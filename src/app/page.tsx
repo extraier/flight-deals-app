@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import realDeals from '@/data/real-deals.json';
 
 type SortOption = 'price' | 'discount';
-type RegionFilter = 'all' | string;
+type FilterMode = 'region' | 'country';
 
 const regionColors: Record<string, string> = {
   '東南亞': 'bg-amber-500/10 text-amber-600 border-amber-500/30',
@@ -23,20 +23,34 @@ const regionColors: Record<string, string> = {
   '香港': 'bg-pink-500/10 text-pink-600 border-pink-500/30',
 };
 
-const regions = ['all', '東亞', '東南亞', '中國', '大洋洲', '北美洲', '歐洲', '南亞', '中東', '非洲'];
+const regions = ['全部', '東亞', '東南亞', '中國', '大洋洲', '北美洲', '歐洲', '南亞', '中東', '非洲'];
 
 export default function Home() {
   const [sortBy, setSortBy] = useState<SortOption>('price');
-  const [regionFilter, setRegionFilter] = useState<RegionFilter>('all');
+  const [filterMode, setFilterMode] = useState<FilterMode>('region');
+  const [selectedRegion, setSelectedRegion] = useState<string>('全部');
+  const [selectedCountry, setSelectedCountry] = useState<string>('全部');
 
   const deals = realDeals as any[];
+
+  // Get unique countries from data
+  const countries = useMemo(() => {
+    const uniqueCountries = [...new Set(deals.map((d) => d.destination.name))].sort();
+    return ['全部', ...uniqueCountries];
+  }, [deals]);
 
   const filteredAndSortedDeals = useMemo(() => {
     let result = [...deals];
 
-    // Filter by region
-    if (regionFilter !== 'all') {
-      result = result.filter((d) => d.destination.region === regionFilter);
+    // Filter
+    if (filterMode === 'region') {
+      if (selectedRegion !== '全部') {
+        result = result.filter((d) => d.destination.region === selectedRegion);
+      }
+    } else {
+      if (selectedCountry !== '全部') {
+        result = result.filter((d) => d.destination.name === selectedCountry);
+      }
     }
 
     // Sort
@@ -51,7 +65,7 @@ export default function Home() {
     }
 
     return result;
-  }, [deals, sortBy, regionFilter]);
+  }, [deals, sortBy, filterMode, selectedRegion, selectedCountry]);
 
   const discount = (deal: any) => {
     if (!deal.typicalPrice || deal.typicalPrice <= 0) return null;
@@ -81,20 +95,61 @@ export default function Home() {
 
         {/* Filters & Sort */}
         <div className="mb-6 space-y-3">
-          {/* Region Filter */}
-          <div className="flex flex-wrap gap-2">
-            {regions.map((region) => (
-              <Button
-                key={region}
-                variant={regionFilter === region ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setRegionFilter(region)}
-                className="text-xs"
-              >
-                {region === 'all' ? '全部' : region}
-              </Button>
-            ))}
+          {/* Filter Mode Toggle */}
+          <div className="flex gap-2">
+            <Button
+              variant={filterMode === 'region' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => {
+                setFilterMode('region');
+                setSelectedRegion('全部');
+              }}
+            >
+              🌍 按地區
+            </Button>
+            <Button
+              variant={filterMode === 'country' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => {
+                setFilterMode('country');
+                setSelectedCountry('全部');
+              }}
+            >
+              ✈️ 按國家
+            </Button>
           </div>
+
+          {/* Region Filter */}
+          {filterMode === 'region' && (
+            <div className="flex flex-wrap gap-2">
+              {regions.map((region) => (
+                <Button
+                  key={region}
+                  variant={selectedRegion === region ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSelectedRegion(region)}
+                  className="text-xs"
+                >
+                  {region}
+                </Button>
+              ))}
+            </div>
+          )}
+
+          {/* Country Filter */}
+          {filterMode === 'country' && (
+            <select
+              value={selectedCountry}
+              onChange={(e) => setSelectedCountry(e.target.value)}
+              className="w-full max-w-xs rounded-lg border border-input bg-background px-3 py-2 text-sm"
+            >
+              {countries.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+          )}
 
           {/* Sort Options */}
           <div className="flex gap-2">
