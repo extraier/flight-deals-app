@@ -50,6 +50,8 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
   const cheapestPrice = price;
   const greenDates = cheapestDates.filter(d => d.price === cheapestPrice);
 
+
+
   const datesByMonth: Record<string, typeof greenDates> = {};
   greenDates.forEach((date) => {
     const key = `${date.year}-${String(date.month).padStart(2, '0')}`;
@@ -259,7 +261,7 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
 
                 {/* Action Button */}
                 <a
-                  href={`https://www.google.com/travel/flights?q=HKG+to+${destination.code}+${selectedDate.year}-${String(selectedDate.month).padStart(2,'0')}-${String(selectedDate.day).padStart(2,'0')}&gl=hk&hl=zh-TW`}
+                  href={`https://www.google.com/travel/flights?q=HKG+to+${destination.code}+${selectedDate.year}-${String(selectedDate.month).padStart(2,'0')}-${String(selectedDate.day).padStart(2,'0')}&df=1&gl=hk&hl=zh-TW&curr=HKD`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90"

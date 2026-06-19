@@ -31,7 +31,8 @@
             "return_airline": "UO",
             "return_dep_time": "21:10",
             "return_arr_time": "23:30",
-            "return_flight": "535"
+            "return_flight": "535",
+            "ret_date": "2026-07-11"
           }
         },
         {
@@ -48,7 +49,8 @@
             "return_airline": "UO",
             "return_dep_time": "21:10",
             "return_arr_time": "23:30",
-            "return_flight": "535"
+            "return_flight": "535",
+            "ret_date": "2026-07-21"
           }
         },
         {
@@ -230,7 +232,8 @@
             "return_airline": "_9C",
             "return_dep_time": "09:15",
             "return_arr_time": "12:20",
-            "return_flight": "8715"
+            "return_flight": "8715",
+            "ret_date": "2026-09-08"
           }
         },
         {
@@ -247,7 +250,8 @@
             "return_airline": "_9C",
             "return_dep_time": "09:15",
             "return_arr_time": "12:20",
-            "return_flight": "8715"
+            "return_flight": "8715",
+            "ret_date": "2026-09-10"
           }
         }
       ],
@@ -328,7 +332,8 @@
             "return_airline": "UO",
             "return_dep_time": "13:40",
             "return_arr_time": "15:35",
-            "return_flight": "111"
+            "return_flight": "111",
+            "ret_date": "2026-08-16"
           }
         },
         {
@@ -345,7 +350,8 @@
             "return_airline": "UO",
             "return_dep_time": "15:20",
             "return_arr_time": "17:10",
-            "return_flight": "113"
+            "return_flight": "113",
+            "ret_date": "2026-08-17"
           }
         },
         {
@@ -464,7 +470,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:25",
             "return_arr_time": "12:10",
-            "return_flight": "193"
+            "return_flight": "193",
+            "ret_date": "2026-08-11"
           }
         },
         {
@@ -481,7 +488,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:25",
             "return_arr_time": "12:10",
-            "return_flight": "193"
+            "return_flight": "193",
+            "ret_date": "2026-08-12"
           }
         },
         {
@@ -754,7 +762,8 @@
             "return_airline": "UO",
             "return_dep_time": "09:35",
             "return_arr_time": "12:40",
-            "return_flight": "541"
+            "return_flight": "541",
+            "ret_date": "2026-07-06"
           }
         },
         {
@@ -771,7 +780,8 @@
             "return_airline": "UO",
             "return_dep_time": "09:35",
             "return_arr_time": "12:40",
-            "return_flight": "541"
+            "return_flight": "541",
+            "ret_date": "2026-07-14"
           }
         },
         {
@@ -788,7 +798,8 @@
             "return_airline": "UO",
             "return_dep_time": "09:35",
             "return_arr_time": "12:40",
-            "return_flight": "541"
+            "return_flight": "541",
+            "ret_date": "2026-07-16"
           }
         },
         {
@@ -1145,7 +1156,8 @@
             "return_airline": "VJ",
             "return_dep_time": "15:10",
             "return_arr_time": "18:50",
-            "return_flight": "876"
+            "return_flight": "876",
+            "ret_date": "2027-03-01"
           }
         },
         {
@@ -1162,7 +1174,8 @@
             "return_airline": "VJ",
             "return_dep_time": "15:10",
             "return_arr_time": "18:50",
-            "return_flight": "876"
+            "return_flight": "876",
+            "ret_date": "2027-03-04"
           }
         },
         {
@@ -1179,7 +1192,8 @@
             "return_airline": "VJ",
             "return_dep_time": "15:10",
             "return_arr_time": "18:50",
-            "return_flight": "876"
+            "return_flight": "876",
+            "ret_date": "2027-03-05"
           }
         },
         {
@@ -1312,7 +1326,8 @@
             "return_airline": "YP",
             "return_dep_time": "09:15",
             "return_arr_time": "12:00",
-            "return_flight": "801"
+            "return_flight": "801",
+            "ret_date": "2026-09-09"
           }
         },
         {
@@ -1329,7 +1344,8 @@
             "return_airline": "YP",
             "return_dep_time": "09:15",
             "return_arr_time": "12:05",
-            "return_flight": "801"
+            "return_flight": "801",
+            "ret_date": "2026-09-15"
           }
         },
         {
@@ -1346,7 +1362,8 @@
             "return_airline": "YP",
             "return_dep_time": "09:15",
             "return_arr_time": "12:05",
-            "return_flight": "801"
+            "return_flight": "801",
+            "ret_date": "2026-09-22"
           }
         },
         {
@@ -1402,7 +1419,8 @@
             "return_airline": "UO",
             "return_dep_time": "16:15",
             "return_arr_time": "20:15",
-            "return_flight": "701"
+            "return_flight": "701",
+            "ret_date": "2026-07-09"
           }
         },
         {
@@ -1419,7 +1437,8 @@
             "return_airline": "UO",
             "return_dep_time": "17:50",
             "return_arr_time": "21:40",
-            "return_flight": "759"
+            "return_flight": "759",
+            "ret_date": "2026-07-11"
           }
         },
         {
@@ -1436,7 +1455,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:10",
             "return_arr_time": "14:20",
-            "return_flight": "705"
+            "return_flight": "705",
+            "ret_date": "2026-07-12"
           }
         },
         {
@@ -1453,7 +1473,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:10",
             "return_arr_time": "14:20",
-            "return_flight": "705"
+            "return_flight": "705",
+            "ret_date": "2026-07-13"
           }
         },
         {
@@ -1470,7 +1491,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:10",
             "return_arr_time": "14:20",
-            "return_flight": "705"
+            "return_flight": "705",
+            "ret_date": "2026-09-02"
           }
         },
         {
@@ -1487,7 +1509,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:10",
             "return_arr_time": "14:20",
-            "return_flight": "705"
+            "return_flight": "705",
+            "ret_date": "2026-09-03"
           }
         },
         {
@@ -1504,7 +1527,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:10",
             "return_arr_time": "14:20",
-            "return_flight": "705"
+            "return_flight": "705",
+            "ret_date": "2026-09-05"
           }
         },
         {
@@ -1528,7 +1552,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:10",
             "return_arr_time": "14:20",
-            "return_flight": "705"
+            "return_flight": "705",
+            "ret_date": "2026-09-07"
           }
         },
         {
@@ -1545,7 +1570,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:10",
             "return_arr_time": "14:20",
-            "return_flight": "705"
+            "return_flight": "705",
+            "ret_date": "2026-09-08"
           }
         },
         {
@@ -1562,7 +1588,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:10",
             "return_arr_time": "14:20",
-            "return_flight": "705"
+            "return_flight": "705",
+            "ret_date": "2026-09-09"
           }
         },
         {
@@ -1579,7 +1606,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:10",
             "return_arr_time": "14:20",
-            "return_flight": "705"
+            "return_flight": "705",
+            "ret_date": "2026-09-10"
           }
         },
         {
@@ -1596,7 +1624,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:15",
             "return_arr_time": "14:20",
-            "return_flight": "705"
+            "return_flight": "705",
+            "ret_date": "2026-09-11"
           }
         },
         {
@@ -1613,7 +1642,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:10",
             "return_arr_time": "14:20",
-            "return_flight": "705"
+            "return_flight": "705",
+            "ret_date": "2026-09-12"
           }
         },
         {
@@ -1637,7 +1667,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:10",
             "return_arr_time": "14:20",
-            "return_flight": "705"
+            "return_flight": "705",
+            "ret_date": "2026-09-14"
           }
         },
         {
@@ -1654,7 +1685,8 @@
             "return_airline": "UO",
             "return_dep_time": "16:15",
             "return_arr_time": "20:15",
-            "return_flight": "701"
+            "return_flight": "701",
+            "ret_date": "2026-09-15"
           }
         },
         {
@@ -1671,7 +1703,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:10",
             "return_arr_time": "14:20",
-            "return_flight": "705"
+            "return_flight": "705",
+            "ret_date": "2026-09-16"
           }
         },
         {
@@ -1695,7 +1728,8 @@
             "return_airline": "UO",
             "return_dep_time": "10:15",
             "return_arr_time": "14:20",
-            "return_flight": "705"
+            "return_flight": "705",
+            "ret_date": "2026-09-18"
           }
         },
         {
@@ -1975,7 +2009,8 @@
             "return_airline": "UO",
             "return_dep_time": "07:45",
             "return_arr_time": "10:20",
-            "return_flight": "607"
+            "return_flight": "607",
+            "ret_date": "2026-08-19"
           }
         },
         {
@@ -1992,7 +2027,8 @@
             "return_airline": "UO",
             "return_dep_time": "07:45",
             "return_arr_time": "10:20",
-            "return_flight": "607"
+            "return_flight": "607",
+            "ret_date": "2026-09-09"
           }
         },
         {
@@ -2009,7 +2045,8 @@
             "return_airline": "UO",
             "return_dep_time": "07:45",
             "return_arr_time": "10:20",
-            "return_flight": "607"
+            "return_flight": "607",
+            "ret_date": "2026-09-16"
           }
         },
         {
@@ -2026,7 +2063,8 @@
             "return_airline": "CI",
             "return_dep_time": "10:30",
             "return_arr_time": "11:55",
-            "return_flight": "191"
+            "return_flight": "191",
+            "ret_date": "2026-09-21"
           }
         }
       ],
@@ -2061,7 +2099,8 @@
             "return_airline": "AK",
             "return_dep_time": "07:15",
             "return_arr_time": "11:15",
-            "return_flight": "138"
+            "return_flight": "138",
+            "ret_date": "2026-10-16"
           }
         },
         {
@@ -2078,7 +2117,8 @@
             "return_airline": "AK",
             "return_dep_time": "07:15",
             "return_arr_time": "11:15",
-            "return_flight": "138"
+            "return_flight": "138",
+            "ret_date": "2026-10-17"
           }
         },
         {
@@ -2095,7 +2135,8 @@
             "return_airline": "AK",
             "return_dep_time": "07:15",
             "return_arr_time": "11:15",
-            "return_flight": "138"
+            "return_flight": "138",
+            "ret_date": "2026-10-18"
           }
         },
         {
@@ -2333,7 +2374,8 @@
             "return_airline": "MM",
             "return_dep_time": "08:25",
             "return_arr_time": "11:40",
-            "return_flight": "63"
+            "return_flight": "63",
+            "ret_date": "2026-09-24"
           }
         },
         {
@@ -2350,7 +2392,8 @@
             "return_airline": "MM",
             "return_dep_time": "08:25",
             "return_arr_time": "11:40",
-            "return_flight": "63"
+            "return_flight": "63",
+            "ret_date": "2026-09-26"
           }
         },
         {
@@ -2367,7 +2410,8 @@
             "return_airline": "MM",
             "return_dep_time": "08:25",
             "return_arr_time": "11:40",
-            "return_flight": "63"
+            "return_flight": "63",
+            "ret_date": "2026-09-27"
           }
         },
         {
@@ -2472,7 +2516,8 @@
             "return_airline": "UO",
             "return_dep_time": "11:15",
             "return_arr_time": "16:00",
-            "return_flight": "725"
+            "return_flight": "725",
+            "ret_date": "2026-09-08"
           }
         }
       ],
@@ -2514,7 +2559,8 @@
             "return_airline": "UO",
             "return_dep_time": "01:00",
             "return_arr_time": "04:55",
-            "return_flight": "769"
+            "return_flight": "769",
+            "ret_date": "2026-09-25"
           }
         }
       ],
@@ -2549,7 +2595,8 @@
             "return_airline": "GK",
             "return_dep_time": "20:10",
             "return_arr_time": "23:55",
-            "return_flight": "27"
+            "return_flight": "27",
+            "ret_date": "2026-09-24"
           }
         },
         {
@@ -2566,7 +2613,8 @@
             "return_airline": "GK",
             "return_dep_time": "19:30",
             "return_arr_time": "23:45",
-            "return_flight": "27"
+            "return_flight": "27",
+            "ret_date": "2026-11-01"
           }
         }
       ],
@@ -2608,7 +2656,8 @@
             "return_airline": "TR",
             "return_dep_time": "15:25",
             "return_arr_time": "19:45",
-            "return_flight": "982"
+            "return_flight": "982",
+            "ret_date": "2026-09-10"
           }
         },
         {
@@ -2657,7 +2706,8 @@
             "return_airline": "AK",
             "return_dep_time": "19:45",
             "return_arr_time": "22:50",
-            "return_flight": "379"
+            "return_flight": "379",
+            "ret_date": "2026-10-19"
           }
         }
       ],
@@ -2706,7 +2756,8 @@
             "return_airline": "CX",
             "return_dep_time": "05:00",
             "return_arr_time": "06:25",
-            "return_flight": "953"
+            "return_flight": "953",
+            "ret_date": "2026-06-29"
           }
         },
         {
@@ -3777,7 +3828,8 @@
             "return_airline": "VJ",
             "return_dep_time": "13:30",
             "return_arr_time": "16:35",
-            "return_flight": "854"
+            "return_flight": "854",
+            "ret_date": "2026-11-15"
           }
         },
         {
@@ -3840,7 +3892,8 @@
             "return_airline": "UO",
             "return_dep_time": "21:00",
             "return_arr_time": "00:50",
-            "return_flight": "685"
+            "return_flight": "685",
+            "ret_date": "2026-12-10"
           }
         },
         {
@@ -3924,7 +3977,8 @@
             "return_airline": "UO",
             "return_dep_time": "12:55",
             "return_arr_time": "15:35",
-            "return_flight": "601"
+            "return_flight": "601",
+            "ret_date": "2026-07-17"
           }
         },
         {
@@ -3987,7 +4041,8 @@
             "return_airline": "HU",
             "return_dep_time": "12:15",
             "return_arr_time": "15:10",
-            "return_flight": "7166"
+            "return_flight": "7166",
+            "ret_date": "2026-06-27"
           }
         },
         {
@@ -4004,7 +4059,8 @@
             "return_airline": "HU",
             "return_dep_time": "12:15",
             "return_arr_time": "15:10",
-            "return_flight": "7166"
+            "return_flight": "7166",
+            "ret_date": "2026-06-28"
           }
         },
         {
@@ -4021,7 +4077,8 @@
             "return_airline": "HU",
             "return_dep_time": "09:05",
             "return_arr_time": "12:00",
-            "return_flight": "7266"
+            "return_flight": "7266",
+            "ret_date": "2026-06-29"
           }
         },
         {
@@ -4378,7 +4435,8 @@
             "return_airline": "CX",
             "return_dep_time": "10:00",
             "return_arr_time": "13:45",
-            "return_flight": "347"
+            "return_flight": "347",
+            "ret_date": "2026-07-01"
           }
         },
         {
@@ -4707,7 +4765,8 @@
             "return_airline": "SC",
             "return_dep_time": "21:10",
             "return_arr_time": "23:25",
-            "return_flight": "8832"
+            "return_flight": "8832",
+            "ret_date": "2026-06-29"
           }
         },
         {
@@ -4724,7 +4783,8 @@
             "return_airline": "SC",
             "return_dep_time": "11:45",
             "return_arr_time": "14:25",
-            "return_flight": "4856"
+            "return_flight": "4856",
+            "ret_date": "2026-06-30"
           }
         }
       ],
@@ -4759,7 +4819,8 @@
             "return_airline": "GK",
             "return_dep_time": "09:35",
             "return_arr_time": "11:15",
-            "return_flight": "102"
+            "return_flight": "102",
+            "ret_date": "2026-09-02"
           }
         }
       ],
@@ -4794,7 +4855,8 @@
             "return_airline": "AI",
             "return_dep_time": "22:40",
             "return_arr_time": "06:15",
-            "return_flight": "314"
+            "return_flight": "314",
+            "ret_date": "2026-11-22"
           }
         }
       ],
@@ -4829,7 +4891,8 @@
             "return_airline": "SC",
             "return_dep_time": "12:55",
             "return_arr_time": "15:55",
-            "return_flight": "4682"
+            "return_flight": "4682",
+            "ret_date": "2026-06-29"
           }
         },
         {
@@ -4846,7 +4909,8 @@
             "return_airline": "SC",
             "return_dep_time": "12:55",
             "return_arr_time": "16:05",
-            "return_flight": "4682"
+            "return_flight": "4682",
+            "ret_date": "2026-06-30"
           }
         },
         {
@@ -4863,7 +4927,8 @@
             "return_airline": "SC",
             "return_dep_time": "12:55",
             "return_arr_time": "16:05",
-            "return_flight": "4682"
+            "return_flight": "4682",
+            "ret_date": "2026-07-01"
           }
         },
         {
@@ -4964,7 +5029,8 @@
             "return_airline": "SC",
             "return_dep_time": "12:55",
             "return_arr_time": "16:05",
-            "return_flight": "4682"
+            "return_flight": "4682",
+            "ret_date": "2026-09-08"
           }
         },
         {
@@ -5160,7 +5226,8 @@
             "return_airline": "MH",
             "return_dep_time": "23:25",
             "return_arr_time": "07:25",
-            "return_flight": "195"
+            "return_flight": "195",
+            "ret_date": "2026-09-16"
           }
         }
       ],
@@ -5195,7 +5262,8 @@
             "return_airline": "LX",
             "return_dep_time": "09:35",
             "return_arr_time": "11:20",
-            "return_flight": "1727"
+            "return_flight": "1727",
+            "ret_date": "2026-11-17"
           }
         },
         {
@@ -5212,7 +5280,8 @@
             "return_airline": "LX",
             "return_dep_time": "14:50",
             "return_arr_time": "16:25",
-            "return_flight": "1737"
+            "return_flight": "1737",
+            "ret_date": "2026-11-23"
           }
         },
         {
@@ -5229,7 +5298,8 @@
             "return_airline": "AZ",
             "return_dep_time": "16:40",
             "return_arr_time": "18:15",
-            "return_flight": "574"
+            "return_flight": "574",
+            "ret_date": "2026-11-24"
           }
         },
         {
@@ -5271,7 +5341,8 @@
             "return_airline": "QF",
             "return_dep_time": "11:15",
             "return_arr_time": "17:50",
-            "return_flight": "127"
+            "return_flight": "127",
+            "ret_date": "2026-11-10"
           }
         }
       ],
@@ -5320,7 +5391,8 @@
             "return_airline": "AK",
             "return_dep_time": "22:55",
             "return_arr_time": "05:00",
-            "return_flight": "46"
+            "return_flight": "46",
+            "ret_date": "2026-10-17"
           }
         },
         {
@@ -5390,7 +5462,8 @@
             "return_airline": "TG",
             "return_dep_time": "11:25",
             "return_arr_time": "13:20",
-            "return_flight": "302"
+            "return_flight": "302",
+            "ret_date": "2026-11-28"
           }
         }
       ],
@@ -5425,7 +5498,8 @@
             "return_airline": "_5J",
             "return_dep_time": "22:10",
             "return_arr_time": "11:55",
-            "return_flight": "15"
+            "return_flight": "15",
+            "ret_date": "2026-11-17"
           }
         }
       ],
@@ -5460,7 +5534,8 @@
             "return_airline": "BI",
             "return_dep_time": "13:30",
             "return_arr_time": "17:40",
-            "return_flight": "6"
+            "return_flight": "6",
+            "ret_date": "2026-10-29"
           }
         },
         {
@@ -5484,7 +5559,8 @@
             "return_airline": "BI",
             "return_dep_time": "13:30",
             "return_arr_time": "17:40",
-            "return_flight": "6"
+            "return_flight": "6",
+            "ret_date": "2026-11-12"
           }
         },
         {
@@ -5540,7 +5616,8 @@
             "return_airline": "AF",
             "return_dep_time": "10:05",
             "return_arr_time": "12:05",
-            "return_flight": "1149"
+            "return_flight": "1149",
+            "ret_date": "2027-01-20"
           }
         }
       ],
@@ -5575,7 +5652,8 @@
             "return_airline": "EY",
             "return_dep_time": "09:50",
             "return_arr_time": "19:35",
-            "return_flight": "102"
+            "return_flight": "102",
+            "ret_date": "2026-11-11"
           }
         }
       ],
@@ -5610,7 +5688,8 @@
             "return_airline": "LH",
             "return_dep_time": "06:10",
             "return_arr_time": "07:25",
-            "return_flight": "1051"
+            "return_flight": "1051",
+            "ret_date": "2026-11-10"
           }
         },
         {
@@ -5680,7 +5759,8 @@
             "return_airline": "LX",
             "return_dep_time": "09:00",
             "return_arr_time": "11:55",
-            "return_flight": "317"
+            "return_flight": "317",
+            "ret_date": "2026-11-10"
           }
         },
         {
@@ -5697,7 +5777,8 @@
             "return_airline": "LX",
             "return_dep_time": "09:00",
             "return_arr_time": "11:55",
-            "return_flight": "317"
+            "return_flight": "317",
+            "ret_date": "2026-11-16"
           }
         },
         {
@@ -5714,7 +5795,8 @@
             "return_airline": "LX",
             "return_dep_time": "09:00",
             "return_arr_time": "11:55",
-            "return_flight": "317"
+            "return_flight": "317",
+            "ret_date": "2026-11-17"
           }
         },
         {
@@ -5763,7 +5845,8 @@
             "return_airline": "DL",
             "return_dep_time": "18:55",
             "return_arr_time": "21:44",
-            "return_flight": "2861"
+            "return_flight": "2861",
+            "ret_date": "2026-09-13"
           }
         },
         {
@@ -6078,7 +6161,8 @@
             "return_airline": "UA",
             "return_dep_time": "10:05",
             "return_arr_time": "12:20",
-            "return_flight": "500"
+            "return_flight": "500",
+            "ret_date": "2026-10-24"
           }
         }
       ],
@@ -6113,7 +6197,8 @@
             "return_airline": "AY",
             "return_dep_time": "19:00",
             "return_arr_time": "22:25",
-            "return_flight": "1306"
+            "return_flight": "1306",
+            "ret_date": "2026-11-11"
           }
         },
         {
@@ -6130,7 +6215,8 @@
             "return_airline": "AY",
             "return_dep_time": "19:00",
             "return_arr_time": "22:25",
-            "return_flight": "1306"
+            "return_flight": "1306",
+            "ret_date": "2026-11-18"
           }
         }
       ],
@@ -6179,7 +6265,8 @@
             "return_airline": "UA",
             "return_dep_time": "12:35",
             "return_arr_time": "18:30",
-            "return_flight": "152"
+            "return_flight": "152",
+            "ret_date": "2026-09-09"
           }
         },
         {
@@ -6196,7 +6283,8 @@
             "return_airline": "UA",
             "return_dep_time": "12:35",
             "return_arr_time": "18:30",
-            "return_flight": "152"
+            "return_flight": "152",
+            "ret_date": "2026-09-12"
           }
         },
         {
@@ -6269,7 +6357,8 @@
             "return_airline": "UA",
             "return_dep_time": "12:35",
             "return_arr_time": "18:30",
-            "return_flight": "152"
+            "return_flight": "152",
+            "ret_date": "2026-09-24"
           }
         },
         {
@@ -6430,7 +6519,8 @@
             "return_airline": "AF",
             "return_dep_time": "12:10",
             "return_arr_time": "13:40",
-            "return_flight": "1619"
+            "return_flight": "1619",
+            "ret_date": "2026-09-23"
           }
         }
       ],
@@ -6472,7 +6562,8 @@
             "return_airline": "EY",
             "return_dep_time": "04:30",
             "return_arr_time": "06:35",
-            "return_flight": "664"
+            "return_flight": "664",
+            "ret_date": "2026-07-07"
           }
         }
       ],
@@ -6514,7 +6605,8 @@
             "return_airline": "AC",
             "return_dep_time": "17:25",
             "return_arr_time": "18:32",
-            "return_flight": "8806"
+            "return_flight": "8806",
+            "ret_date": "2026-09-17"
           }
         },
         {
@@ -6531,7 +6623,8 @@
             "return_airline": "AC",
             "return_dep_time": "17:25",
             "return_arr_time": "18:32",
-            "return_flight": "8806"
+            "return_flight": "8806",
+            "ret_date": "2026-09-18"
           }
         },
         {
@@ -6622,7 +6715,8 @@
             "return_airline": "EY",
             "return_dep_time": "02:20",
             "return_arr_time": "06:45",
-            "return_flight": "718"
+            "return_flight": "718",
+            "ret_date": "2026-07-06"
           }
         },
         {
@@ -6660,7 +6754,8 @@
             "return_airline": "EY",
             "return_dep_time": "19:45",
             "return_arr_time": "00:15",
-            "return_flight": "716"
+            "return_flight": "716",
+            "ret_date": "2026-07-28"
           }
         },
         {
@@ -6709,7 +6804,8 @@
             "return_airline": "DL",
             "return_dep_time": "14:55",
             "return_arr_time": "17:20",
-            "return_flight": "967"
+            "return_flight": "967",
+            "ret_date": "2026-09-25"
           }
         }
       ],
@@ -6744,7 +6840,8 @@
             "return_airline": "HU",
             "return_dep_time": "20:45",
             "return_arr_time": "04:40",
-            "return_flight": "798"
+            "return_flight": "798",
+            "ret_date": "2026-09-02"
           }
         },
         {
@@ -6761,7 +6858,8 @@
             "return_airline": "HU",
             "return_dep_time": "20:45",
             "return_arr_time": "05:00",
-            "return_flight": "786"
+            "return_flight": "786",
+            "ret_date": "2026-09-04"
           }
         },
         {
@@ -6778,7 +6876,8 @@
             "return_airline": "QF",
             "return_dep_time": "06:00",
             "return_arr_time": "07:45",
-            "return_flight": "140"
+            "return_flight": "140",
+            "ret_date": "2026-09-09"
           }
         },
         {
@@ -6795,7 +6894,8 @@
             "return_airline": "FJ",
             "return_dep_time": "14:00",
             "return_arr_time": "17:10",
-            "return_flight": "410"
+            "return_flight": "410",
+            "ret_date": "2026-09-11"
           }
         },
         {
@@ -6812,7 +6912,8 @@
             "return_airline": "QF",
             "return_dep_time": "06:00",
             "return_arr_time": "07:45",
-            "return_flight": "140"
+            "return_flight": "140",
+            "ret_date": "2026-09-16"
           }
         },
         {
@@ -6829,7 +6930,8 @@
             "return_airline": "QF",
             "return_dep_time": "06:00",
             "return_arr_time": "07:45",
-            "return_flight": "140"
+            "return_flight": "140",
+            "ret_date": "2026-10-21"
           }
         }
       ],
@@ -6864,7 +6966,8 @@
             "return_airline": "EY",
             "return_dep_time": "09:45",
             "return_arr_time": "19:45",
-            "return_flight": "748"
+            "return_flight": "748",
+            "ret_date": "2026-09-09"
           }
         },
         {
@@ -6881,7 +6984,8 @@
             "return_airline": "EY",
             "return_dep_time": "09:45",
             "return_arr_time": "19:45",
-            "return_flight": "748"
+            "return_flight": "748",
+            "ret_date": "2026-09-16"
           }
         },
         {
@@ -6898,7 +7002,8 @@
             "return_airline": "EY",
             "return_dep_time": "09:45",
             "return_arr_time": "19:45",
-            "return_flight": "748"
+            "return_flight": "748",
+            "ret_date": "2026-09-23"
           }
         },
         {
@@ -6929,7 +7034,8 @@
             "return_airline": "EK",
             "return_dep_time": "10:25",
             "return_arr_time": "20:25",
-            "return_flight": "768"
+            "return_flight": "768",
+            "ret_date": "2026-10-28"
           }
         },
         {
@@ -7020,7 +7126,8 @@
             "return_airline": "BR",
             "return_dep_time": "01:25",
             "return_arr_time": "05:20",
-            "return_flight": "31"
+            "return_flight": "31",
+            "ret_date": "2026-09-16"
           }
         },
         {
@@ -7037,7 +7144,8 @@
             "return_airline": "BR",
             "return_dep_time": "01:25",
             "return_arr_time": "05:20",
-            "return_flight": "31"
+            "return_flight": "31",
+            "ret_date": "2026-09-17"
           }
         },
         {
@@ -7054,7 +7162,8 @@
             "return_airline": "BR",
             "return_dep_time": "01:25",
             "return_arr_time": "05:20",
-            "return_flight": "31"
+            "return_flight": "31",
+            "ret_date": "2026-09-18"
           }
         },
         {
