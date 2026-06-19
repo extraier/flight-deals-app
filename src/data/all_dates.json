@@ -3,11 +3,11 @@
   "run_id": "20260619142425",
   "results": [
     {
-      "route": "HKG\u2192MNL",
+      "route": "HKG→MNL",
       "destination": {
-        "name": "\u99ac\u5c3c\u62c9",
+        "name": "馬尼拉",
         "code": "MNL",
-        "region": "\u6771\u5357\u4e9e"
+        "region": "東南亞"
       },
       "price": 1184.0,
       "currency": "HKD",
@@ -30,7 +30,8 @@
             "arr_time": "20:10",
             "return_airline": "UO",
             "return_dep_time": "21:10",
-            "return_arr_time": "23:30"
+            "return_arr_time": "23:30",
+            "return_flight": "535"
           }
         },
         {
@@ -46,7 +47,8 @@
             "arr_time": "20:10",
             "return_airline": "UO",
             "return_dep_time": "21:10",
-            "return_arr_time": "23:30"
+            "return_arr_time": "23:30",
+            "return_flight": "535"
           }
         },
         {
@@ -200,11 +202,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192PVG",
+      "route": "HKG→PVG",
       "destination": {
-        "name": "\u4e0a\u6d77\u6d66\u6771",
+        "name": "上海浦東",
         "code": "PVG",
-        "region": "\u4e2d\u570b"
+        "region": "中國"
       },
       "price": 1269.0,
       "currency": "HKD",
@@ -227,7 +229,8 @@
             "arr_time": "15:55",
             "return_airline": "_9C",
             "return_dep_time": "09:15",
-            "return_arr_time": "12:20"
+            "return_arr_time": "12:20",
+            "return_flight": "8715"
           }
         },
         {
@@ -243,18 +246,19 @@
             "arr_time": "15:50",
             "return_airline": "_9C",
             "return_dep_time": "09:15",
-            "return_arr_time": "12:20"
+            "return_arr_time": "12:20",
+            "return_flight": "8715"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192KHH",
+      "route": "HKG→KHH",
       "destination": {
-        "name": "\u9ad8\u96c4",
+        "name": "高雄",
         "code": "KHH",
-        "region": "\u6771\u4e9e"
+        "region": "東亞"
       },
       "price": 1281.0,
       "currency": "HKD",
@@ -296,11 +300,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192TPE",
+      "route": "HKG→TPE",
       "destination": {
-        "name": "\u53f0\u5317",
+        "name": "台北",
         "code": "TPE",
-        "region": "\u6771\u4e9e"
+        "region": "東亞"
       },
       "price": 1281.0,
       "currency": "HKD",
@@ -323,7 +327,8 @@
             "arr_time": "14:25",
             "return_airline": "UO",
             "return_dep_time": "13:40",
-            "return_arr_time": "15:35"
+            "return_arr_time": "15:35",
+            "return_flight": "111"
           }
         },
         {
@@ -339,7 +344,8 @@
             "arr_time": "20:30",
             "return_airline": "UO",
             "return_dep_time": "15:20",
-            "return_arr_time": "17:10"
+            "return_arr_time": "17:10",
+            "return_flight": "113"
           }
         },
         {
@@ -430,11 +436,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192RMQ",
+      "route": "HKG→RMQ",
       "destination": {
-        "name": "\u53f0\u4e2d",
+        "name": "台中",
         "code": "RMQ",
-        "region": "\u6771\u4e9e"
+        "region": "東亞"
       },
       "price": 1341.0,
       "currency": "HKD",
@@ -457,7 +463,8 @@
             "arr_time": "09:35",
             "return_airline": "UO",
             "return_dep_time": "10:25",
-            "return_arr_time": "12:10"
+            "return_arr_time": "12:10",
+            "return_flight": "193"
           }
         },
         {
@@ -473,7 +480,8 @@
             "arr_time": "09:35",
             "return_airline": "UO",
             "return_dep_time": "10:25",
-            "return_arr_time": "12:10"
+            "return_arr_time": "12:10",
+            "return_flight": "193"
           }
         },
         {
@@ -718,11 +726,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192HAN",
+      "route": "HKG→HAN",
       "destination": {
-        "name": "\u6cb3\u5167",
+        "name": "河內",
         "code": "HAN",
-        "region": "\u6771\u5357\u4e9e"
+        "region": "東南亞"
       },
       "price": 1411.0,
       "currency": "HKD",
@@ -745,7 +753,8 @@
             "arr_time": "08:50",
             "return_airline": "UO",
             "return_dep_time": "09:35",
-            "return_arr_time": "12:40"
+            "return_arr_time": "12:40",
+            "return_flight": "541"
           }
         },
         {
@@ -761,7 +770,8 @@
             "arr_time": "08:50",
             "return_airline": "UO",
             "return_dep_time": "09:35",
-            "return_arr_time": "12:40"
+            "return_arr_time": "12:40",
+            "return_flight": "541"
           }
         },
         {
@@ -777,7 +787,8 @@
             "arr_time": "08:50",
             "return_airline": "UO",
             "return_dep_time": "09:35",
-            "return_arr_time": "12:40"
+            "return_arr_time": "12:40",
+            "return_flight": "541"
           }
         },
         {
@@ -1106,11 +1117,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192SGN",
+      "route": "HKG→SGN",
       "destination": {
-        "name": "\u80e1\u5fd7\u660e\u5e02",
+        "name": "胡志明市",
         "code": "SGN",
-        "region": "\u6771\u5357\u4e9e"
+        "region": "東南亞"
       },
       "price": 1432.0,
       "currency": "HKD",
@@ -1133,7 +1144,8 @@
             "arr_time": "21:30",
             "return_airline": "VJ",
             "return_dep_time": "15:10",
-            "return_arr_time": "18:50"
+            "return_arr_time": "18:50",
+            "return_flight": "876"
           }
         },
         {
@@ -1149,7 +1161,8 @@
             "arr_time": "21:30",
             "return_airline": "VJ",
             "return_dep_time": "15:10",
-            "return_arr_time": "18:50"
+            "return_arr_time": "18:50",
+            "return_flight": "876"
           }
         },
         {
@@ -1165,7 +1178,8 @@
             "arr_time": "21:30",
             "return_airline": "VJ",
             "return_dep_time": "15:10",
-            "return_arr_time": "18:50"
+            "return_arr_time": "18:50",
+            "return_flight": "876"
           }
         },
         {
@@ -1270,11 +1284,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192ICN",
+      "route": "HKG→ICN",
       "destination": {
-        "name": "\u9996\u723e",
+        "name": "首爾",
         "code": "ICN",
-        "region": "\u6771\u4e9e"
+        "region": "東亞"
       },
       "price": 1508.0,
       "currency": "HKD",
@@ -1297,7 +1311,8 @@
             "arr_time": "18:15",
             "return_airline": "YP",
             "return_dep_time": "09:15",
-            "return_arr_time": "12:00"
+            "return_arr_time": "12:00",
+            "return_flight": "801"
           }
         },
         {
@@ -1313,7 +1328,8 @@
             "arr_time": "18:15",
             "return_airline": "YP",
             "return_dep_time": "09:15",
-            "return_arr_time": "12:05"
+            "return_arr_time": "12:05",
+            "return_flight": "801"
           }
         },
         {
@@ -1329,7 +1345,8 @@
             "arr_time": "18:15",
             "return_airline": "YP",
             "return_dep_time": "09:15",
-            "return_arr_time": "12:05"
+            "return_arr_time": "12:05",
+            "return_flight": "801"
           }
         },
         {
@@ -1357,11 +1374,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192BKK",
+      "route": "HKG→BKK",
       "destination": {
-        "name": "\u66fc\u8c37",
+        "name": "曼谷",
         "code": "BKK",
-        "region": "\u6771\u5357\u4e9e"
+        "region": "東南亞"
       },
       "price": 1587.0,
       "currency": "HKD",
@@ -1384,7 +1401,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "16:15",
-            "return_arr_time": "20:15"
+            "return_arr_time": "20:15",
+            "return_flight": "701"
           }
         },
         {
@@ -1400,7 +1418,8 @@
             "arr_time": "18:55",
             "return_airline": "UO",
             "return_dep_time": "17:50",
-            "return_arr_time": "21:40"
+            "return_arr_time": "21:40",
+            "return_flight": "759"
           }
         },
         {
@@ -1416,7 +1435,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "10:10",
-            "return_arr_time": "14:20"
+            "return_arr_time": "14:20",
+            "return_flight": "705"
           }
         },
         {
@@ -1432,7 +1452,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "10:10",
-            "return_arr_time": "14:20"
+            "return_arr_time": "14:20",
+            "return_flight": "705"
           }
         },
         {
@@ -1448,7 +1469,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "10:10",
-            "return_arr_time": "14:20"
+            "return_arr_time": "14:20",
+            "return_flight": "705"
           }
         },
         {
@@ -1464,7 +1486,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "10:10",
-            "return_arr_time": "14:20"
+            "return_arr_time": "14:20",
+            "return_flight": "705"
           }
         },
         {
@@ -1480,7 +1503,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "10:10",
-            "return_arr_time": "14:20"
+            "return_arr_time": "14:20",
+            "return_flight": "705"
           }
         },
         {
@@ -1503,7 +1527,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "10:10",
-            "return_arr_time": "14:20"
+            "return_arr_time": "14:20",
+            "return_flight": "705"
           }
         },
         {
@@ -1519,7 +1544,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "10:10",
-            "return_arr_time": "14:20"
+            "return_arr_time": "14:20",
+            "return_flight": "705"
           }
         },
         {
@@ -1535,7 +1561,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "10:10",
-            "return_arr_time": "14:20"
+            "return_arr_time": "14:20",
+            "return_flight": "705"
           }
         },
         {
@@ -1551,7 +1578,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "10:10",
-            "return_arr_time": "14:20"
+            "return_arr_time": "14:20",
+            "return_flight": "705"
           }
         },
         {
@@ -1567,7 +1595,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "10:15",
-            "return_arr_time": "14:20"
+            "return_arr_time": "14:20",
+            "return_flight": "705"
           }
         },
         {
@@ -1583,7 +1612,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "10:10",
-            "return_arr_time": "14:20"
+            "return_arr_time": "14:20",
+            "return_flight": "705"
           }
         },
         {
@@ -1606,7 +1636,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "10:10",
-            "return_arr_time": "14:20"
+            "return_arr_time": "14:20",
+            "return_flight": "705"
           }
         },
         {
@@ -1622,7 +1653,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "16:15",
-            "return_arr_time": "20:15"
+            "return_arr_time": "20:15",
+            "return_flight": "701"
           }
         },
         {
@@ -1638,7 +1670,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "10:10",
-            "return_arr_time": "14:20"
+            "return_arr_time": "14:20",
+            "return_flight": "705"
           }
         },
         {
@@ -1661,7 +1694,8 @@
             "arr_time": "09:25",
             "return_airline": "UO",
             "return_dep_time": "10:15",
-            "return_arr_time": "14:20"
+            "return_arr_time": "14:20",
+            "return_flight": "705"
           }
         },
         {
@@ -1913,11 +1947,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192PUS",
+      "route": "HKG→PUS",
       "destination": {
-        "name": "\u91dc\u5c71",
+        "name": "釜山",
         "code": "PUS",
-        "region": "\u6771\u4e9e"
+        "region": "東亞"
       },
       "price": 1615.0,
       "currency": "HKD",
@@ -1940,7 +1974,8 @@
             "arr_time": "07:00",
             "return_airline": "UO",
             "return_dep_time": "07:45",
-            "return_arr_time": "10:20"
+            "return_arr_time": "10:20",
+            "return_flight": "607"
           }
         },
         {
@@ -1956,7 +1991,8 @@
             "arr_time": "07:00",
             "return_airline": "UO",
             "return_dep_time": "07:45",
-            "return_arr_time": "10:20"
+            "return_arr_time": "10:20",
+            "return_flight": "607"
           }
         },
         {
@@ -1972,7 +2008,8 @@
             "arr_time": "07:00",
             "return_airline": "UO",
             "return_dep_time": "07:45",
-            "return_arr_time": "10:20"
+            "return_arr_time": "10:20",
+            "return_flight": "607"
           }
         },
         {
@@ -1988,18 +2025,19 @@
             "arr_time": "12:10",
             "return_airline": "CI",
             "return_dep_time": "10:30",
-            "return_arr_time": "11:55"
+            "return_arr_time": "11:55",
+            "return_flight": "191"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192KUL",
+      "route": "HKG→KUL",
       "destination": {
-        "name": "\u5409\u9686\u5761",
+        "name": "吉隆坡",
         "code": "KUL",
-        "region": "\u6771\u5357\u4e9e"
+        "region": "東南亞"
       },
       "price": 1681.0,
       "currency": "HKD",
@@ -2022,7 +2060,8 @@
             "arr_time": "15:55",
             "return_airline": "AK",
             "return_dep_time": "07:15",
-            "return_arr_time": "11:15"
+            "return_arr_time": "11:15",
+            "return_flight": "138"
           }
         },
         {
@@ -2038,7 +2077,8 @@
             "arr_time": "15:55",
             "return_airline": "AK",
             "return_dep_time": "07:15",
-            "return_arr_time": "11:15"
+            "return_arr_time": "11:15",
+            "return_flight": "138"
           }
         },
         {
@@ -2054,7 +2094,8 @@
             "arr_time": "15:55",
             "return_airline": "AK",
             "return_dep_time": "07:15",
-            "return_arr_time": "11:15"
+            "return_arr_time": "11:15",
+            "return_flight": "138"
           }
         },
         {
@@ -2264,11 +2305,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192KIX",
+      "route": "HKG→KIX",
       "destination": {
-        "name": "\u5927\u962a",
+        "name": "大阪",
         "code": "KIX",
-        "region": "\u6771\u4e9e"
+        "region": "東亞"
       },
       "price": 1707.0,
       "currency": "HKD",
@@ -2291,7 +2332,8 @@
             "arr_time": "17:35",
             "return_airline": "MM",
             "return_dep_time": "08:25",
-            "return_arr_time": "11:40"
+            "return_arr_time": "11:40",
+            "return_flight": "63"
           }
         },
         {
@@ -2307,7 +2349,8 @@
             "arr_time": "17:35",
             "return_airline": "MM",
             "return_dep_time": "08:25",
-            "return_arr_time": "11:40"
+            "return_arr_time": "11:40",
+            "return_flight": "63"
           }
         },
         {
@@ -2323,7 +2366,8 @@
             "arr_time": "17:35",
             "return_airline": "MM",
             "return_dep_time": "08:25",
-            "return_arr_time": "11:40"
+            "return_arr_time": "11:40",
+            "return_flight": "63"
           }
         },
         {
@@ -2400,11 +2444,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192HKT",
+      "route": "HKG→HKT",
       "destination": {
-        "name": "\u5e03\u5409",
+        "name": "布吉",
         "code": "HKT",
-        "region": "\u6771\u5357\u4e9e"
+        "region": "東南亞"
       },
       "price": 1757.0,
       "currency": "HKD",
@@ -2427,18 +2471,19 @@
             "arr_time": "10:30",
             "return_airline": "UO",
             "return_dep_time": "11:15",
-            "return_arr_time": "16:00"
+            "return_arr_time": "16:00",
+            "return_flight": "725"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192PEN",
+      "route": "HKG→PEN",
       "destination": {
-        "name": "\u6ab3\u57ce",
+        "name": "檳城",
         "code": "PEN",
-        "region": "\u6771\u5357\u4e9e"
+        "region": "東南亞"
       },
       "price": 1792.0,
       "currency": "HKD",
@@ -2468,18 +2513,19 @@
             "arr_time": "00:15",
             "return_airline": "UO",
             "return_dep_time": "01:00",
-            "return_arr_time": "04:55"
+            "return_arr_time": "04:55",
+            "return_flight": "769"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192NRT",
+      "route": "HKG→NRT",
       "destination": {
-        "name": "\u6771\u4eac\u6210\u7530",
+        "name": "東京成田",
         "code": "NRT",
-        "region": "\u6771\u4e9e"
+        "region": "東亞"
       },
       "price": 1874.0,
       "currency": "HKD",
@@ -2502,7 +2548,8 @@
             "arr_time": "06:15",
             "return_airline": "GK",
             "return_dep_time": "20:10",
-            "return_arr_time": "23:55"
+            "return_arr_time": "23:55",
+            "return_flight": "27"
           }
         },
         {
@@ -2518,18 +2565,19 @@
             "arr_time": "06:15",
             "return_airline": "GK",
             "return_dep_time": "19:30",
-            "return_arr_time": "23:45"
+            "return_arr_time": "23:45",
+            "return_flight": "27"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192SIN",
+      "route": "HKG→SIN",
       "destination": {
-        "name": "\u65b0\u52a0\u5761",
+        "name": "新加坡",
         "code": "SIN",
-        "region": "\u6771\u5357\u4e9e"
+        "region": "東南亞"
       },
       "price": 1911.0,
       "currency": "HKD",
@@ -2559,7 +2607,8 @@
             "arr_time": "00:45",
             "return_airline": "TR",
             "return_dep_time": "15:25",
-            "return_arr_time": "19:45"
+            "return_arr_time": "19:45",
+            "return_flight": "982"
           }
         },
         {
@@ -2580,11 +2629,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192DPS",
+      "route": "HKG→DPS",
       "destination": {
-        "name": "\u5df4\u5398\u5cf6",
+        "name": "巴厘島",
         "code": "DPS",
-        "region": "\u6771\u5357\u4e9e"
+        "region": "東南亞"
       },
       "price": 1976.0,
       "currency": "HKD",
@@ -2607,18 +2656,19 @@
             "arr_time": "00:45",
             "return_airline": "AK",
             "return_dep_time": "19:45",
-            "return_arr_time": "22:50"
+            "return_arr_time": "22:50",
+            "return_flight": "379"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192CAN",
+      "route": "HKG→CAN",
       "destination": {
-        "name": "\u5ee3\u5dde",
+        "name": "廣州",
         "code": "CAN",
-        "region": "\u4e2d\u570b"
+        "region": "中國"
       },
       "price": 1982.0,
       "currency": "HKD",
@@ -2655,7 +2705,8 @@
             "arr_time": "02:20",
             "return_airline": "CX",
             "return_dep_time": "05:00",
-            "return_arr_time": "06:25"
+            "return_arr_time": "06:25",
+            "return_flight": "953"
           }
         },
         {
@@ -3684,11 +3735,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192CGK",
+      "route": "HKG→CGK",
       "destination": {
-        "name": "\u96c5\u52a0\u9054",
+        "name": "雅加達",
         "code": "CGK",
-        "region": "\u6771\u5357\u4e9e"
+        "region": "東南亞"
       },
       "price": 2139.0,
       "currency": "HKD",
@@ -3725,7 +3776,8 @@
             "arr_time": "21:30",
             "return_airline": "VJ",
             "return_dep_time": "13:30",
-            "return_arr_time": "16:35"
+            "return_arr_time": "16:35",
+            "return_flight": "854"
           }
         },
         {
@@ -3746,11 +3798,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192NGO",
+      "route": "HKG→NGO",
       "destination": {
-        "name": "\u540d\u53e4\u5c4b",
+        "name": "名古屋",
         "code": "NGO",
-        "region": "\u6771\u4e9e"
+        "region": "東亞"
       },
       "price": 2201.0,
       "currency": "HKD",
@@ -3787,7 +3839,8 @@
             "arr_time": "20:05",
             "return_airline": "UO",
             "return_dep_time": "21:00",
-            "return_arr_time": "00:50"
+            "return_arr_time": "00:50",
+            "return_flight": "685"
           }
         },
         {
@@ -3815,11 +3868,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192FUK",
+      "route": "HKG→FUK",
       "destination": {
-        "name": "\u798f\u5ca1",
+        "name": "福岡",
         "code": "FUK",
-        "region": "\u6771\u4e9e"
+        "region": "東亞"
       },
       "price": 2235.0,
       "currency": "HKD",
@@ -3870,7 +3923,8 @@
             "arr_time": "17:00",
             "return_airline": "UO",
             "return_dep_time": "12:55",
-            "return_arr_time": "15:35"
+            "return_arr_time": "15:35",
+            "return_flight": "601"
           }
         },
         {
@@ -3905,11 +3959,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192XIY",
+      "route": "HKG→XIY",
       "destination": {
-        "name": "\u897f\u5b89",
+        "name": "西安",
         "code": "XIY",
-        "region": "\u4e2d\u570b"
+        "region": "中國"
       },
       "price": 2244.0,
       "currency": "HKD",
@@ -3932,7 +3986,8 @@
             "arr_time": "17:40",
             "return_airline": "HU",
             "return_dep_time": "12:15",
-            "return_arr_time": "15:10"
+            "return_arr_time": "15:10",
+            "return_flight": "7166"
           }
         },
         {
@@ -3948,7 +4003,8 @@
             "arr_time": "17:40",
             "return_airline": "HU",
             "return_dep_time": "12:15",
-            "return_arr_time": "15:10"
+            "return_arr_time": "15:10",
+            "return_flight": "7166"
           }
         },
         {
@@ -3964,7 +4020,8 @@
             "arr_time": "17:40",
             "return_airline": "HU",
             "return_dep_time": "09:05",
-            "return_arr_time": "12:00"
+            "return_arr_time": "12:00",
+            "return_flight": "7266"
           }
         },
         {
@@ -4279,11 +4336,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192PEK",
+      "route": "HKG→PEK",
       "destination": {
-        "name": "\u5317\u4eac",
+        "name": "北京",
         "code": "PEK",
-        "region": "\u4e2d\u570b"
+        "region": "中國"
       },
       "price": 2442.0,
       "currency": "HKD",
@@ -4320,7 +4377,8 @@
             "arr_time": "10:45",
             "return_airline": "CX",
             "return_dep_time": "10:00",
-            "return_arr_time": "13:45"
+            "return_arr_time": "13:45",
+            "return_flight": "347"
           }
         },
         {
@@ -4621,11 +4679,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192CTU",
+      "route": "HKG→CTU",
       "destination": {
-        "name": "\u6210\u90fd",
+        "name": "成都",
         "code": "CTU",
-        "region": "\u4e2d\u570b"
+        "region": "中國"
       },
       "price": 2604.0,
       "currency": "HKD",
@@ -4648,7 +4706,8 @@
             "arr_time": "20:35",
             "return_airline": "SC",
             "return_dep_time": "21:10",
-            "return_arr_time": "23:25"
+            "return_arr_time": "23:25",
+            "return_flight": "8832"
           }
         },
         {
@@ -4664,18 +4723,19 @@
             "arr_time": "20:35",
             "return_airline": "SC",
             "return_dep_time": "11:45",
-            "return_arr_time": "14:25"
+            "return_arr_time": "14:25",
+            "return_flight": "4856"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192CTS",
+      "route": "HKG→CTS",
       "destination": {
-        "name": "\u672d\u5e4c",
+        "name": "札幌",
         "code": "CTS",
-        "region": "\u6771\u4e9e"
+        "region": "東亞"
       },
       "price": 2791.0,
       "currency": "HKD",
@@ -4698,18 +4758,19 @@
             "arr_time": "06:15",
             "return_airline": "GK",
             "return_dep_time": "09:35",
-            "return_arr_time": "11:15"
+            "return_arr_time": "11:15",
+            "return_flight": "102"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192DEL",
+      "route": "HKG→DEL",
       "destination": {
-        "name": "\u5fb7\u91cc",
+        "name": "德里",
         "code": "DEL",
-        "region": "\u5357\u4e9e"
+        "region": "南亞"
       },
       "price": 3049.0,
       "currency": "HKD",
@@ -4732,18 +4793,19 @@
             "arr_time": "12:25",
             "return_airline": "AI",
             "return_dep_time": "22:40",
-            "return_arr_time": "06:15"
+            "return_arr_time": "06:15",
+            "return_flight": "314"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192SZX",
+      "route": "HKG→SZX",
       "destination": {
-        "name": "\u6df1\u5733",
+        "name": "深圳",
         "code": "SZX",
-        "region": "\u4e2d\u570b"
+        "region": "中國"
       },
       "price": 3104.0,
       "currency": "HKD",
@@ -4766,7 +4828,8 @@
             "arr_time": "11:40",
             "return_airline": "SC",
             "return_dep_time": "12:55",
-            "return_arr_time": "15:55"
+            "return_arr_time": "15:55",
+            "return_flight": "4682"
           }
         },
         {
@@ -4782,7 +4845,8 @@
             "arr_time": "15:00",
             "return_airline": "SC",
             "return_dep_time": "12:55",
-            "return_arr_time": "16:05"
+            "return_arr_time": "16:05",
+            "return_flight": "4682"
           }
         },
         {
@@ -4798,7 +4862,8 @@
             "arr_time": "15:00",
             "return_airline": "SC",
             "return_dep_time": "12:55",
-            "return_arr_time": "16:05"
+            "return_arr_time": "16:05",
+            "return_flight": "4682"
           }
         },
         {
@@ -4898,7 +4963,8 @@
             "arr_time": "15:00",
             "return_airline": "SC",
             "return_dep_time": "12:55",
-            "return_arr_time": "16:05"
+            "return_arr_time": "16:05",
+            "return_flight": "4682"
           }
         },
         {
@@ -5066,11 +5132,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192BOM",
+      "route": "HKG→BOM",
       "destination": {
-        "name": "\u5b5f\u8cb7",
+        "name": "孟買",
         "code": "BOM",
-        "region": "\u5357\u4e9e"
+        "region": "南亞"
       },
       "price": 3180.0,
       "currency": "HKD",
@@ -5093,18 +5159,19 @@
             "arr_time": "18:30",
             "return_airline": "MH",
             "return_dep_time": "23:25",
-            "return_arr_time": "07:25"
+            "return_arr_time": "07:25",
+            "return_flight": "195"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192FCO",
+      "route": "HKG→FCO",
       "destination": {
-        "name": "\u7f85\u99ac",
+        "name": "羅馬",
         "code": "FCO",
-        "region": "\u6b50\u6d32"
+        "region": "歐洲"
       },
       "price": 3667.0,
       "currency": "HKD",
@@ -5127,7 +5194,8 @@
             "arr_time": "06:10",
             "return_airline": "LX",
             "return_dep_time": "09:35",
-            "return_arr_time": "11:20"
+            "return_arr_time": "11:20",
+            "return_flight": "1727"
           }
         },
         {
@@ -5143,7 +5211,8 @@
             "arr_time": "06:10",
             "return_airline": "LX",
             "return_dep_time": "14:50",
-            "return_arr_time": "16:25"
+            "return_arr_time": "16:25",
+            "return_flight": "1737"
           }
         },
         {
@@ -5159,7 +5228,8 @@
             "arr_time": "06:10",
             "return_airline": "AZ",
             "return_dep_time": "16:40",
-            "return_arr_time": "18:15"
+            "return_arr_time": "18:15",
+            "return_flight": "574"
           }
         },
         {
@@ -5173,11 +5243,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192SYD",
+      "route": "HKG→SYD",
       "destination": {
-        "name": "\u6089\u5c3c",
+        "name": "悉尼",
         "code": "SYD",
-        "region": "\u5927\u6d0b\u6d32"
+        "region": "大洋洲"
       },
       "price": 3684.0,
       "currency": "HKD",
@@ -5200,18 +5270,19 @@
             "arr_time": "07:55",
             "return_airline": "QF",
             "return_dep_time": "11:15",
-            "return_arr_time": "17:50"
+            "return_arr_time": "17:50",
+            "return_flight": "127"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192CMB",
+      "route": "HKG→CMB",
       "destination": {
-        "name": "\u79d1\u502b\u5761",
+        "name": "科倫坡",
         "code": "CMB",
-        "region": "\u5357\u4e9e"
+        "region": "南亞"
       },
       "price": 3686.0,
       "currency": "HKD",
@@ -5248,7 +5319,8 @@
             "arr_time": "15:55",
             "return_airline": "AK",
             "return_dep_time": "22:55",
-            "return_arr_time": "05:00"
+            "return_arr_time": "05:00",
+            "return_flight": "46"
           }
         },
         {
@@ -5290,11 +5362,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192RGN",
+      "route": "HKG→RGN",
       "destination": {
-        "name": "\u4ef0\u5149",
+        "name": "仰光",
         "code": "RGN",
-        "region": "\u6771\u5357\u4e9e"
+        "region": "東南亞"
       },
       "price": 3847.0,
       "currency": "HKD",
@@ -5317,18 +5389,19 @@
             "arr_time": "14:25",
             "return_airline": "TG",
             "return_dep_time": "11:25",
-            "return_arr_time": "13:20"
+            "return_arr_time": "13:20",
+            "return_flight": "302"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192DXB",
+      "route": "HKG→DXB",
       "destination": {
-        "name": "\u8fea\u62dc",
+        "name": "迪拜",
         "code": "DXB",
-        "region": "\u4e2d\u6771"
+        "region": "中東"
       },
       "price": 3923.0,
       "currency": "HKD",
@@ -5351,18 +5424,19 @@
             "arr_time": "11:50",
             "return_airline": "_5J",
             "return_dep_time": "22:10",
-            "return_arr_time": "11:55"
+            "return_arr_time": "11:55",
+            "return_flight": "15"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192MEL",
+      "route": "HKG→MEL",
       "destination": {
-        "name": "\u58a8\u723e\u672c",
+        "name": "墨爾本",
         "code": "MEL",
-        "region": "\u5927\u6d0b\u6d32"
+        "region": "大洋洲"
       },
       "price": 4018.0,
       "currency": "HKD",
@@ -5385,7 +5459,8 @@
             "arr_time": "17:40",
             "return_airline": "BI",
             "return_dep_time": "13:30",
-            "return_arr_time": "17:40"
+            "return_arr_time": "17:40",
+            "return_flight": "6"
           }
         },
         {
@@ -5408,7 +5483,8 @@
             "arr_time": "17:45",
             "return_airline": "BI",
             "return_dep_time": "13:30",
-            "return_arr_time": "17:40"
+            "return_arr_time": "17:40",
+            "return_flight": "6"
           }
         },
         {
@@ -5436,11 +5512,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192BCN",
+      "route": "HKG→BCN",
       "destination": {
-        "name": "\u5df4\u585e\u7f85\u90a3",
+        "name": "巴塞羅那",
         "code": "BCN",
-        "region": "\u6b50\u6d32"
+        "region": "歐洲"
       },
       "price": 4199.0,
       "currency": "HKD",
@@ -5463,18 +5539,19 @@
             "arr_time": "05:45",
             "return_airline": "AF",
             "return_dep_time": "10:05",
-            "return_arr_time": "12:05"
+            "return_arr_time": "12:05",
+            "return_flight": "1149"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192MAD",
+      "route": "HKG→MAD",
       "destination": {
-        "name": "\u99ac\u5fb7\u91cc",
+        "name": "馬德里",
         "code": "MAD",
-        "region": "\u6b50\u6d32"
+        "region": "歐洲"
       },
       "price": 4361.0,
       "currency": "HKD",
@@ -5497,18 +5574,19 @@
             "arr_time": "00:25",
             "return_airline": "EY",
             "return_dep_time": "09:50",
-            "return_arr_time": "19:35"
+            "return_arr_time": "19:35",
+            "return_flight": "102"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192CDG",
+      "route": "HKG→CDG",
       "destination": {
-        "name": "\u5df4\u9ece",
+        "name": "巴黎",
         "code": "CDG",
-        "region": "\u6b50\u6d32"
+        "region": "歐洲"
       },
       "price": 4480.0,
       "currency": "HKD",
@@ -5531,7 +5609,8 @@
             "arr_time": "06:10",
             "return_airline": "LH",
             "return_dep_time": "06:10",
-            "return_arr_time": "07:25"
+            "return_arr_time": "07:25",
+            "return_flight": "1051"
           }
         },
         {
@@ -5573,11 +5652,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192LHR",
+      "route": "HKG→LHR",
       "destination": {
-        "name": "\u502b\u6566",
+        "name": "倫敦",
         "code": "LHR",
-        "region": "\u6b50\u6d32"
+        "region": "歐洲"
       },
       "price": 4560.0,
       "currency": "HKD",
@@ -5600,7 +5679,8 @@
             "arr_time": "06:10",
             "return_airline": "LX",
             "return_dep_time": "09:00",
-            "return_arr_time": "11:55"
+            "return_arr_time": "11:55",
+            "return_flight": "317"
           }
         },
         {
@@ -5616,7 +5696,8 @@
             "arr_time": "06:10",
             "return_airline": "LX",
             "return_dep_time": "09:00",
-            "return_arr_time": "11:55"
+            "return_arr_time": "11:55",
+            "return_flight": "317"
           }
         },
         {
@@ -5632,7 +5713,8 @@
             "arr_time": "06:10",
             "return_airline": "LX",
             "return_dep_time": "09:00",
-            "return_arr_time": "11:55"
+            "return_arr_time": "11:55",
+            "return_flight": "317"
           }
         },
         {
@@ -5646,11 +5728,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192SEA",
+      "route": "HKG→SEA",
       "destination": {
-        "name": "\u897f\u96c5\u5716",
+        "name": "西雅圖",
         "code": "SEA",
-        "region": "\u5317\u7f8e\u6d32"
+        "region": "北美洲"
       },
       "price": 4912.0,
       "currency": "HKD",
@@ -5680,7 +5762,8 @@
             "arr_time": "17:05",
             "return_airline": "DL",
             "return_dep_time": "18:55",
-            "return_arr_time": "21:44"
+            "return_arr_time": "21:44",
+            "return_flight": "2861"
           }
         },
         {
@@ -5967,11 +6050,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192SFO",
+      "route": "HKG→SFO",
       "destination": {
-        "name": "\u4e09\u85e9\u5e02",
+        "name": "三藩市",
         "code": "SFO",
-        "region": "\u5317\u7f8e\u6d32"
+        "region": "北美洲"
       },
       "price": 4930.0,
       "currency": "HKD",
@@ -5994,18 +6077,19 @@
             "arr_time": "09:30",
             "return_airline": "UA",
             "return_dep_time": "10:05",
-            "return_arr_time": "12:20"
+            "return_arr_time": "12:20",
+            "return_flight": "500"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192AMS",
+      "route": "HKG→AMS",
       "destination": {
-        "name": "\u963f\u59c6\u65af\u7279\u4e39",
+        "name": "阿姆斯特丹",
         "code": "AMS",
-        "region": "\u6b50\u6d32"
+        "region": "歐洲"
       },
       "price": 4969.0,
       "currency": "HKD",
@@ -6028,7 +6112,8 @@
             "arr_time": "05:45",
             "return_airline": "AY",
             "return_dep_time": "19:00",
-            "return_arr_time": "22:25"
+            "return_arr_time": "22:25",
+            "return_flight": "1306"
           }
         },
         {
@@ -6044,18 +6129,19 @@
             "arr_time": "05:45",
             "return_airline": "AY",
             "return_dep_time": "19:00",
-            "return_arr_time": "22:25"
+            "return_arr_time": "22:25",
+            "return_flight": "1306"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192LAX",
+      "route": "HKG→LAX",
       "destination": {
-        "name": "\u6d1b\u6749\u77f6",
+        "name": "洛杉矶",
         "code": "LAX",
-        "region": "\u5317\u7f8e\u6d32"
+        "region": "北美洲"
       },
       "price": 4974.0,
       "currency": "HKD",
@@ -6092,7 +6178,8 @@
             "arr_time": "11:15",
             "return_airline": "UA",
             "return_dep_time": "12:35",
-            "return_arr_time": "18:30"
+            "return_arr_time": "18:30",
+            "return_flight": "152"
           }
         },
         {
@@ -6108,7 +6195,8 @@
             "arr_time": "11:15",
             "return_airline": "UA",
             "return_dep_time": "12:35",
-            "return_arr_time": "18:30"
+            "return_arr_time": "18:30",
+            "return_flight": "152"
           }
         },
         {
@@ -6180,7 +6268,8 @@
             "arr_time": "11:10",
             "return_airline": "UA",
             "return_dep_time": "12:35",
-            "return_arr_time": "18:30"
+            "return_arr_time": "18:30",
+            "return_flight": "152"
           }
         },
         {
@@ -6313,11 +6402,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192FRA",
+      "route": "HKG→FRA",
       "destination": {
-        "name": "\u6cd5\u862d\u514b\u798f",
+        "name": "法蘭克福",
         "code": "FRA",
-        "region": "\u6b50\u6d32"
+        "region": "歐洲"
       },
       "price": 5540.0,
       "currency": "HKD",
@@ -6340,18 +6429,19 @@
             "arr_time": "05:50",
             "return_airline": "AF",
             "return_dep_time": "12:10",
-            "return_arr_time": "13:40"
+            "return_arr_time": "13:40",
+            "return_flight": "1619"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192DOH",
+      "route": "HKG→DOH",
       "destination": {
-        "name": "\u591a\u54c8",
+        "name": "多哈",
         "code": "DOH",
-        "region": "\u4e2d\u6771"
+        "region": "中東"
       },
       "price": 5629.0,
       "currency": "HKD",
@@ -6381,18 +6471,19 @@
             "arr_time": "00:25",
             "return_airline": "EY",
             "return_dep_time": "04:30",
-            "return_arr_time": "06:35"
+            "return_arr_time": "06:35",
+            "return_flight": "664"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192YVR",
+      "route": "HKG→YVR",
       "destination": {
-        "name": "\u6eab\u54e5\u83ef",
+        "name": "溫哥華",
         "code": "YVR",
-        "region": "\u5317\u7f8e\u6d32"
+        "region": "北美洲"
       },
       "price": 5684.0,
       "currency": "HKD",
@@ -6422,7 +6513,8 @@
             "arr_time": "20:00",
             "return_airline": "AC",
             "return_dep_time": "17:25",
-            "return_arr_time": "18:32"
+            "return_arr_time": "18:32",
+            "return_flight": "8806"
           }
         },
         {
@@ -6438,7 +6530,8 @@
             "arr_time": "20:00",
             "return_airline": "AC",
             "return_dep_time": "17:25",
-            "return_arr_time": "18:32"
+            "return_arr_time": "18:32",
+            "return_flight": "8806"
           }
         },
         {
@@ -6501,11 +6594,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192CAI",
+      "route": "HKG→CAI",
       "destination": {
-        "name": "\u958b\u7f85",
+        "name": "開羅",
         "code": "CAI",
-        "region": "\u4e2d\u6771"
+        "region": "中東"
       },
       "price": 5808.0,
       "currency": "HKD",
@@ -6528,7 +6621,8 @@
             "arr_time": "00:25",
             "return_airline": "EY",
             "return_dep_time": "02:20",
-            "return_arr_time": "06:45"
+            "return_arr_time": "06:45",
+            "return_flight": "718"
           }
         },
         {
@@ -6565,7 +6659,8 @@
             "arr_time": "00:25",
             "return_airline": "EY",
             "return_dep_time": "19:45",
-            "return_arr_time": "00:15"
+            "return_arr_time": "00:15",
+            "return_flight": "716"
           }
         },
         {
@@ -6586,11 +6681,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192ORD",
+      "route": "HKG→ORD",
       "destination": {
-        "name": "\u829d\u52a0\u54e5",
+        "name": "芝加哥",
         "code": "ORD",
-        "region": "\u5317\u7f8e\u6d32"
+        "region": "北美洲"
       },
       "price": 6806.0,
       "currency": "HKD",
@@ -6613,18 +6708,19 @@
             "arr_time": "08:00",
             "return_airline": "DL",
             "return_dep_time": "14:55",
-            "return_arr_time": "17:20"
+            "return_arr_time": "17:20",
+            "return_flight": "967"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192AKL",
+      "route": "HKG→AKL",
       "destination": {
-        "name": "\u5967\u514b\u862d",
+        "name": "奧克蘭",
         "code": "AKL",
-        "region": "\u5927\u6d0b\u6d32"
+        "region": "大洋洲"
       },
       "price": 6912.0,
       "currency": "HKD",
@@ -6647,7 +6743,8 @@
             "arr_time": "17:40",
             "return_airline": "HU",
             "return_dep_time": "20:45",
-            "return_arr_time": "04:40"
+            "return_arr_time": "04:40",
+            "return_flight": "798"
           }
         },
         {
@@ -6663,7 +6760,8 @@
             "arr_time": "17:40",
             "return_airline": "HU",
             "return_dep_time": "20:45",
-            "return_arr_time": "05:00"
+            "return_arr_time": "05:00",
+            "return_flight": "786"
           }
         },
         {
@@ -6679,7 +6777,8 @@
             "arr_time": "06:45",
             "return_airline": "QF",
             "return_dep_time": "06:00",
-            "return_arr_time": "07:45"
+            "return_arr_time": "07:45",
+            "return_flight": "140"
           }
         },
         {
@@ -6695,7 +6794,8 @@
             "arr_time": "06:25",
             "return_airline": "FJ",
             "return_dep_time": "14:00",
-            "return_arr_time": "17:10"
+            "return_arr_time": "17:10",
+            "return_flight": "410"
           }
         },
         {
@@ -6711,7 +6811,8 @@
             "arr_time": "06:45",
             "return_airline": "QF",
             "return_dep_time": "06:00",
-            "return_arr_time": "07:45"
+            "return_arr_time": "07:45",
+            "return_flight": "140"
           }
         },
         {
@@ -6727,18 +6828,19 @@
             "arr_time": "07:45",
             "return_airline": "QF",
             "return_dep_time": "06:00",
-            "return_arr_time": "07:45"
+            "return_arr_time": "07:45",
+            "return_flight": "140"
           }
         }
       ],
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192JNB",
+      "route": "HKG→JNB",
       "destination": {
-        "name": "\u7d04\u7ff0\u5167\u65af\u5821",
+        "name": "約翰內斯堡",
         "code": "JNB",
-        "region": "\u975e\u6d32"
+        "region": "非洲"
       },
       "price": 6929.0,
       "currency": "HKD",
@@ -6761,7 +6863,8 @@
             "arr_time": "00:25",
             "return_airline": "EY",
             "return_dep_time": "09:45",
-            "return_arr_time": "19:45"
+            "return_arr_time": "19:45",
+            "return_flight": "748"
           }
         },
         {
@@ -6777,7 +6880,8 @@
             "arr_time": "00:25",
             "return_airline": "EY",
             "return_dep_time": "09:45",
-            "return_arr_time": "19:45"
+            "return_arr_time": "19:45",
+            "return_flight": "748"
           }
         },
         {
@@ -6793,7 +6897,8 @@
             "arr_time": "00:25",
             "return_airline": "EY",
             "return_dep_time": "09:45",
-            "return_arr_time": "19:45"
+            "return_arr_time": "19:45",
+            "return_flight": "748"
           }
         },
         {
@@ -6823,7 +6928,8 @@
             "arr_time": "23:00",
             "return_airline": "EK",
             "return_dep_time": "10:25",
-            "return_arr_time": "20:25"
+            "return_arr_time": "20:25",
+            "return_flight": "768"
           }
         },
         {
@@ -6886,11 +6992,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192JFK",
+      "route": "HKG→JFK",
       "destination": {
-        "name": "\u7d10\u7d04",
+        "name": "紐約",
         "code": "JFK",
-        "region": "\u5317\u7f8e\u6d32"
+        "region": "北美洲"
       },
       "price": 7448.0,
       "currency": "HKD",
@@ -6913,7 +7019,8 @@
             "arr_time": "17:15",
             "return_airline": "BR",
             "return_dep_time": "01:25",
-            "return_arr_time": "05:20"
+            "return_arr_time": "05:20",
+            "return_flight": "31"
           }
         },
         {
@@ -6929,7 +7036,8 @@
             "arr_time": "15:20",
             "return_airline": "BR",
             "return_dep_time": "01:25",
-            "return_arr_time": "05:20"
+            "return_arr_time": "05:20",
+            "return_flight": "31"
           }
         },
         {
@@ -6945,7 +7053,8 @@
             "arr_time": "17:15",
             "return_airline": "BR",
             "return_dep_time": "01:25",
-            "return_arr_time": "05:20"
+            "return_arr_time": "05:20",
+            "return_flight": "31"
           }
         },
         {
@@ -7001,11 +7110,11 @@
       "totalDestinations": 51
     },
     {
-      "route": "HKG\u2192NOS",
+      "route": "HKG→NOS",
       "destination": {
         "name": "NOS",
         "code": "NOS",
-        "region": "\u5176\u4ed6"
+        "region": "其他"
       },
       "price": 13245.0,
       "currency": "HKD",
