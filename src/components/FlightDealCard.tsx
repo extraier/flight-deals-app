@@ -4,12 +4,23 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 
+interface FlightInfo {
+  airline: string;
+  flight_no: string;
+  dep_time: string;
+  arr_time?: string;
+  return_airline?: string;
+  return_dep_time?: string;
+  return_arr_time?: string;
+}
+
 interface DateInfo {
   day: number;
   month: number;
   year: number;
   price: number;
   stay: number | null;
+  flight?: FlightInfo;
 }
 
 interface Deal {
@@ -125,11 +136,21 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
                     .map((date, idx) => (
                       <div
                         key={idx}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-sm transition-colors hover:bg-emerald-500/20"
+                        className="inline-flex flex-col gap-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-sm transition-colors hover:bg-emerald-500/20"
                       >
-                        <span className="font-medium text-emerald-400">{date.day}號</span>
-                        {date.stay && (
-                          <span className="text-xs text-slate-400">{date.stay}日</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-emerald-400">{date.day}號</span>
+                          {date.stay && (
+                            <span className="text-xs text-slate-400">{date.stay}日</span>
+                          )}
+                        </div>
+                        {date.flight && (
+                          <div className="flex items-center gap-1 text-xs">
+                            <span className="font-medium text-slate-300">{date.flight.airline}</span>
+                            <span className="text-slate-400">{date.flight.flight_no}</span>
+                            <span className="text-slate-500">·</span>
+                            <span className="text-slate-300">{date.flight.dep_time}</span>
+                          </div>
                         )}
                       </div>
                     ))}

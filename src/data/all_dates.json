@@ -1,15 +1,21 @@
 {
-  "generated_at": "2026-06-19T12:11:59.332298",
-  "count": 51,
+  "generated_at": "2026-06-19T12:19:12.250786",
+  "run_id": "20260619121912",
   "results": [
     {
       "route": "HKG\u2192MNL",
-      "destination": "\u99ac\u5c3c\u62c9",
-      "code": "MNL",
+      "destination": {
+        "name": "\u99ac\u5c3c\u62c9",
+        "code": "MNL",
+        "region": "\u6771\u5357\u4e9e"
+      },
       "price": 1184.0,
-      "typical": 1280,
-      "discount": 8,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 23
+      },
+      "typicalPrice": 1280,
       "cheapestDates": [
         {
           "day": 4,
@@ -190,16 +196,23 @@
           "price": 1184.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192PVG",
-      "destination": "\u4e0a\u6d77\u6d66\u6771",
-      "code": "PVG",
+      "destination": {
+        "name": "\u4e0a\u6d77\u6d66\u6771",
+        "code": "PVG",
+        "region": "\u4e2d\u570b"
+      },
       "price": 1269.0,
-      "typical": 1914,
-      "discount": 34,
-      "dates": 149,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 2
+      },
+      "typicalPrice": 1914,
       "cheapestDates": [
         {
           "day": 1,
@@ -233,16 +246,23 @@
             "return_arr_time": "12:20"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192KHH",
-      "destination": "\u9ad8\u96c4",
-      "code": "KHH",
+      "destination": {
+        "name": "\u9ad8\u96c4",
+        "code": "KHH",
+        "region": "\u6771\u4e9e"
+      },
       "price": 1281.0,
-      "typical": 1401,
-      "discount": 9,
-      "dates": 183,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 4
+      },
+      "typicalPrice": 1401,
       "cheapestDates": [
         {
           "day": 22,
@@ -272,16 +292,23 @@
           "price": 1281.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192TPE",
-      "destination": "\u53f0\u5317",
-      "code": "TPE",
+      "destination": {
+        "name": "\u53f0\u5317",
+        "code": "TPE",
+        "region": "\u6771\u4e9e"
+      },
       "price": 1281.0,
-      "typical": 1401,
-      "discount": 9,
-      "dates": 285,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 14
+      },
+      "typicalPrice": 1401,
       "cheapestDates": [
         {
           "day": 9,
@@ -399,16 +426,23 @@
           "price": 1281.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192RMQ",
-      "destination": "\u53f0\u4e2d",
-      "code": "RMQ",
+      "destination": {
+        "name": "\u53f0\u4e2d",
+        "code": "RMQ",
+        "region": "\u6771\u4e9e"
+      },
       "price": 1341.0,
-      "typical": 1381,
-      "discount": 3,
-      "dates": 180,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 36
+      },
+      "typicalPrice": 1381,
       "cheapestDates": [
         {
           "day": 4,
@@ -680,16 +714,23 @@
           "price": 1341.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192HAN",
-      "destination": "\u6cb3\u5167",
-      "code": "HAN",
+      "destination": {
+        "name": "\u6cb3\u5167",
+        "code": "HAN",
+        "region": "\u6771\u5357\u4e9e"
+      },
       "price": 1411.0,
-      "typical": 1481,
-      "discount": 5,
-      "dates": 149,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 49
+      },
+      "typicalPrice": 1481,
       "cheapestDates": [
         {
           "day": 29,
@@ -1061,16 +1102,23 @@
           "price": 1411.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192SGN",
-      "destination": "\u80e1\u5fd7\u660e\u5e02",
-      "code": "SGN",
+      "destination": {
+        "name": "\u80e1\u5fd7\u660e\u5e02",
+        "code": "SGN",
+        "region": "\u6771\u5357\u4e9e"
+      },
       "price": 1432.0,
-      "typical": 1934,
-      "discount": 26,
-      "dates": 239,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 17
+      },
+      "typicalPrice": 1934,
       "cheapestDates": [
         {
           "day": 22,
@@ -1218,16 +1266,23 @@
           "price": 1432.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192ICN",
-      "destination": "\u9996\u723e",
-      "code": "ICN",
+      "destination": {
+        "name": "\u9996\u723e",
+        "code": "ICN",
+        "region": "\u6771\u4e9e"
+      },
       "price": 1508.0,
-      "typical": 1772,
-      "discount": 15,
-      "dates": 183,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 6
+      },
+      "typicalPrice": 1772,
       "cheapestDates": [
         {
           "day": 2,
@@ -1298,16 +1353,23 @@
           "price": 1508.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192BKK",
-      "destination": "\u66fc\u8c37",
-      "code": "BKK",
+      "destination": {
+        "name": "\u66fc\u8c37",
+        "code": "BKK",
+        "region": "\u6771\u5357\u4e9e"
+      },
       "price": 1587.0,
-      "typical": 1627,
-      "discount": 2,
-      "dates": 183,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 55
+      },
+      "typicalPrice": 1627,
       "cheapestDates": [
         {
           "day": 2,
@@ -1703,16 +1765,23 @@
           "price": 1587.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192PUS",
-      "destination": "\u91dc\u5c71",
-      "code": "PUS",
+      "destination": {
+        "name": "\u91dc\u5c71",
+        "code": "PUS",
+        "region": "\u6771\u4e9e"
+      },
       "price": 1615.0,
-      "typical": 2175,
-      "discount": 26,
-      "dates": 285,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 4
+      },
+      "typicalPrice": 2175,
       "cheapestDates": [
         {
           "day": 12,
@@ -1769,16 +1838,23 @@
           "price": 1615.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192KUL",
-      "destination": "\u5409\u9686\u5761",
-      "code": "KUL",
+      "destination": {
+        "name": "\u5409\u9686\u5761",
+        "code": "KUL",
+        "region": "\u6771\u5357\u4e9e"
+      },
       "price": 1681.0,
-      "typical": 1979,
-      "discount": 15,
-      "dates": 285,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 32
+      },
+      "typicalPrice": 1979,
       "cheapestDates": [
         {
           "day": 9,
@@ -2031,16 +2107,23 @@
           "price": 1681.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192KIX",
-      "destination": "\u5927\u962a",
-      "code": "KIX",
+      "destination": {
+        "name": "\u5927\u962a",
+        "code": "KIX",
+        "region": "\u6771\u4e9e"
+      },
       "price": 1707.0,
-      "typical": 2432,
-      "discount": 30,
-      "dates": 183,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 13
+      },
+      "typicalPrice": 2432,
       "cheapestDates": [
         {
           "day": 17,
@@ -2160,16 +2243,23 @@
           "price": 1707.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192HKT",
-      "destination": "\u5e03\u5409",
-      "code": "HKT",
+      "destination": {
+        "name": "\u5e03\u5409",
+        "code": "HKT",
+        "region": "\u6771\u5357\u4e9e"
+      },
       "price": 1757.0,
-      "typical": 2159,
-      "discount": 19,
-      "dates": 122,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 1
+      },
+      "typicalPrice": 2159,
       "cheapestDates": [
         {
           "day": 1,
@@ -2187,16 +2277,23 @@
             "return_arr_time": "16:00"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192PEN",
-      "destination": "\u6ab3\u57ce",
-      "code": "PEN",
+      "destination": {
+        "name": "\u6ab3\u57ce",
+        "code": "PEN",
+        "region": "\u6771\u5357\u4e9e"
+      },
       "price": 1792.0,
-      "typical": 1985,
-      "discount": 10,
-      "dates": 122,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 2
+      },
+      "typicalPrice": 1985,
       "cheapestDates": [
         {
           "day": 8,
@@ -2221,16 +2318,23 @@
             "return_arr_time": "04:55"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192NRT",
-      "destination": "\u6771\u4eac\u6210\u7530",
-      "code": "NRT",
+      "destination": {
+        "name": "\u6771\u4eac\u6210\u7530",
+        "code": "NRT",
+        "region": "\u6771\u4e9e"
+      },
       "price": 1874.0,
-      "typical": 2406,
-      "discount": 22,
-      "dates": 149,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 2
+      },
+      "typicalPrice": 2406,
       "cheapestDates": [
         {
           "day": 17,
@@ -2264,16 +2368,23 @@
             "return_arr_time": "23:45"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192SIN",
-      "destination": "\u65b0\u52a0\u5761",
-      "code": "SIN",
+      "destination": {
+        "name": "\u65b0\u52a0\u5761",
+        "code": "SIN",
+        "region": "\u6771\u5357\u4e9e"
+      },
       "price": 1911.0,
-      "typical": 2425,
-      "discount": 21,
-      "dates": 122,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 4
+      },
+      "typicalPrice": 2425,
       "cheapestDates": [
         {
           "day": 31,
@@ -2312,16 +2423,23 @@
           "price": 1911.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192DPS",
-      "destination": "\u5df4\u5398\u5cf6",
-      "code": "DPS",
+      "destination": {
+        "name": "\u5df4\u5398\u5cf6",
+        "code": "DPS",
+        "region": "\u6771\u5357\u4e9e"
+      },
       "price": 1976.0,
-      "typical": 3120,
-      "discount": 37,
-      "dates": 183,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 1
+      },
+      "typicalPrice": 3120,
       "cheapestDates": [
         {
           "day": 12,
@@ -2339,16 +2457,23 @@
             "return_arr_time": "22:50"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192CAN",
-      "destination": "\u5ee3\u5dde",
-      "code": "CAN",
+      "destination": {
+        "name": "\u5ee3\u5dde",
+        "code": "CAN",
+        "region": "\u4e2d\u570b"
+      },
       "price": 1982.0,
-      "typical": 1982,
-      "discount": 0,
-      "dates": 149,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 149
+      },
+      "typicalPrice": 1982,
       "cheapestDates": [
         {
           "day": 20,
@@ -3402,16 +3527,23 @@
           "price": 1982.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192CGK",
-      "destination": "\u96c5\u52a0\u9054",
-      "code": "CGK",
+      "destination": {
+        "name": "\u96c5\u52a0\u9054",
+        "code": "CGK",
+        "region": "\u6771\u5357\u4e9e"
+      },
       "price": 2139.0,
-      "typical": 2595,
-      "discount": 18,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 5
+      },
+      "typicalPrice": 2595,
       "cheapestDates": [
         {
           "day": 21,
@@ -3457,16 +3589,23 @@
           "price": 2139.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192NGO",
-      "destination": "\u540d\u53e4\u5c4b",
-      "code": "NGO",
+      "destination": {
+        "name": "\u540d\u53e4\u5c4b",
+        "code": "NGO",
+        "region": "\u6771\u4e9e"
+      },
       "price": 2201.0,
-      "typical": 2614,
-      "discount": 16,
-      "dates": 183,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 6
+      },
+      "typicalPrice": 2614,
       "cheapestDates": [
         {
           "day": 31,
@@ -3519,16 +3658,23 @@
           "price": 2201.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192FUK",
-      "destination": "\u798f\u5ca1",
-      "code": "FUK",
+      "destination": {
+        "name": "\u798f\u5ca1",
+        "code": "FUK",
+        "region": "\u6771\u4e9e"
+      },
       "price": 2235.0,
-      "typical": 2451,
-      "discount": 9,
-      "dates": 122,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 9
+      },
+      "typicalPrice": 2451,
       "cheapestDates": [
         {
           "day": 29,
@@ -3602,16 +3748,23 @@
           "price": 2235.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192XIY",
-      "destination": "\u897f\u5b89",
-      "code": "XIY",
+      "destination": {
+        "name": "\u897f\u5b89",
+        "code": "XIY",
+        "region": "\u4e2d\u570b"
+      },
       "price": 2244.0,
-      "typical": 2648,
-      "discount": 15,
-      "dates": 192,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 47
+      },
+      "typicalPrice": 2648,
       "cheapestDates": [
         {
           "day": 20,
@@ -3969,16 +4122,23 @@
           "price": 2244.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192PEK",
-      "destination": "\u5317\u4eac",
-      "code": "PEK",
+      "destination": {
+        "name": "\u5317\u4eac",
+        "code": "PEK",
+        "region": "\u4e2d\u570b"
+      },
       "price": 2442.0,
-      "typical": 2542,
-      "discount": 4,
-      "dates": 149,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 45
+      },
+      "typicalPrice": 2542,
       "cheapestDates": [
         {
           "day": 22,
@@ -4304,16 +4464,23 @@
           "price": 2442.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192CTU",
-      "destination": "\u6210\u90fd",
-      "code": "CTU",
+      "destination": {
+        "name": "\u6210\u90fd",
+        "code": "CTU",
+        "region": "\u4e2d\u570b"
+      },
       "price": 2604.0,
-      "typical": 3754,
-      "discount": 31,
-      "dates": 185,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 2
+      },
+      "typicalPrice": 3754,
       "cheapestDates": [
         {
           "day": 22,
@@ -4347,16 +4514,23 @@
             "return_arr_time": "14:25"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192CTS",
-      "destination": "\u672d\u5e4c",
-      "code": "CTS",
+      "destination": {
+        "name": "\u672d\u5e4c",
+        "code": "CTS",
+        "region": "\u6771\u4e9e"
+      },
       "price": 2791.0,
-      "typical": 3640,
-      "discount": 23,
-      "dates": 122,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 1
+      },
+      "typicalPrice": 3640,
       "cheapestDates": [
         {
           "day": 26,
@@ -4374,16 +4548,23 @@
             "return_arr_time": "11:15"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192DEL",
-      "destination": "\u5fb7\u91cc",
-      "code": "DEL",
+      "destination": {
+        "name": "\u5fb7\u91cc",
+        "code": "DEL",
+        "region": "\u5357\u4e9e"
+      },
       "price": 3049.0,
-      "typical": 3962,
-      "discount": 23,
-      "dates": 149,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 1
+      },
+      "typicalPrice": 3962,
       "cheapestDates": [
         {
           "day": 15,
@@ -4401,16 +4582,23 @@
             "return_arr_time": "06:15"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192SZX",
-      "destination": "\u6df1\u5733",
-      "code": "SZX",
+      "destination": {
+        "name": "\u6df1\u5733",
+        "code": "SZX",
+        "region": "\u4e2d\u570b"
+      },
       "price": 3104.0,
-      "typical": 3804,
-      "discount": 18,
-      "dates": 207,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 39
+      },
+      "typicalPrice": 3804,
       "cheapestDates": [
         {
           "day": 22,
@@ -4712,16 +4900,23 @@
           "price": 3104.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192BOM",
-      "destination": "\u5b5f\u8cb7",
-      "code": "BOM",
+      "destination": {
+        "name": "\u5b5f\u8cb7",
+        "code": "BOM",
+        "region": "\u5357\u4e9e"
+      },
       "price": 3180.0,
-      "typical": 4496,
-      "discount": 29,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 1
+      },
+      "typicalPrice": 4496,
       "cheapestDates": [
         {
           "day": 9,
@@ -4739,16 +4934,23 @@
             "return_arr_time": "07:25"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192FCO",
-      "destination": "\u7f85\u99ac",
-      "code": "FCO",
+      "destination": {
+        "name": "\u7f85\u99ac",
+        "code": "FCO",
+        "region": "\u6b50\u6d32"
+      },
       "price": 3667.0,
-      "typical": 5440,
-      "discount": 33,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 4
+      },
+      "typicalPrice": 5440,
       "cheapestDates": [
         {
           "day": 10,
@@ -4805,16 +5007,23 @@
           "price": 3667.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192SYD",
-      "destination": "\u6089\u5c3c",
-      "code": "SYD",
+      "destination": {
+        "name": "\u6089\u5c3c",
+        "code": "SYD",
+        "region": "\u5927\u6d0b\u6d32"
+      },
       "price": 3684.0,
-      "typical": 5471,
-      "discount": 33,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 1
+      },
+      "typicalPrice": 5471,
       "cheapestDates": [
         {
           "day": 3,
@@ -4832,16 +5041,23 @@
             "return_arr_time": "17:50"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192CMB",
-      "destination": "\u79d1\u502b\u5761",
-      "code": "CMB",
+      "destination": {
+        "name": "\u79d1\u502b\u5761",
+        "code": "CMB",
+        "region": "\u5357\u4e9e"
+      },
       "price": 3686.0,
-      "typical": 4238,
-      "discount": 13,
-      "dates": 183,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 8
+      },
+      "typicalPrice": 4238,
       "cheapestDates": [
         {
           "day": 6,
@@ -4908,16 +5124,23 @@
           "price": 3686.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192RGN",
-      "destination": "\u4ef0\u5149",
-      "code": "RGN",
+      "destination": {
+        "name": "\u4ef0\u5149",
+        "code": "RGN",
+        "region": "\u6771\u5357\u4e9e"
+      },
       "price": 3847.0,
-      "typical": 4307,
-      "discount": 11,
-      "dates": 137,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 1
+      },
+      "typicalPrice": 4307,
       "cheapestDates": [
         {
           "day": 21,
@@ -4935,16 +5158,23 @@
             "return_arr_time": "13:20"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192DXB",
-      "destination": "\u8fea\u62dc",
-      "code": "DXB",
+      "destination": {
+        "name": "\u8fea\u62dc",
+        "code": "DXB",
+        "region": "\u4e2d\u6771"
+      },
       "price": 3923.0,
-      "typical": 4911,
-      "discount": 20,
-      "dates": 149,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 1
+      },
+      "typicalPrice": 4911,
       "cheapestDates": [
         {
           "day": 10,
@@ -4962,16 +5192,23 @@
             "return_arr_time": "11:55"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192MEL",
-      "destination": "\u58a8\u723e\u672c",
-      "code": "MEL",
+      "destination": {
+        "name": "\u58a8\u723e\u672c",
+        "code": "MEL",
+        "region": "\u5927\u6d0b\u6d32"
+      },
       "price": 4018.0,
-      "typical": 5338,
-      "discount": 25,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 6
+      },
+      "typicalPrice": 5338,
       "cheapestDates": [
         {
           "day": 22,
@@ -5033,16 +5270,23 @@
           "price": 4018.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192BCN",
-      "destination": "\u5df4\u585e\u7f85\u90a3",
-      "code": "BCN",
+      "destination": {
+        "name": "\u5df4\u585e\u7f85\u90a3",
+        "code": "BCN",
+        "region": "\u6b50\u6d32"
+      },
       "price": 4199.0,
-      "typical": 5528,
-      "discount": 24,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 1
+      },
+      "typicalPrice": 5528,
       "cheapestDates": [
         {
           "day": 13,
@@ -5051,16 +5295,23 @@
           "price": 4199.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192MAD",
-      "destination": "\u99ac\u5fb7\u91cc",
-      "code": "MAD",
+      "destination": {
+        "name": "\u99ac\u5fb7\u91cc",
+        "code": "MAD",
+        "region": "\u6b50\u6d32"
+      },
       "price": 4361.0,
-      "typical": 5703,
-      "discount": 24,
-      "dates": 179,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 1
+      },
+      "typicalPrice": 5703,
       "cheapestDates": [
         {
           "day": 4,
@@ -5078,16 +5329,23 @@
             "return_arr_time": "19:35"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192CDG",
-      "destination": "\u5df4\u9ece",
-      "code": "CDG",
+      "destination": {
+        "name": "\u5df4\u9ece",
+        "code": "CDG",
+        "region": "\u6b50\u6d32"
+      },
       "price": 4480.0,
-      "typical": 6268,
-      "discount": 29,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 6
+      },
+      "typicalPrice": 6268,
       "cheapestDates": [
         {
           "day": 3,
@@ -5140,16 +5398,23 @@
           "price": 4480.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192LHR",
-      "destination": "\u502b\u6566",
-      "code": "LHR",
+      "destination": {
+        "name": "\u502b\u6566",
+        "code": "LHR",
+        "region": "\u6b50\u6d32"
+      },
       "price": 4560.0,
-      "typical": 6316,
-      "discount": 28,
-      "dates": 149,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 4
+      },
+      "typicalPrice": 6316,
       "cheapestDates": [
         {
           "day": 3,
@@ -5206,16 +5471,23 @@
           "price": 4560.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192SEA",
-      "destination": "\u897f\u96c5\u5716",
-      "code": "SEA",
+      "destination": {
+        "name": "\u897f\u96c5\u5716",
+        "code": "SEA",
+        "region": "\u5317\u7f8e\u6d32"
+      },
       "price": 4912.0,
-      "typical": 4974,
-      "discount": 1,
-      "dates": 149,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 42
+      },
+      "typicalPrice": 4974,
       "cheapestDates": [
         {
           "day": 4,
@@ -5520,16 +5792,23 @@
           "price": 4912.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192SFO",
-      "destination": "\u4e09\u85e9\u5e02",
-      "code": "SFO",
+      "destination": {
+        "name": "\u4e09\u85e9\u5e02",
+        "code": "SFO",
+        "region": "\u5317\u7f8e\u6d32"
+      },
       "price": 4930.0,
-      "typical": 5780,
-      "discount": 15,
-      "dates": 149,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 1
+      },
+      "typicalPrice": 5780,
       "cheapestDates": [
         {
           "day": 17,
@@ -5547,16 +5826,23 @@
             "return_arr_time": "12:20"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192AMS",
-      "destination": "\u963f\u59c6\u65af\u7279\u4e39",
-      "code": "AMS",
+      "destination": {
+        "name": "\u963f\u59c6\u65af\u7279\u4e39",
+        "code": "AMS",
+        "region": "\u6b50\u6d32"
+      },
       "price": 4969.0,
-      "typical": 6547,
-      "discount": 24,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 2
+      },
+      "typicalPrice": 6547,
       "cheapestDates": [
         {
           "day": 4,
@@ -5590,16 +5876,23 @@
             "return_arr_time": "22:25"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192LAX",
-      "destination": "\u6d1b\u6749\u77f6",
-      "code": "LAX",
+      "destination": {
+        "name": "\u6d1b\u6749\u77f6",
+        "code": "LAX",
+        "region": "\u5317\u7f8e\u6d32"
+      },
       "price": 4974.0,
-      "typical": 6377,
-      "discount": 22,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 31
+      },
+      "typicalPrice": 6377,
       "cheapestDates": [
         {
           "day": 26,
@@ -5836,16 +6129,23 @@
           "price": 4974.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192FRA",
-      "destination": "\u6cd5\u862d\u514b\u798f",
-      "code": "FRA",
+      "destination": {
+        "name": "\u6cd5\u862d\u514b\u798f",
+        "code": "FRA",
+        "region": "\u6b50\u6d32"
+      },
       "price": 5540.0,
-      "typical": 6161,
-      "discount": 10,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 1
+      },
+      "typicalPrice": 6161,
       "cheapestDates": [
         {
           "day": 16,
@@ -5863,16 +6163,23 @@
             "return_arr_time": "13:40"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192DOH",
-      "destination": "\u591a\u54c8",
-      "code": "DOH",
+      "destination": {
+        "name": "\u591a\u54c8",
+        "code": "DOH",
+        "region": "\u4e2d\u6771"
+      },
       "price": 5629.0,
-      "typical": 6169,
-      "discount": 9,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 2
+      },
+      "typicalPrice": 6169,
       "cheapestDates": [
         {
           "day": 29,
@@ -5897,16 +6204,23 @@
             "return_arr_time": "06:35"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192YVR",
-      "destination": "\u6eab\u54e5\u83ef",
-      "code": "YVR",
+      "destination": {
+        "name": "\u6eab\u54e5\u83ef",
+        "code": "YVR",
+        "region": "\u5317\u7f8e\u6d32"
+      },
       "price": 5684.0,
-      "typical": 7317,
-      "discount": 22,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 11
+      },
+      "typicalPrice": 7317,
       "cheapestDates": [
         {
           "day": 9,
@@ -6003,16 +6317,23 @@
           "price": 5684.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192CAI",
-      "destination": "\u958b\u7f85",
-      "code": "CAI",
+      "destination": {
+        "name": "\u958b\u7f85",
+        "code": "CAI",
+        "region": "\u4e2d\u6771"
+      },
       "price": 5808.0,
-      "typical": 6883,
-      "discount": 16,
-      "dates": 183,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 7
+      },
+      "typicalPrice": 6883,
       "cheapestDates": [
         {
           "day": 29,
@@ -6063,16 +6384,23 @@
           "price": 5808.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192ORD",
-      "destination": "\u829d\u52a0\u54e5",
-      "code": "ORD",
+      "destination": {
+        "name": "\u829d\u52a0\u54e5",
+        "code": "ORD",
+        "region": "\u5317\u7f8e\u6d32"
+      },
       "price": 6806.0,
-      "typical": 8320,
-      "discount": 18,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 1
+      },
+      "typicalPrice": 8320,
       "cheapestDates": [
         {
           "day": 18,
@@ -6090,16 +6418,23 @@
             "return_arr_time": "17:20"
           }
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192AKL",
-      "destination": "\u5967\u514b\u862d",
-      "code": "AKL",
+      "destination": {
+        "name": "\u5967\u514b\u862d",
+        "code": "AKL",
+        "region": "\u5927\u6d0b\u6d32"
+      },
       "price": 6912.0,
-      "typical": 8056,
-      "discount": 14,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 6
+      },
+      "typicalPrice": 8056,
       "cheapestDates": [
         {
           "day": 26,
@@ -6143,16 +6478,23 @@
           "price": 6912.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192JNB",
-      "destination": "\u7d04\u7ff0\u5167\u65af\u5821",
-      "code": "JNB",
+      "destination": {
+        "name": "\u7d04\u7ff0\u5167\u65af\u5821",
+        "code": "JNB",
+        "region": "\u975e\u6d32"
+      },
       "price": 6929.0,
-      "typical": 7643,
-      "discount": 9,
-      "dates": 163,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 14
+      },
+      "typicalPrice": 7643,
       "cheapestDates": [
         {
           "day": 2,
@@ -6279,16 +6621,23 @@
           "price": 6929.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192JFK",
-      "destination": "\u7d10\u7d04",
-      "code": "JFK",
+      "destination": {
+        "name": "\u7d10\u7d04",
+        "code": "JFK",
+        "region": "\u5317\u7f8e\u6d32"
+      },
       "price": 7448.0,
-      "typical": 8150,
-      "discount": 9,
-      "dates": 210,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 10
+      },
+      "typicalPrice": 8150,
       "cheapestDates": [
         {
           "day": 9,
@@ -6387,16 +6736,23 @@
           "price": 7448.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     },
     {
       "route": "HKG\u2192NOS",
-      "destination": "NOS",
-      "code": "NOS",
+      "destination": {
+        "name": "NOS",
+        "code": "NOS",
+        "region": "\u5176\u4ed6"
+      },
       "price": 13245.0,
-      "typical": 13245,
-      "discount": 0,
-      "dates": 1,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": true,
+        "cheapDays": 1
+      },
+      "typicalPrice": 13245,
       "cheapestDates": [
         {
           "day": 19,
@@ -6405,7 +6761,8 @@
           "price": 13245.0,
           "stay": 7
         }
-      ]
+      ],
+      "totalDestinations": 51
     }
   ]
 }
