@@ -1,21 +1,44 @@
 'use client';
 
-import { FlightDeal } from '@/types/flight';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 
+interface DateInfo {
+  day: number;
+  month: number;
+  year: number;
+  price: number;
+  stay: number | null;
+}
+
+interface Deal {
+  route: string;
+  destination: { name: string; code: string; region: string };
+  price: number;
+  currency: string;
+  badge?: { carryOn?: boolean; duration?: number; cheapDays?: number };
+  typicalPrice: number;
+  cheapestDates: DateInfo[];
+  totalDestinations: number;
+  moreMonths?: number;
+}
+
 interface FlightDealCardProps {
-  deal: FlightDeal;
+  deal: Deal;
   onMoreMonths?: () => void;
 }
 
 export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
   const { destination, price, badge, cheapestDates, moreMonths, typicalPrice } = deal;
 
-  // Group dates by month
-  const datesByMonth: Record<string, typeof cheapestDates> = {};
-  cheapestDates.forEach((date) => {
+  // Only show dates at the cheapest price (green dates)
+  const cheapestPrice = price;
+  const greenDates = cheapestDates.filter(d => d.price === cheapestPrice);
+
+  // Group green dates by month
+  const datesByMonth: Record<string, typeof greenDates> = {};
+  greenDates.forEach((date) => {
     const key = `${date.year}-${String(date.month).padStart(2, '0')}`;
     if (!datesByMonth[key]) datesByMonth[key] = [];
     datesByMonth[key].push(date);
@@ -29,6 +52,12 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
     '2026-10': '10月',
     '2026-11': '11月',
     '2026-12': '12月',
+    '2027-01': '1月',
+    '2027-02': '2月',
+    '2027-03': '3月',
+    '2027-04': '4月',
+    '2027-05': '5月',
+    '2027-06': '6月',
   };
 
   return (
@@ -68,18 +97,16 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
         )}
       </div>
 
-      {/* Legend */}
-      {typicalPrice && (
-        <div className="px-6 pb-4">
-          <p className="text-xs text-slate-500">
-            綠色日子 ~${typicalPrice.toLocaleString()} 來回
-          </p>
-        </div>
-      )}
+      {/* Legend - shows cheapest price */}
+      <div className="px-6 pb-4">
+        <p className="text-xs text-slate-500">
+          綠色日子 ~${cheapestPrice.toLocaleString()} 來回
+        </p>
+      </div>
 
       <Separator className="bg-slate-800" />
 
-      {/* Calendar Grid */}
+      {/* Calendar Grid - only green dates */}
       <div className="p-6">
         <div className="space-y-4">
           {Object.entries(datesByMonth)
@@ -101,8 +128,8 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
                         className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-sm transition-colors hover:bg-emerald-500/20"
                       >
                         <span className="font-medium text-emerald-400">{date.day}號</span>
-                        {date.duration && (
-                          <span className="text-xs text-slate-400">{date.duration}日</span>
+                        {date.stay && (
+                          <span className="text-xs text-slate-400">{date.stay}日</span>
                         )}
                       </div>
                     ))}
