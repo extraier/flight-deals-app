@@ -219,7 +219,7 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
                       </div>
                       <div>
                         <p className="font-bold text-card-foreground">
-                          {selectedDate.flight.airline} {selectedDate.flight.flight_no}
+                          {selectedDate.flight.airline.replace(/^_/, '')} {selectedDate.flight.flight_no}
                         </p>
                         <p className="text-sm text-muted-foreground">
                           {selectedDate.flight.dep_time}
@@ -245,7 +245,7 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
                       </div>
                       <div>
                         <p className="font-bold text-card-foreground">
-                          {selectedDate.flight.return_airline} {selectedDate.flight.return_dep_time?.split(' ').pop()}
+                          {selectedDate.flight.return_airline.replace(/^_/, '')} {selectedDate.flight.flight_no}
                         </p>
                         <p className="text-sm text-muted-foreground">
                           {selectedDate.flight.return_dep_time}
