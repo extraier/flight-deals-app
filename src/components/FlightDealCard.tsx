@@ -130,19 +130,27 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
                         <button
                           key={idx}
                           onClick={() => setSelectedDate(date)}
-                          className="inline-flex flex-col items-center gap-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-sm transition-all hover:border-emerald-400 hover:bg-emerald-500/20 cursor-pointer"
+                          className={`inline-flex flex-col items-center gap-1 rounded-lg border px-3 py-1.5 text-sm transition-all cursor-pointer ${
+                            date.flight 
+                              ? 'border-emerald-500/30 bg-emerald-500/10 hover:border-emerald-400 hover:bg-emerald-500/20' 
+                              : 'border-slate-600/30 bg-slate-700/20 hover:border-slate-500/50 hover:bg-slate-700/30'
+                          }`}
                         >
                           <div className="flex items-center gap-2">
-                            <span className="font-medium text-emerald-400">{date.day}號</span>
+                            <span className={`font-medium ${date.flight ? 'text-emerald-400' : 'text-slate-400'}`}>
+                              {date.day}號
+                            </span>
                             {date.stay && (
-                              <span className="text-xs text-slate-400">{date.stay}日</span>
+                              <span className="text-xs text-slate-500">{date.stay}日</span>
                             )}
                           </div>
-                          {date.flight && (
+                          {date.flight ? (
                             <div className="flex items-center gap-1 text-xs text-slate-400">
                               <span>{date.flight.airline}</span>
                               <span>{date.flight.dep_time}</span>
                             </div>
+                          ) : (
+                            <div className="text-xs text-slate-500">詳情待確認</div>
                           )}
                         </button>
                       ))}
@@ -198,7 +206,7 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
               </button>
             </div>
 
-            {/* Flight Details */}
+            {/* Flight Details - with data */}
             {selectedDate.flight ? (
               <div className="space-y-4">
                 {/* Outbound Flight */}
@@ -259,9 +267,27 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
                 </a>
               </div>
             ) : (
-              <div className="text-center py-8 text-slate-400">
-                <p>暫無航班詳情</p>
-                <p className="text-sm mt-1">定價: HK${selectedDate.price.toLocaleString()}</p>
+              /* No flight data - show pending state */
+              <div className="space-y-4">
+                <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-center">
+                  <p className="text-amber-400 font-medium">⚠️ 詳情待確認</p>
+                  <p className="text-sm text-slate-400 mt-1">
+                    此日期航班詳情正在確認中，請稍後再試
+                  </p>
+                  <p className="text-sm text-slate-500 mt-2">
+                    票價: HK${selectedDate.price.toLocaleString()} · {selectedDate.stay}日行程
+                  </p>
+                </div>
+
+                {/* Quick Google Search Link */}
+                <a
+                  href={`https://www.google.com/travel/flights?q=${destination.code}+to+HKG+${selectedDate.year}-${String(selectedDate.month).padStart(2, '0')}-${String(selectedDate.day).padStart(2, '0')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-700 px-4 py-3 font-medium text-slate-300 transition-colors hover:bg-slate-600"
+                >
+                  🔍 在 Google Flights 搜尋
+                </a>
               </div>
             )}
           </div>
