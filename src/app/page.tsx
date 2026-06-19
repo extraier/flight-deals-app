@@ -37,6 +37,37 @@ interface Deal {
   totalDestinations: number;
 }
 
+// Country grouping - map city codes to country names
+const CITY_TO_COUNTRY: Record<string, string> = {
+  // 台灣
+  TPE: '台灣', KHH: '台灣', RMQ: '台灣',
+  // 日本
+  NRT: '日本', NGO: '日本', KIX: '日本', FUK: '日本', CTS: '日本', OKA: '日本',
+  // 韓國
+  ICN: '韓國', PUS: '韓國',
+  // 中國
+  PVG: '中國', PEK: '中國', CAN: '中國', SZX: '中國', CTU: '中國', XIY: '中國',
+  // 東南亞
+  BKK: '泰國', MNL: '菲律賓', SIN: '新加坡', KUL: '馬來西亞', HAN: '越南', SGN: '越南',
+  CGK: '印尼', DPS: '印尼', RGN: '緬甸', PEN: '馬來西亞',
+  // 南亞
+  BOM: '印度', DEL: '印度', CMB: '斯里蘭卡',
+  // 中東
+  DOH: '卡塔爾', DXB: '阿聯酋', CAI: '埃及',
+  // 歐洲
+  LHR: '英國', CDG: '法國', AMS: '荷蘭', BCN: '西班牙', MAD: '西班牙',
+  FCO: '意大利', FRA: '德國',
+  // 北美
+  LAX: '美國', SFO: '美國', ORD: '美國', SEA: '美國', JFK: '美國', YVR: '加拿大',
+  // 大洋洲
+  SYD: '澳洲', MEL: '澳洲', AKL: '新西蘭',
+};
+
+// Get country name for a deal
+function getCountry(deal: Deal): string {
+  return CITY_TO_COUNTRY[deal.destination.code] || deal.destination.region;
+}
+
 const deals = allDatesData.results as Deal[];
 
 export default function Home() {
@@ -45,10 +76,10 @@ export default function Home() {
   const [selectedRegion, setSelectedRegion] = useState<string>('全部');
   const [selectedCountry, setSelectedCountry] = useState<string>('全部');
 
-  // Get unique countries from data
+  // Get unique countries from data (grouped by country)
   const countries = useMemo(() => {
-    const uniqueCountries = [...new Set(deals.map((d) => d.destination.name))].sort();
-    return ['全部', ...uniqueCountries];
+    const uniqueCountries = [...new Set(deals.map((d) => getCountry(d)))];
+    return ['全部', ...uniqueCountries.sort()];
   }, []);
 
   const filteredAndSortedDeals = useMemo(() => {
@@ -61,7 +92,7 @@ export default function Home() {
       }
     } else {
       if (selectedCountry !== '全部') {
-        result = result.filter((d) => d.destination.name === selectedCountry);
+        result = result.filter((d) => getCountry(d) === selectedCountry);
       }
     }
 
