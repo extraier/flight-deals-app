@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import realDeals from '@/data/real-deals.json';
+import allDatesData from '@/data/all_dates.json';
 
 type SortOption = 'price' | 'discount';
 type FilterMode = 'region' | 'country';
@@ -21,9 +21,23 @@ const regionColors: Record<string, string> = {
   '中東': 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30',
   '非洲': 'bg-yellow-500/10 text-yellow-600 border-yellow-500/30',
   '香港': 'bg-pink-500/10 text-pink-600 border-pink-500/30',
+  '其他': 'bg-slate-500/10 text-slate-600 border-slate-500/30',
 };
 
 const regions = ['全部', '東亞', '東南亞', '中國', '大洋洲', '北美洲', '歐洲', '南亞', '中東', '非洲'];
+
+interface Deal {
+  route: string;
+  destination: { name: string; code: string; region: string };
+  price: number;
+  currency: string;
+  badge: { carryOn: boolean; cheapDays: number };
+  typicalPrice: number;
+  cheapestDates: Array<{ day: number; month: number; year: number; price: number; stay: number | null }>;
+  totalDestinations: number;
+}
+
+const deals = allDatesData.results as Deal[];
 
 export default function Home() {
   const [sortBy, setSortBy] = useState<SortOption>('price');
@@ -31,13 +45,11 @@ export default function Home() {
   const [selectedRegion, setSelectedRegion] = useState<string>('全部');
   const [selectedCountry, setSelectedCountry] = useState<string>('全部');
 
-  const deals = realDeals as any[];
-
   // Get unique countries from data
   const countries = useMemo(() => {
     const uniqueCountries = [...new Set(deals.map((d) => d.destination.name))].sort();
     return ['全部', ...uniqueCountries];
-  }, [deals]);
+  }, []);
 
   const filteredAndSortedDeals = useMemo(() => {
     let result = [...deals];
@@ -67,7 +79,7 @@ export default function Home() {
     return result;
   }, [deals, sortBy, filterMode, selectedRegion, selectedCountry]);
 
-  const discount = (deal: any) => {
+  const discount = (deal: Deal) => {
     if (!deal.typicalPrice || deal.typicalPrice <= 0) return null;
     return Math.round(((deal.typicalPrice - deal.price) / deal.typicalPrice) * 100);
   };
@@ -88,7 +100,7 @@ export default function Home() {
             <div className="text-xs text-muted-foreground">個目的地</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-emerald-600">${deals[0]?.price.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-emerald-600">${Math.min(...deals.map(d => d.price)).toLocaleString()}</div>
             <div className="text-xs text-muted-foreground">最低價</div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import { FlightDealCard } from '@/components/FlightDealCard';
-import realDeals from '@/data/real-deals.json';
+import allDatesData from '@/data/all_dates.json';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
@@ -9,7 +9,7 @@ interface PageProps {
 
 export default async function RoutePage({ params }: PageProps) {
   const { code } = await params;
-  const deals = realDeals as any[];
+  const deals = allDatesData.results as any[];
   const deal = deals.find((d) => d.destination.code === code);
 
   return (
