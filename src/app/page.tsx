@@ -1,7 +1,14 @@
+'use client';
+
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import realDeals from '@/data/real-deals.json';
+
+type SortOption = 'price' | 'discount';
+type RegionFilter = 'all' | string;
 
 const regionColors: Record<string, string> = {
   '東南亞': 'bg-amber-500/10 text-amber-600 border-amber-500/30',
@@ -16,63 +23,146 @@ const regionColors: Record<string, string> = {
   '香港': 'bg-pink-500/10 text-pink-600 border-pink-500/30',
 };
 
+const regions = ['all', '東亞', '東南亞', '中國', '大洋洲', '北美洲', '歐洲', '南亞', '中東', '非洲'];
+
 export default function Home() {
+  const [sortBy, setSortBy] = useState<SortOption>('price');
+  const [regionFilter, setRegionFilter] = useState<RegionFilter>('all');
+
   const deals = realDeals as any[];
+
+  const filteredAndSortedDeals = useMemo(() => {
+    let result = [...deals];
+
+    // Filter by region
+    if (regionFilter !== 'all') {
+      result = result.filter((d) => d.destination.region === regionFilter);
+    }
+
+    // Sort
+    if (sortBy === 'price') {
+      result.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'discount') {
+      result.sort((a, b) => {
+        const discountA = a.typicalPrice > 0 ? ((a.typicalPrice - a.price) / a.typicalPrice) * 100 : 0;
+        const discountB = b.typicalPrice > 0 ? ((b.typicalPrice - b.price) / b.typicalPrice) * 100 : 0;
+        return discountB - discountA;
+      });
+    }
+
+    return result;
+  }, [deals, sortBy, regionFilter]);
+
+  const discount = (deal: any) => {
+    if (!deal.typicalPrice || deal.typicalPrice <= 0) return null;
+    return Math.round(((deal.typicalPrice - deal.price) / deal.typicalPrice) * 100);
+  };
 
   return (
     <div className="min-h-screen bg-background py-12">
       <div className="mx-auto max-w-5xl px-4">
         {/* Header */}
-        <div className="mb-12 text-center">
+        <div className="mb-8 text-center">
           <h1 className="text-4xl font-bold tracking-tight text-foreground">CompareTiger</h1>
           <p className="mt-3 text-lg text-muted-foreground">香港國際機場 ✈️ 最低機票</p>
         </div>
 
         {/* Stats */}
-        <div className="mb-8 flex justify-center gap-8">
+        <div className="mb-6 flex justify-center gap-8">
           <div className="text-center">
             <div className="text-2xl font-bold text-emerald-600">{deals.length}</div>
             <div className="text-xs text-muted-foreground">個目的地</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-emerald-600">$758</div>
+            <div className="text-2xl font-bold text-emerald-600">${deals[0]?.price.toLocaleString()}</div>
             <div className="text-xs text-muted-foreground">最低價</div>
           </div>
         </div>
 
+        {/* Filters & Sort */}
+        <div className="mb-6 space-y-3">
+          {/* Region Filter */}
+          <div className="flex flex-wrap gap-2">
+            {regions.map((region) => (
+              <Button
+                key={region}
+                variant={regionFilter === region ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setRegionFilter(region)}
+                className="text-xs"
+              >
+                {region === 'all' ? '全部' : region}
+              </Button>
+            ))}
+          </div>
+
+          {/* Sort Options */}
+          <div className="flex gap-2">
+            <Button
+              variant={sortBy === 'price' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setSortBy('price')}
+            >
+              💰 最低價
+            </Button>
+            <Button
+              variant={sortBy === 'discount' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setSortBy('discount')}
+            >
+              🔥 最抵
+            </Button>
+          </div>
+        </div>
+
+        {/* Results count */}
+        <p className="mb-4 text-sm text-muted-foreground">
+          顯示 {filteredAndSortedDeals.length} 個目的地
+        </p>
+
         {/* Destinations Grid */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {deals.map((dest) => (
-            <Link key={dest.route} href={`/route/${dest.destination.code}`} className="group">
-              <Card className="transition-all duration-200 hover:border-sky-500/50 hover:shadow-lg hover:shadow-sky-500/10">
-                <CardHeader className="pb-2">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <CardTitle className="text-xl">{dest.destination.name}</CardTitle>
-                      <p className="text-sm text-muted-foreground">{dest.destination.code}</p>
+          {filteredAndSortedDeals.map((dest) => {
+            const discountPct = discount(dest);
+            return (
+              <Link key={dest.route} href={`/route/${dest.destination.code}`} className="group">
+                <Card className="transition-all duration-200 hover:border-sky-500/50 hover:shadow-lg hover:shadow-sky-500/10">
+                  <CardHeader className="pb-2">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <CardTitle className="text-xl">{dest.destination.name}</CardTitle>
+                        <p className="text-sm text-muted-foreground">{dest.destination.code}</p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xl font-bold text-emerald-600">${dest.price.toLocaleString()}</div>
+                        <div className="text-xs text-muted-foreground">起</div>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-xl font-bold text-emerald-600">${dest.price.toLocaleString()}</div>
-                      <div className="text-xs text-muted-foreground">起</div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          variant="outline"
+                          className={`${regionColors[dest.destination.region] || 'bg-slate-500/10 text-slate-600 border-slate-500/30'}`}
+                        >
+                          {dest.destination.region}
+                        </Badge>
+                        {discountPct !== null && discountPct > 0 && (
+                          <Badge variant="destructive" className="text-xs">
+                            -{discountPct}%
+                          </Badge>
+                        )}
+                      </div>
+                      <span className="text-sm text-sky-600 transition-colors group-hover:text-sky-500">
+                        查看詳情 →
+                      </span>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <Badge
-                      variant="outline"
-                      className={`${regionColors[dest.destination.region] || 'bg-slate-500/10 text-slate-600 border-slate-500/30'}`}
-                    >
-                      {dest.destination.region}
-                    </Badge>
-                    <span className="text-sm text-sky-600 transition-colors group-hover:text-sky-500">
-                      查看詳情 →
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
+                  </CardContent>
+                </Card>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>
