@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-19T12:54:30.398163",
-  "run_id": "20260619125430",
+  "generated_at": "2026-06-19T14:24:25.663078",
+  "run_id": "20260619142425",
   "results": [
     {
       "route": "HKG\u2192MNL",
@@ -1376,7 +1376,16 @@
           "month": 7,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "16:15",
+            "return_arr_time": "20:15"
+          }
         },
         {
           "day": 4,
@@ -1399,35 +1408,80 @@
           "month": 7,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "10:10",
+            "return_arr_time": "14:20"
+          }
         },
         {
           "day": 6,
           "month": 7,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "10:10",
+            "return_arr_time": "14:20"
+          }
         },
         {
           "day": 26,
           "month": 8,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "10:10",
+            "return_arr_time": "14:20"
+          }
         },
         {
           "day": 27,
           "month": 8,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "10:10",
+            "return_arr_time": "14:20"
+          }
         },
         {
           "day": 29,
           "month": 8,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "10:10",
+            "return_arr_time": "14:20"
+          }
         },
         {
           "day": 30,
@@ -1441,42 +1495,96 @@
           "month": 8,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "10:10",
+            "return_arr_time": "14:20"
+          }
         },
         {
           "day": 1,
           "month": 9,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "10:10",
+            "return_arr_time": "14:20"
+          }
         },
         {
           "day": 2,
           "month": 9,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "10:10",
+            "return_arr_time": "14:20"
+          }
         },
         {
           "day": 3,
           "month": 9,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "10:10",
+            "return_arr_time": "14:20"
+          }
         },
         {
           "day": 4,
           "month": 9,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "10:15",
+            "return_arr_time": "14:20"
+          }
         },
         {
           "day": 5,
           "month": 9,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "10:10",
+            "return_arr_time": "14:20"
+          }
         },
         {
           "day": 6,
@@ -1490,21 +1598,48 @@
           "month": 9,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "10:10",
+            "return_arr_time": "14:20"
+          }
         },
         {
           "day": 8,
           "month": 9,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "16:15",
+            "return_arr_time": "20:15"
+          }
         },
         {
           "day": 9,
           "month": 9,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "10:10",
+            "return_arr_time": "14:20"
+          }
         },
         {
           "day": 10,
@@ -1518,7 +1653,16 @@
           "month": 9,
           "year": 2026,
           "price": 1587.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UO",
+            "flight_no": "704",
+            "dep_time": "07:25",
+            "arr_time": "09:25",
+            "return_airline": "UO",
+            "return_dep_time": "10:15",
+            "return_arr_time": "14:20"
+          }
         },
         {
           "day": 16,
@@ -4746,7 +4890,16 @@
           "month": 9,
           "year": 2026,
           "price": 3104.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "ZH",
+            "flight_no": "9096",
+            "dep_time": "12:30",
+            "arr_time": "15:00",
+            "return_airline": "SC",
+            "return_dep_time": "12:55",
+            "return_arr_time": "16:05"
+          }
         },
         {
           "day": 2,
@@ -5302,7 +5455,16 @@
           "month": 1,
           "year": 2027,
           "price": 4199.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "AF",
+            "flight_no": "185",
+            "dep_time": "22:40",
+            "arr_time": "05:45",
+            "return_airline": "AF",
+            "return_dep_time": "10:05",
+            "return_arr_time": "12:05"
+          }
         }
       ],
       "totalDestinations": 51
@@ -6010,7 +6172,16 @@
           "month": 9,
           "year": 2026,
           "price": 4974.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "UA",
+            "flight_no": "153",
+            "dep_time": "12:40",
+            "arr_time": "11:10",
+            "return_airline": "UA",
+            "return_dep_time": "12:35",
+            "return_arr_time": "18:30"
+          }
         },
         {
           "day": 18,
@@ -6349,7 +6520,16 @@
           "month": 6,
           "year": 2026,
           "price": 5808.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "EY",
+            "flight_no": "871",
+            "dep_time": "20:10",
+            "arr_time": "00:25",
+            "return_airline": "EY",
+            "return_dep_time": "02:20",
+            "return_arr_time": "06:45"
+          }
         },
         {
           "day": 30,
@@ -6377,7 +6557,16 @@
           "month": 7,
           "year": 2026,
           "price": 5808.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "EY",
+            "flight_no": "871",
+            "dep_time": "20:10",
+            "arr_time": "00:25",
+            "return_airline": "EY",
+            "return_dep_time": "19:45",
+            "return_arr_time": "00:15"
+          }
         },
         {
           "day": 22,
@@ -6450,42 +6639,96 @@
           "month": 8,
           "year": 2026,
           "price": 6912.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "BI",
+            "flight_no": "636",
+            "dep_time": "14:40",
+            "arr_time": "17:40",
+            "return_airline": "HU",
+            "return_dep_time": "20:45",
+            "return_arr_time": "04:40"
+          }
         },
         {
           "day": 28,
           "month": 8,
           "year": 2026,
           "price": 6912.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "BI",
+            "flight_no": "636",
+            "dep_time": "14:40",
+            "arr_time": "17:40",
+            "return_airline": "HU",
+            "return_dep_time": "20:45",
+            "return_arr_time": "05:00"
+          }
         },
         {
           "day": 2,
           "month": 9,
           "year": 2026,
           "price": 6912.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "QF",
+            "flight_no": "128",
+            "dep_time": "19:30",
+            "arr_time": "06:45",
+            "return_airline": "QF",
+            "return_dep_time": "06:00",
+            "return_arr_time": "07:45"
+          }
         },
         {
           "day": 4,
           "month": 9,
           "year": 2026,
           "price": 6912.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "FJ",
+            "flight_no": "392",
+            "dep_time": "16:15",
+            "arr_time": "06:25",
+            "return_airline": "FJ",
+            "return_dep_time": "14:00",
+            "return_arr_time": "17:10"
+          }
         },
         {
           "day": 9,
           "month": 9,
           "year": 2026,
           "price": 6912.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "QF",
+            "flight_no": "128",
+            "dep_time": "19:30",
+            "arr_time": "06:45",
+            "return_airline": "QF",
+            "return_dep_time": "06:00",
+            "return_arr_time": "07:45"
+          }
         },
         {
           "day": 14,
           "month": 10,
           "year": 2026,
           "price": 6912.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "QF",
+            "flight_no": "128",
+            "dep_time": "19:30",
+            "arr_time": "07:45",
+            "return_airline": "QF",
+            "return_dep_time": "06:00",
+            "return_arr_time": "07:45"
+          }
         }
       ],
       "totalDestinations": 51
@@ -6572,7 +6815,16 @@
           "month": 10,
           "year": 2026,
           "price": 6929.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "EK",
+            "flight_no": "383",
+            "dep_time": "19:10",
+            "arr_time": "23:00",
+            "return_airline": "EK",
+            "return_dep_time": "10:25",
+            "return_arr_time": "20:25"
+          }
         },
         {
           "day": 23,
