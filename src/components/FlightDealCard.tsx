@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { X } from 'lucide-react';
 
 interface FlightInfo {
   airline: string;
@@ -42,12 +44,11 @@ interface FlightDealCardProps {
 
 export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
   const { destination, price, badge, cheapestDates, moreMonths, typicalPrice } = deal;
+  const [selectedDate, setSelectedDate] = useState<DateInfo | null>(null);
 
-  // Only show dates at the cheapest price (green dates)
   const cheapestPrice = price;
   const greenDates = cheapestDates.filter(d => d.price === cheapestPrice);
 
-  // Group green dates by month
   const datesByMonth: Record<string, typeof greenDates> = {};
   greenDates.forEach((date) => {
     const key = `${date.year}-${String(date.month).padStart(2, '0')}`;
@@ -56,126 +57,216 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
   });
 
   const monthNames: Record<string, string> = {
-    '2026-06': '6月',
-    '2026-07': '7月',
-    '2026-08': '8月',
-    '2026-09': '9月',
-    '2026-10': '10月',
-    '2026-11': '11月',
-    '2026-12': '12月',
-    '2027-01': '1月',
-    '2027-02': '2月',
-    '2027-03': '3月',
-    '2027-04': '4月',
-    '2027-05': '5月',
-    '2027-06': '6月',
+    '2026-06': '6月', '2026-07': '7月', '2026-08': '8月',
+    '2026-09': '9月', '2026-10': '10月', '2026-11': '11月',
+    '2026-12': '12月', '2027-01': '1月', '2027-02': '2月',
+    '2027-03': '3月', '2027-04': '4月', '2027-05': '5月',
+    '2026-01': '1月', '2026-02': '2月', '2026-03': '3月',
+    '2026-04': '4月', '2026-05': '5月',
   };
 
   return (
-    <Card className="overflow-hidden border-slate-800 bg-card">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-800 p-6">
-        <div className="flex items-start justify-between">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-bold text-slate-50">{destination.name}</h2>
-            <p className="text-sm text-slate-400">
-              {destination.region} · {destination.code}
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="text-3xl font-bold text-emerald-400">${price.toLocaleString()}</div>
-            <div className="text-sm text-slate-400">來回</div>
+    <>
+      <Card className="overflow-hidden border-slate-800 bg-card">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-slate-900 to-slate-800 p-6">
+          <div className="flex items-start justify-between">
+            <div className="space-y-1">
+              <h2 className="text-2xl font-bold text-slate-50">{destination.name}</h2>
+              <p className="text-sm text-slate-400">
+                {destination.region} · {destination.code}
+              </p>
+            </div>
+            <div className="text-right">
+              <div className="text-3xl font-bold text-emerald-400">${price.toLocaleString()}</div>
+              <div className="text-sm text-slate-400">來回</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Badges */}
-      <div className="flex flex-wrap gap-2 px-6 py-4">
-        {badge?.carryOn && (
-          <Badge variant="secondary" className="bg-slate-800 text-slate-300 hover:bg-slate-700">
-            🧳 手提
-          </Badge>
-        )}
-        {badge?.duration && (
-          <Badge variant="secondary" className="bg-slate-800 text-slate-300 hover:bg-slate-700">
-            📅 {badge.duration}日行程
-          </Badge>
-        )}
-        {badge?.cheapDays && (
-          <Badge variant="secondary" className="bg-emerald-900/50 text-emerald-300 hover:bg-emerald-800/50">
-            💰 {badge.cheapDays} 個平價日子
-          </Badge>
-        )}
-      </div>
+        {/* Badges */}
+        <div className="flex flex-wrap gap-2 px-6 py-4">
+          {badge?.carryOn && (
+            <Badge variant="secondary" className="bg-slate-800 text-slate-300 hover:bg-slate-700">
+              🧳 手提
+            </Badge>
+          )}
+          {badge?.duration && (
+            <Badge variant="secondary" className="bg-slate-800 text-slate-300 hover:bg-slate-700">
+              📅 {badge.duration}日行程
+            </Badge>
+          )}
+          {badge?.cheapDays && (
+            <Badge variant="secondary" className="bg-emerald-900/50 text-emerald-300 hover:bg-emerald-800/50">
+              💰 {badge.cheapDays} 個平價日子
+            </Badge>
+          )}
+        </div>
 
-      {/* Legend - shows cheapest price */}
-      <div className="px-6 pb-4">
-        <p className="text-xs text-slate-500">
-          綠色日子 ~${cheapestPrice.toLocaleString()} 來回
-        </p>
-      </div>
+        {/* Legend */}
+        <div className="px-6 pb-4">
+          <p className="text-xs text-slate-500">
+            點擊日期查看航班詳情 · 綠色日子 ~${cheapestPrice.toLocaleString()} 來回
+          </p>
+        </div>
 
-      <Separator className="bg-slate-800" />
+        <Separator className="bg-slate-800" />
 
-      {/* Calendar Grid - only green dates */}
-      <div className="p-6">
-        <div className="space-y-4">
-          {Object.entries(datesByMonth)
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([monthKey, dates]) => (
-              <div key={monthKey} className="flex items-start gap-4">
-                {/* Month Label */}
-                <span className="w-10 shrink-0 text-right text-sm font-medium text-slate-400">
-                  {monthNames[monthKey] || monthKey}
-                </span>
+        {/* Calendar Grid */}
+        <div className="p-6">
+          <div className="space-y-4">
+            {Object.entries(datesByMonth)
+              .sort(([a], [b]) => a.localeCompare(b))
+              .map(([monthKey, dates]) => (
+                <div key={monthKey} className="flex items-start gap-4">
+                  <span className="w-10 shrink-0 text-right text-sm font-medium text-slate-400">
+                    {monthNames[monthKey] || monthKey}
+                  </span>
 
-                {/* Date Badges */}
-                <div className="flex flex-wrap gap-2">
-                  {dates
-                    .sort((a, b) => a.day - b.day)
-                    .map((date, idx) => (
-                      <div
-                        key={idx}
-                        className="inline-flex flex-col gap-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-sm transition-colors hover:bg-emerald-500/20"
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-emerald-400">{date.day}號</span>
-                          {date.stay && (
-                            <span className="text-xs text-slate-400">{date.stay}日</span>
-                          )}
-                        </div>
-                        {date.flight && (
-                          <div className="flex items-center gap-1 text-xs">
-                            <span className="font-medium text-slate-300">{date.flight.airline}</span>
-                            <span className="text-slate-400">{date.flight.flight_no}</span>
-                            <span className="text-slate-500">·</span>
-                            <span className="text-slate-300">{date.flight.dep_time}</span>
+                  <div className="flex flex-wrap gap-2">
+                    {dates
+                      .sort((a, b) => a.day - b.day)
+                      .map((date, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setSelectedDate(date)}
+                          className="inline-flex flex-col items-center gap-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-sm transition-all hover:border-emerald-400 hover:bg-emerald-500/20 cursor-pointer"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium text-emerald-400">{date.day}號</span>
+                            {date.stay && (
+                              <span className="text-xs text-slate-400">{date.stay}日</span>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    ))}
+                          {date.flight && (
+                            <div className="flex items-center gap-1 text-xs text-slate-400">
+                              <span>{date.flight.airline}</span>
+                              <span>{date.flight.dep_time}</span>
+                            </div>
+                          )}
+                        </button>
+                      ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+          </div>
         </div>
-      </div>
 
-      {/* Footer */}
-      <div className="flex items-center justify-between border-t border-slate-800 bg-slate-900/50 px-6 py-4">
-        {moreMonths !== undefined && moreMonths > 0 && (
-          <button
-            onClick={onMoreMonths}
-            className="text-sm font-medium text-sky-400 transition-colors hover:text-sky-300"
+        {/* Footer */}
+        <div className="flex items-center justify-between border-t border-slate-800 bg-slate-900/50 px-6 py-4">
+          {moreMonths !== undefined && moreMonths > 0 && (
+            <button
+              onClick={onMoreMonths}
+              className="text-sm font-medium text-sky-400 transition-colors hover:text-sky-300"
+            >
+              + 仲有 {moreMonths} 個月
+            </button>
+          )}
+          {deal.totalDestinations && (
+            <span className="text-xs text-slate-500">
+              共 {deal.totalDestinations} 個目的地
+            </span>
+          )}
+        </div>
+      </Card>
+
+      {/* Flight Detail Modal */}
+      {selectedDate && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          onClick={() => setSelectedDate(null)}
+        >
+          <div 
+            className="w-full max-w-md rounded-2xl border border-slate-700 bg-card p-6 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
           >
-            + 仲有 {moreMonths} 個月
-          </button>
-        )}
-        {deal.totalDestinations && (
-          <span className="text-xs text-slate-500">
-            共 {deal.totalDestinations} 個目的地
-          </span>
-        )}
-      </div>
-    </Card>
+            {/* Modal Header */}
+            <div className="mb-6 flex items-start justify-between">
+              <div>
+                <h3 className="text-xl font-bold">
+                  {selectedDate.year}年{selectedDate.month}月{selectedDate.day}日
+                </h3>
+                <p className="text-2xl font-bold text-emerald-400 mt-1">
+                  HK${selectedDate.price.toLocaleString()} 來回
+                </p>
+              </div>
+              <button
+                onClick={() => setSelectedDate(null)}
+                className="rounded-full p-1 hover:bg-slate-800 transition-colors"
+              >
+                <X className="h-5 w-5 text-slate-400" />
+              </button>
+            </div>
+
+            {/* Flight Details */}
+            {selectedDate.flight ? (
+              <div className="space-y-4">
+                {/* Outbound Flight */}
+                <div className="rounded-xl bg-slate-800/50 p-4">
+                  <p className="text-xs font-medium text-slate-400 mb-3">去程 · {destination.name}</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/20 text-sky-400 font-bold">
+                        →
+                      </div>
+                      <div>
+                        <p className="font-bold text-slate-50">
+                          {selectedDate.flight.airline} {selectedDate.flight.flight_no}
+                        </p>
+                        <p className="text-sm text-slate-400">
+                          {selectedDate.flight.dep_time}
+                          {selectedDate.flight.arr_time && ` → ${selectedDate.flight.arr_time}`}
+                        </p>
+                      </div>
+                    </div>
+                    {selectedDate.stay && (
+                      <span className="text-xs text-slate-500">
+                        {selectedDate.stay}日
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Return Flight */}
+                {selectedDate.flight.return_airline && (
+                  <div className="rounded-xl bg-slate-800/50 p-4">
+                    <p className="text-xs font-medium text-slate-400 mb-3">回程 · 香港</p>
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 font-bold">
+                        ←
+                      </div>
+                      <div>
+                        <p className="font-bold text-slate-50">
+                          {selectedDate.flight.return_airline} {selectedDate.flight.return_dep_time?.split(' ').pop()}
+                        </p>
+                        <p className="text-sm text-slate-400">
+                          {selectedDate.flight.return_dep_time}
+                          {selectedDate.flight.return_arr_time && ` → ${selectedDate.flight.return_arr_time}`}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Action Button */}
+                <a
+                  href={`https://www.google.com/travel/flights/search?tfs=CBwQAhopag&tfu=${selectedDate.flight.dep_time}&gl=hk`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-sky-600 px-4 py-3 font-medium text-white transition-colors hover:bg-sky-500"
+                >
+                  在 Google Flights 查看
+                </a>
+              </div>
+            ) : (
+              <div className="text-center py-8 text-slate-400">
+                <p>暫無航班詳情</p>
+                <p className="text-sm mt-1">定價: HK${selectedDate.price.toLocaleString()}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
