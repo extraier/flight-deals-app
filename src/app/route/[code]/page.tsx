@@ -1,5 +1,5 @@
 import { FlightDealCard } from '@/components/FlightDealCard';
-import { sampleDeals } from '@/data/sample-deals';
+import realDeals from '@/data/real-deals.json';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
@@ -9,7 +9,8 @@ interface PageProps {
 
 export default async function RoutePage({ params }: PageProps) {
   const { code } = await params;
-  const deal = sampleDeals.find((d) => d.destination.code === code);
+  const deals = realDeals as any[];
+  const deal = deals.find((d) => d.destination.code === code);
 
   return (
     <div className="min-h-screen bg-background py-12">
@@ -27,7 +28,7 @@ export default async function RoutePage({ params }: PageProps) {
         {deal ? (
           <FlightDealCard deal={deal} />
         ) : (
-          <div className="rounded-2xl border border-slate-800 bg-card p-8 text-center">
+          <div className="rounded-2xl border border-slate-200 bg-card p-8 text-center">
             <p className="text-muted-foreground">找不到 {code} 的數據</p>
           </div>
         )}

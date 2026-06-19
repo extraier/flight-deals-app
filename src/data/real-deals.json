@@ -1,0 +1,1226 @@
+[
+  {
+    "route": "HKG→MNL",
+    "destination": {
+      "name": "馬尼拉",
+      "code": "MNL",
+      "region": "東南亞"
+    },
+    "price": 1038,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 1250,
+    "cheapestDates": [
+      {
+        "day": 11,
+        "month": 9,
+        "year": 2026,
+        "price": 1038
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→TPE",
+    "destination": {
+      "name": "台北",
+      "code": "TPE",
+      "region": "東亞"
+    },
+    "price": 1281,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 1425,
+    "cheapestDates": [
+      {
+        "day": 27,
+        "month": 8,
+        "year": 2026,
+        "price": 1281
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→KHH",
+    "destination": {
+      "name": "高雄",
+      "code": "KHH",
+      "region": "東亞"
+    },
+    "price": 1361,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 1500,
+    "cheapestDates": [
+      {
+        "day": 10,
+        "month": 9,
+        "year": 2026,
+        "price": 1341
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→RMQ",
+    "destination": {
+      "name": "台中",
+      "code": "RMQ",
+      "region": "東亞"
+    },
+    "price": 1361,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 1500,
+    "cheapestDates": [
+      {
+        "day": 27,
+        "month": 8,
+        "year": 2026,
+        "price": 1341
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→OKA",
+    "destination": {
+      "name": "沖繩",
+      "code": "OKA",
+      "region": "東亞"
+    },
+    "price": 1477,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 2250,
+    "cheapestDates": [
+      {
+        "day": 4,
+        "month": 9,
+        "year": 2026,
+        "price": 1477
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→ICN",
+    "destination": {
+      "name": "首爾",
+      "code": "ICN",
+      "region": "東亞"
+    },
+    "price": 1506,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 1350,
+    "cheapestDates": [
+      {
+        "day": 30,
+        "month": 8,
+        "year": 2026,
+        "price": 1506
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→SGN",
+    "destination": {
+      "name": "胡志明市",
+      "code": "SGN",
+      "region": "東南亞"
+    },
+    "price": 1545,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 1575,
+    "cheapestDates": [
+      {
+        "day": 22,
+        "month": 10,
+        "year": 2026,
+        "price": 1545
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→HAN",
+    "destination": {
+      "name": "河內",
+      "code": "HAN",
+      "region": "東南亞"
+    },
+    "price": 1581,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 1600,
+    "cheapestDates": [
+      {
+        "day": 27,
+        "month": 8,
+        "year": 2026,
+        "price": 1411
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→PVG",
+    "destination": {
+      "name": "上海",
+      "code": "PVG",
+      "region": "中國"
+    },
+    "price": 1620,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 1850,
+    "cheapestDates": [
+      {
+        "day": 16,
+        "month": 7,
+        "year": 2026,
+        "price": 1267
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→BKK",
+    "destination": {
+      "name": "曼谷",
+      "code": "BKK",
+      "region": "東南亞"
+    },
+    "price": 1627,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 1375,
+    "cheapestDates": [
+      {
+        "day": 2,
+        "month": 7,
+        "year": 2026,
+        "price": 1587
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→HKT",
+    "destination": {
+      "name": "布吉",
+      "code": "HKT",
+      "region": "東南亞"
+    },
+    "price": 1777,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 1375,
+    "cheapestDates": [
+      {
+        "day": 11,
+        "month": 9,
+        "year": 2026,
+        "price": 1757
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→NRT",
+    "destination": {
+      "name": "東京",
+      "code": "NRT",
+      "region": "東亞"
+    },
+    "price": 1822,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 2600,
+    "cheapestDates": [
+      {
+        "day": 6,
+        "month": 12,
+        "year": 2026,
+        "price": 1822
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→PEN",
+    "destination": {
+      "name": "檳城",
+      "code": "PEN",
+      "region": "東南亞"
+    },
+    "price": 1822,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 1775,
+    "cheapestDates": [
+      {
+        "day": 18,
+        "month": 9,
+        "year": 2026,
+        "price": 1662
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→KIX",
+    "destination": {
+      "name": "大阪",
+      "code": "KIX",
+      "region": "東亞"
+    },
+    "price": 1868,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 2000,
+    "cheapestDates": [
+      {
+        "day": 29,
+        "month": 10,
+        "year": 2026,
+        "price": 1707
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→KUL",
+    "destination": {
+      "name": "吉隆坡",
+      "code": "KUL",
+      "region": "東南亞"
+    },
+    "price": 1948,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 1900,
+    "cheapestDates": [
+      {
+        "day": 8,
+        "month": 10,
+        "year": 2026,
+        "price": 1739
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→CAN",
+    "destination": {
+      "name": "廣州",
+      "code": "CAN",
+      "region": "中國"
+    },
+    "price": 1982,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 0,
+    "cheapestDates": [
+      {
+        "day": 11,
+        "month": 6,
+        "year": 2026,
+        "price": 1982
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→SIN",
+    "destination": {
+      "name": "新加坡",
+      "code": "SIN",
+      "region": "東南亞"
+    },
+    "price": 2141,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 2125,
+    "cheapestDates": [
+      {
+        "day": 26,
+        "month": 10,
+        "year": 2026,
+        "price": 1966
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→CGK",
+    "destination": {
+      "name": "雅加達",
+      "code": "CGK",
+      "region": "東南亞"
+    },
+    "price": 2230,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 2125,
+    "cheapestDates": [
+      {
+        "day": 16,
+        "month": 10,
+        "year": 2026,
+        "price": 1892
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→PUS",
+    "destination": {
+      "name": "釜山",
+      "code": "PUS",
+      "region": "東亞"
+    },
+    "price": 2230,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 1775,
+    "cheapestDates": [
+      {
+        "day": 3,
+        "month": 9,
+        "year": 2026,
+        "price": 1835
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→FUK",
+    "destination": {
+      "name": "福岡",
+      "code": "FUK",
+      "region": "東亞"
+    },
+    "price": 2335,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 1875,
+    "cheapestDates": [
+      {
+        "day": 3,
+        "month": 7,
+        "year": 2026,
+        "price": 2235
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→CTU",
+    "destination": {
+      "name": "成都",
+      "code": "CTU",
+      "region": "中國"
+    },
+    "price": 2570,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 2775,
+    "cheapestDates": [
+      {
+        "day": 2,
+        "month": 7,
+        "year": 2026,
+        "price": 2500
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→DPS",
+    "destination": {
+      "name": "峇里島",
+      "code": "DPS",
+      "region": "東南亞"
+    },
+    "price": 2653,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 2525,
+    "cheapestDates": [
+      {
+        "day": 15,
+        "month": 10,
+        "year": 2026,
+        "price": 2359
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→NGO",
+    "destination": {
+      "name": "名古屋",
+      "code": "NGO",
+      "region": "東亞"
+    },
+    "price": 2772,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 0,
+    "cheapestDates": [
+      {
+        "day": 27,
+        "month": 8,
+        "year": 2026,
+        "price": 1777
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→DEL",
+    "destination": {
+      "name": "德里",
+      "code": "DEL",
+      "region": "南亞"
+    },
+    "price": 2918,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 2800,
+    "cheapestDates": [
+      {
+        "day": 20,
+        "month": 11,
+        "year": 2026,
+        "price": 2918
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→PEK",
+    "destination": {
+      "name": "北京",
+      "code": "PEK",
+      "region": "中國"
+    },
+    "price": 3452,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 2450,
+    "cheapestDates": [
+      {
+        "day": 2,
+        "month": 7,
+        "year": 2026,
+        "price": 2442
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→CTS",
+    "destination": {
+      "name": "札幌",
+      "code": "CTS",
+      "region": "東亞"
+    },
+    "price": 3481,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 3075,
+    "cheapestDates": [
+      {
+        "day": 29,
+        "month": 10,
+        "year": 2026,
+        "price": 3061
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→XIY",
+    "destination": {
+      "name": "西安",
+      "code": "XIY",
+      "region": "中國"
+    },
+    "price": 3492,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 1775,
+    "cheapestDates": [
+      {
+        "day": 8,
+        "month": 10,
+        "year": 2026,
+        "price": 2345
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→DXB",
+    "destination": {
+      "name": "杜拜",
+      "code": "DXB",
+      "region": "中東"
+    },
+    "price": 3790,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 4450,
+    "cheapestDates": [
+      {
+        "day": 19,
+        "month": 9,
+        "year": 2026,
+        "price": 3374
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→RGN",
+    "destination": {
+      "name": "仰光",
+      "code": "RGN",
+      "region": "東南亞"
+    },
+    "price": 3957,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 2950,
+    "cheapestDates": [
+      {
+        "day": 3,
+        "month": 9,
+        "year": 2026,
+        "price": 3957
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→MEL",
+    "destination": {
+      "name": "墨爾本",
+      "code": "MEL",
+      "region": "大洋洲"
+    },
+    "price": 4014,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 5675,
+    "cheapestDates": [
+      {
+        "day": 22,
+        "month": 10,
+        "year": 2026,
+        "price": 4014
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→CMB",
+    "destination": {
+      "name": "科倫坡",
+      "code": "CMB",
+      "region": "南亞"
+    },
+    "price": 4306,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 3450,
+    "cheapestDates": [
+      {
+        "day": 6,
+        "month": 8,
+        "year": 2026,
+        "price": 4241
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→BOM",
+    "destination": {
+      "name": "孟買",
+      "code": "BOM",
+      "region": "南亞"
+    },
+    "price": 4618,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 3150,
+    "cheapestDates": [
+      {
+        "day": 6,
+        "month": 7,
+        "year": 2026,
+        "price": 3087
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→FCO",
+    "destination": {
+      "name": "羅馬",
+      "code": "FCO",
+      "region": "歐洲"
+    },
+    "price": 4753,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 4625,
+    "cheapestDates": [
+      {
+        "day": 9,
+        "month": 11,
+        "year": 2026,
+        "price": 3665
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→SZX",
+    "destination": {
+      "name": "深圳",
+      "code": "SZX",
+      "region": "中國"
+    },
+    "price": 4857,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 3675,
+    "cheapestDates": [
+      {
+        "day": 25,
+        "month": 6,
+        "year": 2026,
+        "price": 3104
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→SEA",
+    "destination": {
+      "name": "西雅圖",
+      "code": "SEA",
+      "region": "北美洲"
+    },
+    "price": 4911,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 5150,
+    "cheapestDates": [
+      {
+        "day": 10,
+        "month": 9,
+        "year": 2026,
+        "price": 4911
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→MAD",
+    "destination": {
+      "name": "馬德里",
+      "code": "MAD",
+      "region": "歐洲"
+    },
+    "price": 5081,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 5800,
+    "cheapestDates": [
+      {
+        "day": 5,
+        "month": 11,
+        "year": 2026,
+        "price": 4149
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→BCN",
+    "destination": {
+      "name": "巴塞羅那",
+      "code": "BCN",
+      "region": "歐洲"
+    },
+    "price": 5206,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 5100,
+    "cheapestDates": [
+      {
+        "day": 15,
+        "month": 11,
+        "year": 2026,
+        "price": 4195
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→SYD",
+    "destination": {
+      "name": "悉尼",
+      "code": "SYD",
+      "region": "大洋洲"
+    },
+    "price": 5486,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 4450,
+    "cheapestDates": [
+      {
+        "day": 22,
+        "month": 10,
+        "year": 2026,
+        "price": 3978
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→LAX",
+    "destination": {
+      "name": "洛杉矶",
+      "code": "LAX",
+      "region": "北美洲"
+    },
+    "price": 5520,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 5125,
+    "cheapestDates": [
+      {
+        "day": 17,
+        "month": 9,
+        "year": 2026,
+        "price": 4974
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→SFO",
+    "destination": {
+      "name": "三藩市",
+      "code": "SFO",
+      "region": "北美洲"
+    },
+    "price": 5520,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 5025,
+    "cheapestDates": [
+      {
+        "day": 3,
+        "month": 9,
+        "year": 2026,
+        "price": 5520
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→FRA",
+    "destination": {
+      "name": "法蘭克福",
+      "code": "FRA",
+      "region": "歐洲"
+    },
+    "price": 5815,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 5900,
+    "cheapestDates": [
+      {
+        "day": 12,
+        "month": 11,
+        "year": 2026,
+        "price": 5440
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→CAI",
+    "destination": {
+      "name": "開羅",
+      "code": "CAI",
+      "region": "中東"
+    },
+    "price": 5838,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 6450,
+    "cheapestDates": [
+      {
+        "day": 3,
+        "month": 9,
+        "year": 2026,
+        "price": 5838
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→CDG",
+    "destination": {
+      "name": "巴黎",
+      "code": "CDG",
+      "region": "歐洲"
+    },
+    "price": 5841,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 5600,
+    "cheapestDates": [
+      {
+        "day": 9,
+        "month": 11,
+        "year": 2026,
+        "price": 4474
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→LHR",
+    "destination": {
+      "name": "倫敦",
+      "code": "LHR",
+      "region": "歐洲"
+    },
+    "price": 6049,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 4650,
+    "cheapestDates": [
+      {
+        "day": 19,
+        "month": 11,
+        "year": 2026,
+        "price": 4608
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→YVR",
+    "destination": {
+      "name": "溫哥華",
+      "code": "YVR",
+      "region": "北美洲"
+    },
+    "price": 6276,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 5475,
+    "cheapestDates": [
+      {
+        "day": 6,
+        "month": 11,
+        "year": 2026,
+        "price": 5686
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→AMS",
+    "destination": {
+      "name": "阿姆斯特丹",
+      "code": "AMS",
+      "region": "歐洲"
+    },
+    "price": 6434,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 5450,
+    "cheapestDates": [
+      {
+        "day": 16,
+        "month": 11,
+        "year": 2026,
+        "price": 4724
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→ORD",
+    "destination": {
+      "name": "芝加哥",
+      "code": "ORD",
+      "region": "北美洲"
+    },
+    "price": 6824,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 6900,
+    "cheapestDates": [
+      {
+        "day": 5,
+        "month": 9,
+        "year": 2026,
+        "price": 6805
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→DOH",
+    "destination": {
+      "name": "多哈",
+      "code": "DOH",
+      "region": "中東"
+    },
+    "price": 6841,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 6450,
+    "cheapestDates": [
+      {
+        "day": 30,
+        "month": 7,
+        "year": 2026,
+        "price": 5961
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→JNB",
+    "destination": {
+      "name": "約翰內斯堡",
+      "code": "JNB",
+      "region": "非洲"
+    },
+    "price": 7243,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 8300,
+    "cheapestDates": [
+      {
+        "day": 23,
+        "month": 10,
+        "year": 2026,
+        "price": 7073
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→AKL",
+    "destination": {
+      "name": "奧克蘭",
+      "code": "AKL",
+      "region": "大洋洲"
+    },
+    "price": 7390,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 6850,
+    "cheapestDates": [
+      {
+        "day": 27,
+        "month": 8,
+        "year": 2026,
+        "price": 6910
+      }
+    ],
+    "totalDestinations": 51
+  },
+  {
+    "route": "HKG→JFK",
+    "destination": {
+      "name": "紐約",
+      "code": "JFK",
+      "region": "北美洲"
+    },
+    "price": 7450,
+    "currency": "HKD",
+    "badge": {
+      "carryOn": true,
+      "cheapDays": 1
+    },
+    "typicalPrice": 6550,
+    "cheapestDates": [
+      {
+        "day": 10,
+        "month": 9,
+        "year": 2026,
+        "price": 7450
+      }
+    ],
+    "totalDestinations": 51
+  }
+]
