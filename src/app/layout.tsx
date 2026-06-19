@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'CompareTiger - 香港機票比價',
-  description: '香港國際機場出發，最低价机票实时比较',
+  description: '香港國際機場出發，最低價機票實時比較',
 };
 
 export default function RootLayout({
@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-Hant">
+    <html lang="zh-Hant" className="dark">
       <body className={inter.className}>{children}</body>
     </html>
   );

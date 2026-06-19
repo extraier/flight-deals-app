@@ -1,6 +1,9 @@
 'use client';
 
 import { FlightDeal } from '@/types/flight';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 
 interface FlightDealCardProps {
   deal: FlightDeal;
@@ -29,96 +32,102 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
   };
 
   return (
-    <div className="w-full max-w-md rounded-2xl border border-[#202c3d] bg-[#16202c] p-4">
-      {/* Header: Destination + Price */}
-      <div className="flex items-start justify-between">
-        <div>
-          <h2 className="text-xl font-bold text-[#e2e8f0]">{destination.name}</h2>
-          <p className="text-sm text-[#708090]">
-            {destination.region} · {destination.code}
-          </p>
-        </div>
-        <div className="text-right">
-          <span className="text-2xl font-bold text-[#00e676]">${price}</span>
-          <span className="ml-1 text-sm text-[#e2e8f0]">來回</span>
+    <Card className="overflow-hidden border-slate-800 bg-card">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-slate-900 to-slate-800 p-6">
+        <div className="flex items-start justify-between">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-bold text-slate-50">{destination.name}</h2>
+            <p className="text-sm text-slate-400">
+              {destination.region} · {destination.code}
+            </p>
+          </div>
+          <div className="text-right">
+            <div className="text-3xl font-bold text-emerald-400">${price.toLocaleString()}</div>
+            <div className="text-sm text-slate-400">來回</div>
+          </div>
         </div>
       </div>
 
       {/* Badges */}
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 px-6 py-4">
         {badge?.carryOn && (
-          <span className="rounded-full bg-[#222d3c] px-3 py-1 text-xs text-[#8a99ad]">
-            手提
-          </span>
+          <Badge variant="secondary" className="bg-slate-800 text-slate-300 hover:bg-slate-700">
+            🧳 手提
+          </Badge>
         )}
         {badge?.duration && (
-          <span className="rounded-full bg-[#222d3c] px-3 py-1 text-xs text-[#8a99ad]">
-            {badge.duration}日行程
-          </span>
+          <Badge variant="secondary" className="bg-slate-800 text-slate-300 hover:bg-slate-700">
+            📅 {badge.duration}日行程
+          </Badge>
         )}
         {badge?.cheapDays && (
-          <span className="rounded-full bg-[#222d3c] px-3 py-1 text-xs text-[#8a99ad]">
-            {badge.cheapDays} 個平價日子
-          </span>
+          <Badge variant="secondary" className="bg-emerald-900/50 text-emerald-300 hover:bg-emerald-800/50">
+            💰 {badge.cheapDays} 個平價日子
+          </Badge>
         )}
       </div>
 
       {/* Legend */}
       {typicalPrice && (
-        <p className="mt-3 text-xs text-[#708090]">
-          綠色日子 ~${typicalPrice} 來回
-        </p>
+        <div className="px-6 pb-4">
+          <p className="text-xs text-slate-500">
+            綠色日子 ~${typicalPrice.toLocaleString()} 來回
+          </p>
+        </div>
       )}
 
-      {/* Calendar Grid by Month */}
-      <div className="mt-3 space-y-3">
-        {Object.entries(datesByMonth)
-          .sort(([a], [b]) => a.localeCompare(b))
-          .map(([monthKey, dates]) => (
-            <div key={monthKey} className="flex items-start gap-3">
-              {/* Month Label */}
-              <span className="w-8 shrink-0 text-right text-sm text-[#708090]">
-                {monthNames[monthKey] || monthKey}
-              </span>
+      <Separator className="bg-slate-800" />
 
-              {/* Date Badges */}
-              <div className="flex flex-wrap gap-2">
-                {dates
-                  .sort((a, b) => a.day - b.day)
-                  .map((date, idx) => (
-                    <span
-                      key={idx}
-                      className="inline-flex items-center gap-1 rounded-lg border border-[#00e676]/30 bg-[#16202c] px-2 py-1 text-xs"
-                    >
-                      <span className="font-medium text-[#00e676]">
-                        {date.day}號
-                      </span>
-                      {date.duration && (
-                        <span className="text-[#708090]">{date.duration}日</span>
-                      )}
-                    </span>
-                  ))}
+      {/* Calendar Grid */}
+      <div className="p-6">
+        <div className="space-y-4">
+          {Object.entries(datesByMonth)
+            .sort(([a], [b]) => a.localeCompare(b))
+            .map(([monthKey, dates]) => (
+              <div key={monthKey} className="flex items-start gap-4">
+                {/* Month Label */}
+                <span className="w-10 shrink-0 text-right text-sm font-medium text-slate-400">
+                  {monthNames[monthKey] || monthKey}
+                </span>
+
+                {/* Date Badges */}
+                <div className="flex flex-wrap gap-2">
+                  {dates
+                    .sort((a, b) => a.day - b.day)
+                    .map((date, idx) => (
+                      <div
+                        key={idx}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-sm transition-colors hover:bg-emerald-500/20"
+                      >
+                        <span className="font-medium text-emerald-400">{date.day}號</span>
+                        {date.duration && (
+                          <span className="text-xs text-slate-400">{date.duration}日</span>
+                        )}
+                      </div>
+                    ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+        </div>
       </div>
 
       {/* Footer */}
-      <div className="mt-4 flex items-center justify-between">
+      <div className="flex items-center justify-between border-t border-slate-800 bg-slate-900/50 px-6 py-4">
         {moreMonths !== undefined && moreMonths > 0 && (
           <button
             onClick={onMoreMonths}
-            className="text-sm font-medium text-[#3da8f5] hover:underline"
+            className="text-sm font-medium text-sky-400 transition-colors hover:text-sky-300"
           >
             + 仲有 {moreMonths} 個月
           </button>
         )}
         {deal.totalDestinations && (
-          <span className="text-xs text-[#708090]">
+          <span className="text-xs text-slate-500">
             共 {deal.totalDestinations} 個目的地
           </span>
         )}
       </div>
-    </div>
+    </Card>
   );
 }
