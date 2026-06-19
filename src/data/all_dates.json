@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-19T12:19:12.250786",
-  "run_id": "20260619121912",
+  "generated_at": "2026-06-19T12:54:30.398163",
+  "run_id": "20260619125430",
   "results": [
     {
       "route": "HKG\u2192MNL",
@@ -1836,7 +1836,16 @@
           "month": 9,
           "year": 2026,
           "price": 1615.0,
-          "stay": 7
+          "stay": 7,
+          "flight": {
+            "airline": "CI",
+            "flight_no": "602",
+            "dep_time": "10:15",
+            "arr_time": "12:10",
+            "return_airline": "CI",
+            "return_dep_time": "10:30",
+            "return_arr_time": "11:55"
+          }
         }
       ],
       "totalDestinations": 51
