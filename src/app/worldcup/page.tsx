@@ -115,7 +115,7 @@ export default function WorldCupPage() {
 
         {/* Header */}
         <div className="mb-6 text-center">
-          <h1 className="text-3xl font-bold tracking-tight">🏆 世界盃赔率走勢</h1>
+          <h1 className="text-3xl font-bold tracking-tight">🏆 世界盃賠率走勢</h1>
           <p className={`mt-2 text-sm ${muted}`}>
             更新 {data.latest_datetime?.replace('_', ' ')} HKT · 馬會 1x2 + Polymarket 概率
           </p>
@@ -239,7 +239,7 @@ export default function WorldCupPage() {
         <div className={`mt-6 rounded-xl border ${border} ${cardBg} p-4 text-xs ${muted}`}>
           <h4 className={`mb-2 font-medium ${text}`}>📖 說明</h4>
           <ul className="space-y-1">
-            <li>🟢 <b>馬會赔率</b>：十進制赔率 (如 1.85 = 需投注 HK$1 贏 HK$0.85)</li>
+            <li>🟢 <b>馬會賠率</b>：十進制賠率 (如 1.85 = 需投注 HK$1 贏 HK$0.85)</li>
             <li>🔵 <b>Polymarket</b>：隱含概率 % (如 55% = 該選項有 55% 機會)</li>
             <li>↑/↓ = 對比較時段升/跌</li>
           </ul>
