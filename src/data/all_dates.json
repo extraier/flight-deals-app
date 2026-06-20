@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-20T08:12:14.421851",
+  "generated": "2026-06-20T08:17:18.670387",
   "results": [
     {
       "route": "HKG→MNL",
@@ -14,7 +14,7 @@
         "carryOn": false,
         "cheapDays": 0
       },
-      "typicalPrice": 1224,
+      "typicalPrice": 1232,
       "cheapestDates": [
         {
           "day": 4,
@@ -29,6 +29,21 @@
             "arr_time": "20:10",
             "ret_date": "2026-07-11",
             "ret_flight": "535"
+          }
+        },
+        {
+          "day": 9,
+          "month": 7,
+          "year": 2026,
+          "price": 1314.0,
+          "stay": 7,
+          "flight": {
+            "number": "534",
+            "airline": "UO",
+            "dep_time": "17:50",
+            "arr_time": "20:10",
+            "ret_date": "2026-07-16",
+            "ret_flight": "112"
           }
         },
         {
@@ -47,6 +62,21 @@
           }
         },
         {
+          "day": 17,
+          "month": 7,
+          "year": 2026,
+          "price": 1203.0,
+          "stay": 7,
+          "flight": {
+            "number": "534",
+            "airline": "UO",
+            "dep_time": "17:50",
+            "arr_time": "20:10",
+            "ret_date": "2026-07-24",
+            "ret_flight": "535"
+          }
+        },
+        {
           "day": 18,
           "month": 7,
           "year": 2026,
@@ -58,36 +88,6 @@
             "dep_time": "17:50",
             "arr_time": "20:10",
             "ret_date": "2026-07-25",
-            "ret_flight": "535"
-          }
-        },
-        {
-          "day": 2,
-          "month": 9,
-          "year": 2026,
-          "price": 1184.0,
-          "stay": 7,
-          "flight": {
-            "number": "516",
-            "airline": "UO",
-            "dep_time": "22:40",
-            "arr_time": "01:00",
-            "ret_date": "2026-09-09",
-            "ret_flight": "535"
-          }
-        },
-        {
-          "day": 3,
-          "month": 9,
-          "year": 2026,
-          "price": 1294.0,
-          "stay": 7,
-          "flight": {
-            "number": "534",
-            "airline": "UO",
-            "dep_time": "17:50",
-            "arr_time": "20:10",
-            "ret_date": "2026-09-10",
             "ret_flight": "535"
           }
         }
