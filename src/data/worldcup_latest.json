@@ -1,3 +1,5 @@
+Loaded 67 today snapshots
+Loaded 119 yesterday snapshots
 {
   "matches": [
     {
@@ -26,9 +28,9 @@
         "hkjc_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": -1.23,
-        "hkjc_draw": 1.41,
-        "hkjc_away": 2.33
+        "hkjc_home": 0.63,
+        "hkjc_draw": 0.0,
+        "hkjc_away": -1.12
       }
     },
     {
@@ -89,8 +91,8 @@
       },
       "chg_24h": {
         "hkjc_home": 0.0,
-        "hkjc_draw": 2.94,
-        "hkjc_away": -10.0
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
       }
     },
     {
@@ -119,9 +121,9 @@
         "hkjc_away": 1.44
       },
       "chg_24h": {
-        "hkjc_home": -3.17,
+        "hkjc_home": -4.69,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.71
+        "hkjc_away": 1.44
       }
     },
     {
@@ -181,9 +183,9 @@
         "hkjc_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": -1.47,
-        "hkjc_draw": 1.22,
-        "hkjc_away": 0.0
+        "hkjc_home": 0.0,
+        "hkjc_draw": -2.35,
+        "hkjc_away": -3.45
       }
     },
     {
@@ -212,9 +214,9 @@
         "hkjc_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": 0.0,
+        "hkjc_home": -0.74,
         "hkjc_draw": 0.0,
-        "hkjc_away": -9.09
+        "hkjc_away": -3.23
       }
     },
     {
@@ -243,9 +245,9 @@
         "hkjc_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": -1.75,
-        "hkjc_draw": 2.86,
-        "hkjc_away": -2.63
+        "hkjc_home": -3.45,
+        "hkjc_draw": 0.0,
+        "hkjc_away": -0.67
       }
     },
     {
@@ -605,9 +607,9 @@
         "away": 0.705
       },
       "chg_1h": {
-        "hkjc_home": 8.11,
-        "hkjc_draw": 3.09,
-        "hkjc_away": -1.61
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 8.11,
@@ -1241,10 +1243,10 @@
       }
     }
   ],
-  "generated": "2026-06-20T13:22:15.885313",
+  "generated": "2026-06-20T13:25:31.892804",
   "latest_datetime": "2026-06-20 13:15:46",
   "latest_ts": 1781932546.59706,
-  "ref_1h": "2026-06-20 12:15:46",
-  "ref_4h": "2026-06-20 09:15:46",
-  "ref_24h": "2026-06-19 13:15:46"
+  "ref_1h": "2026-06-20 12:30:46",
+  "ref_4h": "2026-06-20 09:30:46",
+  "ref_24h": "2026-06-19 13:29:38"
 }
