@@ -330,7 +330,7 @@ export default function TrumpPage() {
           <img
             src={futuAd.src}
             alt="富途牛牛優惠"
-            style={{ borderRadius: '8px', marginBottom: '12px', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+            style={{ borderRadius: '8px', marginBottom: '12px', display: 'block', marginLeft: 'auto', marginRight: 'auto', width: '70%' }}
           />
           <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '10px' }}>
             🎁 Comparetiger 獨家 富途開戶即賺 $1,800 現金券！
