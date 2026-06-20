@@ -82,7 +82,8 @@ function ReturnPill({ pct }: { pct: number | null }) {
   );
 }
 
-function TransactionsTab({ isDark, limit = 5 }: { isDark: boolean; limit?: number }) {
+function TransactionsTab({ isDark }: { isDark: boolean }) {
+  const [showAll, setShowAll] = useState(false);
   const trades = data.quiver_trades || [];
   const filings = data.filings || [];
 
@@ -136,13 +137,16 @@ function TransactionsTab({ isDark, limit = 5 }: { isDark: boolean; limit?: numbe
                       <td className="p-3"><ReturnPill pct={t.return_pct} /></td>
                     </tr>
                   );
-                }).slice(0, limit)}
+                }).slice(0, showAll ? undefined : 5)}
               </tbody>
             </table>
           </div>
-          {trades.length > limit && (
-            <button className={`w-full py-3 text-sm ${isDark ? 'text-zinc-500 hover:text-zinc-300' : 'text-zinc-500 hover:text-zinc-700'} mt-2`}>
-              Show {trades.length - limit} more trades ↓
+          {!showAll && trades.length > 5 && (
+            <button
+              onClick={() => setShowAll(true)}
+              className={`w-full py-3 text-sm ${isDark ? 'text-zinc-500 hover:text-zinc-300' : 'text-zinc-500 hover:text-zinc-700'} mt-2`}
+            >
+              Show {trades.length - 5} more trades ↓
             </button>
           )}
         </>
@@ -335,7 +339,7 @@ export default function TrumpPage() {
           <img
             src={futuAd.src}
             alt="富途牛牛優惠"
-            style={{ maxWidth: '100%', borderRadius: '8px', marginBottom: '12px', maxHeight: '180px', objectFit: 'cover' }}
+            style={{ borderRadius: '8px', marginBottom: '12px', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
           />
           <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '10px' }}>
             🎁 Comparetiger 獨家 富途開戶即賺 $1,800 現金券！
