@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-20T08:47:43.996708",
+  "generated": "2026-06-20T08:52:48.363532",
   "results": [
     {
       "route": "HKG→MNL",
@@ -3823,7 +3823,7 @@
         "carryOn": false,
         "cheapDays": 0
       },
-      "typicalPrice": 7427,
+      "typicalPrice": 6824,
       "cheapestDates": [
         {
           "day": 27,
@@ -3841,7 +3841,7 @@
           }
         },
         {
-          "day": 18,
+          "day": 2,
           "month": 9,
           "year": 2026,
           "price": 6824.0,
@@ -3851,30 +3851,54 @@
             "airline": "DL",
             "dep_time": "09:25",
             "arr_time": "08:00",
-            "ret_date": "2026-09-25",
-            "ret_flight": "967"
+            "ret_date": "2026-09-09",
+            "ret_flight": "1556"
           }
         },
         {
-          "day": 20,
-          "month": 6,
+          "day": 3,
+          "month": 9,
           "year": 2026,
-          "price": 8069.0,
-          "stay": 7
+          "price": 6824.0,
+          "stay": 7,
+          "flight": {
+            "number": "88",
+            "airline": "DL",
+            "dep_time": "09:25",
+            "arr_time": "08:00",
+            "ret_date": "2026-09-10",
+            "ret_flight": "1556"
+          }
         },
         {
-          "day": 21,
-          "month": 6,
+          "day": 4,
+          "month": 9,
           "year": 2026,
-          "price": 7708.0,
-          "stay": 7
+          "price": 6824.0,
+          "stay": 7,
+          "flight": {
+            "number": "88",
+            "airline": "DL",
+            "dep_time": "09:25",
+            "arr_time": "08:00",
+            "ret_date": "2026-09-11",
+            "ret_flight": "1556"
+          }
         },
         {
-          "day": 22,
-          "month": 6,
+          "day": 5,
+          "month": 9,
           "year": 2026,
-          "price": 7708.0,
-          "stay": 7
+          "price": 6824.0,
+          "stay": 7,
+          "flight": {
+            "number": "88",
+            "airline": "DL",
+            "dep_time": "09:25",
+            "arr_time": "08:00",
+            "ret_date": "2026-09-12",
+            "ret_flight": "1556"
+          }
         }
       ],
       "totalDestinations": 46
