@@ -1,16 +1,14 @@
-Loaded 67 today snapshots
-Loaded 119 yesterday snapshots
 {
   "matches": [
     {
       "match": "Netherlands vs Sweden",
       "homeTeam": "Netherlands",
       "awayTeam": "Sweden",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.6,
         "draw": 3.6,
-        "away": 4.4
+        "away": 4.35
       },
       "poly": {
         "home": 0.575,
@@ -20,24 +18,24 @@ Loaded 119 yesterday snapshots
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": -1.14
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": -1.14
       },
       "chg_24h": {
         "hkjc_home": 0.63,
         "hkjc_draw": 0.0,
-        "hkjc_away": -1.12
+        "hkjc_away": -2.25
       }
     },
     {
       "match": "Germany vs Côte d'Ivoire",
       "homeTeam": "Germany",
       "awayTeam": "Côte d'Ivoire",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.36,
         "draw": 4.25,
@@ -68,69 +66,69 @@ Loaded 119 yesterday snapshots
       "match": "Ecuador vs Curaçao",
       "homeTeam": "Ecuador",
       "awayTeam": "Curaçao",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.08,
-        "draw": 7.0,
-        "away": 18.0
+        "draw": 6.8,
+        "away": 17.0
       },
       "poly": {
-        "home": 0.875,
+        "home": 0.865,
         "draw": 0.095,
-        "away": 0.0405
+        "away": 0.0425
       },
       "chg_1h": {
         "hkjc_home": 0.0,
-        "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_draw": -2.86,
+        "hkjc_away": -5.56
       },
       "chg_4h": {
         "hkjc_home": 0.0,
-        "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_draw": -2.86,
+        "hkjc_away": -5.56
       },
       "chg_24h": {
         "hkjc_home": 0.0,
-        "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_draw": -2.86,
+        "hkjc_away": -5.56
       }
     },
     {
       "match": "Tunisia vs Japan",
       "homeTeam": "Tunisia",
       "awayTeam": "Japan",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 6.1,
         "draw": 3.9,
-        "away": 1.41
+        "away": 1.4
       },
       "poly": {
         "home": 0.145,
         "draw": 0.235,
-        "away": 0.625
+        "away": 0.615
       },
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": -0.71
       },
       "chg_4h": {
         "hkjc_home": -4.69,
         "hkjc_draw": 0.0,
-        "hkjc_away": 1.44
+        "hkjc_away": 0.72
       },
       "chg_24h": {
         "hkjc_home": -4.69,
         "hkjc_draw": 0.0,
-        "hkjc_away": 1.44
+        "hkjc_away": 0.72
       }
     },
     {
       "match": "Spain vs Saudi Arabia",
       "homeTeam": "Spain",
       "awayTeam": "Saudi Arabia",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.06,
         "draw": 7.25,
@@ -161,7 +159,7 @@ Loaded 119 yesterday snapshots
       "match": "Belgium vs IR Iran",
       "homeTeam": "Belgium",
       "awayTeam": "IR Iran",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.34,
         "draw": 4.15,
@@ -192,7 +190,7 @@ Loaded 119 yesterday snapshots
       "match": "Uruguay vs Cabo Verde",
       "homeTeam": "Uruguay",
       "awayTeam": "Cabo Verde",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.34,
         "draw": 3.95,
@@ -223,7 +221,7 @@ Loaded 119 yesterday snapshots
       "match": "New Zealand vs Egypt",
       "homeTeam": "New Zealand",
       "awayTeam": "Egypt",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 5.6,
         "draw": 3.6,
@@ -254,7 +252,7 @@ Loaded 119 yesterday snapshots
       "match": "Argentina vs Austria",
       "homeTeam": "Argentina",
       "awayTeam": "Austria",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.5,
         "draw": 3.6,
@@ -285,14 +283,14 @@ Loaded 119 yesterday snapshots
       "match": "France vs Iraq",
       "homeTeam": "France",
       "awayTeam": "Iraq",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.04,
         "draw": 7.75,
         "away": 24.0
       },
       "poly": {
-        "home": 0.9,
+        "home": 0.905,
         "draw": 0.075,
         "away": 0.0265
       },
@@ -316,7 +314,7 @@ Loaded 119 yesterday snapshots
       "match": "Norway vs Senegal",
       "homeTeam": "Norway",
       "awayTeam": "Senegal",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 2.01,
         "draw": 3.15,
@@ -347,10 +345,10 @@ Loaded 119 yesterday snapshots
       "match": "Jordan vs Algeria",
       "homeTeam": "Jordan",
       "awayTeam": "Algeria",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
-        "home": 6.2,
-        "draw": 4.05,
+        "home": 5.9,
+        "draw": 4.0,
         "away": 1.4
       },
       "poly": {
@@ -359,18 +357,18 @@ Loaded 119 yesterday snapshots
         "away": 0.615
       },
       "chg_1h": {
-        "hkjc_home": 0.0,
-        "hkjc_draw": 0.0,
+        "hkjc_home": -4.84,
+        "hkjc_draw": -1.23,
         "hkjc_away": 0.0
       },
       "chg_4h": {
-        "hkjc_home": 0.0,
-        "hkjc_draw": 0.0,
+        "hkjc_home": -4.84,
+        "hkjc_draw": -1.23,
         "hkjc_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": 0.0,
-        "hkjc_draw": 0.0,
+        "hkjc_home": -4.84,
+        "hkjc_draw": -1.23,
         "hkjc_away": 0.0
       }
     },
@@ -378,7 +376,7 @@ Loaded 119 yesterday snapshots
       "match": "Portugal vs Uzbekistan",
       "homeTeam": "Portugal",
       "awayTeam": "Uzbekistan",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.09,
         "draw": 6.8,
@@ -409,7 +407,7 @@ Loaded 119 yesterday snapshots
       "match": "England vs Ghana",
       "homeTeam": "England",
       "awayTeam": "Ghana",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.09,
         "draw": 6.8,
@@ -440,7 +438,7 @@ Loaded 119 yesterday snapshots
       "match": "Panama vs Croatia",
       "homeTeam": "Panama",
       "awayTeam": "Croatia",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 6.6,
         "draw": 4.05,
@@ -471,7 +469,7 @@ Loaded 119 yesterday snapshots
       "match": "Colombia vs DR Congo",
       "homeTeam": "Colombia",
       "awayTeam": "DR Congo",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.36,
         "draw": 3.85,
@@ -502,7 +500,7 @@ Loaded 119 yesterday snapshots
       "match": "Switzerland vs Canada",
       "homeTeam": "Switzerland",
       "awayTeam": "Canada",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 3.0,
         "draw": 3.0,
@@ -533,7 +531,7 @@ Loaded 119 yesterday snapshots
       "match": "Bosnia and Herzegovina vs Qatar",
       "homeTeam": "Bosnia and Herzegovina",
       "awayTeam": "Qatar",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.39,
         "draw": 4.4,
@@ -564,7 +562,7 @@ Loaded 119 yesterday snapshots
       "match": "Morocco vs Haiti",
       "homeTeam": "Morocco",
       "awayTeam": "Haiti",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.11,
         "draw": 6.6,
@@ -595,7 +593,7 @@ Loaded 119 yesterday snapshots
       "match": "Scotland vs Brazil",
       "homeTeam": "Scotland",
       "awayTeam": "Brazil",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 10.0,
         "draw": 5.0,
@@ -626,14 +624,14 @@ Loaded 119 yesterday snapshots
       "match": "Czechia vs Mexico",
       "homeTeam": "Czechia",
       "awayTeam": "Mexico",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.91,
         "draw": 3.35,
         "away": 3.35
       },
       "poly": {
-        "home": 0.285,
+        "home": 0.275,
         "draw": 0.235,
         "away": 0.485
       },
@@ -657,7 +655,7 @@ Loaded 119 yesterday snapshots
       "match": "South Africa vs Korea Republic",
       "homeTeam": "South Africa",
       "awayTeam": "Korea Republic",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 5.0,
         "draw": 3.5,
@@ -688,7 +686,7 @@ Loaded 119 yesterday snapshots
       "match": "Ecuador vs Germany",
       "homeTeam": "Ecuador",
       "awayTeam": "Germany",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 5.6,
         "draw": 3.65,
@@ -719,7 +717,7 @@ Loaded 119 yesterday snapshots
       "match": "Curaçao vs Côte d'Ivoire",
       "homeTeam": "Curaçao",
       "awayTeam": "Côte d'Ivoire",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 16.0,
         "draw": 6.8,
@@ -750,7 +748,7 @@ Loaded 119 yesterday snapshots
       "match": "Japan vs Sweden",
       "homeTeam": "Japan",
       "awayTeam": "Sweden",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 2.15,
         "draw": 3.1,
@@ -781,7 +779,7 @@ Loaded 119 yesterday snapshots
       "match": "Tunisia vs Netherlands",
       "homeTeam": "Tunisia",
       "awayTeam": "Netherlands",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 10.5,
         "draw": 5.3,
@@ -812,16 +810,16 @@ Loaded 119 yesterday snapshots
       "match": "Paraguay vs Australia",
       "homeTeam": "Paraguay",
       "awayTeam": "Australia",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 2.12,
         "draw": 3.05,
         "away": 3.1
       },
       "poly": {
-        "home": 0.385,
-        "draw": 0.375,
-        "away": 0.235
+        "home": 0.355,
+        "draw": 0.395,
+        "away": 0.245
       },
       "chg_1h": {
         "hkjc_home": 0.0,
@@ -843,7 +841,7 @@ Loaded 119 yesterday snapshots
       "match": "Türkiye vs United States",
       "homeTeam": "Türkiye",
       "awayTeam": "United States",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 2.29,
         "draw": 3.2,
@@ -852,7 +850,7 @@ Loaded 119 yesterday snapshots
       "poly": {
         "home": 0.285,
         "draw": 0.235,
-        "away": 0.49
+        "away": 0.485
       },
       "chg_1h": {
         "hkjc_home": 0.0,
@@ -874,7 +872,7 @@ Loaded 119 yesterday snapshots
       "match": "Norway vs France",
       "homeTeam": "Norway",
       "awayTeam": "France",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 4.3,
         "draw": 3.6,
@@ -905,7 +903,7 @@ Loaded 119 yesterday snapshots
       "match": "Senegal vs Iraq",
       "homeTeam": "Senegal",
       "awayTeam": "Iraq",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.22,
         "draw": 5.1,
@@ -936,7 +934,7 @@ Loaded 119 yesterday snapshots
       "match": "Cabo Verde vs Saudi Arabia",
       "homeTeam": "Cabo Verde",
       "awayTeam": "Saudi Arabia",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 2.46,
         "draw": 3.15,
@@ -967,7 +965,7 @@ Loaded 119 yesterday snapshots
       "match": "Uruguay vs Spain",
       "homeTeam": "Uruguay",
       "awayTeam": "Spain",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 6.5,
         "draw": 3.9,
@@ -998,7 +996,7 @@ Loaded 119 yesterday snapshots
       "match": "Egypt vs IR Iran",
       "homeTeam": "Egypt",
       "awayTeam": "IR Iran",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 2.15,
         "draw": 3.1,
@@ -1029,7 +1027,7 @@ Loaded 119 yesterday snapshots
       "match": "New Zealand vs Belgium",
       "homeTeam": "New Zealand",
       "awayTeam": "Belgium",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 11.5,
         "draw": 5.7,
@@ -1060,7 +1058,7 @@ Loaded 119 yesterday snapshots
       "match": "Panama vs England",
       "homeTeam": "Panama",
       "awayTeam": "England",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 15.0,
         "draw": 6.5,
@@ -1091,7 +1089,7 @@ Loaded 119 yesterday snapshots
       "match": "Croatia vs Ghana",
       "homeTeam": "Croatia",
       "awayTeam": "Ghana",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 1.5,
         "draw": 3.5,
@@ -1122,7 +1120,7 @@ Loaded 119 yesterday snapshots
       "match": "Colombia vs Portugal",
       "homeTeam": "Colombia",
       "awayTeam": "Portugal",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 3.75,
         "draw": 3.3,
@@ -1153,7 +1151,7 @@ Loaded 119 yesterday snapshots
       "match": "DR Congo vs Uzbekistan",
       "homeTeam": "DR Congo",
       "awayTeam": "Uzbekistan",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 2.09,
         "draw": 3.35,
@@ -1184,7 +1182,7 @@ Loaded 119 yesterday snapshots
       "match": "Jordan vs Argentina",
       "homeTeam": "Jordan",
       "awayTeam": "Argentina",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 16.0,
         "draw": 7.0,
@@ -1215,7 +1213,7 @@ Loaded 119 yesterday snapshots
       "match": "Algeria vs Austria",
       "homeTeam": "Algeria",
       "awayTeam": "Austria",
-      "gameTime": "2026-06-20 13:15",
+      "gameTime": "2026-06-20 13:33",
       "hkjc": {
         "home": 3.2,
         "draw": 2.96,
@@ -1243,10 +1241,10 @@ Loaded 119 yesterday snapshots
       }
     }
   ],
-  "generated": "2026-06-20T13:25:40.672390",
-  "latest_datetime": "2026-06-20 13:15:46",
-  "latest_ts": 1781932546.59706,
-  "ref_1h": "2026-06-20 12:30:46",
-  "ref_4h": "2026-06-20 09:30:46",
-  "ref_24h": "2026-06-19 13:29:38"
+  "generated": "2026-06-20T13:34:23.407033",
+  "latest_datetime": "2026-06-20 13:33:35",
+  "latest_ts": 1781933615.943483,
+  "ref_1h": "2026-06-20 12:33:26",
+  "ref_4h": "2026-06-20 09:33:01",
+  "ref_24h": "2026-06-19 13:30:46"
 }
