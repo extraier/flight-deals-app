@@ -40,9 +40,21 @@ interface Deal {
   currency: string;
   badge: { carryOn: boolean; cheapDays: number };
   typicalPrice: number;
-  cheapestDates: Array<{ day: number; month: number; year: number; price: number; stay: number | null }>;
+  cheapestDates: Array<{
+    day: number; month: number; year: number;
+    price: number; stay: number | null;
+    history?: Record<string, { price: number; diff: number; pct: number }>;
+  }>;
   totalDestinations: number;
 }
+
+type ComparePeriod = 'now' | '1d' | '4d' | '7d';
+const COMPARE_LABELS: Record<ComparePeriod, string> = {
+  now: '今日',
+  '1d': '1日前',
+  '4d': '4日前',
+  '7d': '7日前',
+};
 
 const CITY_TO_COUNTRY: Record<string, string> = {
   TPE: '台灣', KHH: '台灣', RMQ: '台灣',
@@ -69,6 +81,7 @@ export default function Home() {
   const [filterMode, setFilterMode] = useState<FilterMode>('region');
   const [selectedRegion, setSelectedRegion] = useState<string>('全部');
   const [selectedCountry, setSelectedCountry] = useState<string>('全部');
+  const [comparePeriod, setComparePeriod] = useState<ComparePeriod>('now');
 
   const allData = departure === 'HKG' ? allDatesHkg : allDatesSzx;
   const deals = (allData.results || []) as Deal[];
@@ -105,6 +118,25 @@ export default function Home() {
   const discount = (deal: Deal) => {
     if (!deal.typicalPrice || deal.typicalPrice <= 0) return null;
     return Math.round(((deal.typicalPrice - deal.price) / deal.typicalPrice) * 100);
+  };
+
+  // Get comparison price for a deal (based on selected period)
+  const getComparePrice = (deal: Deal): number | null => {
+    if (comparePeriod === 'now') return null;
+    // Use the cheapest date's history for the comparison period
+    const cd = deal.cheapestDates[0];
+    if (!cd?.history?.[comparePeriod]) return null;
+    return cd.history[comparePeriod].price;
+  };
+
+  const getCompareDiff = (deal: Deal): { diff: number; pct: number } | null => {
+    if (comparePeriod === 'now') return null;
+    const cd = deal.cheapestDates[0];
+    if (!cd?.history?.[comparePeriod]) return null;
+    const old = cd.history[comparePeriod].price;
+    const diff = deal.price - old;
+    const pct = old > 0 ? Math.round((diff / old) * 100) : 0;
+    return { diff, pct };
   };
 
   return (
@@ -215,22 +247,54 @@ export default function Home() {
                 </select>
               )}
 
-              {/* Sort Options */}
-              <div className="flex gap-2">
-                <Button
-                  variant={sortBy === 'price' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSortBy('price')}
-                >
-                  💰 最低價
-                </Button>
-                <Button
-                  variant={sortBy === 'discount' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSortBy('discount')}
-                >
-                  🔥 最抵
-                </Button>
+              {/* Sort + Compare Options */}
+              <div className="flex flex-wrap gap-3">
+                <div className="flex items-center gap-1">
+                  <span className="text-xs text-muted-foreground">比較：</span>
+                  <div className="inline-flex rounded-md border border-border bg-card p-0.5 gap-0.5">
+                    {(Object.keys(COMPARE_LABELS) as ComparePeriod[]).map((p) => {
+                      const hasData = deals.some(d => p === 'now' || d.cheapestDates[0]?.history?.[p]);
+                      return (
+                        <button
+                          key={p}
+                          onClick={() => setComparePeriod(p)}
+                          disabled={!hasData && p !== 'now'}
+                          className={`px-2 py-1 rounded text-xs font-medium transition-all ${
+                            comparePeriod === p
+                              ? 'bg-sky-600 text-white'
+                              : hasData
+                                ? 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                                : 'text-muted-foreground/40 cursor-not-allowed'
+                          }`}
+                        >
+                          {COMPARE_LABELS[p]}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <span className="text-xs text-muted-foreground">排序：</span>
+                  <div className="inline-flex rounded-md border border-border bg-card p-0.5 gap-0.5">
+                    <button
+                      onClick={() => setSortBy('price')}
+                      className={`px-2 py-1 rounded text-xs font-medium transition-all ${
+                        sortBy === 'price' ? 'bg-sky-600 text-white' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                      }`}
+                    >
+                      💰 最低價
+                    </button>
+                    <button
+                      onClick={() => setSortBy('discount')}
+                      className={`px-2 py-1 rounded text-xs font-medium transition-all ${
+                        sortBy === 'discount' ? 'bg-sky-600 text-white' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                      }`}
+                    >
+                      🔥 最抵
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -243,6 +307,7 @@ export default function Home() {
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {filteredAndSortedDeals.map((dest) => {
                 const discountPct = discount(dest);
+                const diff = getCompareDiff(dest);
                 return (
                   <Link key={dest.route} href={`/route/${dest.destination.code}?dep=${departure}`} className="group">
                     <Card className="transition-all duration-200 hover:border-sky-500/50 hover:shadow-lg hover:shadow-sky-500/10">
@@ -254,6 +319,13 @@ export default function Home() {
                           </div>
                           <div className="text-right">
                             <div className="text-xl font-bold text-emerald-600">${dest.price.toLocaleString()}</div>
+                            {diff !== null && (
+                              <div className={`text-xs font-medium ${
+                                diff.diff < 0 ? 'text-emerald-600' : diff.diff > 0 ? 'text-red-500' : 'text-muted-foreground'
+                              }`}>
+                                {diff.diff < 0 ? '↓' : '↑'}{Math.abs(diff.diff).toLocaleString()} ({diff.diff < 0 ? '-' : '+'}{Math.abs(diff.pct)}%)
+                              </div>
+                            )}
                             <div className="text-xs text-muted-foreground">起</div>
                           </div>
                         </div>
@@ -270,6 +342,11 @@ export default function Home() {
                             {discountPct !== null && discountPct > 0 && (
                               <Badge variant="destructive" className="text-xs">
                                 -{discountPct}%
+                              </Badge>
+                            )}
+                            {diff !== null && (
+                              <Badge variant="outline" className="text-xs text-muted-foreground border-muted-foreground/30">
+                                vs {COMPARE_LABELS[comparePeriod]}
                               </Badge>
                             )}
                           </div>
