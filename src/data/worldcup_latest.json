@@ -18,17 +18,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 2.74,
-        "hkjc_away": -2.27
+        "hkjc_away": -2.27,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 5.13
       },
       "chg_24h": {
         "hkjc_home": -0.63,
         "hkjc_draw": 4.17,
-        "hkjc_away": -3.37
+        "hkjc_away": -3.37,
+        "poly_home": 3.6,
+        "poly_draw": -4.08,
+        "poly_away": 0.0
       }
     },
     {
@@ -49,17 +58,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": -1.47,
         "hkjc_draw": 1.18,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": -1.47,
         "hkjc_draw": 3.61,
-        "hkjc_away": -4.62
+        "hkjc_away": -4.62,
+        "poly_home": 1.57,
+        "poly_draw": 0.0,
+        "poly_away": -6.06
       }
     },
     {
@@ -80,17 +98,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 2.53
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": -6.9
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": -2.86,
-        "hkjc_away": -5.56
+        "hkjc_away": -5.56,
+        "poly_home": -1.14,
+        "poly_draw": 0.0,
+        "poly_away": 2.53
       }
     },
     {
@@ -111,17 +138,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 1.63
       },
       "chg_24h": {
         "hkjc_home": -4.69,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.72
+        "hkjc_away": 0.72,
+        "poly_home": 7.41,
+        "poly_draw": 0.0,
+        "poly_away": -3.1
       }
     },
     {
@@ -142,17 +178,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": -5.8
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": -10.96
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": -4.76
+        "hkjc_away": -4.76,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": -13.33
       }
     },
     {
@@ -173,17 +218,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -204,17 +258,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 1.5,
+        "poly_draw": 0.0,
+        "poly_away": -8.7
       }
     },
     {
@@ -235,17 +298,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -266,17 +338,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": -1.37,
-        "hkjc_away": -5.36
+        "hkjc_away": -5.36,
+        "poly_home": 1.63,
+        "poly_draw": 0.0,
+        "poly_away": -6.45
       }
     },
     {
@@ -297,17 +378,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 1.85
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 3.77
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": -11.43,
-        "hkjc_away": -14.29
+        "hkjc_away": -14.29,
+        "poly_home": 1.12,
+        "poly_draw": 0.0,
+        "poly_away": 7.84
       }
     },
     {
@@ -328,17 +418,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": -1.47,
         "hkjc_draw": -1.56,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 2.41,
+        "poly_draw": 0.0,
+        "poly_away": -3.17
       }
     },
     {
@@ -359,17 +458,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": -4.84,
         "hkjc_draw": -1.23,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -390,17 +498,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": -7.41,
+        "poly_away": 0.0
       }
     },
     {
@@ -421,17 +538,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -452,17 +578,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -483,17 +618,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -514,17 +658,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -545,17 +698,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": -1.46,
+        "poly_draw": 0.0,
+        "poly_away": 8.0
       }
     },
     {
@@ -576,17 +738,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 1.24,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 1.24,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": -4.31,
         "hkjc_draw": 15.79,
-        "hkjc_away": 21.74
+        "hkjc_away": 21.74,
+        "poly_home": 7.95,
+        "poly_draw": -18.18,
+        "poly_away": -35.29
       }
     },
     {
@@ -607,17 +778,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 8.11,
         "hkjc_draw": 3.09,
-        "hkjc_away": -1.61
+        "hkjc_away": -1.61,
+        "poly_home": -8.0,
+        "poly_draw": -5.41,
+        "poly_away": 1.44
       }
     },
     {
@@ -638,17 +818,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": -7.84,
+        "poly_away": 6.45
       }
     },
     {
@@ -669,17 +858,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": -6.06,
+        "poly_draw": 4.26,
+        "poly_away": 1.68
       }
     },
     {
@@ -700,17 +898,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -731,17 +938,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -762,17 +978,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 3.51
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": -2.25,
+        "poly_draw": 0.0,
+        "poly_away": 3.51
       }
     },
     {
@@ -793,17 +1018,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -824,17 +1058,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 17.92,
         "hkjc_draw": -27.54,
-        "hkjc_away": 16.13
+        "hkjc_away": 16.13,
+        "poly_home": 0.0,
+        "poly_draw": 5.06,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 17.92,
         "hkjc_draw": -27.54,
-        "hkjc_away": 16.13
+        "hkjc_away": 16.13,
+        "poly_home": -22.47,
+        "poly_draw": 45.61,
+        "poly_away": -10.91
       }
     },
     {
@@ -855,17 +1098,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": -13.1,
         "hkjc_draw": 6.25,
-        "hkjc_away": 11.11
+        "hkjc_away": 11.11,
+        "poly_home": 3.39,
+        "poly_draw": 0.0,
+        "poly_away": -2.11
       },
       "chg_24h": {
         "hkjc_home": -13.1,
         "hkjc_draw": 6.25,
-        "hkjc_away": 11.11
+        "hkjc_away": 11.11,
+        "poly_home": -11.59,
+        "poly_draw": -4.08,
+        "poly_away": 9.41
       }
     },
     {
@@ -886,17 +1138,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": -4.44,
+        "poly_draw": 0.0,
+        "poly_away": -1.8
       }
     },
     {
@@ -917,17 +1178,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": -5.71,
+        "poly_away": 0.0
       }
     },
     {
@@ -948,17 +1218,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": -2.9,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -979,17 +1258,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -1010,17 +1298,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -1041,17 +1338,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -1072,17 +1378,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": -11.76,
+        "poly_draw": -7.41,
+        "poly_away": 2.58
       }
     },
     {
@@ -1103,17 +1418,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -1134,17 +1458,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": -3.51,
+        "poly_draw": -3.77,
+        "poly_away": 4.4
       }
     },
     {
@@ -1165,17 +1498,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -1196,17 +1538,26 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": -0.8,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -1227,21 +1578,30 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     }
   ],
-  "generated": "2026-06-20T18:41:26.821346",
+  "generated": "2026-06-20T18:42:06.896241",
   "latest_datetime": "2026-06-20 18:34:12",
   "latest_ts": 1781951652.931278,
   "ref_1h": "2026-06-20 17:45:46",
