@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-20T08:32:31.207747",
+  "generated": "2026-06-20T08:37:35.490437",
   "results": [
     {
       "route": "HKG→MNL",
@@ -1730,7 +1730,7 @@
         "carryOn": false,
         "cheapDays": 0
       },
-      "typicalPrice": 2390,
+      "typicalPrice": 2450,
       "cheapestDates": [
         {
           "day": 3,
@@ -1744,6 +1744,21 @@
             "dep_time": "10:50",
             "arr_time": "15:50",
             "ret_date": "2026-07-10",
+            "ret_flight": "691"
+          }
+        },
+        {
+          "day": 4,
+          "month": 7,
+          "year": 2026,
+          "price": 2321.0,
+          "stay": 7,
+          "flight": {
+            "number": "670",
+            "airline": "UO",
+            "dep_time": "14:50",
+            "arr_time": "19:50",
+            "ret_date": "2026-07-11",
             "ret_flight": "691"
           }
         },
@@ -1763,47 +1778,32 @@
           }
         },
         {
-          "day": 26,
-          "month": 8,
+          "day": 9,
+          "month": 7,
           "year": 2026,
-          "price": 2321.0,
+          "price": 2634.0,
           "stay": 7,
           "flight": {
             "number": "670",
             "airline": "UO",
             "dep_time": "14:50",
             "arr_time": "19:50",
-            "ret_date": "2026-09-02",
+            "ret_date": "2026-07-16",
             "ret_flight": "691"
           }
         },
         {
-          "day": 28,
+          "day": 19,
           "month": 8,
           "year": 2026,
-          "price": 2534.0,
+          "price": 2421.0,
           "stay": 7,
           "flight": {
             "number": "690",
             "airline": "UO",
             "dep_time": "10:50",
             "arr_time": "15:50",
-            "ret_date": "2026-09-04",
-            "ret_flight": "691"
-          }
-        },
-        {
-          "day": 29,
-          "month": 8,
-          "year": 2026,
-          "price": 2221.0,
-          "stay": 7,
-          "flight": {
-            "number": "690",
-            "airline": "UO",
-            "dep_time": "10:50",
-            "arr_time": "15:50",
-            "ret_date": "2026-09-05",
+            "ret_date": "2026-08-26",
             "ret_flight": "691"
           }
         }
