@@ -6,9 +6,9 @@
       "awayTeam": "Sweden",
       "gameTime": "2026-06-21 01:00",
       "hkjc": {
-        "home": 1.58,
+        "home": 1.59,
         "draw": 3.65,
-        "away": 4.4
+        "away": 4.35
       },
       "poly": {
         "home": 0.575,
@@ -16,19 +16,19 @@
         "away": 0.195
       },
       "chg_1h": {
-        "hkjc_home": -1.25,
-        "hkjc_draw": 1.39,
-        "hkjc_away": 0.0
+        "hkjc_home": 0.63,
+        "hkjc_draw": 0.0,
+        "hkjc_away": -1.14
       },
       "chg_4h": {
-        "hkjc_home": -1.25,
-        "hkjc_draw": 1.39,
-        "hkjc_away": 0.0
-      },
-      "chg_24h": {
         "hkjc_home": -0.63,
         "hkjc_draw": 1.39,
-        "hkjc_away": -1.12
+        "hkjc_away": -1.14
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 1.39,
+        "hkjc_away": -2.25
       }
     },
     {
@@ -75,12 +75,12 @@
       "poly": {
         "home": 0.865,
         "draw": 0.095,
-        "away": 0.0425
+        "away": 0.0435
       },
       "chg_1h": {
         "hkjc_home": 0.0,
-        "hkjc_draw": -2.86,
-        "hkjc_away": -5.56
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
@@ -111,7 +111,7 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": -0.71
+        "hkjc_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": -4.69,
@@ -142,7 +142,7 @@
       "chg_1h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": -4.76
+        "hkjc_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
@@ -326,8 +326,8 @@
         "away": 0.305
       },
       "chg_1h": {
-        "hkjc_home": -1.47,
-        "hkjc_draw": -1.56,
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
         "hkjc_away": 0.0
       },
       "chg_4h": {
@@ -357,8 +357,8 @@
         "away": 0.615
       },
       "chg_1h": {
-        "hkjc_home": -4.84,
-        "hkjc_draw": -1.23,
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
         "hkjc_away": 0.0
       },
       "chg_4h": {
@@ -571,7 +571,7 @@
       "poly": {
         "home": 0.805,
         "draw": 0.135,
-        "away": 0.065
+        "away": 0.055
       },
       "chg_1h": {
         "hkjc_home": 0.0,
@@ -600,7 +600,7 @@
         "away": 1.22
       },
       "poly": {
-        "home": 0.125,
+        "home": 0.115,
         "draw": 0.175,
         "away": 0.705
       },
@@ -812,29 +812,29 @@
       "awayTeam": "Australia",
       "gameTime": "2026-06-26 10:00",
       "hkjc": {
-        "home": 2.12,
-        "draw": 3.05,
-        "away": 3.1
+        "home": 2.47,
+        "draw": 2.21,
+        "away": 3.65
       },
       "poly": {
-        "home": 0.355,
+        "home": 0.345,
         "draw": 0.395,
         "away": 0.245
       },
       "chg_1h": {
-        "hkjc_home": 0.0,
-        "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_home": 16.51,
+        "hkjc_draw": -27.54,
+        "hkjc_away": 17.74
       },
       "chg_4h": {
-        "hkjc_home": 0.0,
-        "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_home": 16.51,
+        "hkjc_draw": -27.54,
+        "hkjc_away": 17.74
       },
       "chg_24h": {
-        "hkjc_home": 0.0,
-        "hkjc_draw": 0.0,
-        "hkjc_away": 0.0
+        "hkjc_home": 16.51,
+        "hkjc_draw": -27.54,
+        "hkjc_away": 17.74
       }
     },
     {
@@ -848,7 +848,7 @@
         "away": 2.7
       },
       "poly": {
-        "home": 0.285,
+        "home": 0.295,
         "draw": 0.235,
         "away": 0.475
       },
@@ -1065,7 +1065,7 @@
         "away": 1.11
       },
       "poly": {
-        "home": 0.085,
+        "home": 0.075,
         "draw": 0.125,
         "away": 0.795
       },
@@ -1241,10 +1241,10 @@
       }
     }
   ],
-  "generated": "2026-06-20T14:05:10.886668",
-  "latest_datetime": "2026-06-20 14:00:46",
-  "latest_ts": 1781935246.621668,
-  "ref_1h": "2026-06-20 13:00:48",
-  "ref_4h": "2026-06-20 10:00:46",
-  "ref_24h": "2026-06-19 14:00:46"
+  "generated": "2026-06-20T15:05:09.352759",
+  "latest_datetime": "2026-06-20 15:00:46",
+  "latest_ts": 1781938846.913301,
+  "ref_1h": "2026-06-20 14:00:46",
+  "ref_4h": "2026-06-20 11:00:46",
+  "ref_24h": "2026-06-19 15:00:47"
 }
