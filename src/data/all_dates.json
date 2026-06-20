@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-20T08:42:39.728672",
+  "generated": "2026-06-20T08:47:43.996708",
   "results": [
     {
       "route": "HKG→MNL",
@@ -1220,7 +1220,7 @@
         "carryOn": false,
         "cheapDays": 0
       },
-      "typicalPrice": 2383,
+      "typicalPrice": 2008,
       "cheapestDates": [
         {
           "day": 26,
@@ -1253,6 +1253,36 @@
           }
         },
         {
+          "day": 31,
+          "month": 8,
+          "year": 2026,
+          "price": 2108.0,
+          "stay": 7,
+          "flight": {
+            "number": "28",
+            "airline": "GK",
+            "dep_time": "00:55",
+            "arr_time": "06:15",
+            "ret_date": "2026-09-07",
+            "ret_flight": "27"
+          }
+        },
+        {
+          "day": 2,
+          "month": 9,
+          "year": 2026,
+          "price": 2108.0,
+          "stay": 7,
+          "flight": {
+            "number": "28",
+            "airline": "GK",
+            "dep_time": "00:55",
+            "arr_time": "06:15",
+            "ret_date": "2026-09-09",
+            "ret_flight": "27"
+          }
+        },
+        {
           "day": 17,
           "month": 9,
           "year": 2026,
@@ -1265,36 +1295,6 @@
             "arr_time": "06:15",
             "ret_date": "2026-09-24",
             "ret_flight": "27"
-          }
-        },
-        {
-          "day": 25,
-          "month": 10,
-          "year": 2026,
-          "price": 1874.0,
-          "stay": 7,
-          "flight": {
-            "number": "28",
-            "airline": "GK",
-            "dep_time": "00:55",
-            "arr_time": "06:15",
-            "ret_date": "2026-11-01",
-            "ret_flight": "27"
-          }
-        },
-        {
-          "day": 8,
-          "month": 11,
-          "year": 2026,
-          "price": 4218.0,
-          "stay": 7,
-          "flight": {
-            "number": "504",
-            "airline": "CX",
-            "dep_time": "09:05",
-            "arr_time": "14:10",
-            "ret_date": "2026-11-15",
-            "ret_flight": "521"
           }
         }
       ],
