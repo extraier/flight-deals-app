@@ -251,10 +251,8 @@ export default function WorldCupPage() {
                       </td>
                     </tr>
                     {/* Polymarket row */}
-                    <tr key={`${i}-poly`} className="border-b border-border/30 bg-secondary/20">
-                      <td className="py-1.5 px-4">
-                        <span className="text-xs text-muted-foreground ml-2">Polymarket</span>
-                      </td>
+                    <tr key={`${i}-poly`} className="border-b border-border/30 bg-secondary/10">
+                      <td className="py-1.5 px-4"></td>
                       <td className="py-1.5 px-3"></td>
                       <td className="py-1.5 px-3 text-center">
                         <span className="text-sky-400 text-xs">{fmtPct(p.home)}</span>
@@ -273,9 +271,14 @@ export default function WorldCupPage() {
           </table>
         </div>
 
-        <p className="mt-4 text-xs text-muted-foreground text-center">
-          赔率變動：↑ = 升 · ↓ = 跌 · → = 不變 · 馬會 = 十進制赔率 · Polymarket = 隱含概率
-        </p>
+        <div className="mt-6 rounded-xl border border-border bg-secondary/30 p-4 text-xs text-muted-foreground">
+          <h4 className="mb-2 font-medium text-foreground">📖 說明</h4>
+          <ul className="space-y-1">
+            <li>🟢 <b>馬會赔率</b>：十進制赔率 (如 1.85 = 需投注 HK$1 贏 HK$0.85)</li>
+            <li>🔵 <b>Polymarket</b>：隱含概率 % (如 55% = 該選項有 55% 機會)</li>
+            <li>↑/↓ = 對比較時段升/跌</li>
+          </ul>
+        </div>
       </div>
     </div>
   );
