@@ -1,6 +1,3774 @@
 {
-  "generated": "2026-06-20T00:00:00",
+  "generated": "2026-06-20T03:23:55.531030",
   "source": "fli_calendar.db",
   "departure": "SZX",
-  "results": []
+  "results": [
+    {
+      "route": "SZX→SGN",
+      "destination": {
+        "name": "胡志明市",
+        "code": "SGN",
+        "region": "東南亞"
+      },
+      "price": 1256,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 289
+      },
+      "typicalPrice": 2325,
+      "cheapestDates": [
+        {
+          "day": 17,
+          "month": 8,
+          "year": 2026,
+          "price": 1256,
+          "stay": 3
+        },
+        {
+          "day": 18,
+          "month": 8,
+          "year": 2026,
+          "price": 1256,
+          "stay": 7
+        },
+        {
+          "day": 16,
+          "month": 8,
+          "year": 2026,
+          "price": 1257,
+          "stay": 3
+        },
+        {
+          "day": 19,
+          "month": 8,
+          "year": 2026,
+          "price": 1257,
+          "stay": 3
+        },
+        {
+          "day": 21,
+          "month": 8,
+          "year": 2026,
+          "price": 1257,
+          "stay": 3
+        },
+        {
+          "day": 16,
+          "month": 8,
+          "year": 2026,
+          "price": 1257,
+          "stay": 7
+        },
+        {
+          "day": 17,
+          "month": 8,
+          "year": 2026,
+          "price": 1257,
+          "stay": 7
+        },
+        {
+          "day": 18,
+          "month": 8,
+          "year": 2026,
+          "price": 1680,
+          "stay": 3
+        },
+        {
+          "day": 23,
+          "month": 8,
+          "year": 2026,
+          "price": 1681,
+          "stay": 3
+        },
+        {
+          "day": 24,
+          "month": 8,
+          "year": 2026,
+          "price": 1681,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→XIY",
+      "destination": {
+        "name": "西安",
+        "code": "XIY",
+        "region": "中國"
+      },
+      "price": 1413,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 278
+      },
+      "typicalPrice": 2014,
+      "cheapestDates": [
+        {
+          "day": 1,
+          "month": 11,
+          "year": 2026,
+          "price": 1413,
+          "stay": 3
+        },
+        {
+          "day": 2,
+          "month": 11,
+          "year": 2026,
+          "price": 1413,
+          "stay": 3
+        },
+        {
+          "day": 3,
+          "month": 11,
+          "year": 2026,
+          "price": 1413,
+          "stay": 3
+        },
+        {
+          "day": 4,
+          "month": 11,
+          "year": 2026,
+          "price": 1413,
+          "stay": 3
+        },
+        {
+          "day": 7,
+          "month": 11,
+          "year": 2026,
+          "price": 1413,
+          "stay": 3
+        },
+        {
+          "day": 8,
+          "month": 11,
+          "year": 2026,
+          "price": 1413,
+          "stay": 3
+        },
+        {
+          "day": 9,
+          "month": 11,
+          "year": 2026,
+          "price": 1413,
+          "stay": 3
+        },
+        {
+          "day": 15,
+          "month": 11,
+          "year": 2026,
+          "price": 1413,
+          "stay": 3
+        },
+        {
+          "day": 16,
+          "month": 11,
+          "year": 2026,
+          "price": 1413,
+          "stay": 3
+        },
+        {
+          "day": 22,
+          "month": 6,
+          "year": 2026,
+          "price": 1494,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→KUL",
+      "destination": {
+        "name": "吉隆坡",
+        "code": "KUL",
+        "region": "東南亞"
+      },
+      "price": 1586,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 366
+      },
+      "typicalPrice": 1933,
+      "cheapestDates": [
+        {
+          "day": 13,
+          "month": 9,
+          "year": 2026,
+          "price": 1586,
+          "stay": 3
+        },
+        {
+          "day": 15,
+          "month": 9,
+          "year": 2026,
+          "price": 1586,
+          "stay": 3
+        },
+        {
+          "day": 12,
+          "month": 10,
+          "year": 2026,
+          "price": 1586,
+          "stay": 3
+        },
+        {
+          "day": 16,
+          "month": 10,
+          "year": 2026,
+          "price": 1586,
+          "stay": 3
+        },
+        {
+          "day": 18,
+          "month": 10,
+          "year": 2026,
+          "price": 1586,
+          "stay": 3
+        },
+        {
+          "day": 8,
+          "month": 9,
+          "year": 2026,
+          "price": 1586,
+          "stay": 7
+        },
+        {
+          "day": 10,
+          "month": 9,
+          "year": 2026,
+          "price": 1586,
+          "stay": 7
+        },
+        {
+          "day": 15,
+          "month": 9,
+          "year": 2026,
+          "price": 1586,
+          "stay": 7
+        },
+        {
+          "day": 12,
+          "month": 10,
+          "year": 2026,
+          "price": 1586,
+          "stay": 7
+        },
+        {
+          "day": 13,
+          "month": 10,
+          "year": 2026,
+          "price": 1586,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→SIN",
+      "destination": {
+        "name": "新加坡",
+        "code": "SIN",
+        "region": "東南亞"
+      },
+      "price": 1817,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 594
+      },
+      "typicalPrice": 2791,
+      "cheapestDates": [
+        {
+          "day": 20,
+          "month": 8,
+          "year": 2026,
+          "price": 1817,
+          "stay": 3
+        },
+        {
+          "day": 16,
+          "month": 10,
+          "year": 2026,
+          "price": 1817,
+          "stay": 3
+        },
+        {
+          "day": 17,
+          "month": 10,
+          "year": 2026,
+          "price": 1817,
+          "stay": 3
+        },
+        {
+          "day": 18,
+          "month": 8,
+          "year": 2026,
+          "price": 1817,
+          "stay": 7
+        },
+        {
+          "day": 19,
+          "month": 8,
+          "year": 2026,
+          "price": 1817,
+          "stay": 7
+        },
+        {
+          "day": 15,
+          "month": 9,
+          "year": 2026,
+          "price": 1817,
+          "stay": 7
+        },
+        {
+          "day": 16,
+          "month": 9,
+          "year": 2026,
+          "price": 1817,
+          "stay": 7
+        },
+        {
+          "day": 17,
+          "month": 9,
+          "year": 2026,
+          "price": 1817,
+          "stay": 7
+        },
+        {
+          "day": 22,
+          "month": 9,
+          "year": 2026,
+          "price": 1817,
+          "stay": 7
+        },
+        {
+          "day": 7,
+          "month": 10,
+          "year": 2026,
+          "price": 1817,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→BKK",
+      "destination": {
+        "name": "曼谷",
+        "code": "BKK",
+        "region": "東南亞"
+      },
+      "price": 1873,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 372
+      },
+      "typicalPrice": 2285,
+      "cheapestDates": [
+        {
+          "day": 7,
+          "month": 9,
+          "year": 2026,
+          "price": 1873,
+          "stay": 3
+        },
+        {
+          "day": 3,
+          "month": 9,
+          "year": 2026,
+          "price": 1873,
+          "stay": 7
+        },
+        {
+          "day": 7,
+          "month": 9,
+          "year": 2026,
+          "price": 1873,
+          "stay": 7
+        },
+        {
+          "day": 10,
+          "month": 9,
+          "year": 2026,
+          "price": 1873,
+          "stay": 7
+        },
+        {
+          "day": 12,
+          "month": 9,
+          "year": 2026,
+          "price": 1873,
+          "stay": 7
+        },
+        {
+          "day": 12,
+          "month": 10,
+          "year": 2026,
+          "price": 1873,
+          "stay": 7
+        },
+        {
+          "day": 9,
+          "month": 9,
+          "year": 2026,
+          "price": 2073,
+          "stay": 3
+        },
+        {
+          "day": 10,
+          "month": 9,
+          "year": 2026,
+          "price": 2073,
+          "stay": 3
+        },
+        {
+          "day": 12,
+          "month": 9,
+          "year": 2026,
+          "price": 2073,
+          "stay": 3
+        },
+        {
+          "day": 26,
+          "month": 8,
+          "year": 2026,
+          "price": 2073,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→PEN",
+      "destination": {
+        "name": "檳城",
+        "code": "PEN",
+        "region": "東南亞"
+      },
+      "price": 1900,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 291
+      },
+      "typicalPrice": 2506,
+      "cheapestDates": [
+        {
+          "day": 8,
+          "month": 9,
+          "year": 2026,
+          "price": 1900,
+          "stay": 3
+        },
+        {
+          "day": 15,
+          "month": 9,
+          "year": 2026,
+          "price": 1900,
+          "stay": 3
+        },
+        {
+          "day": 11,
+          "month": 10,
+          "year": 2026,
+          "price": 1900,
+          "stay": 3
+        },
+        {
+          "day": 12,
+          "month": 10,
+          "year": 2026,
+          "price": 1900,
+          "stay": 3
+        },
+        {
+          "day": 13,
+          "month": 10,
+          "year": 2026,
+          "price": 1900,
+          "stay": 3
+        },
+        {
+          "day": 14,
+          "month": 10,
+          "year": 2026,
+          "price": 1900,
+          "stay": 3
+        },
+        {
+          "day": 20,
+          "month": 10,
+          "year": 2026,
+          "price": 1900,
+          "stay": 3
+        },
+        {
+          "day": 8,
+          "month": 9,
+          "year": 2026,
+          "price": 1900,
+          "stay": 7
+        },
+        {
+          "day": 10,
+          "month": 9,
+          "year": 2026,
+          "price": 1900,
+          "stay": 7
+        },
+        {
+          "day": 15,
+          "month": 9,
+          "year": 2026,
+          "price": 1900,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→ICN",
+      "destination": {
+        "name": "首爾",
+        "code": "ICN",
+        "region": "東亞"
+      },
+      "price": 2084,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 244
+      },
+      "typicalPrice": 2327,
+      "cheapestDates": [
+        {
+          "day": 24,
+          "month": 6,
+          "year": 2026,
+          "price": 2084,
+          "stay": 7
+        },
+        {
+          "day": 25,
+          "month": 6,
+          "year": 2026,
+          "price": 2084,
+          "stay": 7
+        },
+        {
+          "day": 27,
+          "month": 6,
+          "year": 2026,
+          "price": 2084,
+          "stay": 7
+        },
+        {
+          "day": 28,
+          "month": 6,
+          "year": 2026,
+          "price": 2084,
+          "stay": 7
+        },
+        {
+          "day": 29,
+          "month": 6,
+          "year": 2026,
+          "price": 2084,
+          "stay": 7
+        },
+        {
+          "day": 30,
+          "month": 6,
+          "year": 2026,
+          "price": 2084,
+          "stay": 7
+        },
+        {
+          "day": 1,
+          "month": 7,
+          "year": 2026,
+          "price": 2084,
+          "stay": 7
+        },
+        {
+          "day": 2,
+          "month": 7,
+          "year": 2026,
+          "price": 2084,
+          "stay": 7
+        },
+        {
+          "day": 3,
+          "month": 7,
+          "year": 2026,
+          "price": 2084,
+          "stay": 7
+        },
+        {
+          "day": 4,
+          "month": 7,
+          "year": 2026,
+          "price": 2084,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→DPS",
+      "destination": {
+        "name": "巴厘島",
+        "code": "DPS",
+        "region": "東南亞"
+      },
+      "price": 2188,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 258
+      },
+      "typicalPrice": 3748,
+      "cheapestDates": [
+        {
+          "day": 10,
+          "month": 10,
+          "year": 2026,
+          "price": 2188,
+          "stay": 3
+        },
+        {
+          "day": 11,
+          "month": 10,
+          "year": 2026,
+          "price": 2188,
+          "stay": 3
+        },
+        {
+          "day": 12,
+          "month": 10,
+          "year": 2026,
+          "price": 2188,
+          "stay": 3
+        },
+        {
+          "day": 13,
+          "month": 10,
+          "year": 2026,
+          "price": 2188,
+          "stay": 3
+        },
+        {
+          "day": 14,
+          "month": 10,
+          "year": 2026,
+          "price": 2188,
+          "stay": 3
+        },
+        {
+          "day": 16,
+          "month": 10,
+          "year": 2026,
+          "price": 2188,
+          "stay": 3
+        },
+        {
+          "day": 17,
+          "month": 10,
+          "year": 2026,
+          "price": 2188,
+          "stay": 3
+        },
+        {
+          "day": 18,
+          "month": 10,
+          "year": 2026,
+          "price": 2188,
+          "stay": 3
+        },
+        {
+          "day": 19,
+          "month": 10,
+          "year": 2026,
+          "price": 2188,
+          "stay": 3
+        },
+        {
+          "day": 20,
+          "month": 10,
+          "year": 2026,
+          "price": 2188,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→CMB",
+      "destination": {
+        "name": "科倫坡",
+        "code": "CMB",
+        "region": "南亞"
+      },
+      "price": 2322,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 5
+      },
+      "typicalPrice": 3467,
+      "cheapestDates": [
+        {
+          "day": 10,
+          "month": 1,
+          "year": 2027,
+          "price": 2322,
+          "stay": 7
+        },
+        {
+          "day": 19,
+          "month": 1,
+          "year": 2027,
+          "price": 2322,
+          "stay": 14
+        },
+        {
+          "day": 27,
+          "month": 10,
+          "year": 2026,
+          "price": 3467,
+          "stay": 14
+        },
+        {
+          "day": 28,
+          "month": 10,
+          "year": 2026,
+          "price": 3567,
+          "stay": 7
+        },
+        {
+          "day": 23,
+          "month": 8,
+          "year": 2026,
+          "price": 4049,
+          "stay": 14
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→TPE",
+      "destination": {
+        "name": "台北",
+        "code": "TPE",
+        "region": "東亞"
+      },
+      "price": 2448,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 372
+      },
+      "typicalPrice": 2703,
+      "cheapestDates": [
+        {
+          "day": 20,
+          "month": 7,
+          "year": 2026,
+          "price": 2448,
+          "stay": 3
+        },
+        {
+          "day": 27,
+          "month": 7,
+          "year": 2026,
+          "price": 2448,
+          "stay": 3
+        },
+        {
+          "day": 13,
+          "month": 8,
+          "year": 2026,
+          "price": 2448,
+          "stay": 3
+        },
+        {
+          "day": 14,
+          "month": 8,
+          "year": 2026,
+          "price": 2448,
+          "stay": 3
+        },
+        {
+          "day": 16,
+          "month": 8,
+          "year": 2026,
+          "price": 2448,
+          "stay": 3
+        },
+        {
+          "day": 17,
+          "month": 8,
+          "year": 2026,
+          "price": 2448,
+          "stay": 3
+        },
+        {
+          "day": 20,
+          "month": 8,
+          "year": 2026,
+          "price": 2448,
+          "stay": 3
+        },
+        {
+          "day": 27,
+          "month": 8,
+          "year": 2026,
+          "price": 2448,
+          "stay": 3
+        },
+        {
+          "day": 31,
+          "month": 8,
+          "year": 2026,
+          "price": 2448,
+          "stay": 3
+        },
+        {
+          "day": 3,
+          "month": 9,
+          "year": 2026,
+          "price": 2448,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→PVG",
+      "destination": {
+        "name": "上海浦東",
+        "code": "PVG",
+        "region": "中國"
+      },
+      "price": 2778,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 373
+      },
+      "typicalPrice": 3936,
+      "cheapestDates": [
+        {
+          "day": 22,
+          "month": 6,
+          "year": 2026,
+          "price": 2778,
+          "stay": 3
+        },
+        {
+          "day": 23,
+          "month": 6,
+          "year": 2026,
+          "price": 2778,
+          "stay": 3
+        },
+        {
+          "day": 24,
+          "month": 6,
+          "year": 2026,
+          "price": 2778,
+          "stay": 3
+        },
+        {
+          "day": 25,
+          "month": 6,
+          "year": 2026,
+          "price": 2778,
+          "stay": 3
+        },
+        {
+          "day": 26,
+          "month": 6,
+          "year": 2026,
+          "price": 2778,
+          "stay": 3
+        },
+        {
+          "day": 27,
+          "month": 6,
+          "year": 2026,
+          "price": 2778,
+          "stay": 3
+        },
+        {
+          "day": 28,
+          "month": 6,
+          "year": 2026,
+          "price": 2778,
+          "stay": 3
+        },
+        {
+          "day": 29,
+          "month": 6,
+          "year": 2026,
+          "price": 2778,
+          "stay": 3
+        },
+        {
+          "day": 1,
+          "month": 7,
+          "year": 2026,
+          "price": 2778,
+          "stay": 3
+        },
+        {
+          "day": 2,
+          "month": 7,
+          "year": 2026,
+          "price": 2778,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→FUK",
+      "destination": {
+        "name": "福岡",
+        "code": "FUK",
+        "region": "東亞"
+      },
+      "price": 2885,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 189
+      },
+      "typicalPrice": 3384,
+      "cheapestDates": [
+        {
+          "day": 29,
+          "month": 8,
+          "year": 2026,
+          "price": 2885,
+          "stay": 3
+        },
+        {
+          "day": 30,
+          "month": 8,
+          "year": 2026,
+          "price": 2885,
+          "stay": 3
+        },
+        {
+          "day": 31,
+          "month": 8,
+          "year": 2026,
+          "price": 2885,
+          "stay": 3
+        },
+        {
+          "day": 1,
+          "month": 9,
+          "year": 2026,
+          "price": 2885,
+          "stay": 3
+        },
+        {
+          "day": 2,
+          "month": 9,
+          "year": 2026,
+          "price": 2885,
+          "stay": 3
+        },
+        {
+          "day": 3,
+          "month": 9,
+          "year": 2026,
+          "price": 2885,
+          "stay": 3
+        },
+        {
+          "day": 4,
+          "month": 9,
+          "year": 2026,
+          "price": 2885,
+          "stay": 3
+        },
+        {
+          "day": 5,
+          "month": 9,
+          "year": 2026,
+          "price": 2885,
+          "stay": 3
+        },
+        {
+          "day": 6,
+          "month": 9,
+          "year": 2026,
+          "price": 2885,
+          "stay": 3
+        },
+        {
+          "day": 7,
+          "month": 9,
+          "year": 2026,
+          "price": 2885,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→KIX",
+      "destination": {
+        "name": "大阪",
+        "code": "KIX",
+        "region": "東亞"
+      },
+      "price": 2905,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 309
+      },
+      "typicalPrice": 3518,
+      "cheapestDates": [
+        {
+          "day": 22,
+          "month": 8,
+          "year": 2026,
+          "price": 2905,
+          "stay": 3
+        },
+        {
+          "day": 9,
+          "month": 8,
+          "year": 2026,
+          "price": 2905,
+          "stay": 7
+        },
+        {
+          "day": 24,
+          "month": 8,
+          "year": 2026,
+          "price": 2905,
+          "stay": 7
+        },
+        {
+          "day": 29,
+          "month": 8,
+          "year": 2026,
+          "price": 2929,
+          "stay": 3
+        },
+        {
+          "day": 30,
+          "month": 8,
+          "year": 2026,
+          "price": 2929,
+          "stay": 3
+        },
+        {
+          "day": 31,
+          "month": 8,
+          "year": 2026,
+          "price": 2929,
+          "stay": 3
+        },
+        {
+          "day": 1,
+          "month": 9,
+          "year": 2026,
+          "price": 2929,
+          "stay": 3
+        },
+        {
+          "day": 2,
+          "month": 9,
+          "year": 2026,
+          "price": 2929,
+          "stay": 3
+        },
+        {
+          "day": 3,
+          "month": 9,
+          "year": 2026,
+          "price": 2929,
+          "stay": 3
+        },
+        {
+          "day": 4,
+          "month": 9,
+          "year": 2026,
+          "price": 2929,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→CTS",
+      "destination": {
+        "name": "札幌",
+        "code": "CTS",
+        "region": "東亞"
+      },
+      "price": 2910,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 262
+      },
+      "typicalPrice": 3779,
+      "cheapestDates": [
+        {
+          "day": 29,
+          "month": 8,
+          "year": 2026,
+          "price": 2910,
+          "stay": 3
+        },
+        {
+          "day": 30,
+          "month": 8,
+          "year": 2026,
+          "price": 2910,
+          "stay": 3
+        },
+        {
+          "day": 31,
+          "month": 8,
+          "year": 2026,
+          "price": 2910,
+          "stay": 3
+        },
+        {
+          "day": 1,
+          "month": 9,
+          "year": 2026,
+          "price": 2910,
+          "stay": 3
+        },
+        {
+          "day": 2,
+          "month": 9,
+          "year": 2026,
+          "price": 2910,
+          "stay": 3
+        },
+        {
+          "day": 3,
+          "month": 9,
+          "year": 2026,
+          "price": 2910,
+          "stay": 3
+        },
+        {
+          "day": 4,
+          "month": 9,
+          "year": 2026,
+          "price": 2910,
+          "stay": 3
+        },
+        {
+          "day": 5,
+          "month": 9,
+          "year": 2026,
+          "price": 2910,
+          "stay": 3
+        },
+        {
+          "day": 6,
+          "month": 9,
+          "year": 2026,
+          "price": 2910,
+          "stay": 3
+        },
+        {
+          "day": 7,
+          "month": 9,
+          "year": 2026,
+          "price": 2910,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→NGO",
+      "destination": {
+        "name": "名古屋",
+        "code": "NGO",
+        "region": "東亞"
+      },
+      "price": 2917,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 141
+      },
+      "typicalPrice": 3624,
+      "cheapestDates": [
+        {
+          "day": 30,
+          "month": 8,
+          "year": 2026,
+          "price": 2917,
+          "stay": 7
+        },
+        {
+          "day": 31,
+          "month": 8,
+          "year": 2026,
+          "price": 2917,
+          "stay": 7
+        },
+        {
+          "day": 6,
+          "month": 9,
+          "year": 2026,
+          "price": 2917,
+          "stay": 7
+        },
+        {
+          "day": 8,
+          "month": 9,
+          "year": 2026,
+          "price": 2917,
+          "stay": 7
+        },
+        {
+          "day": 11,
+          "month": 9,
+          "year": 2026,
+          "price": 2917,
+          "stay": 7
+        },
+        {
+          "day": 14,
+          "month": 9,
+          "year": 2026,
+          "price": 2917,
+          "stay": 7
+        },
+        {
+          "day": 15,
+          "month": 9,
+          "year": 2026,
+          "price": 2917,
+          "stay": 7
+        },
+        {
+          "day": 16,
+          "month": 9,
+          "year": 2026,
+          "price": 2917,
+          "stay": 7
+        },
+        {
+          "day": 8,
+          "month": 10,
+          "year": 2026,
+          "price": 2917,
+          "stay": 7
+        },
+        {
+          "day": 9,
+          "month": 10,
+          "year": 2026,
+          "price": 2917,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→NRT",
+      "destination": {
+        "name": "東京成田",
+        "code": "NRT",
+        "region": "東亞"
+      },
+      "price": 2998,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 534
+      },
+      "typicalPrice": 3681,
+      "cheapestDates": [
+        {
+          "day": 22,
+          "month": 6,
+          "year": 2026,
+          "price": 2998,
+          "stay": 14
+        },
+        {
+          "day": 24,
+          "month": 6,
+          "year": 2026,
+          "price": 3045,
+          "stay": 3
+        },
+        {
+          "day": 24,
+          "month": 6,
+          "year": 2026,
+          "price": 3230,
+          "stay": 14
+        },
+        {
+          "day": 23,
+          "month": 6,
+          "year": 2026,
+          "price": 3322,
+          "stay": 7
+        },
+        {
+          "day": 23,
+          "month": 6,
+          "year": 2026,
+          "price": 3322,
+          "stay": 14
+        },
+        {
+          "day": 17,
+          "month": 7,
+          "year": 2026,
+          "price": 3346,
+          "stay": 14
+        },
+        {
+          "day": 4,
+          "month": 7,
+          "year": 2026,
+          "price": 3461,
+          "stay": 3
+        },
+        {
+          "day": 11,
+          "month": 7,
+          "year": 2026,
+          "price": 3461,
+          "stay": 3
+        },
+        {
+          "day": 18,
+          "month": 7,
+          "year": 2026,
+          "price": 3461,
+          "stay": 3
+        },
+        {
+          "day": 29,
+          "month": 8,
+          "year": 2026,
+          "price": 3461,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→CTU",
+      "destination": {
+        "name": "成都",
+        "code": "CTU",
+        "region": "中國"
+      },
+      "price": 3033,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 248
+      },
+      "typicalPrice": 3160,
+      "cheapestDates": [
+        {
+          "day": 21,
+          "month": 6,
+          "year": 2026,
+          "price": 3033,
+          "stay": 3
+        },
+        {
+          "day": 22,
+          "month": 6,
+          "year": 2026,
+          "price": 3033,
+          "stay": 3
+        },
+        {
+          "day": 23,
+          "month": 6,
+          "year": 2026,
+          "price": 3033,
+          "stay": 3
+        },
+        {
+          "day": 24,
+          "month": 6,
+          "year": 2026,
+          "price": 3033,
+          "stay": 3
+        },
+        {
+          "day": 25,
+          "month": 6,
+          "year": 2026,
+          "price": 3033,
+          "stay": 3
+        },
+        {
+          "day": 26,
+          "month": 6,
+          "year": 2026,
+          "price": 3033,
+          "stay": 3
+        },
+        {
+          "day": 27,
+          "month": 6,
+          "year": 2026,
+          "price": 3033,
+          "stay": 3
+        },
+        {
+          "day": 28,
+          "month": 6,
+          "year": 2026,
+          "price": 3033,
+          "stay": 3
+        },
+        {
+          "day": 29,
+          "month": 6,
+          "year": 2026,
+          "price": 3033,
+          "stay": 3
+        },
+        {
+          "day": 30,
+          "month": 6,
+          "year": 2026,
+          "price": 3033,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→KHH",
+      "destination": {
+        "name": "高雄",
+        "code": "KHH",
+        "region": "東亞"
+      },
+      "price": 3178,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 200
+      },
+      "typicalPrice": 4604,
+      "cheapestDates": [
+        {
+          "day": 16,
+          "month": 7,
+          "year": 2026,
+          "price": 3178,
+          "stay": 3
+        },
+        {
+          "day": 23,
+          "month": 7,
+          "year": 2026,
+          "price": 3178,
+          "stay": 3
+        },
+        {
+          "day": 30,
+          "month": 7,
+          "year": 2026,
+          "price": 3178,
+          "stay": 3
+        },
+        {
+          "day": 6,
+          "month": 8,
+          "year": 2026,
+          "price": 3178,
+          "stay": 3
+        },
+        {
+          "day": 13,
+          "month": 8,
+          "year": 2026,
+          "price": 3178,
+          "stay": 3
+        },
+        {
+          "day": 20,
+          "month": 8,
+          "year": 2026,
+          "price": 3178,
+          "stay": 3
+        },
+        {
+          "day": 27,
+          "month": 8,
+          "year": 2026,
+          "price": 3178,
+          "stay": 3
+        },
+        {
+          "day": 3,
+          "month": 9,
+          "year": 2026,
+          "price": 3178,
+          "stay": 3
+        },
+        {
+          "day": 10,
+          "month": 9,
+          "year": 2026,
+          "price": 3178,
+          "stay": 3
+        },
+        {
+          "day": 17,
+          "month": 9,
+          "year": 2026,
+          "price": 3178,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→CAN",
+      "destination": {
+        "name": "廣州",
+        "code": "CAN",
+        "region": "中國"
+      },
+      "price": 3276,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 86
+      },
+      "typicalPrice": 3680,
+      "cheapestDates": [
+        {
+          "day": 23,
+          "month": 6,
+          "year": 2026,
+          "price": 3276,
+          "stay": 3
+        },
+        {
+          "day": 7,
+          "month": 7,
+          "year": 2026,
+          "price": 3311,
+          "stay": 3
+        },
+        {
+          "day": 14,
+          "month": 7,
+          "year": 2026,
+          "price": 3311,
+          "stay": 3
+        },
+        {
+          "day": 28,
+          "month": 7,
+          "year": 2026,
+          "price": 3311,
+          "stay": 3
+        },
+        {
+          "day": 4,
+          "month": 7,
+          "year": 2026,
+          "price": 3350,
+          "stay": 3
+        },
+        {
+          "day": 30,
+          "month": 6,
+          "year": 2026,
+          "price": 3350,
+          "stay": 7
+        },
+        {
+          "day": 21,
+          "month": 7,
+          "year": 2026,
+          "price": 3350,
+          "stay": 7
+        },
+        {
+          "day": 28,
+          "month": 7,
+          "year": 2026,
+          "price": 3350,
+          "stay": 7
+        },
+        {
+          "day": 30,
+          "month": 6,
+          "year": 2026,
+          "price": 3392,
+          "stay": 3
+        },
+        {
+          "day": 21,
+          "month": 7,
+          "year": 2026,
+          "price": 3392,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→PUS",
+      "destination": {
+        "name": "釜山",
+        "code": "PUS",
+        "region": "東亞"
+      },
+      "price": 3276,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 49
+      },
+      "typicalPrice": 3820,
+      "cheapestDates": [
+        {
+          "day": 1,
+          "month": 9,
+          "year": 2026,
+          "price": 3276,
+          "stay": 3
+        },
+        {
+          "day": 23,
+          "month": 6,
+          "year": 2026,
+          "price": 3276,
+          "stay": 7
+        },
+        {
+          "day": 24,
+          "month": 6,
+          "year": 2026,
+          "price": 3276,
+          "stay": 7
+        },
+        {
+          "day": 29,
+          "month": 6,
+          "year": 2026,
+          "price": 3276,
+          "stay": 7
+        },
+        {
+          "day": 30,
+          "month": 6,
+          "year": 2026,
+          "price": 3276,
+          "stay": 7
+        },
+        {
+          "day": 1,
+          "month": 7,
+          "year": 2026,
+          "price": 3276,
+          "stay": 7
+        },
+        {
+          "day": 2,
+          "month": 7,
+          "year": 2026,
+          "price": 3276,
+          "stay": 7
+        },
+        {
+          "day": 3,
+          "month": 7,
+          "year": 2026,
+          "price": 3276,
+          "stay": 7
+        },
+        {
+          "day": 4,
+          "month": 7,
+          "year": 2026,
+          "price": 3276,
+          "stay": 7
+        },
+        {
+          "day": 5,
+          "month": 7,
+          "year": 2026,
+          "price": 3276,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→SYD",
+      "destination": {
+        "name": "悉尼",
+        "code": "SYD",
+        "region": "大洋洲"
+      },
+      "price": 3689,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 561
+      },
+      "typicalPrice": 6040,
+      "cheapestDates": [
+        {
+          "day": 8,
+          "month": 9,
+          "year": 2026,
+          "price": 3689,
+          "stay": 3
+        },
+        {
+          "day": 13,
+          "month": 9,
+          "year": 2026,
+          "price": 3689,
+          "stay": 3
+        },
+        {
+          "day": 19,
+          "month": 9,
+          "year": 2026,
+          "price": 3689,
+          "stay": 3
+        },
+        {
+          "day": 20,
+          "month": 9,
+          "year": 2026,
+          "price": 3689,
+          "stay": 3
+        },
+        {
+          "day": 21,
+          "month": 9,
+          "year": 2026,
+          "price": 3689,
+          "stay": 3
+        },
+        {
+          "day": 13,
+          "month": 10,
+          "year": 2026,
+          "price": 3689,
+          "stay": 3
+        },
+        {
+          "day": 17,
+          "month": 10,
+          "year": 2026,
+          "price": 3689,
+          "stay": 3
+        },
+        {
+          "day": 18,
+          "month": 10,
+          "year": 2026,
+          "price": 3689,
+          "stay": 3
+        },
+        {
+          "day": 20,
+          "month": 10,
+          "year": 2026,
+          "price": 3689,
+          "stay": 3
+        },
+        {
+          "day": 29,
+          "month": 8,
+          "year": 2026,
+          "price": 3689,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→BOM",
+      "destination": {
+        "name": "孟買",
+        "code": "BOM",
+        "region": "南亞"
+      },
+      "price": 4008,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 12
+      },
+      "typicalPrice": 5836,
+      "cheapestDates": [
+        {
+          "day": 25,
+          "month": 8,
+          "year": 2026,
+          "price": 4008,
+          "stay": 14
+        },
+        {
+          "day": 9,
+          "month": 9,
+          "year": 2026,
+          "price": 4667,
+          "stay": 7
+        },
+        {
+          "day": 16,
+          "month": 1,
+          "year": 2027,
+          "price": 4835,
+          "stay": 3
+        },
+        {
+          "day": 21,
+          "month": 10,
+          "year": 2026,
+          "price": 4835,
+          "stay": 7
+        },
+        {
+          "day": 3,
+          "month": 7,
+          "year": 2026,
+          "price": 5124,
+          "stay": 7
+        },
+        {
+          "day": 22,
+          "month": 10,
+          "year": 2026,
+          "price": 5790,
+          "stay": 14
+        },
+        {
+          "day": 23,
+          "month": 8,
+          "year": 2026,
+          "price": 5882,
+          "stay": 3
+        },
+        {
+          "day": 14,
+          "month": 11,
+          "year": 2026,
+          "price": 6038,
+          "stay": 3
+        },
+        {
+          "day": 29,
+          "month": 12,
+          "year": 2026,
+          "price": 6079,
+          "stay": 7
+        },
+        {
+          "day": 21,
+          "month": 12,
+          "year": 2026,
+          "price": 6079,
+          "stay": 14
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→PEK",
+      "destination": {
+        "name": "北京",
+        "code": "PEK",
+        "region": "中國"
+      },
+      "price": 4098,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 320
+      },
+      "typicalPrice": 4607,
+      "cheapestDates": [
+        {
+          "day": 21,
+          "month": 6,
+          "year": 2026,
+          "price": 4098,
+          "stay": 3
+        },
+        {
+          "day": 22,
+          "month": 6,
+          "year": 2026,
+          "price": 4098,
+          "stay": 3
+        },
+        {
+          "day": 23,
+          "month": 6,
+          "year": 2026,
+          "price": 4098,
+          "stay": 3
+        },
+        {
+          "day": 24,
+          "month": 6,
+          "year": 2026,
+          "price": 4098,
+          "stay": 3
+        },
+        {
+          "day": 25,
+          "month": 6,
+          "year": 2026,
+          "price": 4098,
+          "stay": 3
+        },
+        {
+          "day": 26,
+          "month": 6,
+          "year": 2026,
+          "price": 4098,
+          "stay": 3
+        },
+        {
+          "day": 27,
+          "month": 6,
+          "year": 2026,
+          "price": 4098,
+          "stay": 3
+        },
+        {
+          "day": 28,
+          "month": 6,
+          "year": 2026,
+          "price": 4098,
+          "stay": 3
+        },
+        {
+          "day": 21,
+          "month": 6,
+          "year": 2026,
+          "price": 4098,
+          "stay": 7
+        },
+        {
+          "day": 22,
+          "month": 6,
+          "year": 2026,
+          "price": 4098,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→DXB",
+      "destination": {
+        "name": "迪拜",
+        "code": "DXB",
+        "region": "中東"
+      },
+      "price": 4402,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 276
+      },
+      "typicalPrice": 5369,
+      "cheapestDates": [
+        {
+          "day": 11,
+          "month": 11,
+          "year": 2026,
+          "price": 4402,
+          "stay": 3
+        },
+        {
+          "day": 18,
+          "month": 11,
+          "year": 2026,
+          "price": 4402,
+          "stay": 7
+        },
+        {
+          "day": 17,
+          "month": 11,
+          "year": 2026,
+          "price": 4402,
+          "stay": 14
+        },
+        {
+          "day": 23,
+          "month": 12,
+          "year": 2026,
+          "price": 4506,
+          "stay": 3
+        },
+        {
+          "day": 31,
+          "month": 12,
+          "year": 2026,
+          "price": 4506,
+          "stay": 7
+        },
+        {
+          "day": 29,
+          "month": 12,
+          "year": 2026,
+          "price": 4506,
+          "stay": 14
+        },
+        {
+          "day": 31,
+          "month": 8,
+          "year": 2026,
+          "price": 4877,
+          "stay": 3
+        },
+        {
+          "day": 1,
+          "month": 9,
+          "year": 2026,
+          "price": 4877,
+          "stay": 3
+        },
+        {
+          "day": 2,
+          "month": 9,
+          "year": 2026,
+          "price": 4877,
+          "stay": 3
+        },
+        {
+          "day": 3,
+          "month": 9,
+          "year": 2026,
+          "price": 4877,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→CAI",
+      "destination": {
+        "name": "開羅",
+        "code": "CAI",
+        "region": "中東"
+      },
+      "price": 4723,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 197
+      },
+      "typicalPrice": 6945,
+      "cheapestDates": [
+        {
+          "day": 31,
+          "month": 8,
+          "year": 2026,
+          "price": 4723,
+          "stay": 3
+        },
+        {
+          "day": 1,
+          "month": 9,
+          "year": 2026,
+          "price": 4723,
+          "stay": 3
+        },
+        {
+          "day": 2,
+          "month": 9,
+          "year": 2026,
+          "price": 4723,
+          "stay": 3
+        },
+        {
+          "day": 3,
+          "month": 9,
+          "year": 2026,
+          "price": 4723,
+          "stay": 3
+        },
+        {
+          "day": 4,
+          "month": 9,
+          "year": 2026,
+          "price": 4723,
+          "stay": 3
+        },
+        {
+          "day": 7,
+          "month": 9,
+          "year": 2026,
+          "price": 4723,
+          "stay": 3
+        },
+        {
+          "day": 8,
+          "month": 9,
+          "year": 2026,
+          "price": 4723,
+          "stay": 3
+        },
+        {
+          "day": 9,
+          "month": 9,
+          "year": 2026,
+          "price": 4723,
+          "stay": 3
+        },
+        {
+          "day": 10,
+          "month": 9,
+          "year": 2026,
+          "price": 4723,
+          "stay": 3
+        },
+        {
+          "day": 11,
+          "month": 9,
+          "year": 2026,
+          "price": 4723,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→FCO",
+      "destination": {
+        "name": "羅馬",
+        "code": "FCO",
+        "region": "歐洲"
+      },
+      "price": 4861,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 49
+      },
+      "typicalPrice": 6250,
+      "cheapestDates": [
+        {
+          "day": 1,
+          "month": 7,
+          "year": 2026,
+          "price": 4861,
+          "stay": 7
+        },
+        {
+          "day": 6,
+          "month": 7,
+          "year": 2026,
+          "price": 4861,
+          "stay": 7
+        },
+        {
+          "day": 2,
+          "month": 7,
+          "year": 2026,
+          "price": 5162,
+          "stay": 7
+        },
+        {
+          "day": 7,
+          "month": 7,
+          "year": 2026,
+          "price": 5162,
+          "stay": 7
+        },
+        {
+          "day": 4,
+          "month": 7,
+          "year": 2026,
+          "price": 5254,
+          "stay": 7
+        },
+        {
+          "day": 5,
+          "month": 7,
+          "year": 2026,
+          "price": 5254,
+          "stay": 7
+        },
+        {
+          "day": 21,
+          "month": 7,
+          "year": 2026,
+          "price": 5254,
+          "stay": 7
+        },
+        {
+          "day": 16,
+          "month": 9,
+          "year": 2026,
+          "price": 5323,
+          "stay": 7
+        },
+        {
+          "day": 10,
+          "month": 11,
+          "year": 2026,
+          "price": 5323,
+          "stay": 7
+        },
+        {
+          "day": 10,
+          "month": 11,
+          "year": 2026,
+          "price": 5323,
+          "stay": 14
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→DEL",
+      "destination": {
+        "name": "德里",
+        "code": "DEL",
+        "region": "南亞"
+      },
+      "price": 4881,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 72
+      },
+      "typicalPrice": 8697,
+      "cheapestDates": [
+        {
+          "day": 16,
+          "month": 1,
+          "year": 2027,
+          "price": 4881,
+          "stay": 14
+        },
+        {
+          "day": 4,
+          "month": 11,
+          "year": 2026,
+          "price": 5390,
+          "stay": 7
+        },
+        {
+          "day": 31,
+          "month": 8,
+          "year": 2026,
+          "price": 5599,
+          "stay": 14
+        },
+        {
+          "day": 2,
+          "month": 11,
+          "year": 2026,
+          "price": 5795,
+          "stay": 3
+        },
+        {
+          "day": 25,
+          "month": 12,
+          "year": 2026,
+          "price": 6044,
+          "stay": 7
+        },
+        {
+          "day": 27,
+          "month": 8,
+          "year": 2026,
+          "price": 6218,
+          "stay": 3
+        },
+        {
+          "day": 25,
+          "month": 12,
+          "year": 2026,
+          "price": 6334,
+          "stay": 3
+        },
+        {
+          "day": 2,
+          "month": 7,
+          "year": 2026,
+          "price": 6550,
+          "stay": 3
+        },
+        {
+          "day": 2,
+          "month": 7,
+          "year": 2026,
+          "price": 6550,
+          "stay": 7
+        },
+        {
+          "day": 23,
+          "month": 8,
+          "year": 2026,
+          "price": 6550,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→MAD",
+      "destination": {
+        "name": "馬德里",
+        "code": "MAD",
+        "region": "歐洲"
+      },
+      "price": 5055,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 30
+      },
+      "typicalPrice": 6871,
+      "cheapestDates": [
+        {
+          "day": 24,
+          "month": 6,
+          "year": 2026,
+          "price": 5055,
+          "stay": 7
+        },
+        {
+          "day": 1,
+          "month": 7,
+          "year": 2026,
+          "price": 5055,
+          "stay": 7
+        },
+        {
+          "day": 8,
+          "month": 7,
+          "year": 2026,
+          "price": 5055,
+          "stay": 7
+        },
+        {
+          "day": 5,
+          "month": 7,
+          "year": 2026,
+          "price": 5816,
+          "stay": 7
+        },
+        {
+          "day": 2,
+          "month": 7,
+          "year": 2026,
+          "price": 5943,
+          "stay": 7
+        },
+        {
+          "day": 30,
+          "month": 6,
+          "year": 2026,
+          "price": 6000,
+          "stay": 7
+        },
+        {
+          "day": 7,
+          "month": 7,
+          "year": 2026,
+          "price": 6000,
+          "stay": 7
+        },
+        {
+          "day": 21,
+          "month": 6,
+          "year": 2026,
+          "price": 6012,
+          "stay": 7
+        },
+        {
+          "day": 23,
+          "month": 6,
+          "year": 2026,
+          "price": 6089,
+          "stay": 7
+        },
+        {
+          "day": 4,
+          "month": 7,
+          "year": 2026,
+          "price": 6498,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→RGN",
+      "destination": {
+        "name": "仰光",
+        "code": "RGN",
+        "region": "東南亞"
+      },
+      "price": 5356,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 5
+      },
+      "typicalPrice": 6432,
+      "cheapestDates": [
+        {
+          "day": 30,
+          "month": 6,
+          "year": 2026,
+          "price": 5356,
+          "stay": 14
+        },
+        {
+          "day": 15,
+          "month": 7,
+          "year": 2026,
+          "price": 5726,
+          "stay": 3
+        },
+        {
+          "day": 14,
+          "month": 7,
+          "year": 2026,
+          "price": 6432,
+          "stay": 7
+        },
+        {
+          "day": 31,
+          "month": 8,
+          "year": 2026,
+          "price": 6478,
+          "stay": 7
+        },
+        {
+          "day": 4,
+          "month": 9,
+          "year": 2026,
+          "price": 6582,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→BCN",
+      "destination": {
+        "name": "巴塞羅那",
+        "code": "BCN",
+        "region": "歐洲"
+      },
+      "price": 5459,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 61
+      },
+      "typicalPrice": 7519,
+      "cheapestDates": [
+        {
+          "day": 1,
+          "month": 7,
+          "year": 2026,
+          "price": 5459,
+          "stay": 7
+        },
+        {
+          "day": 2,
+          "month": 7,
+          "year": 2026,
+          "price": 5459,
+          "stay": 7
+        },
+        {
+          "day": 6,
+          "month": 7,
+          "year": 2026,
+          "price": 5459,
+          "stay": 7
+        },
+        {
+          "day": 7,
+          "month": 7,
+          "year": 2026,
+          "price": 5459,
+          "stay": 7
+        },
+        {
+          "day": 8,
+          "month": 7,
+          "year": 2026,
+          "price": 5772,
+          "stay": 7
+        },
+        {
+          "day": 21,
+          "month": 7,
+          "year": 2026,
+          "price": 5853,
+          "stay": 7
+        },
+        {
+          "day": 4,
+          "month": 7,
+          "year": 2026,
+          "price": 5876,
+          "stay": 7
+        },
+        {
+          "day": 5,
+          "month": 7,
+          "year": 2026,
+          "price": 5876,
+          "stay": 7
+        },
+        {
+          "day": 12,
+          "month": 11,
+          "year": 2026,
+          "price": 5933,
+          "stay": 14
+        },
+        {
+          "day": 3,
+          "month": 7,
+          "year": 2026,
+          "price": 6084,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→MEL",
+      "destination": {
+        "name": "墨爾本",
+        "code": "MEL",
+        "region": "大洋洲"
+      },
+      "price": 5475,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 63
+      },
+      "typicalPrice": 7100,
+      "cheapestDates": [
+        {
+          "day": 13,
+          "month": 8,
+          "year": 2026,
+          "price": 5475,
+          "stay": 7
+        },
+        {
+          "day": 19,
+          "month": 8,
+          "year": 2026,
+          "price": 5481,
+          "stay": 7
+        },
+        {
+          "day": 17,
+          "month": 8,
+          "year": 2026,
+          "price": 5522,
+          "stay": 7
+        },
+        {
+          "day": 8,
+          "month": 9,
+          "year": 2026,
+          "price": 5571,
+          "stay": 14
+        },
+        {
+          "day": 15,
+          "month": 8,
+          "year": 2026,
+          "price": 5908,
+          "stay": 7
+        },
+        {
+          "day": 7,
+          "month": 8,
+          "year": 2026,
+          "price": 6250,
+          "stay": 7
+        },
+        {
+          "day": 9,
+          "month": 8,
+          "year": 2026,
+          "price": 6250,
+          "stay": 7
+        },
+        {
+          "day": 14,
+          "month": 8,
+          "year": 2026,
+          "price": 6250,
+          "stay": 7
+        },
+        {
+          "day": 16,
+          "month": 8,
+          "year": 2026,
+          "price": 6250,
+          "stay": 7
+        },
+        {
+          "day": 12,
+          "month": 8,
+          "year": 2026,
+          "price": 6269,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→CDG",
+      "destination": {
+        "name": "巴黎",
+        "code": "CDG",
+        "region": "歐洲"
+      },
+      "price": 5900,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 282
+      },
+      "typicalPrice": 8463,
+      "cheapestDates": [
+        {
+          "day": 7,
+          "month": 9,
+          "year": 2026,
+          "price": 5900,
+          "stay": 7
+        },
+        {
+          "day": 8,
+          "month": 9,
+          "year": 2026,
+          "price": 5900,
+          "stay": 7
+        },
+        {
+          "day": 9,
+          "month": 9,
+          "year": 2026,
+          "price": 5900,
+          "stay": 7
+        },
+        {
+          "day": 10,
+          "month": 9,
+          "year": 2026,
+          "price": 5900,
+          "stay": 7
+        },
+        {
+          "day": 11,
+          "month": 9,
+          "year": 2026,
+          "price": 5900,
+          "stay": 7
+        },
+        {
+          "day": 14,
+          "month": 9,
+          "year": 2026,
+          "price": 5900,
+          "stay": 7
+        },
+        {
+          "day": 15,
+          "month": 9,
+          "year": 2026,
+          "price": 5900,
+          "stay": 7
+        },
+        {
+          "day": 16,
+          "month": 9,
+          "year": 2026,
+          "price": 5900,
+          "stay": 7
+        },
+        {
+          "day": 17,
+          "month": 9,
+          "year": 2026,
+          "price": 5900,
+          "stay": 7
+        },
+        {
+          "day": 18,
+          "month": 9,
+          "year": 2026,
+          "price": 5900,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→LAX",
+      "destination": {
+        "name": "洛杉矶",
+        "code": "LAX",
+        "region": "北美洲"
+      },
+      "price": 6152,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 459
+      },
+      "typicalPrice": 8409,
+      "cheapestDates": [
+        {
+          "day": 7,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        },
+        {
+          "day": 8,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        },
+        {
+          "day": 9,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        },
+        {
+          "day": 10,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        },
+        {
+          "day": 11,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        },
+        {
+          "day": 12,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        },
+        {
+          "day": 13,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        },
+        {
+          "day": 14,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        },
+        {
+          "day": 15,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        },
+        {
+          "day": 16,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→SEA",
+      "destination": {
+        "name": "西雅圖",
+        "code": "SEA",
+        "region": "北美洲"
+      },
+      "price": 6152,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 5
+      },
+      "typicalPrice": 7541,
+      "cheapestDates": [
+        {
+          "day": 23,
+          "month": 10,
+          "year": 2026,
+          "price": 6152,
+          "stay": 7
+        },
+        {
+          "day": 29,
+          "month": 12,
+          "year": 2026,
+          "price": 7541,
+          "stay": 3
+        },
+        {
+          "day": 25,
+          "month": 12,
+          "year": 2026,
+          "price": 7541,
+          "stay": 14
+        },
+        {
+          "day": 14,
+          "month": 11,
+          "year": 2026,
+          "price": 8282,
+          "stay": 14
+        },
+        {
+          "day": 1,
+          "month": 1,
+          "year": 2027,
+          "price": 17842,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→SFO",
+      "destination": {
+        "name": "三藩市",
+        "code": "SFO",
+        "region": "北美洲"
+      },
+      "price": 6152,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 192
+      },
+      "typicalPrice": 9740,
+      "cheapestDates": [
+        {
+          "day": 7,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        },
+        {
+          "day": 8,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        },
+        {
+          "day": 9,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        },
+        {
+          "day": 10,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        },
+        {
+          "day": 11,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        },
+        {
+          "day": 12,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 3
+        },
+        {
+          "day": 7,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 7
+        },
+        {
+          "day": 8,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 7
+        },
+        {
+          "day": 11,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 7
+        },
+        {
+          "day": 12,
+          "month": 9,
+          "year": 2026,
+          "price": 6152,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→AKL",
+      "destination": {
+        "name": "奧克蘭",
+        "code": "AKL",
+        "region": "大洋洲"
+      },
+      "price": 6309,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 336
+      },
+      "typicalPrice": 9886,
+      "cheapestDates": [
+        {
+          "day": 27,
+          "month": 8,
+          "year": 2026,
+          "price": 6309,
+          "stay": 3
+        },
+        {
+          "day": 21,
+          "month": 8,
+          "year": 2026,
+          "price": 6309,
+          "stay": 7
+        },
+        {
+          "day": 3,
+          "month": 9,
+          "year": 2026,
+          "price": 6482,
+          "stay": 3
+        },
+        {
+          "day": 10,
+          "month": 9,
+          "year": 2026,
+          "price": 6482,
+          "stay": 3
+        },
+        {
+          "day": 4,
+          "month": 9,
+          "year": 2026,
+          "price": 6482,
+          "stay": 7
+        },
+        {
+          "day": 28,
+          "month": 8,
+          "year": 2026,
+          "price": 6482,
+          "stay": 14
+        },
+        {
+          "day": 28,
+          "month": 8,
+          "year": 2026,
+          "price": 6899,
+          "stay": 7
+        },
+        {
+          "day": 21,
+          "month": 8,
+          "year": 2026,
+          "price": 6899,
+          "stay": 14
+        },
+        {
+          "day": 2,
+          "month": 9,
+          "year": 2026,
+          "price": 7003,
+          "stay": 3
+        },
+        {
+          "day": 4,
+          "month": 9,
+          "year": 2026,
+          "price": 7003,
+          "stay": 3
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→LHR",
+      "destination": {
+        "name": "倫敦",
+        "code": "LHR",
+        "region": "歐洲"
+      },
+      "price": 6336,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 247
+      },
+      "typicalPrice": 7592,
+      "cheapestDates": [
+        {
+          "day": 14,
+          "month": 10,
+          "year": 2026,
+          "price": 6336,
+          "stay": 14
+        },
+        {
+          "day": 7,
+          "month": 10,
+          "year": 2026,
+          "price": 6591,
+          "stay": 14
+        },
+        {
+          "day": 14,
+          "month": 10,
+          "year": 2026,
+          "price": 6636,
+          "stay": 7
+        },
+        {
+          "day": 25,
+          "month": 8,
+          "year": 2026,
+          "price": 6759,
+          "stay": 7
+        },
+        {
+          "day": 4,
+          "month": 9,
+          "year": 2026,
+          "price": 6759,
+          "stay": 7
+        },
+        {
+          "day": 7,
+          "month": 9,
+          "year": 2026,
+          "price": 6759,
+          "stay": 7
+        },
+        {
+          "day": 8,
+          "month": 9,
+          "year": 2026,
+          "price": 6759,
+          "stay": 7
+        },
+        {
+          "day": 9,
+          "month": 9,
+          "year": 2026,
+          "price": 6759,
+          "stay": 7
+        },
+        {
+          "day": 10,
+          "month": 9,
+          "year": 2026,
+          "price": 6759,
+          "stay": 7
+        },
+        {
+          "day": 11,
+          "month": 9,
+          "year": 2026,
+          "price": 6759,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→FRA",
+      "destination": {
+        "name": "法蘭克福",
+        "code": "FRA",
+        "region": "歐洲"
+      },
+      "price": 6471,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 114
+      },
+      "typicalPrice": 9040,
+      "cheapestDates": [
+        {
+          "day": 1,
+          "month": 7,
+          "year": 2026,
+          "price": 6471,
+          "stay": 7
+        },
+        {
+          "day": 2,
+          "month": 7,
+          "year": 2026,
+          "price": 6471,
+          "stay": 7
+        },
+        {
+          "day": 6,
+          "month": 7,
+          "year": 2026,
+          "price": 6471,
+          "stay": 7
+        },
+        {
+          "day": 7,
+          "month": 7,
+          "year": 2026,
+          "price": 6471,
+          "stay": 7
+        },
+        {
+          "day": 8,
+          "month": 7,
+          "year": 2026,
+          "price": 6783,
+          "stay": 7
+        },
+        {
+          "day": 16,
+          "month": 7,
+          "year": 2026,
+          "price": 6864,
+          "stay": 7
+        },
+        {
+          "day": 21,
+          "month": 7,
+          "year": 2026,
+          "price": 6864,
+          "stay": 7
+        },
+        {
+          "day": 4,
+          "month": 7,
+          "year": 2026,
+          "price": 6876,
+          "stay": 7
+        },
+        {
+          "day": 5,
+          "month": 7,
+          "year": 2026,
+          "price": 6876,
+          "stay": 7
+        },
+        {
+          "day": 7,
+          "month": 9,
+          "year": 2026,
+          "price": 6922,
+          "stay": 14
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→AMS",
+      "destination": {
+        "name": "阿姆斯特丹",
+        "code": "AMS",
+        "region": "歐洲"
+      },
+      "price": 6674,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 44
+      },
+      "typicalPrice": 7418,
+      "cheapestDates": [
+        {
+          "day": 1,
+          "month": 7,
+          "year": 2026,
+          "price": 6674,
+          "stay": 7
+        },
+        {
+          "day": 2,
+          "month": 7,
+          "year": 2026,
+          "price": 6674,
+          "stay": 7
+        },
+        {
+          "day": 6,
+          "month": 7,
+          "year": 2026,
+          "price": 6674,
+          "stay": 7
+        },
+        {
+          "day": 7,
+          "month": 7,
+          "year": 2026,
+          "price": 6674,
+          "stay": 7
+        },
+        {
+          "day": 8,
+          "month": 7,
+          "year": 2026,
+          "price": 6674,
+          "stay": 7
+        },
+        {
+          "day": 22,
+          "month": 7,
+          "year": 2026,
+          "price": 6843,
+          "stay": 7
+        },
+        {
+          "day": 23,
+          "month": 7,
+          "year": 2026,
+          "price": 6843,
+          "stay": 7
+        },
+        {
+          "day": 18,
+          "month": 11,
+          "year": 2026,
+          "price": 6843,
+          "stay": 7
+        },
+        {
+          "day": 17,
+          "month": 11,
+          "year": 2026,
+          "price": 6843,
+          "stay": 14
+        },
+        {
+          "day": 13,
+          "month": 7,
+          "year": 2026,
+          "price": 7068,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→DOH",
+      "destination": {
+        "name": "卡塔爾",
+        "code": "DOH",
+        "region": "中東"
+      },
+      "price": 6942,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 120
+      },
+      "typicalPrice": 9012,
+      "cheapestDates": [
+        {
+          "day": 2,
+          "month": 11,
+          "year": 2026,
+          "price": 6942,
+          "stay": 14
+        },
+        {
+          "day": 16,
+          "month": 11,
+          "year": 2026,
+          "price": 7232,
+          "stay": 7
+        },
+        {
+          "day": 29,
+          "month": 6,
+          "year": 2026,
+          "price": 7456,
+          "stay": 7
+        },
+        {
+          "day": 30,
+          "month": 6,
+          "year": 2026,
+          "price": 7456,
+          "stay": 7
+        },
+        {
+          "day": 1,
+          "month": 7,
+          "year": 2026,
+          "price": 7456,
+          "stay": 7
+        },
+        {
+          "day": 2,
+          "month": 7,
+          "year": 2026,
+          "price": 7456,
+          "stay": 7
+        },
+        {
+          "day": 3,
+          "month": 7,
+          "year": 2026,
+          "price": 7456,
+          "stay": 7
+        },
+        {
+          "day": 6,
+          "month": 7,
+          "year": 2026,
+          "price": 7456,
+          "stay": 7
+        },
+        {
+          "day": 7,
+          "month": 7,
+          "year": 2026,
+          "price": 7456,
+          "stay": 7
+        },
+        {
+          "day": 8,
+          "month": 7,
+          "year": 2026,
+          "price": 7456,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→JFK",
+      "destination": {
+        "name": "紐約",
+        "code": "JFK",
+        "region": "北美洲"
+      },
+      "price": 7657,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 194
+      },
+      "typicalPrice": 10865,
+      "cheapestDates": [
+        {
+          "day": 11,
+          "month": 9,
+          "year": 2026,
+          "price": 7657,
+          "stay": 3
+        },
+        {
+          "day": 12,
+          "month": 9,
+          "year": 2026,
+          "price": 7657,
+          "stay": 3
+        },
+        {
+          "day": 13,
+          "month": 9,
+          "year": 2026,
+          "price": 7657,
+          "stay": 3
+        },
+        {
+          "day": 14,
+          "month": 9,
+          "year": 2026,
+          "price": 7657,
+          "stay": 3
+        },
+        {
+          "day": 15,
+          "month": 9,
+          "year": 2026,
+          "price": 7657,
+          "stay": 3
+        },
+        {
+          "day": 17,
+          "month": 9,
+          "year": 2026,
+          "price": 7657,
+          "stay": 3
+        },
+        {
+          "day": 18,
+          "month": 9,
+          "year": 2026,
+          "price": 7657,
+          "stay": 3
+        },
+        {
+          "day": 11,
+          "month": 9,
+          "year": 2026,
+          "price": 7657,
+          "stay": 7
+        },
+        {
+          "day": 13,
+          "month": 9,
+          "year": 2026,
+          "price": 7657,
+          "stay": 7
+        },
+        {
+          "day": 14,
+          "month": 9,
+          "year": 2026,
+          "price": 7657,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→JNB",
+      "destination": {
+        "name": "約翰內斯堡",
+        "code": "JNB",
+        "region": "非洲"
+      },
+      "price": 8134,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 63
+      },
+      "typicalPrice": 10808,
+      "cheapestDates": [
+        {
+          "day": 1,
+          "month": 7,
+          "year": 2026,
+          "price": 8134,
+          "stay": 7
+        },
+        {
+          "day": 2,
+          "month": 7,
+          "year": 2026,
+          "price": 8134,
+          "stay": 7
+        },
+        {
+          "day": 6,
+          "month": 7,
+          "year": 2026,
+          "price": 8134,
+          "stay": 7
+        },
+        {
+          "day": 7,
+          "month": 7,
+          "year": 2026,
+          "price": 8134,
+          "stay": 7
+        },
+        {
+          "day": 8,
+          "month": 7,
+          "year": 2026,
+          "price": 8134,
+          "stay": 7
+        },
+        {
+          "day": 18,
+          "month": 9,
+          "year": 2026,
+          "price": 8284,
+          "stay": 7
+        },
+        {
+          "day": 13,
+          "month": 11,
+          "year": 2026,
+          "price": 8284,
+          "stay": 3
+        },
+        {
+          "day": 14,
+          "month": 1,
+          "year": 2027,
+          "price": 8284,
+          "stay": 3
+        },
+        {
+          "day": 21,
+          "month": 10,
+          "year": 2026,
+          "price": 8284,
+          "stay": 7
+        },
+        {
+          "day": 15,
+          "month": 1,
+          "year": 2027,
+          "price": 8284,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→ORD",
+      "destination": {
+        "name": "芝加哥",
+        "code": "ORD",
+        "region": "北美洲"
+      },
+      "price": 9476,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 25
+      },
+      "typicalPrice": 12625,
+      "cheapestDates": [
+        {
+          "day": 28,
+          "month": 12,
+          "year": 2026,
+          "price": 9476,
+          "stay": 14
+        },
+        {
+          "day": 29,
+          "month": 10,
+          "year": 2026,
+          "price": 9751,
+          "stay": 3
+        },
+        {
+          "day": 1,
+          "month": 11,
+          "year": 2026,
+          "price": 9765,
+          "stay": 14
+        },
+        {
+          "day": 1,
+          "month": 7,
+          "year": 2026,
+          "price": 10319,
+          "stay": 3
+        },
+        {
+          "day": 1,
+          "month": 7,
+          "year": 2026,
+          "price": 10319,
+          "stay": 7
+        },
+        {
+          "day": 3,
+          "month": 7,
+          "year": 2026,
+          "price": 11106,
+          "stay": 7
+        },
+        {
+          "day": 6,
+          "month": 7,
+          "year": 2026,
+          "price": 11106,
+          "stay": 7
+        },
+        {
+          "day": 28,
+          "month": 8,
+          "year": 2026,
+          "price": 11106,
+          "stay": 7
+        },
+        {
+          "day": 2,
+          "month": 7,
+          "year": 2026,
+          "price": 11324,
+          "stay": 7
+        },
+        {
+          "day": 25,
+          "month": 6,
+          "year": 2026,
+          "price": 11659,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    },
+    {
+      "route": "SZX→OKE",
+      "destination": {
+        "name": "沖繩",
+        "code": "OKE",
+        "region": "東亞"
+      },
+      "price": 31253,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 12
+      },
+      "typicalPrice": 31369,
+      "cheapestDates": [
+        {
+          "day": 30,
+          "month": 8,
+          "year": 2026,
+          "price": 31253,
+          "stay": 14
+        },
+        {
+          "day": 19,
+          "month": 1,
+          "year": 2027,
+          "price": 31253,
+          "stay": 7
+        },
+        {
+          "day": 19,
+          "month": 1,
+          "year": 2027,
+          "price": 31253,
+          "stay": 14
+        },
+        {
+          "day": 29,
+          "month": 8,
+          "year": 2026,
+          "price": 31369,
+          "stay": 3
+        },
+        {
+          "day": 28,
+          "month": 8,
+          "year": 2026,
+          "price": 31369,
+          "stay": 7
+        },
+        {
+          "day": 15,
+          "month": 11,
+          "year": 2026,
+          "price": 31369,
+          "stay": 7
+        },
+        {
+          "day": 7,
+          "month": 11,
+          "year": 2026,
+          "price": 31369,
+          "stay": 14
+        },
+        {
+          "day": 25,
+          "month": 10,
+          "year": 2026,
+          "price": 31439,
+          "stay": 3
+        },
+        {
+          "day": 13,
+          "month": 7,
+          "year": 2026,
+          "price": 31508,
+          "stay": 3
+        },
+        {
+          "day": 16,
+          "month": 7,
+          "year": 2026,
+          "price": 31508,
+          "stay": 7
+        }
+      ],
+      "totalDestinations": 44
+    }
+  ]
 }
