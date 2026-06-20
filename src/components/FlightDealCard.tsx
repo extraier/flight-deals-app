@@ -15,6 +15,7 @@ interface FlightInfo {
   return_dep_time?: string;
   return_arr_time?: string;
   return_flight?: string;
+  ret_date?: string;
 }
 
 interface DateInfo {
@@ -261,7 +262,7 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
 
                 {/* Action Button */}
                 <a
-                  href={`https://www.google.com/travel/flights?q=HKG+to+${destination.code}+${selectedDate.year}-${String(selectedDate.month).padStart(2,'0')}-${String(selectedDate.day).padStart(2,'0')}&df=1&gl=hk&hl=zh-TW&curr=HKD`}
+                  href={`https://www.google.com/travel/flights?q=HKG+to+${destination.code}+${selectedDate.year}-${String(selectedDate.month).padStart(2,'0')}-${String(selectedDate.day).padStart(2,'0')}+${selectedDate.flight?.ret_date}&gl=hk&hl=zh-TW&curr=HKD`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
