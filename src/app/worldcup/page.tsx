@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 import worldcupData from '@/data/worldcup_latest.json';
 
 type Window = '1h' | '4h' | '24h';
@@ -74,19 +75,23 @@ const TEAM_CN: Record<string, string> = {
 const sortLabel = (w: Window) => ({ '1h': '1小時前', '4h': '4小時前', '24h': '24小時前' }[w]);
 
 export default function WorldCupPage() {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isDark = mounted ? theme === 'dark' : true;
+
   const [window, setWindow] = useState<Window>('24h');
   const [sortBy, setSortBy] = useState<'time' | 'change'>('time');
-  const [dark, setDark] = useState(true);
 
-  const bg = dark ? 'dark bg-[#0f1117]' : 'bg-white';
-  const text = dark ? 'text-zinc-100' : 'text-zinc-900';
-  const muted = dark ? 'text-zinc-400' : 'text-zinc-500';
-  const muted2 = dark ? 'text-zinc-500' : 'text-zinc-400';
-  const border = dark ? 'border-zinc-700' : 'border-zinc-200';
-  const hover = dark ? 'hover:bg-zinc-800/60' : 'hover:bg-zinc-50';
-  const thead = dark ? 'bg-zinc-800 border-zinc-700' : 'bg-zinc-100 border-zinc-200';
-  const polyBg = dark ? 'bg-zinc-800/30 border-zinc-700/40' : 'bg-zinc-50';
-  const cardBg = dark ? 'bg-zinc-800/50' : 'bg-zinc-100';
+  const bg = isDark ? 'dark bg-[#0f1117]' : 'bg-white';
+  const text = isDark ? 'text-zinc-100' : 'text-zinc-900';
+  const muted = isDark ? 'text-zinc-400' : 'text-zinc-500';
+  const muted2 = isDark ? 'text-zinc-500' : 'text-zinc-400';
+  const border = isDark ? 'border-zinc-700' : 'border-zinc-200';
+  const hover = isDark ? 'hover:bg-zinc-800/60' : 'hover:bg-zinc-50';
+  const thead = isDark ? 'bg-zinc-800 border-zinc-700' : 'bg-zinc-100 border-zinc-200';
+  const polyBg = isDark ? 'bg-zinc-800/30 border-zinc-700/40' : 'bg-zinc-50';
+  const cardBg = isDark ? 'bg-zinc-800/50' : 'bg-zinc-100';
 
   const rows = [...data.matches].sort((a, b) => {
     if (sortBy === 'change') {
@@ -97,7 +102,7 @@ export default function WorldCupPage() {
   });
 
   const activeBtn = 'bg-sky-600 text-white shadow-sm';
-  const inactiveBtn = dark
+  const inactiveBtn = isDark
     ? 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800'
     : 'text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100';
 
@@ -107,15 +112,7 @@ export default function WorldCupPage() {
 
         {/* Header */}
         <div className="mb-6 text-center">
-          <div className="flex items-center justify-center gap-3">
-            <h1 className="text-3xl font-bold tracking-tight">🏆 世界盃赔率走勢</h1>
-            <button
-              onClick={() => setDark(d => !d)}
-              className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${dark ? 'border-zinc-600 text-yellow-400 hover:border-yellow-400' : 'border-zinc-300 text-zinc-600 hover:border-zinc-600'}`}
-            >
-              {dark ? '☀️' : '🌙'}
-            </button>
-          </div>
+          <h1 className="text-3xl font-bold tracking-tight">🏆 世界盃赔率走勢</h1>
           <p className={`mt-2 text-sm ${muted}`}>
             更新 {data.latest_datetime?.replace('_', ' ')} HKT · 馬會 1x2 + Polymarket 概率
           </p>
