@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
 import trumpData from '@/data/trump_alerts.json';
 import futuAd from './futu_ad.jpg';
 
@@ -44,26 +45,53 @@ const data = trumpData as unknown as {
 
 type Tab = 'trades' | 'truth';
 
+// Light/dark aware color helpers
+function card(isDark: boolean) {
+  return isDark
+    ? 'bg-zinc-900/50 border-zinc-700 hover:border-zinc-600'
+    : 'bg-white border-zinc-200 hover:border-zinc-400 shadow-sm';
+}
+
+function textMuted(isDark: boolean) {
+  return isDark ? 'text-zinc-400' : 'text-zinc-500';
+}
+
+function textFaint(isDark: boolean) {
+  return isDark ? 'text-zinc-600' : 'text-zinc-400';
+}
+
+function bgSurface(isDark: boolean) {
+  return isDark ? 'bg-zinc-800' : 'bg-zinc-100';
+}
+
+function bgHeader(isDark: boolean) {
+  return isDark ? 'bg-zinc-900 border-zinc-700' : 'bg-zinc-100 border-zinc-300';
+}
+
+function borderSubtle(isDark: boolean) {
+  return isDark ? 'border-zinc-700' : 'border-zinc-200';
+}
+
 function ReturnPill({ pct }: { pct: number | null }) {
-  if (pct === null || pct === undefined) return <span className="text-zinc-500">—</span>;
+  if (pct === null || pct === undefined) return <span className="text-zinc-400">—</span>;
   const pos = pct > 0;
   return (
-    <span className={`font-bold ${pos ? 'text-emerald-400' : pct < 0 ? 'text-red-400' : 'text-zinc-400'}`}>
+    <span className={`font-bold ${pos ? 'text-emerald-500' : pct < 0 ? 'text-red-500' : 'text-zinc-400'}`}>
       {pos ? '+' : ''}{pct.toFixed(2)}%
     </span>
   );
 }
 
-function TransactionsTab() {
+function TransactionsTab({ isDark }: { isDark: boolean }) {
   const trades = data.quiver_trades || [];
   const filings = data.filings || [];
 
   if (trades.length === 0 && filings.length === 0) {
     return (
-      <div className="text-center py-16 text-zinc-500">
+      <div className="text-center py-16 text-zinc-400">
         <div className="text-4xl mb-4">📊</div>
         <div>暫無持股交易記錄</div>
-        <div className="text-sm mt-2 text-zinc-600">數據來自 QuiverQuant · SEC EDGAR</div>
+        <div className={`text-sm mt-2 ${textFaint(isDark)}`}>數據來自 QuiverQuant · SEC EDGAR</div>
       </div>
     );
   }
@@ -72,13 +100,13 @@ function TransactionsTab() {
     <div>
       {trades.length > 0 && (
         <>
-          <div className="bg-gradient-to-r from-red-900/80 to-red-800/60 text-white px-4 py-2 rounded-lg mb-4 font-bold text-sm flex items-center gap-2">
-            📊 Trump 持股交易 <span className="text-zinc-300 font-normal text-xs">QuiverQuant</span>
+          <div className="bg-gradient-to-r from-red-700 to-red-600 text-white px-4 py-2 rounded-lg mb-4 font-bold text-sm">
+            📊 Trump 持股交易 <span className="font-normal opacity-80 text-xs">QuiverQuant</span>
           </div>
           <div className="overflow-x-auto mb-6">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-zinc-800 text-zinc-300">
+                <tr className={`${bgSurface(isDark)} text-${isDark ? 'zinc-300' : 'zinc-700'}`}>
                   <th className="text-left p-3 rounded-tl-lg">股票</th>
                   <th className="text-left p-3">交易</th>
                   <th className="text-left p-3">申報日期</th>
@@ -92,19 +120,19 @@ function TransactionsTab() {
                   const isSale = /Sale|Sell/i.test(t.transaction);
                   const amount = t.transaction.includes('\n') ? t.transaction.split('\n').pop()?.trim() : '';
                   return (
-                    <tr key={i} className="border-b border-zinc-800 hover:bg-zinc-900/50">
+                    <tr key={i} className={`border-b ${borderSubtle(isDark)} ${isDark ? 'hover:bg-zinc-800/50' : 'hover:bg-zinc-50'}`}>
                       <td className="p-3 font-medium">
                         <div>{t.stock.split('\n')[0]}</div>
-                        {t.ticker && <div className="text-xs text-zinc-500">{t.ticker}</div>}
+                        {t.ticker && <div className={`text-xs ${textFaint(isDark)}`}>{t.ticker}</div>}
                       </td>
                       <td className="p-3">
-                        <span className={isPurchase ? 'text-emerald-400 font-bold' : isSale ? 'text-red-400 font-bold' : 'text-zinc-300'}>
+                        <span className={isPurchase ? 'text-emerald-500 font-bold' : isSale ? 'text-red-500 font-bold' : 'text-zinc-400'}>
                           {isPurchase ? '買入' : isSale ? '賣出' : t.transaction.slice(0, 10)}
                         </span>
-                        {amount && <div className="text-xs text-zinc-500">{amount}</div>}
+                        {amount && <div className={`text-xs ${textFaint(isDark)}`}>{amount}</div>}
                       </td>
-                      <td className="p-3 text-zinc-400">{t.filed}</td>
-                      <td className="p-3 text-zinc-400">{t.traded}</td>
+                      <td className={`p-3 ${textMuted(isDark)}`}>{t.filed}</td>
+                      <td className={`p-3 ${textMuted(isDark)}`}>{t.traded}</td>
                       <td className="p-3"><ReturnPill pct={t.return_pct} /></td>
                     </tr>
                   );
@@ -117,13 +145,13 @@ function TransactionsTab() {
 
       {filings.length > 0 && (
         <>
-          <div className="bg-gradient-to-r from-orange-900/80 to-orange-800/60 text-white px-4 py-2 rounded-lg mb-4 font-bold text-sm">
+          <div className="bg-gradient-to-r from-orange-700 to-orange-600 text-white px-4 py-2 rounded-lg mb-4 font-bold text-sm">
             🏛️ SEC 持倉申報
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-zinc-800 text-zinc-300">
+                <tr className={`${bgSurface(isDark)} text-${isDark ? 'zinc-300' : 'zinc-700'}`}>
                   <th className="text-left p-3 rounded-tl-lg">股票</th>
                   <th className="text-left p-3">交易</th>
                   <th className="text-left p-3">申報日期</th>
@@ -137,16 +165,16 @@ function TransactionsTab() {
                   const isSale = /Sale|Sell/i.test(f.transaction);
                   const pct = f.return_pct ? parseFloat(f.return_pct) : null;
                   return (
-                    <tr key={i} className="border-b border-zinc-800 hover:bg-zinc-900/50">
-                      <td className="p-3 font-medium">{f.ticker} <span className="text-zinc-500 text-xs">{f.company}</span></td>
+                    <tr key={i} className={`border-b ${borderSubtle(isDark)} ${isDark ? 'hover:bg-zinc-800/50' : 'hover:bg-zinc-50'}`}>
+                      <td className="p-3 font-medium">{f.ticker} <span className={`text-xs ${textFaint(isDark)}`}>{f.company}</span></td>
                       <td className="p-3">
-                        <span className={isPurchase ? 'text-emerald-400 font-bold' : isSale ? 'text-red-400 font-bold' : 'text-zinc-300'}>
+                        <span className={isPurchase ? 'text-emerald-500 font-bold' : isSale ? 'text-red-500 font-bold' : 'text-zinc-400'}>
                           {isPurchase ? '買入' : isSale ? '賣出' : f.transaction.slice(0, 10)}
                         </span>
-                        <div className="text-xs text-zinc-500">{f.range}</div>
+                        <div className={`text-xs ${textFaint(isDark)}`}>{f.range}</div>
                       </td>
-                      <td className="p-3 text-zinc-400">{f.date}</td>
-                      <td className="p-3 text-zinc-400">{f.trade_date}</td>
+                      <td className={`p-3 ${textMuted(isDark)}`}>{f.date}</td>
+                      <td className={`p-3 ${textMuted(isDark)}`}>{f.trade_date}</td>
                       <td className="p-3"><ReturnPill pct={pct} /></td>
                     </tr>
                   );
@@ -160,80 +188,57 @@ function TransactionsTab() {
   );
 }
 
-function SourceBadge({ source }: { source: string }) {
-  const colors: Record<string, string> = {
-    truth_social: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-    justthenews: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-    default: 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30',
+function SourceBadge({ source, isDark }: { source: string; isDark: boolean }) {
+  const configs: Record<string, { cls: string; label: string }> = {
+    truth_social: { cls: 'bg-blue-500/20 text-blue-400 border-blue-500/30', label: 'Truth Social' },
+    justthenews: { cls: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30', label: 'JustTheNews' },
   };
-  const labels: Record<string, string> = {
-    truth_social: 'Truth Social',
-    justthenews: 'JustTheNews',
-  };
-  const cls = colors[source] || colors.default;
-  return (
-    <span className={`text-xs px-2 py-0.5 rounded border ${cls}`}>
-      {labels[source] || source}
-    </span>
-  );
+  const { cls, label } = configs[source] || { cls: `bg-zinc-500/20 ${isDark ? 'text-zinc-400' : 'text-zinc-600'} border-zinc-500/30`, label: source };
+  return <span className={`text-xs px-2 py-0.5 rounded border ${cls}`}>{label}</span>;
 }
 
-function ConfidenceBadge({ text }: { text: string }) {
-  const colorMap: Record<string, string> = {
+function ConfidenceBadge({ text, isDark }: { text: string; isDark: boolean }) {
+  const configs: Record<string, string> = {
     High: 'bg-red-500/20 text-red-400 border-red-500/30',
     Medium: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-    Low: 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30',
+    Low: `bg-zinc-500/20 ${isDark ? 'text-zinc-400' : 'text-zinc-600'} border-zinc-500/30`,
   };
-  return (
-    <span className={`text-xs px-2 py-0.5 rounded border ${colorMap[text] || colorMap.Low}`}>
-      ⚡ {text}
-    </span>
-  );
+  return <span className={`text-xs px-2 py-0.5 rounded border ${configs[text] || configs.Low}`}>⚡ {text}</span>;
 }
 
 function TickerPill({ ticker }: { ticker: string }) {
-  return (
-    <span className="bg-orange-500/20 text-orange-400 border border-orange-500/30 text-xs px-1.5 py-0.5 rounded font-bold">
-      {ticker}
-    </span>
-  );
+  return <span className="bg-orange-500/20 text-orange-400 border border-orange-500/30 text-xs px-1.5 py-0.5 rounded font-bold">{ticker}</span>;
 }
 
-function PostCard({ post }: { post: Post }) {
+function PostCard({ post, isDark }: { post: Post; isDark: boolean }) {
   const tickers = (post.text.match(/\b[A-Z]{2,5}\b/g) || []).filter(t =>
-    ['MSFT','NVDA','ORCL','ADBE','TSLA','AAPL','GOOGL','AMZN','META','NFLX','NOW','CDNS','TT','VOO','VTI','IWM','VTI'].includes(t)
+    ['MSFT','NVDA','ORCL','ADBE','TSLA','AAPL','GOOGL','AMZN','META','NFLX','NOW','CDNS','TT','VOO','VTI','IWM'].includes(t)
   );
   const confidence = tickers.length > 0 ? 'High' : 'Medium';
   const displayText = post.text.length > 400 ? post.text.slice(0, 400) + '...' : post.text;
 
   return (
-    <div className="border border-zinc-700 rounded-lg bg-zinc-900/50 hover:border-zinc-600 transition-colors overflow-hidden">
+    <div className={`border rounded-lg ${card(isDark)} overflow-hidden`}>
       {post.image && (
-        <img
-          src={post.image}
-          alt="Post image"
-          className="w-full max-h-96 object-cover bg-black"
-          loading="lazy"
-        />
+        <img src={post.image} alt="Post image" className="w-full max-h-96 object-cover bg-black" loading="lazy" />
       )}
-
       <div className="p-4">
         <div className="flex items-center justify-between mb-2 flex-wrap gap-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs text-zinc-500">{post.date}</span>
-            <SourceBadge source={post.source} />
-            <ConfidenceBadge text={confidence} />
+            <span className={`text-xs ${textFaint(isDark)}`}>{post.date}</span>
+            <SourceBadge source={post.source} isDark={isDark} />
+            <ConfidenceBadge text={confidence} isDark={isDark} />
             {tickers.map(t => <TickerPill key={t} ticker={t} />)}
           </div>
-          <span className="text-xs text-zinc-600">#{post.id}</span>
+          <span className={`text-xs ${textFaint(isDark)}`}>#{post.id}</span>
         </div>
 
-        <p className="text-sm text-zinc-100 leading-relaxed mb-2 whitespace-pre-wrap">{displayText}</p>
+        <p className={`text-sm leading-relaxed mb-2 whitespace-pre-wrap ${isDark ? 'text-zinc-100' : 'text-zinc-800'}`}>{displayText}</p>
 
         {post.text_cn && (
-          <div className="mt-3 pt-3 border-t border-zinc-700">
-            <div className="text-xs text-emerald-400 mb-1 font-medium">🇭🇰 粵語/繁體中文翻譯</div>
-            <p className="text-sm text-zinc-300 leading-relaxed whitespace-pre-wrap">{post.text_cn}</p>
+          <div className={`mt-3 pt-3 border-t ${borderSubtle(isDark)}`}>
+            <div className="text-xs text-emerald-500 mb-1 font-medium">🇭🇰 粵語/繁體中文翻譯</div>
+            <p className={`text-sm leading-relaxed whitespace-pre-wrap ${isDark ? 'text-zinc-300' : 'text-zinc-600'}`}>{post.text_cn}</p>
           </div>
         )}
 
@@ -248,11 +253,11 @@ function PostCard({ post }: { post: Post }) {
   );
 }
 
-function TruthSocialTab() {
+function TruthSocialTab({ isDark }: { isDark: boolean }) {
   return (
     <div className="space-y-3">
       {(data.posts || []).map((post: Post) => (
-        <PostCard key={post.id} post={post} />
+        <PostCard key={post.id} post={post} isDark={isDark} />
       ))}
     </div>
   );
@@ -260,29 +265,33 @@ function TruthSocialTab() {
 
 export default function TrumpPage() {
   const [tab, setTab] = useState<Tab>('trades');
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isDark = mounted ? resolvedTheme === 'dark' : true;
   const updated = data.updated?.replace('T', ' ').slice(0, 16) || '';
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen">
       {/* Header */}
-      <div className="bg-gradient-to-r from-zinc-900 to-zinc-800 border-b border-zinc-700 px-6 py-8">
+      <div className={`bg-gradient-to-r ${bgHeader(isDark)} px-6 py-8 border-b ${borderSubtle(isDark)}`}>
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-bold tracking-tight mb-1">Trump Trump Scanner</h1>
-          <p className="text-zinc-400 text-sm">
+          <h1 className={`text-3xl font-bold tracking-tight mb-1 ${isDark ? 'text-zinc-100' : 'text-zinc-900'}`}>
+            Trump Trump Scanner
+          </h1>
+          <p className={`text-sm ${textMuted(isDark)}`}>
             更新時間 {updated} · 每30分鐘自動更新
           </p>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="bg-zinc-900/80 border-b border-zinc-800 px-6 py-3">
+      <div className={`${bgSurface(isDark)} border-b ${borderSubtle(isDark)} px-6 py-3`}>
         <div className="max-w-3xl mx-auto flex gap-1">
           <button
             onClick={() => setTab('trades')}
             className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
-              tab === 'trades'
-                ? 'bg-red-600 text-white'
-                : 'bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700'
+              tab === 'trades' ? 'bg-red-600 text-white' : `${bgSurface(isDark)} ${isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-700' : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200'}`
             }`}
           >
             📊 持股交易
@@ -290,9 +299,7 @@ export default function TrumpPage() {
           <button
             onClick={() => setTab('truth')}
             className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
-              tab === 'truth'
-                ? 'bg-blue-600 text-white'
-                : 'bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700'
+              tab === 'truth' ? 'bg-blue-600 text-white' : `${bgSurface(isDark)} ${isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-700' : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200'}`
             }`}
           >
             📱 Truth Social
@@ -301,8 +308,8 @@ export default function TrumpPage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-3xl mx-auto px-4 py-6">
-        {tab === 'trades' ? <TransactionsTab /> : <TruthSocialTab />}
+      <div className={`max-w-3xl mx-auto px-4 py-6`}>
+        {tab === 'trades' ? <TransactionsTab isDark={isDark} /> : <TruthSocialTab isDark={isDark} />}
       </div>
 
       {/* Futu Ad */}
@@ -347,7 +354,7 @@ export default function TrumpPage() {
       </div>
 
       {/* Footer */}
-      <div className="text-center text-xs text-zinc-600 py-6 border-t border-zinc-800">
+      <div className={`text-center text-xs py-6 border-t ${borderSubtle(isDark)} ${textFaint(isDark)}`}>
         數據來源：Truth Social · QuiverQuant · SEC EDGAR · 最後更新 {updated}
       </div>
     </div>
