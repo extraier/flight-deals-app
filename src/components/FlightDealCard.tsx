@@ -267,7 +267,7 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
                   rel="noopener noreferrer"
                   className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                 >
-                  在 Google Flights 查看
+                  HK${selectedDate.price.toLocaleString()} 來回 · 在 Google Flights 查看
                 </a>
               </div>
             ) : (
