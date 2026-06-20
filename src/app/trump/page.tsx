@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import trumpData from '@/data/trump_alerts.json';
+import futuAd from './futu_ad.jpg';
 
 interface Filing {
   ticker: string;
@@ -313,6 +314,11 @@ export default function TrumpPage() {
           textAlign: 'center',
           color: '#fff',
         }}>
+          <img
+            src={futuAd.src}
+            alt="富途牛牛優惠"
+            style={{ maxWidth: '100%', borderRadius: '8px', marginBottom: '15px' }}
+          />
           <div style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '15px' }}>
             🎁 Comparetiger 獨家 富途開戶即賺 $1,800 現金券！
           </div>
