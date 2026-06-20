@@ -83,7 +83,6 @@ function ReturnPill({ pct }: { pct: number | null }) {
 }
 
 function TransactionsTab({ isDark }: { isDark: boolean }) {
-  const [showAll, setShowAll] = useState(false);
   const trades = data.quiver_trades || [];
   const filings = data.filings || [];
 
@@ -104,15 +103,15 @@ function TransactionsTab({ isDark }: { isDark: boolean }) {
           <div className="bg-gradient-to-r from-red-700 to-red-600 text-white px-4 py-2 rounded-lg mb-4 font-bold text-sm">
             📊 Trump 持股交易 <span className="font-normal opacity-80 text-xs">QuiverQuant</span>
           </div>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" style={{ maxHeight: '400px', overflowY: 'auto' }}>
             <table className="w-full text-sm">
               <thead>
                 <tr className={`${bgSurface(isDark)} text-${isDark ? 'zinc-300' : 'zinc-700'}`}>
-                  <th className="text-left p-3 rounded-tl-lg">股票</th>
-                  <th className="text-left p-3">交易</th>
-                  <th className="text-left p-3">申報日期</th>
-                  <th className="text-left p-3">交易日期</th>
-                  <th className="text-left p-3 rounded-tr-lg">回報</th>
+                  <th className="text-left p-3 rounded-tl-lg sticky top-0 z-10">股票</th>
+                  <th className="text-left p-3 sticky top-0 z-10">交易</th>
+                  <th className="text-left p-3 sticky top-0 z-10">申報日期</th>
+                  <th className="text-left p-3 sticky top-0 z-10">交易日期</th>
+                  <th className="text-left p-3 rounded-tr-lg sticky top-0 z-10">回報</th>
                 </tr>
               </thead>
               <tbody>
@@ -137,18 +136,10 @@ function TransactionsTab({ isDark }: { isDark: boolean }) {
                       <td className="p-3"><ReturnPill pct={t.return_pct} /></td>
                     </tr>
                   );
-                }).slice(0, showAll ? undefined : 5)}
+                })}
               </tbody>
             </table>
           </div>
-          {!showAll && trades.length > 5 && (
-            <button
-              onClick={() => setShowAll(true)}
-              className={`w-full py-3 text-sm ${isDark ? 'text-zinc-500 hover:text-zinc-300' : 'text-zinc-500 hover:text-zinc-700'} mt-2`}
-            >
-              Show {trades.length - 5} more trades ↓
-            </button>
-          )}
         </>
       )}
 
