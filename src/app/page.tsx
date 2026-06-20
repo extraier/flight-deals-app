@@ -13,20 +13,21 @@ type FilterMode = 'region' | 'country';
 type Departure = 'HKG' | 'SZX';
 
 const regionColors: Record<string, string> = {
-  '東南亞': 'bg-amber-500/10 text-amber-600 border-amber-500/30',
   '東亞': 'bg-sky-500/10 text-sky-600 border-sky-500/30',
+  '東南亞': 'bg-amber-500/10 text-amber-600 border-amber-500/30',
   '中國': 'bg-red-500/10 text-red-600 border-red-500/30',
   '大洋洲': 'bg-cyan-500/10 text-cyan-600 border-cyan-500/30',
-  '北美洲': 'bg-red-500/10 text-red-600 border-red-500/30',
+  '北美洲': 'bg-orange-500/10 text-orange-600 border-orange-500/30',
+  '南美洲': 'bg-orange-500/10 text-orange-500 border-orange-500/30',
   '歐洲': 'bg-violet-500/10 text-violet-600 border-violet-500/30',
-  '南亞': 'bg-orange-500/10 text-orange-600 border-orange-500/30',
+  '南亞': 'bg-yellow-500/10 text-yellow-600 border-yellow-500/30',
   '中東': 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30',
-  '非洲': 'bg-yellow-500/10 text-yellow-600 border-yellow-500/30',
+  '非洲': 'bg-yellow-500/10 text-yellow-500 border-yellow-500/30',
   '香港': 'bg-pink-500/10 text-pink-600 border-pink-500/30',
   '其他': 'bg-slate-500/10 text-slate-600 border-slate-500/30',
 };
 
-const regions = ['全部', '東亞', '東南亞', '中國', '大洋洲', '北美洲', '歐洲', '南亞', '中東', '非洲'];
+const regions = ['全部', '東亞', '東南亞', '中國', '大洋洲', '北美洲', '歐洲', '南亞', '中東', '非洲', '南美洲'];
 
 const DEPARTURE_LABELS: Record<Departure, { label: string; subtitle: string }> = {
   HKG: { label: '香港國際機場', subtitle: '香港國際機場 ✈️ 最低機票' },
