@@ -21,6 +21,7 @@ interface Post {
   source: string;
   image: string | null;
   has_image: boolean;
+  text_cn?: string | null;
 }
 
 interface Trade {
@@ -68,7 +69,6 @@ function TransactionsTab() {
 
   return (
     <div>
-      {/* QuiverQuant Trades */}
       {trades.length > 0 && (
         <>
           <div className="bg-gradient-to-r from-red-900/80 to-red-800/60 text-white px-4 py-2 rounded-lg mb-4 font-bold text-sm flex items-center gap-2">
@@ -89,16 +89,18 @@ function TransactionsTab() {
                 {trades.map((t, i) => {
                   const isPurchase = /Purchase|Buy/i.test(t.transaction);
                   const isSale = /Sale|Sell/i.test(t.transaction);
+                  const amount = t.transaction.includes('\n') ? t.transaction.split('\n').pop()?.trim() : '';
                   return (
                     <tr key={i} className="border-b border-zinc-800 hover:bg-zinc-900/50">
                       <td className="p-3 font-medium">
-                        <div>{t.stock}</div>
+                        <div>{t.stock.split('\n')[0]}</div>
                         {t.ticker && <div className="text-xs text-zinc-500">{t.ticker}</div>}
                       </td>
                       <td className="p-3">
                         <span className={isPurchase ? 'text-emerald-400 font-bold' : isSale ? 'text-red-400 font-bold' : 'text-zinc-300'}>
                           {isPurchase ? '買入' : isSale ? '賣出' : t.transaction.slice(0, 10)}
                         </span>
+                        {amount && <div className="text-xs text-zinc-500">{amount}</div>}
                       </td>
                       <td className="p-3 text-zinc-400">{t.filed}</td>
                       <td className="p-3 text-zinc-400">{t.traded}</td>
@@ -112,7 +114,6 @@ function TransactionsTab() {
         </>
       )}
 
-      {/* SEC Filings */}
       {filings.length > 0 && (
         <>
           <div className="bg-gradient-to-r from-orange-900/80 to-orange-800/60 text-white px-4 py-2 rounded-lg mb-4 font-bold text-sm">
@@ -198,64 +199,50 @@ function TickerPill({ ticker }: { ticker: string }) {
 }
 
 function PostCard({ post }: { post: Post }) {
-  const [translated, setTranslated] = useState<string | null>(null);
-  const [translating, setTranslating] = useState(false);
-  const [showTrans, setShowTrans] = useState(false);
-
-  const translate = async () => {
-    if (translated) { setShowTrans(!showTrans); return; }
-    setTranslating(true);
-    try {
-      const res = await fetch(
-        `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-TW&dt=t&q=${encodeURIComponent(post.text)}`
-      );
-      const arr = await res.json();
-      setTranslated(arr[0].map((t: any) => t[0]).join(''));
-      setShowTrans(true);
-    } catch {
-      setTranslated('翻譯失敗');
-    }
-    setTranslating(false);
-  };
-
   const tickers = (post.text.match(/\b[A-Z]{2,5}\b/g) || []).filter(t =>
-    ['MSFT','NVDA','ORCL','ADBE','TSLA','AAPL','GOOGL','AMZN','META','NFLX','NOW','CDNS','TT','VOO','VTI'].includes(t)
+    ['MSFT','NVDA','ORCL','ADBE','TSLA','AAPL','GOOGL','AMZN','META','NFLX','NOW','CDNS','TT','VOO','VTI','IWM','VTI'].includes(t)
   );
-
   const confidence = tickers.length > 0 ? 'High' : 'Medium';
-  const displayText = post.text.length > 350 ? post.text.slice(0, 350) + '...' : post.text;
+  const displayText = post.text.length > 400 ? post.text.slice(0, 400) + '...' : post.text;
 
   return (
-    <div className="border border-zinc-700 rounded-lg p-4 bg-zinc-900/50 hover:border-zinc-600 transition-colors">
-      <div className="flex items-center justify-between mb-2 flex-wrap gap-1">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs text-zinc-500">{post.date}</span>
-          <SourceBadge source={post.source} />
-          <ConfidenceBadge text={confidence} />
-          {tickers.map(t => <TickerPill key={t} ticker={t} />)}
+    <div className="border border-zinc-700 rounded-lg bg-zinc-900/50 hover:border-zinc-600 transition-colors overflow-hidden">
+      {post.image && (
+        <img
+          src={post.image}
+          alt="Post image"
+          className="w-full max-h-96 object-cover bg-black"
+          loading="lazy"
+        />
+      )}
+
+      <div className="p-4">
+        <div className="flex items-center justify-between mb-2 flex-wrap gap-1">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs text-zinc-500">{post.date}</span>
+            <SourceBadge source={post.source} />
+            <ConfidenceBadge text={confidence} />
+            {tickers.map(t => <TickerPill key={t} ticker={t} />)}
+          </div>
+          <span className="text-xs text-zinc-600">#{post.id}</span>
         </div>
-        <span className="text-xs text-zinc-600">#{post.id}</span>
+
+        <p className="text-sm text-zinc-100 leading-relaxed mb-2 whitespace-pre-wrap">{displayText}</p>
+
+        {post.text_cn && (
+          <div className="mt-3 pt-3 border-t border-zinc-700">
+            <div className="text-xs text-emerald-400 mb-1 font-medium">🇭🇰 粵語/繁體中文翻譯</div>
+            <p className="text-sm text-zinc-300 leading-relaxed whitespace-pre-wrap">{post.text_cn}</p>
+          </div>
+        )}
+
+        {post.text.includes('https://') && (
+          <a href={post.link} target="_blank" rel="noopener noreferrer"
+             className="text-xs text-blue-400 hover:text-blue-300 mt-2 inline-block">
+            🔗 查看來源 →
+          </a>
+        )}
       </div>
-
-      <p className="text-sm text-zinc-100 leading-relaxed mb-2 whitespace-pre-wrap">{displayText}</p>
-
-      {post.text.includes('https://') && (
-        <a href={post.link} target="_blank" rel="noopener noreferrer"
-           className="text-xs text-blue-400 hover:text-blue-300 mb-2 inline-block">
-          🔗 查看來源 →
-        </a>
-      )}
-
-      <button onClick={translate}
-        className="text-xs text-zinc-400 hover:text-white mt-1 transition-colors block">
-        {translating ? '翻譯中...' : translated && showTrans ? '🙈 隱藏中文' : '📖 中文翻譯'}
-      </button>
-
-      {showTrans && translated && (
-        <p className="text-sm text-zinc-300 leading-relaxed mt-2 border-t border-zinc-700 pt-2 whitespace-pre-wrap">
-          {translated}
-        </p>
-      )}
     </div>
   );
 }
@@ -326,42 +313,21 @@ export default function TrumpPage() {
           textAlign: 'center',
           color: '#fff',
         }}>
-          <div style={{
-            fontSize: '18px',
-            fontWeight: 'bold',
-            marginBottom: '15px',
-          }}>
+          <div style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '15px' }}>
             🎁 Comparetiger 獨家 富途開戶即賺 $1,800 現金券！
           </div>
-          <div style={{
-            fontSize: '14px',
-            lineHeight: '1.7',
-            marginBottom: '15px',
-            color: '#ddd',
-          }}>
+          <div style={{ fontSize: '14px', lineHeight: '1.7', marginBottom: '15px', color: '#ddd' }}>
             用專屬兌換碼【<span style={{ color: '#f39c12', fontWeight: 'bold' }}>COMPARE</span>】開立富途牛牛戶口，
             除咗享一世免佣，仲送高達 <strong>HK$1,800 現金券</strong>（係真現金券，絕非贈股）！
             達標自動派發，唔使抽獎！
           </div>
-          <div style={{
-            background: 'rgba(255,255,255,0.1)',
-            borderRadius: '8px',
-            padding: '12px',
-            marginBottom: '15px',
-            textAlign: 'left',
-          }}>
+          <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '8px', padding: '12px', marginBottom: '15px', textAlign: 'left' }}>
             <div style={{ fontSize: '13px', color: '#ccc', marginBottom: '8px' }}>📲 簡單領獎 3 步曲：</div>
             <div style={{ fontSize: '13px', color: '#fff' }}>1️⃣ 手機下載並登入「富途牛牛」APP</div>
-            <div style={{ fontSize: '13px', color: '#fff' }}>2️⃣ 撳右下角「我的」→ 「活動中心」→ 「兌換中心」</div>
+            <div style={{ fontSize: '13px', color: '#fff' }}>2️⃣ 撳右下角「我的」→「活動中心」→「兌換中心」</div>
             <div style={{ fontSize: '13px', color: '#fff' }}>3️⃣ 發起開戶前輸入兌換碼【COMPARE】，並成功開通港美股戶口</div>
           </div>
-          <div style={{
-            background: 'rgba(243,156,18,0.2)',
-            border: '1px solid #f39c12',
-            borderRadius: '8px',
-            padding: '12px',
-            textAlign: 'left',
-          }}>
+          <div style={{ background: 'rgba(243,156,18,0.2)', border: '1px solid #f39c12', borderRadius: '8px', padding: '12px', textAlign: 'left' }}>
             <div style={{ fontSize: '14px', color: '#f39c12', fontWeight: 'bold', marginBottom: '8px' }}>
               💰 迎新雙重賞（可疊加，賺盡 $1,800！）：
             </div>
