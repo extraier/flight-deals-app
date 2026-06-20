@@ -82,7 +82,7 @@ function ReturnPill({ pct }: { pct: number | null }) {
   );
 }
 
-function TransactionsTab({ isDark }: { isDark: boolean }) {
+function TransactionsTab({ isDark, limit = 5 }: { isDark: boolean; limit?: number }) {
   const trades = data.quiver_trades || [];
   const filings = data.filings || [];
 
@@ -103,7 +103,7 @@ function TransactionsTab({ isDark }: { isDark: boolean }) {
           <div className="bg-gradient-to-r from-red-700 to-red-600 text-white px-4 py-2 rounded-lg mb-4 font-bold text-sm">
             📊 Trump 持股交易 <span className="font-normal opacity-80 text-xs">QuiverQuant</span>
           </div>
-          <div className="overflow-x-auto mb-6">
+          <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className={`${bgSurface(isDark)} text-${isDark ? 'zinc-300' : 'zinc-700'}`}>
@@ -136,16 +136,21 @@ function TransactionsTab({ isDark }: { isDark: boolean }) {
                       <td className="p-3"><ReturnPill pct={t.return_pct} /></td>
                     </tr>
                   );
-                })}
+                }).slice(0, limit)}
               </tbody>
             </table>
           </div>
+          {trades.length > limit && (
+            <button className={`w-full py-3 text-sm ${isDark ? 'text-zinc-500 hover:text-zinc-300' : 'text-zinc-500 hover:text-zinc-700'} mt-2`}>
+              Show {trades.length - limit} more trades ↓
+            </button>
+          )}
         </>
       )}
 
       {filings.length > 0 && (
         <>
-          <div className="bg-gradient-to-r from-orange-700 to-orange-600 text-white px-4 py-2 rounded-lg mb-4 font-bold text-sm">
+          <div className="bg-gradient-to-r from-orange-700 to-orange-600 text-white px-4 py-2 rounded-lg mb-4 font-bold text-sm mt-6">
             🏛️ SEC 持倉申報
           </div>
           <div className="overflow-x-auto">
@@ -254,11 +259,22 @@ function PostCard({ post, isDark }: { post: Post; isDark: boolean }) {
 }
 
 function TruthSocialTab({ isDark }: { isDark: boolean }) {
+  const [showAll, setShowAll] = useState(false);
+  const posts = data.posts || [];
+  const visible = showAll ? posts : posts.slice(0, 5);
   return (
     <div className="space-y-3">
-      {(data.posts || []).map((post: Post) => (
+      {visible.map((post: Post) => (
         <PostCard key={post.id} post={post} isDark={isDark} />
       ))}
+      {!showAll && posts.length > 5 && (
+        <button
+          onClick={() => setShowAll(true)}
+          className={`w-full py-3 text-sm ${isDark ? 'text-zinc-500 hover:text-zinc-300' : 'text-zinc-500 hover:text-zinc-700'}`}
+        >
+          Show {posts.length - 5} more posts ↓
+        </button>
+      )}
     </div>
   );
 }
@@ -307,50 +323,35 @@ export default function TrumpPage() {
         </div>
       </div>
 
-      {/* Content */}
-      <div className={`max-w-3xl mx-auto px-4 py-6`}>
-        {tab === 'trades' ? <TransactionsTab isDark={isDark} /> : <TruthSocialTab isDark={isDark} />}
-      </div>
-
-      {/* Futu Ad */}
-      <div className="max-w-3xl mx-auto px-4 pb-6">
+      {/* Futu Ad — shown at top for visibility */}
+      <div className="max-w-3xl mx-auto px-4 pt-4 pb-2">
         <div style={{
           background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
           borderRadius: '12px',
-          padding: '20px',
+          padding: '16px',
           textAlign: 'center',
           color: '#fff',
         }}>
           <img
             src={futuAd.src}
             alt="富途牛牛優惠"
-            style={{ maxWidth: '100%', borderRadius: '8px', marginBottom: '15px' }}
+            style={{ maxWidth: '100%', borderRadius: '8px', marginBottom: '12px', maxHeight: '180px', objectFit: 'cover' }}
           />
-          <div style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '15px' }}>
+          <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '10px' }}>
             🎁 Comparetiger 獨家 富途開戶即賺 $1,800 現金券！
           </div>
-          <div style={{ fontSize: '14px', lineHeight: '1.7', marginBottom: '15px', color: '#ddd' }}>
-            用專屬兌換碼【<span style={{ color: '#f39c12', fontWeight: 'bold' }}>COMPARE</span>】開立富途牛牛戶口，
-            除咗享一世免佣，仲送高達 <strong>HK$1,800 現金券</strong>（係真現金券，絕非贈股）！
-            達標自動派發，唔使抽獎！
+          <div style={{ fontSize: '13px', color: '#ddd', marginBottom: '8px' }}>
+            用兌換碼【<span style={{ color: '#f39c12', fontWeight: 'bold' }}>COMPARE</span>】開戶，享一世免佣 + 高達 HK$1,800 現金券
           </div>
-          <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '8px', padding: '12px', marginBottom: '15px', textAlign: 'left' }}>
-            <div style={{ fontSize: '13px', color: '#ccc', marginBottom: '8px' }}>📲 簡單領獎 3 步曲：</div>
-            <div style={{ fontSize: '13px', color: '#fff' }}>1️⃣ 手機下載並登入「富途牛牛」APP</div>
-            <div style={{ fontSize: '13px', color: '#fff' }}>2️⃣ 撳右下角「我的」→「活動中心」→「兌換中心」</div>
-            <div style={{ fontSize: '13px', color: '#fff' }}>3️⃣ 發起開戶前輸入兌換碼【COMPARE】，並成功開通港美股戶口</div>
-          </div>
-          <div style={{ background: 'rgba(243,156,18,0.2)', border: '1px solid #f39c12', borderRadius: '8px', padding: '12px', textAlign: 'left' }}>
-            <div style={{ fontSize: '14px', color: '#f39c12', fontWeight: 'bold', marginBottom: '8px' }}>
-              💰 迎新雙重賞（可疊加，賺盡 $1,800！）：
-            </div>
-            <div style={{ fontSize: '13px', color: '#fff' }}>賞 1：存入資金達 HK$10,000 並放夠 60 日 👉 送 HK$800 獎賞</div>
-            <div style={{ fontSize: '13px', color: '#fff' }}>賞 2：存入資金達 HK$80,000 並放夠 60 日 👉 再送 HK$1,000 獎賞</div>
-          </div>
-          <div style={{ fontSize: '12px', color: '#999', marginTop: '12px' }}>
-            💡 提提你：喺 60 日期間，戶口入面嘅資金可以任你自由買賣，冇交易次數限制，邊投資邊賺迎新回報！
+          <div style={{ fontSize: '12px', color: '#999' }}>
+            📲 步驟：下載富途牛牛 APP → 活動中心 → 兌換中心 → 輸入【COMPARE】
           </div>
         </div>
+      </div>
+
+      {/* Content */}
+      <div className={`max-w-3xl mx-auto px-4 py-6`}>
+        {tab === 'trades' ? <TransactionsTab isDark={isDark} /> : <TruthSocialTab isDark={isDark} />}
       </div>
 
       {/* Footer */}
