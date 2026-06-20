@@ -191,18 +191,9 @@ export default function WorldCupPage() {
               <tr className="bg-secondary border-b border-border">
                 <th className="py-3 px-4 text-left text-muted-foreground font-medium">賽事</th>
                 <th className="py-3 px-3 text-center text-muted-foreground font-medium">時間</th>
-                <th className="py-3 px-3 text-center text-muted-foreground font-medium" colSpan={3}>馬會 (獨贏)</th>
-                <th className="py-3 px-3 text-center text-muted-foreground font-medium" colSpan={3}>Polymarket</th>
-              </tr>
-              <tr className="bg-secondary border-b border-border text-xs text-muted-foreground">
-                <th></th>
-                <th></th>
-                <th className="py-1 px-3 text-center">主勝</th>
-                <th className="py-1 px-3 text-center">和局</th>
-                <th className="py-1 px-3 text-center">客勝</th>
-                <th className="py-1 px-3 text-center">主隊%</th>
-                <th className="py-1 px-3 text-center">和%</th>
-                <th className="py-1 px-3 text-center">客隊%</th>
+                <th className="py-3 px-3 text-center text-muted-foreground font-medium">主勝</th>
+                <th className="py-3 px-3 text-center text-muted-foreground font-medium">和局</th>
+                <th className="py-3 px-3 text-center text-muted-foreground font-medium">客勝</th>
               </tr>
             </thead>
             <tbody>
@@ -215,53 +206,67 @@ export default function WorldCupPage() {
                 const gameHour = gt.includes('T') ? gt.slice(11, 16) : gt.slice(11, 16);
 
                 return (
-                  <tr key={i} className="border-b border-border/50 hover:bg-secondary/50 transition-colors">
-                    {/* Match */}
-                    <td className="py-3 px-4">
-                      <div className="font-medium">{TEAM_CN[match.homeTeam] || match.homeTeam}</div>
-                      <div className="text-xs text-muted-foreground">vs</div>
-                      <div className="font-medium">{TEAM_CN[match.awayTeam] || match.awayTeam}</div>
-                    </td>
-                    {/* Game time */}
-                    <td className="py-3 px-3 text-center text-xs text-muted-foreground whitespace-nowrap">
-                      {gameDate}<br/>{gameHour}
-                    </td>
-                    {/* HKJC odds */}
-                    <td className="py-3 px-3 text-center">
-                      <div className="font-bold text-emerald-400">{fmt(h.home)}</div>
-                      {chg && (
-                        <div className={`text-xs ${changeColor(chg.hkjc_home, true)}`}>
-                          {arrow(chg.hkjc_home)} {Math.abs(chg.hkjc_home ?? 0).toFixed(1)}%
+                  <>
+                    {/* HKJC row */}
+                    <tr key={`${i}-hkjc`} className="border-b border-border/50 hover:bg-secondary/50 transition-colors">
+                      {/* Match + time */}
+                      <td className="py-2 px-4">
+                        <div className="font-medium text-sm">{TEAM_CN[match.homeTeam] || match.homeTeam}</div>
+                        <div className="text-xs text-muted-foreground">vs</div>
+                        <div className="font-medium text-sm">{TEAM_CN[match.awayTeam] || match.awayTeam}</div>
+                      </td>
+                      <td className="py-2 px-3 text-center text-xs text-muted-foreground whitespace-nowrap">
+                        {gameDate}<br/>{gameHour}
+                      </td>
+                      {/* HKJC odds */}
+                      <td className="py-2 px-3 text-center">
+                        <div className="flex flex-col items-center">
+                          <span className="font-bold text-emerald-400 text-sm">{fmt(h.home)}</span>
+                          {chg && (
+                            <span className={`text-xs ${changeColor(chg.hkjc_home, true)}`}>
+                              {arrow(chg.hkjc_home)}{Math.abs(chg.hkjc_home ?? 0).toFixed(1)}%
+                            </span>
+                          )}
                         </div>
-                      )}
-                    </td>
-                    <td className="py-3 px-3 text-center">
-                      <div className="font-bold">{fmt(h.draw)}</div>
-                      {chg && (
-                        <div className={`text-xs ${changeColor(chg.hkjc_draw, false)}`}>
-                          {arrow(chg.hkjc_draw)} {Math.abs(chg.hkjc_draw ?? 0).toFixed(1)}%
+                      </td>
+                      <td className="py-2 px-3 text-center">
+                        <div className="flex flex-col items-center">
+                          <span className="font-bold text-sm">{fmt(h.draw)}</span>
+                          {chg && (
+                            <span className={`text-xs ${changeColor(chg.hkjc_draw, false)}`}>
+                              {arrow(chg.hkjc_draw)}{Math.abs(chg.hkjc_draw ?? 0).toFixed(1)}%
+                            </span>
+                          )}
                         </div>
-                      )}
-                    </td>
-                    <td className="py-3 px-3 text-center">
-                      <div className="font-bold text-red-400">{fmt(h.away)}</div>
-                      {chg && (
-                        <div className={`text-xs ${changeColor(chg.hkjc_away, true)}`}>
-                          {arrow(chg.hkjc_away)} {Math.abs(chg.hkjc_away ?? 0).toFixed(1)}%
+                      </td>
+                      <td className="py-2 px-3 text-center">
+                        <div className="flex flex-col items-center">
+                          <span className="font-bold text-red-400 text-sm">{fmt(h.away)}</span>
+                          {chg && (
+                            <span className={`text-xs ${changeColor(chg.hkjc_away, true)}`}>
+                              {arrow(chg.hkjc_away)}{Math.abs(chg.hkjc_away ?? 0).toFixed(1)}%
+                            </span>
+                          )}
                         </div>
-                      )}
-                    </td>
-                    {/* Polymarket probabilities */}
-                    <td className="py-3 px-3 text-center">
-                      <div className="font-medium text-sky-400">{fmtPct(p.home)}</div>
-                    </td>
-                    <td className="py-3 px-3 text-center">
-                      <div className="font-medium">{fmtPct(p.draw)}</div>
-                    </td>
-                    <td className="py-3 px-3 text-center">
-                      <div className="font-medium text-orange-400">{fmtPct(p.away)}</div>
-                    </td>
-                  </tr>
+                      </td>
+                    </tr>
+                    {/* Polymarket row */}
+                    <tr key={`${i}-poly`} className="border-b border-border/30 bg-secondary/20">
+                      <td className="py-1.5 px-4">
+                        <span className="text-xs text-muted-foreground ml-2">Polymarket</span>
+                      </td>
+                      <td className="py-1.5 px-3"></td>
+                      <td className="py-1.5 px-3 text-center">
+                        <span className="text-sky-400 text-xs">{fmtPct(p.home)}</span>
+                      </td>
+                      <td className="py-1.5 px-3 text-center">
+                        <span className="text-xs">{fmtPct(p.draw)}</span>
+                      </td>
+                      <td className="py-1.5 px-3 text-center">
+                        <span className="text-orange-400 text-xs">{fmtPct(p.away)}</span>
+                      </td>
+                    </tr>
+                  </>
                 );
               })}
             </tbody>
