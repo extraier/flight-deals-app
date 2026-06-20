@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-20T08:22:22.814752",
+  "generated": "2026-06-20T08:27:26.910042",
   "results": [
     {
       "route": "HKG→MNL",
@@ -1560,7 +1560,7 @@
         "carryOn": false,
         "cheapDays": 0
       },
-      "typicalPrice": 2268,
+      "typicalPrice": 2338,
       "cheapestDates": [
         {
           "day": 29,
@@ -1574,6 +1574,21 @@
             "dep_time": "10:50",
             "arr_time": "15:50",
             "ret_date": "2026-09-05",
+            "ret_flight": "691"
+          }
+        },
+        {
+          "day": 30,
+          "month": 8,
+          "year": 2026,
+          "price": 2554.0,
+          "stay": 7,
+          "flight": {
+            "number": "690",
+            "airline": "UO",
+            "dep_time": "10:50",
+            "arr_time": "15:50",
+            "ret_date": "2026-09-06",
             "ret_flight": "691"
           }
         },
@@ -1619,21 +1634,6 @@
             "dep_time": "10:50",
             "arr_time": "15:50",
             "ret_date": "2026-09-09",
-            "ret_flight": "691"
-          }
-        },
-        {
-          "day": 3,
-          "month": 9,
-          "year": 2026,
-          "price": 2201.0,
-          "stay": 7,
-          "flight": {
-            "number": "670",
-            "airline": "UO",
-            "dep_time": "14:50",
-            "arr_time": "19:50",
-            "ret_date": "2026-09-10",
             "ret_flight": "691"
           }
         }
