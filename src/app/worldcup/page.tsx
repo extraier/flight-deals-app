@@ -38,6 +38,57 @@ function fmtPct(n: number | null): string {
   return (n * 100).toFixed(1) + '%';
 }
 
+const TEAM_CN: Record<string, string> = {
+  'Algeria': '阿爾及利亞',
+  'Argentina': '阿根廷',
+  'Australia': '澳洲',
+  'Austria': '奧地利',
+  'Belgium': '比利時',
+  'Bosnia and Herzegovina': '波斯尼亞',
+  'Brazil': '巴西',
+  'Cabo Verde': '佛得角',
+  'Canada': '加拿大',
+  'Colombia': '哥倫比亞',
+  'Croatia': '克羅地亞',
+  'Curaçao': '古拉索',
+  'Czechia': '捷克',
+  "Côte d'Ivoire": '科特迪瓦',
+  'DR Congo': '剛果民主共和國',
+  'Ecuador': '厄瓜多爾',
+  'Egypt': '埃及',
+  'England': '英格蘭',
+  'France': '法國',
+  'Germany': '德國',
+  'Ghana': '加納',
+  'Haiti': '海地',
+  'IR Iran': '伊朗',
+  'Iraq': '伊拉克',
+  'Japan': '日本',
+  'Jordan': '約旦',
+  'Korea Republic': '南韓',
+  'Mexico': '墨西哥',
+  'Morocco': '摩洛哥',
+  'Netherlands': '荷蘭',
+  'New Zealand': '新西蘭',
+  'Norway': '挪威',
+  'Panama': '巴拿馬',
+  'Paraguay': '巴拉圭',
+  'Portugal': '葡萄牙',
+  'Qatar': '卡塔爾',
+  'Saudi Arabia': '沙特阿拉伯',
+  'Scotland': '蘇格蘭',
+  'Senegal': '塞內加爾',
+  'South Africa': '南非',
+  'Spain': '西班牙',
+  'Sweden': '瑞典',
+  'Switzerland': '瑞士',
+  'Tunisia': '突尼斯',
+  'Türkiye': '土耳其',
+  'United States': '美國',
+  'Uruguay': '烏拉圭',
+  'Uzbekistan': '烏茲別克斯坦',
+};
+
 function arrow(v: number | null): string {
   if (v === null || v === 0) return '→';
   return v > 0 ? '↑' : '↓';
@@ -167,9 +218,9 @@ export default function WorldCupPage() {
                   <tr key={i} className="border-b border-border/50 hover:bg-secondary/50 transition-colors">
                     {/* Match */}
                     <td className="py-3 px-4">
-                      <div className="font-medium">{match.homeTeam}</div>
+                      <div className="font-medium">{TEAM_CN[match.homeTeam] || match.homeTeam}</div>
                       <div className="text-xs text-muted-foreground">vs</div>
-                      <div className="font-medium">{match.awayTeam}</div>
+                      <div className="font-medium">{TEAM_CN[match.awayTeam] || match.awayTeam}</div>
                     </td>
                     {/* Game time */}
                     <td className="py-3 px-3 text-center text-xs text-muted-foreground whitespace-nowrap">
