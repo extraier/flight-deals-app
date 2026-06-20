@@ -1,0 +1,1250 @@
+{
+  "matches": [
+    {
+      "match": "Netherlands vs Sweden",
+      "homeTeam": "Netherlands",
+      "awayTeam": "Sweden",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.6,
+        "draw": 3.6,
+        "away": 4.4
+      },
+      "poly": {
+        "home": 0.575,
+        "draw": 0.235,
+        "away": 0.195
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": -1.23,
+        "hkjc_draw": 1.41,
+        "hkjc_away": 2.33
+      }
+    },
+    {
+      "match": "Germany vs Côte d'Ivoire",
+      "homeTeam": "Germany",
+      "awayTeam": "Côte d'Ivoire",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.36,
+        "draw": 4.25,
+        "away": 6.2
+      },
+      "poly": {
+        "home": 0.645,
+        "draw": 0.205,
+        "away": 0.155
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 1.19,
+        "hkjc_away": -3.13
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 2.41,
+        "hkjc_away": -4.62
+      }
+    },
+    {
+      "match": "Ecuador vs Curaçao",
+      "homeTeam": "Ecuador",
+      "awayTeam": "Curaçao",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.08,
+        "draw": 7.0,
+        "away": 18.0
+      },
+      "poly": {
+        "home": 0.875,
+        "draw": 0.095,
+        "away": 0.0405
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 2.94,
+        "hkjc_away": -10.0
+      }
+    },
+    {
+      "match": "Tunisia vs Japan",
+      "homeTeam": "Tunisia",
+      "awayTeam": "Japan",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 6.1,
+        "draw": 3.9,
+        "away": 1.41
+      },
+      "poly": {
+        "home": 0.145,
+        "draw": 0.235,
+        "away": 0.625
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": -4.69,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 1.44
+      },
+      "chg_24h": {
+        "hkjc_home": -3.17,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.71
+      }
+    },
+    {
+      "match": "Spain vs Saudi Arabia",
+      "homeTeam": "Spain",
+      "awayTeam": "Saudi Arabia",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.06,
+        "draw": 7.25,
+        "away": 21.0
+      },
+      "poly": {
+        "home": 0.885,
+        "draw": 0.085,
+        "away": 0.0375
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Belgium vs IR Iran",
+      "homeTeam": "Belgium",
+      "awayTeam": "IR Iran",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.34,
+        "draw": 4.15,
+        "away": 7.0
+      },
+      "poly": {
+        "home": 0.675,
+        "draw": 0.205,
+        "away": 0.115
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": -1.47,
+        "hkjc_draw": 1.22,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Uruguay vs Cabo Verde",
+      "homeTeam": "Uruguay",
+      "awayTeam": "Cabo Verde",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.34,
+        "draw": 3.95,
+        "away": 7.5
+      },
+      "poly": {
+        "home": 0.675,
+        "draw": 0.225,
+        "away": 0.105
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": -9.09
+      }
+    },
+    {
+      "match": "New Zealand vs Egypt",
+      "homeTeam": "New Zealand",
+      "awayTeam": "Egypt",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 5.6,
+        "draw": 3.6,
+        "away": 1.48
+      },
+      "poly": {
+        "home": 0.165,
+        "draw": 0.235,
+        "away": 0.605
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": -1.75,
+        "hkjc_draw": 2.86,
+        "hkjc_away": -2.63
+      }
+    },
+    {
+      "match": "Argentina vs Austria",
+      "homeTeam": "Argentina",
+      "awayTeam": "Austria",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.5,
+        "draw": 3.6,
+        "away": 5.3
+      },
+      "poly": {
+        "home": 0.625,
+        "draw": 0.235,
+        "away": 0.145
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": -1.37,
+        "hkjc_away": -5.36
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": -1.37,
+        "hkjc_away": -5.36
+      }
+    },
+    {
+      "match": "France vs Iraq",
+      "homeTeam": "France",
+      "awayTeam": "Iraq",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.04,
+        "draw": 7.75,
+        "away": 24.0
+      },
+      "poly": {
+        "home": 0.9,
+        "draw": 0.075,
+        "away": 0.0265
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": -11.43,
+        "hkjc_away": -14.29
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": -11.43,
+        "hkjc_away": -14.29
+      }
+    },
+    {
+      "match": "Norway vs Senegal",
+      "homeTeam": "Norway",
+      "awayTeam": "Senegal",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 2.01,
+        "draw": 3.15,
+        "away": 3.15
+      },
+      "poly": {
+        "home": 0.425,
+        "draw": 0.275,
+        "away": 0.305
+      },
+      "chg_1h": {
+        "hkjc_home": -1.47,
+        "hkjc_draw": -1.56,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": -1.47,
+        "hkjc_draw": -1.56,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": -1.47,
+        "hkjc_draw": -1.56,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Jordan vs Algeria",
+      "homeTeam": "Jordan",
+      "awayTeam": "Algeria",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 6.2,
+        "draw": 4.05,
+        "away": 1.4
+      },
+      "poly": {
+        "home": 0.155,
+        "draw": 0.235,
+        "away": 0.615
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Portugal vs Uzbekistan",
+      "homeTeam": "Portugal",
+      "awayTeam": "Uzbekistan",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.09,
+        "draw": 6.8,
+        "away": 18.0
+      },
+      "poly": {
+        "home": 0.815,
+        "draw": 0.125,
+        "away": 0.055
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "England vs Ghana",
+      "homeTeam": "England",
+      "awayTeam": "Ghana",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.09,
+        "draw": 6.8,
+        "away": 17.0
+      },
+      "poly": {
+        "home": 0.805,
+        "draw": 0.145,
+        "away": 0.065
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Panama vs Croatia",
+      "homeTeam": "Panama",
+      "awayTeam": "Croatia",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 6.6,
+        "draw": 4.05,
+        "away": 1.38
+      },
+      "poly": {
+        "home": 0.135,
+        "draw": 0.235,
+        "away": 0.635
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Colombia vs DR Congo",
+      "homeTeam": "Colombia",
+      "awayTeam": "DR Congo",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.36,
+        "draw": 3.85,
+        "away": 8.0
+      },
+      "poly": {
+        "home": 0.645,
+        "draw": 0.225,
+        "away": 0.125
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Switzerland vs Canada",
+      "homeTeam": "Switzerland",
+      "awayTeam": "Canada",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 3.0,
+        "draw": 3.0,
+        "away": 2.2
+      },
+      "poly": {
+        "home": 0.395,
+        "draw": 0.315,
+        "away": 0.295
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Bosnia and Herzegovina vs Qatar",
+      "homeTeam": "Bosnia and Herzegovina",
+      "awayTeam": "Qatar",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.39,
+        "draw": 4.4,
+        "away": 5.7
+      },
+      "poly": {
+        "home": 0.675,
+        "draw": 0.195,
+        "away": 0.135
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Morocco vs Haiti",
+      "homeTeam": "Morocco",
+      "awayTeam": "Haiti",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.11,
+        "draw": 6.6,
+        "away": 14.0
+      },
+      "poly": {
+        "home": 0.805,
+        "draw": 0.135,
+        "away": 0.065
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": -4.31,
+        "hkjc_draw": 15.79,
+        "hkjc_away": 21.74
+      },
+      "chg_24h": {
+        "hkjc_home": -4.31,
+        "hkjc_draw": 15.79,
+        "hkjc_away": 21.74
+      }
+    },
+    {
+      "match": "Scotland vs Brazil",
+      "homeTeam": "Scotland",
+      "awayTeam": "Brazil",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 10.0,
+        "draw": 5.0,
+        "away": 1.22
+      },
+      "poly": {
+        "home": 0.125,
+        "draw": 0.175,
+        "away": 0.705
+      },
+      "chg_1h": {
+        "hkjc_home": 8.11,
+        "hkjc_draw": 3.09,
+        "hkjc_away": -1.61
+      },
+      "chg_4h": {
+        "hkjc_home": 8.11,
+        "hkjc_draw": 3.09,
+        "hkjc_away": -1.61
+      },
+      "chg_24h": {
+        "hkjc_home": 8.11,
+        "hkjc_draw": 3.09,
+        "hkjc_away": -1.61
+      }
+    },
+    {
+      "match": "Czechia vs Mexico",
+      "homeTeam": "Czechia",
+      "awayTeam": "Mexico",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.91,
+        "draw": 3.35,
+        "away": 3.35
+      },
+      "poly": {
+        "home": 0.285,
+        "draw": 0.235,
+        "away": 0.485
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "South Africa vs Korea Republic",
+      "homeTeam": "South Africa",
+      "awayTeam": "Korea Republic",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 5.0,
+        "draw": 3.5,
+        "away": 1.57
+      },
+      "poly": {
+        "home": 0.155,
+        "draw": 0.245,
+        "away": 0.605
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Ecuador vs Germany",
+      "homeTeam": "Ecuador",
+      "awayTeam": "Germany",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 5.6,
+        "draw": 3.65,
+        "away": 1.5
+      },
+      "poly": {
+        "home": 0.185,
+        "draw": 0.235,
+        "away": 0.575
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Curaçao vs Côte d'Ivoire",
+      "homeTeam": "Curaçao",
+      "awayTeam": "Côte d'Ivoire",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 16.0,
+        "draw": 6.8,
+        "away": 1.09
+      },
+      "poly": {
+        "home": 0.045,
+        "draw": 0.105,
+        "away": 0.855
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Japan vs Sweden",
+      "homeTeam": "Japan",
+      "awayTeam": "Sweden",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 2.15,
+        "draw": 3.1,
+        "away": 3.0
+      },
+      "poly": {
+        "home": 0.435,
+        "draw": 0.275,
+        "away": 0.285
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Tunisia vs Netherlands",
+      "homeTeam": "Tunisia",
+      "awayTeam": "Netherlands",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 10.5,
+        "draw": 5.3,
+        "away": 1.19
+      },
+      "poly": {
+        "home": 0.095,
+        "draw": 0.165,
+        "away": 0.745
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Paraguay vs Australia",
+      "homeTeam": "Paraguay",
+      "awayTeam": "Australia",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 2.12,
+        "draw": 3.05,
+        "away": 3.1
+      },
+      "poly": {
+        "home": 0.385,
+        "draw": 0.375,
+        "away": 0.235
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Türkiye vs United States",
+      "homeTeam": "Türkiye",
+      "awayTeam": "United States",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 2.29,
+        "draw": 3.2,
+        "away": 2.7
+      },
+      "poly": {
+        "home": 0.285,
+        "draw": 0.235,
+        "away": 0.49
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Norway vs France",
+      "homeTeam": "Norway",
+      "awayTeam": "France",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 4.3,
+        "draw": 3.6,
+        "away": 1.64
+      },
+      "poly": {
+        "home": 0.215,
+        "draw": 0.235,
+        "away": 0.545
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Senegal vs Iraq",
+      "homeTeam": "Senegal",
+      "awayTeam": "Iraq",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.22,
+        "draw": 5.1,
+        "away": 9.5
+      },
+      "poly": {
+        "home": 0.745,
+        "draw": 0.165,
+        "away": 0.085
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Cabo Verde vs Saudi Arabia",
+      "homeTeam": "Cabo Verde",
+      "awayTeam": "Saudi Arabia",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 2.46,
+        "draw": 3.15,
+        "away": 2.53
+      },
+      "poly": {
+        "home": 0.335,
+        "draw": 0.265,
+        "away": 0.405
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Uruguay vs Spain",
+      "homeTeam": "Uruguay",
+      "awayTeam": "Spain",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 6.5,
+        "draw": 3.9,
+        "away": 1.41
+      },
+      "poly": {
+        "home": 0.155,
+        "draw": 0.225,
+        "away": 0.635
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Egypt vs IR Iran",
+      "homeTeam": "Egypt",
+      "awayTeam": "IR Iran",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 2.15,
+        "draw": 3.1,
+        "away": 3.0
+      },
+      "poly": {
+        "home": 0.465,
+        "draw": 0.295,
+        "away": 0.245
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "New Zealand vs Belgium",
+      "homeTeam": "New Zealand",
+      "awayTeam": "Belgium",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 11.5,
+        "draw": 5.7,
+        "away": 1.16
+      },
+      "poly": {
+        "home": 0.075,
+        "draw": 0.145,
+        "away": 0.785
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Panama vs England",
+      "homeTeam": "Panama",
+      "awayTeam": "England",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 15.0,
+        "draw": 6.5,
+        "away": 1.11
+      },
+      "poly": {
+        "home": 0.085,
+        "draw": 0.125,
+        "away": 0.795
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Croatia vs Ghana",
+      "homeTeam": "Croatia",
+      "awayTeam": "Ghana",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 1.5,
+        "draw": 3.5,
+        "away": 5.9
+      },
+      "poly": {
+        "home": 0.595,
+        "draw": 0.245,
+        "away": 0.155
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Colombia vs Portugal",
+      "homeTeam": "Colombia",
+      "awayTeam": "Portugal",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 3.75,
+        "draw": 3.3,
+        "away": 1.82
+      },
+      "poly": {
+        "home": 0.275,
+        "draw": 0.255,
+        "away": 0.475
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "DR Congo vs Uzbekistan",
+      "homeTeam": "DR Congo",
+      "awayTeam": "Uzbekistan",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 2.09,
+        "draw": 3.35,
+        "away": 2.92
+      },
+      "poly": {
+        "home": 0.465,
+        "draw": 0.255,
+        "away": 0.285
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Jordan vs Argentina",
+      "homeTeam": "Jordan",
+      "awayTeam": "Argentina",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 16.0,
+        "draw": 7.0,
+        "away": 1.09
+      },
+      "poly": {
+        "home": 0.062,
+        "draw": 0.125,
+        "away": 0.815
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    },
+    {
+      "match": "Algeria vs Austria",
+      "homeTeam": "Algeria",
+      "awayTeam": "Austria",
+      "gameTime": "2026-06-20 13:15",
+      "hkjc": {
+        "home": 3.2,
+        "draw": 2.96,
+        "away": 2.13
+      },
+      "poly": {
+        "home": 0.305,
+        "draw": 0.315,
+        "away": 0.375
+      },
+      "chg_1h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_4h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      },
+      "chg_24h": {
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0
+      }
+    }
+  ],
+  "generated": "2026-06-20T13:22:15.885313",
+  "latest_datetime": "2026-06-20 13:15:46",
+  "latest_ts": 1781932546.59706,
+  "ref_1h": "2026-06-20 12:15:46",
+  "ref_4h": "2026-06-20 09:15:46",
+  "ref_24h": "2026-06-19 13:15:46"
+}
