@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-20T08:07:10.162674",
+  "generated": "2026-06-20T08:12:14.421851",
   "results": [
     {
       "route": "HKG→MNL",
@@ -14,7 +14,7 @@
         "carryOn": false,
         "cheapDays": 0
       },
-      "typicalPrice": 1220,
+      "typicalPrice": 1224,
       "cheapestDates": [
         {
           "day": 4,
@@ -77,18 +77,18 @@
           }
         },
         {
-          "day": 23,
+          "day": 3,
           "month": 9,
           "year": 2026,
-          "price": 1275.0,
+          "price": 1294.0,
           "stay": 7,
           "flight": {
             "number": "534",
             "airline": "UO",
             "dep_time": "17:50",
             "arr_time": "20:10",
-            "ret_date": "2026-09-30",
-            "ret_flight": "114"
+            "ret_date": "2026-09-10",
+            "ret_flight": "535"
           }
         }
       ],
