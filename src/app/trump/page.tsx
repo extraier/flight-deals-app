@@ -267,7 +267,7 @@ export default function TrumpPage() {
       {/* Header */}
       <div className="bg-gradient-to-r from-zinc-900 to-zinc-800 border-b border-zinc-700 px-6 py-8">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-bold tracking-tight mb-1">🦅 Trump Truth Scanner</h1>
+          <h1 className="text-3xl font-bold tracking-tight mb-1">Trump Trump Scanner</h1>
           <p className="text-zinc-400 text-sm">
             更新時間 {updated} · 每30分鐘自動更新
           </p>
@@ -295,7 +295,7 @@ export default function TrumpPage() {
                 : 'bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700'
             }`}
           >
-            📱 真相發文
+            📱 Truth Social
           </button>
         </div>
       </div>
