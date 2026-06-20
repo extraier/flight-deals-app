@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-20T07:21:32.486182",
+  "generated": "2026-06-20T07:26:36.719044",
   "results": [
     {
       "route": "HKG→MNL",
@@ -2937,91 +2937,6 @@
       "totalDestinations": 35
     },
     {
-      "route": "HKG→LHR",
-      "destination": {
-        "name": "倫敦",
-        "code": "LHR",
-        "region": "歐洲"
-      },
-      "price": 4964.0,
-      "currency": "HKD",
-      "badge": {
-        "carryOn": false,
-        "cheapDays": 0
-      },
-      "typicalPrice": 5128,
-      "cheapestDates": [
-        {
-          "day": 28,
-          "month": 10,
-          "year": 2026,
-          "price": 4964.0,
-          "stay": 7,
-          "flight": {
-            "number": "139",
-            "airline": "LX",
-            "dep_time": "23:30",
-            "arr_time": "06:10",
-            "ret_date": "2026-11-04",
-            "ret_flight": "921"
-          }
-        },
-        {
-          "day": 3,
-          "month": 11,
-          "year": 2026,
-          "price": 4555.0,
-          "stay": 7,
-          "flight": {
-            "number": "139",
-            "airline": "LX",
-            "dep_time": "23:30",
-            "arr_time": "06:10",
-            "ret_date": "2026-11-10",
-            "ret_flight": "317"
-          }
-        },
-        {
-          "day": 9,
-          "month": 11,
-          "year": 2026,
-          "price": 4555.0,
-          "stay": 7,
-          "flight": {
-            "number": "139",
-            "airline": "LX",
-            "dep_time": "23:30",
-            "arr_time": "06:10",
-            "ret_date": "2026-11-16",
-            "ret_flight": "317"
-          }
-        },
-        {
-          "day": 10,
-          "month": 11,
-          "year": 2026,
-          "price": 4555.0,
-          "stay": 7,
-          "flight": {
-            "number": "139",
-            "airline": "LX",
-            "dep_time": "23:30",
-            "arr_time": "06:10",
-            "ret_date": "2026-11-17",
-            "ret_flight": "317"
-          }
-        },
-        {
-          "day": 20,
-          "month": 6,
-          "year": 2026,
-          "price": 7011.0,
-          "stay": 7
-        }
-      ],
-      "totalDestinations": 36
-    },
-    {
       "route": "HKG→MAD",
       "destination": {
         "name": "馬德里",
@@ -3094,6 +3009,99 @@
           "year": 2026,
           "price": 5815.0,
           "stay": 7
+        }
+      ],
+      "totalDestinations": 36
+    },
+    {
+      "route": "HKG→LHR",
+      "destination": {
+        "name": "倫敦",
+        "code": "LHR",
+        "region": "歐洲"
+      },
+      "price": 5141.0,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 0
+      },
+      "typicalPrice": 4754,
+      "cheapestDates": [
+        {
+          "day": 21,
+          "month": 10,
+          "year": 2026,
+          "price": 5141.0,
+          "stay": 7,
+          "flight": {
+            "number": "139",
+            "airline": "LX",
+            "dep_time": "23:05",
+            "arr_time": "06:10",
+            "ret_date": "2026-10-28",
+            "ret_flight": "327"
+          }
+        },
+        {
+          "day": 28,
+          "month": 10,
+          "year": 2026,
+          "price": 4964.0,
+          "stay": 7,
+          "flight": {
+            "number": "139",
+            "airline": "LX",
+            "dep_time": "23:30",
+            "arr_time": "06:10",
+            "ret_date": "2026-11-04",
+            "ret_flight": "921"
+          }
+        },
+        {
+          "day": 3,
+          "month": 11,
+          "year": 2026,
+          "price": 4555.0,
+          "stay": 7,
+          "flight": {
+            "number": "139",
+            "airline": "LX",
+            "dep_time": "23:30",
+            "arr_time": "06:10",
+            "ret_date": "2026-11-10",
+            "ret_flight": "317"
+          }
+        },
+        {
+          "day": 9,
+          "month": 11,
+          "year": 2026,
+          "price": 4555.0,
+          "stay": 7,
+          "flight": {
+            "number": "139",
+            "airline": "LX",
+            "dep_time": "23:30",
+            "arr_time": "06:10",
+            "ret_date": "2026-11-16",
+            "ret_flight": "317"
+          }
+        },
+        {
+          "day": 10,
+          "month": 11,
+          "year": 2026,
+          "price": 4555.0,
+          "stay": 7,
+          "flight": {
+            "number": "139",
+            "airline": "LX",
+            "dep_time": "23:30",
+            "arr_time": "06:10",
+            "ret_date": "2026-11-17",
+            "ret_flight": "317"
+          }
         }
       ],
       "totalDestinations": 37
