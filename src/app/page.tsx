@@ -5,10 +5,12 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import allDatesData from '@/data/all_dates.json';
+import allDatesHkg from '@/data/all_dates.json';
+import allDatesSzx from '@/data/all_dates_szx.json';
 
 type SortOption = 'price' | 'discount';
 type FilterMode = 'region' | 'country';
+type Departure = 'HKG' | 'SZX';
 
 const regionColors: Record<string, string> = {
   '東南亞': 'bg-amber-500/10 text-amber-600 border-amber-500/30',
@@ -26,6 +28,11 @@ const regionColors: Record<string, string> = {
 
 const regions = ['全部', '東亞', '東南亞', '中國', '大洋洲', '北美洲', '歐洲', '南亞', '中東', '非洲'];
 
+const DEPARTURE_LABELS: Record<Departure, { label: string; subtitle: string }> = {
+  HKG: { label: '香港國際機場', subtitle: '香港國際機場 ✈️ 最低機票' },
+  SZX: { label: '深圳寶安機場', subtitle: '深圳寶安機場 ✈️ 最低機票' },
+};
+
 interface Deal {
   route: string;
   destination: { name: string; code: string; region: string };
@@ -37,55 +44,43 @@ interface Deal {
   totalDestinations: number;
 }
 
-// Country grouping - map city codes to country names
 const CITY_TO_COUNTRY: Record<string, string> = {
-  // 台灣
   TPE: '台灣', KHH: '台灣', RMQ: '台灣',
-  // 日本
   NRT: '日本', NGO: '日本', KIX: '日本', FUK: '日本', CTS: '日本', OKA: '日本',
-  // 韓國
   ICN: '韓國', PUS: '韓國',
-  // 中國
   PVG: '中國', PEK: '中國', CAN: '中國', SZX: '中國', CTU: '中國', XIY: '中國',
-  // 東南亞
   BKK: '泰國', MNL: '菲律賓', SIN: '新加坡', KUL: '馬來西亞', HAN: '越南', SGN: '越南',
   CGK: '印尼', DPS: '印尼', RGN: '緬甸', PEN: '馬來西亞',
-  // 南亞
   BOM: '印度', DEL: '印度', CMB: '斯里蘭卡',
-  // 中東
   DOH: '卡塔爾', DXB: '阿聯酋', CAI: '埃及',
-  // 歐洲
   LHR: '英國', CDG: '法國', AMS: '荷蘭', BCN: '西班牙', MAD: '西班牙',
   FCO: '意大利', FRA: '德國',
-  // 北美
   LAX: '美國', SFO: '美國', ORD: '美國', SEA: '美國', JFK: '美國', YVR: '加拿大',
-  // 大洋洲
   SYD: '澳洲', MEL: '澳洲', AKL: '新西蘭',
 };
 
-// Get country name for a deal
 function getCountry(deal: Deal): string {
   return CITY_TO_COUNTRY[deal.destination.code] || deal.destination.region;
 }
 
-const deals = allDatesData.results as Deal[];
-
 export default function Home() {
+  const [departure, setDeparture] = useState<Departure>('HKG');
   const [sortBy, setSortBy] = useState<SortOption>('price');
   const [filterMode, setFilterMode] = useState<FilterMode>('region');
   const [selectedRegion, setSelectedRegion] = useState<string>('全部');
   const [selectedCountry, setSelectedCountry] = useState<string>('全部');
 
-  // Get unique countries from data (grouped by country)
+  const allData = departure === 'HKG' ? allDatesHkg : allDatesSzx;
+  const deals = (allData.results || []) as Deal[];
+  const szxLoading = departure === 'SZX' && deals.length === 0;
+
   const countries = useMemo(() => {
     const uniqueCountries = [...new Set(deals.map((d) => getCountry(d)))];
     return ['全部', ...uniqueCountries.sort()];
-  }, []);
+  }, [deals]);
 
   const filteredAndSortedDeals = useMemo(() => {
     let result = [...deals];
-
-    // Filter
     if (filterMode === 'region') {
       if (selectedRegion !== '全部') {
         result = result.filter((d) => d.destination.region === selectedRegion);
@@ -95,8 +90,6 @@ export default function Home() {
         result = result.filter((d) => getCountry(d) === selectedCountry);
       }
     }
-
-    // Sort
     if (sortBy === 'price') {
       result.sort((a, b) => a.price - b.price);
     } else if (sortBy === 'discount') {
@@ -106,7 +99,6 @@ export default function Home() {
         return discountB - discountA;
       });
     }
-
     return result;
   }, [deals, sortBy, filterMode, selectedRegion, selectedCountry]);
 
@@ -119,149 +111,180 @@ export default function Home() {
     <div className="min-h-screen bg-background py-12">
       <div className="mx-auto max-w-5xl px-4">
         {/* Header */}
-        <div className="mb-8 text-center">
+        <div className="mb-6 text-center">
           <h1 className="text-4xl font-bold tracking-tight text-foreground">CompareTiger</h1>
-          <p className="mt-3 text-lg text-muted-foreground">香港國際機場 ✈️ 最低機票</p>
+          <p className="mt-2 text-lg text-muted-foreground">{DEPARTURE_LABELS[departure].subtitle}</p>
         </div>
 
-        {/* Stats */}
-        <div className="mb-6 flex justify-center gap-8">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-emerald-600">{deals.length}</div>
-            <div className="text-xs text-muted-foreground">個目的地</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-emerald-600">${Math.min(...deals.map(d => d.price)).toLocaleString()}</div>
-            <div className="text-xs text-muted-foreground">最低價</div>
+        {/* Departure Selector */}
+        <div className="mb-6 flex justify-center">
+          <div className="inline-flex rounded-lg border border-border bg-card p-1 gap-1">
+            <button
+              onClick={() => setDeparture('HKG')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                departure === 'HKG'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+              }`}
+            >
+              🛫 香港國際機場 (HKG)
+            </button>
+            <button
+              onClick={() => setDeparture('SZX')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                departure === 'SZX'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+              }`}
+            >
+              🛫 深圳寶安機場 (SZX)
+            </button>
           </div>
         </div>
 
-        {/* Filters & Sort */}
-        <div className="mb-6 space-y-3">
-          {/* Filter Mode Toggle */}
-          <div className="flex gap-2">
-            <Button
-              variant={filterMode === 'region' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => {
-                setFilterMode('region');
-                setSelectedRegion('全部');
-              }}
-            >
-              🌍 按地區
-            </Button>
-            <Button
-              variant={filterMode === 'country' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => {
-                setFilterMode('country');
-                setSelectedCountry('全部');
-              }}
-            >
-              ✈️ 按國家
-            </Button>
+        {/* Loading state for SZX */}
+        {szxLoading ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="text-4xl mb-4">🔄</div>
+            <p className="text-lg text-muted-foreground">深圳航班資料掃描中...</p>
+            <p className="text-sm text-muted-foreground mt-1">預計 60-90 分鐘後完成首次掃描</p>
           </div>
-
-          {/* Region Filter */}
-          {filterMode === 'region' && (
-            <div className="flex flex-wrap gap-2">
-              {regions.map((region) => (
-                <Button
-                  key={region}
-                  variant={selectedRegion === region ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedRegion(region)}
-                  className="text-xs"
-                >
-                  {region}
-                </Button>
-              ))}
+        ) : (
+          <>
+            {/* Stats */}
+            <div className="mb-6 flex justify-center gap-8">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-emerald-600">{deals.length}</div>
+                <div className="text-xs text-muted-foreground">個目的地</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-emerald-600">
+                  {deals.length > 0 ? `$${Math.min(...deals.map(d => d.price)).toLocaleString()}` : '—'}
+                </div>
+                <div className="text-xs text-muted-foreground">最低價</div>
+              </div>
             </div>
-          )}
 
-          {/* Country Filter */}
-          {filterMode === 'country' && (
-            <select
-              value={selectedCountry}
-              onChange={(e) => setSelectedCountry(e.target.value)}
-              className="w-full max-w-xs rounded-lg border border-input bg-background px-3 py-2 text-sm"
-            >
-              {countries.map((country) => (
-                <option key={country} value={country}>
-                  {country}
-                </option>
-              ))}
-            </select>
-          )}
+            {/* Filters & Sort */}
+            <div className="mb-6 space-y-3">
+              {/* Filter Mode Toggle */}
+              <div className="flex gap-2">
+                <Button
+                  variant={filterMode === 'region' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => { setFilterMode('region'); setSelectedRegion('全部'); }}
+                >
+                  🌍 按地區
+                </Button>
+                <Button
+                  variant={filterMode === 'country' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => { setFilterMode('country'); setSelectedCountry('全部'); }}
+                >
+                  ✈️ 按國家
+                </Button>
+              </div>
 
-          {/* Sort Options */}
-          <div className="flex gap-2">
-            <Button
-              variant={sortBy === 'price' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setSortBy('price')}
-            >
-              💰 最低價
-            </Button>
-            <Button
-              variant={sortBy === 'discount' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setSortBy('discount')}
-            >
-              🔥 最抵
-            </Button>
-          </div>
-        </div>
+              {/* Region Filter */}
+              {filterMode === 'region' && (
+                <div className="flex flex-wrap gap-2">
+                  {regions.map((region) => (
+                    <Button
+                      key={region}
+                      variant={selectedRegion === region ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setSelectedRegion(region)}
+                      className="text-xs"
+                    >
+                      {region}
+                    </Button>
+                  ))}
+                </div>
+              )}
 
-        {/* Results count */}
-        <p className="mb-4 text-sm text-muted-foreground">
-          顯示 {filteredAndSortedDeals.length} 個目的地
-        </p>
+              {/* Country Filter */}
+              {filterMode === 'country' && (
+                <select
+                  value={selectedCountry}
+                  onChange={(e) => setSelectedCountry(e.target.value)}
+                  className="w-full max-w-xs rounded-lg border border-input bg-background px-3 py-2 text-sm"
+                >
+                  {countries.map((country) => (
+                    <option key={country} value={country}>{country}</option>
+                  ))}
+                </select>
+              )}
 
-        {/* Destinations Grid */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredAndSortedDeals.map((dest) => {
-            const discountPct = discount(dest);
-            return (
-              <Link key={dest.route} href={`/route/${dest.destination.code}`} className="group">
-                <Card className="transition-all duration-200 hover:border-sky-500/50 hover:shadow-lg hover:shadow-sky-500/10">
-                  <CardHeader className="pb-2">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle className="text-xl">{dest.destination.name}</CardTitle>
-                        <p className="text-sm text-muted-foreground">{dest.destination.code}</p>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-xl font-bold text-emerald-600">${dest.price.toLocaleString()}</div>
-                        <div className="text-xs text-muted-foreground">起</div>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Badge
-                          variant="outline"
-                          className={`${regionColors[dest.destination.region] || 'bg-slate-500/10 text-slate-600 border-slate-500/30'}`}
-                        >
-                          {dest.destination.region}
-                        </Badge>
-                        {discountPct !== null && discountPct > 0 && (
-                          <Badge variant="destructive" className="text-xs">
-                            -{discountPct}%
-                          </Badge>
-                        )}
-                      </div>
-                      <span className="text-sm text-sky-600 transition-colors group-hover:text-sky-500">
-                        查看詳情 →
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            );
-          })}
-        </div>
+              {/* Sort Options */}
+              <div className="flex gap-2">
+                <Button
+                  variant={sortBy === 'price' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSortBy('price')}
+                >
+                  💰 最低價
+                </Button>
+                <Button
+                  variant={sortBy === 'discount' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSortBy('discount')}
+                >
+                  🔥 最抵
+                </Button>
+              </div>
+            </div>
+
+            {/* Results count */}
+            <p className="mb-4 text-sm text-muted-foreground">
+              顯示 {filteredAndSortedDeals.length} 個目的地
+            </p>
+
+            {/* Destinations Grid */}
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {filteredAndSortedDeals.map((dest) => {
+                const discountPct = discount(dest);
+                return (
+                  <Link key={dest.route} href={`/route/${dest.destination.code}?dep=${departure}`} className="group">
+                    <Card className="transition-all duration-200 hover:border-sky-500/50 hover:shadow-lg hover:shadow-sky-500/10">
+                      <CardHeader className="pb-2">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <CardTitle className="text-xl">{dest.destination.name}</CardTitle>
+                            <p className="text-sm text-muted-foreground">{dest.destination.code}</p>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-xl font-bold text-emerald-600">${dest.price.toLocaleString()}</div>
+                            <div className="text-xs text-muted-foreground">起</div>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Badge
+                              variant="outline"
+                              className={`${regionColors[dest.destination.region] || 'bg-slate-500/10 text-slate-600 border-slate-500/30'}`}
+                            >
+                              {dest.destination.region}
+                            </Badge>
+                            {discountPct !== null && discountPct > 0 && (
+                              <Badge variant="destructive" className="text-xs">
+                                -{discountPct}%
+                              </Badge>
+                            )}
+                          </div>
+                          <span className="text-sm text-sky-600 transition-colors group-hover:text-sky-500">
+                            查看詳情 →
+                          </span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                );
+              })}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

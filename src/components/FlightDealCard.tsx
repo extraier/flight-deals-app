@@ -42,9 +42,10 @@ interface Deal {
 interface FlightDealCardProps {
   deal: Deal;
   onMoreMonths?: () => void;
+  departure?: 'HKG' | 'SZX';
 }
 
-export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
+export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: FlightDealCardProps) {
   const { destination, price, badge, cheapestDates, moreMonths, typicalPrice } = deal;
   const [selectedDate, setSelectedDate] = useState<DateInfo | null>(null);
 
@@ -262,7 +263,7 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
 
                 {/* Action Button */}
                 <a
-                  href={`https://www.google.com/travel/flights?q=HKG+to+${destination.code}+${selectedDate.year}-${String(selectedDate.month).padStart(2,'0')}-${String(selectedDate.day).padStart(2,'0')}+${selectedDate.flight?.ret_date}&gl=hk&hl=zh-TW&curr=HKD`}
+                  href={`https://www.google.com/travel/flights?q=${departure}+to+${destination.code}+${selectedDate.year}-${String(selectedDate.month).padStart(2,'0')}-${String(selectedDate.day).padStart(2,'0')}+${selectedDate.flight?.ret_date}&gl=hk&hl=zh-TW&curr=HKD`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
@@ -285,7 +286,7 @@ export function FlightDealCard({ deal, onMoreMonths }: FlightDealCardProps) {
 
                 {/* Quick Google Search Link */}
                 <a
-                  href={`https://www.google.com/travel/flights?q=${destination.code}+to+HKG+${selectedDate.year}-${String(selectedDate.month).padStart(2, '0')}-${String(selectedDate.day).padStart(2, '0')}`}
+                  href={`https://www.google.com/travel/flights?q=${departure}+to+${destination.code}+${selectedDate.year}-${String(selectedDate.month).padStart(2,'0')}-${String(selectedDate.day).padStart(2,'0')}&gl=hk&hl=zh-TW`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex w-full items-center justify-center gap-2 rounded-xl bg-secondary px-4 py-3 font-medium text-secondary-foreground transition-colors hover:bg-secondary/80"
