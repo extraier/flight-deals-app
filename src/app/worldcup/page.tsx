@@ -7,7 +7,10 @@ import worldcupData from '@/data/worldcup_latest.json';
 type Window = '1h' | '4h' | '24h';
 
 interface Odds { home: number | null; draw: number | null; away: number | null; }
-interface Changes { hkjc_home: number | null; hkjc_draw: number | null; hkjc_away: number | null; }
+interface Changes {
+  hkjc_home: number | null; hkjc_draw: number | null; hkjc_away: number | null;
+  poly_home: number | null; poly_draw: number | null; poly_away: number | null;
+}
 interface Match {
   match: string;
   homeTeam: string;
@@ -20,7 +23,7 @@ interface Match {
   chg_24h?: Changes;
 }
 
-const data = worldcupData as {
+const data = worldcupData as unknown as {
   matches: Match[];
   generated: string;
   latest_datetime: string;
@@ -160,58 +163,73 @@ export default function WorldCupPage() {
                 const dtCN = fmtDateCN(match.gameTime || '');
 
                 return (
-                  <>
-                    <tr key={`${i}-hkjc`} className={`border-b ${border} ${hover} transition-colors`}>
-                      <td className="py-2 px-4">
-                        <div className={`font-medium text-sm ${text}`}>{TEAM_CN[match.homeTeam] || match.homeTeam}</div>
-                        <div className={`text-xs ${muted2}`}>vs</div>
-                        <div className={`font-medium text-sm ${text}`}>{TEAM_CN[match.awayTeam] || match.awayTeam}</div>
-                        <div className={`text-xs ${muted2} mt-1`}>{dtCN}</div>
-                      </td>
-                      <td className="py-2 px-3 text-center">
-                        <div className="flex flex-col items-center">
-                          <span className="font-bold text-emerald-400 text-sm">{fmt(h.home)}</span>
-                          {chg && (
-                            <span className={`text-xs ${chgColor(chg.hkjc_home, true)}`}>
-                              {arrow(chg.hkjc_home)}{Math.abs(chg.hkjc_home ?? 0).toFixed(1)}%
+                  <tr key={`${i}`} className={`border-b ${border} ${hover} transition-colors`}>
+                    {/* Match name + date */}
+                    <td className="py-3 px-4">
+                      <div className={`font-semibold text-sm ${text}`}>{TEAM_CN[match.homeTeam] || match.homeTeam} <span className={`${muted2}`}>vs</span> {TEAM_CN[match.awayTeam] || match.awayTeam}</div>
+                      <div className={`text-xs ${muted2} mt-0.5`}>{dtCN}</div>
+                    </td>
+
+                    {/* Home / 主勝 */}
+                    <td className="py-3 px-3 text-center">
+                      <div className="flex flex-col items-center gap-0.5">
+                        <span className="font-bold text-emerald-400 text-base">{fmt(h.home)}</span>
+                        {chg && (
+                          <span className={`text-xs font-medium ${chgColor(chg.hkjc_home, true)}`}>
+                            {arrow(chg.hkjc_home)}{Math.abs(chg.hkjc_home ?? 0).toFixed(1)}%
+                          </span>
+                        )}
+                        <span className="text-sky-400 text-sm font-medium">
+                          {fmtPct(p.home)}
+                          {chg && chg.poly_home != null && (
+                            <span className={`text-xs ml-0.5 ${chg.poly_home > 0 ? 'text-emerald-400' : chg.poly_home < 0 ? 'text-red-400' : muted2}`}>
+                              {arrow(chg.poly_home)}{Math.abs(chg.poly_home).toFixed(1)}%
                             </span>
                           )}
-                        </div>
-                      </td>
-                      <td className="py-2 px-3 text-center">
-                        <div className="flex flex-col items-center">
-                          <span className={`font-bold text-sm ${text}`}>{fmt(h.draw)}</span>
-                          {chg && (
-                            <span className={`text-xs ${chgColor(chg.hkjc_draw, false)}`}>
-                              {arrow(chg.hkjc_draw)}{Math.abs(chg.hkjc_draw ?? 0).toFixed(1)}%
+                        </span>
+                      </div>
+                    </td>
+
+                    {/* Draw / 和局 */}
+                    <td className="py-3 px-3 text-center">
+                      <div className="flex flex-col items-center gap-0.5">
+                        <span className={`font-bold text-base ${text}`}>{fmt(h.draw)}</span>
+                        {chg && (
+                          <span className={`text-xs font-medium ${chgColor(chg.hkjc_draw, false)}`}>
+                            {arrow(chg.hkjc_draw)}{Math.abs(chg.hkjc_draw ?? 0).toFixed(1)}%
+                          </span>
+                        )}
+                        <span className={`text-sm font-medium ${muted2}`}>
+                          {fmtPct(p.draw)}
+                          {chg && chg.poly_draw != null && (
+                            <span className={`text-xs ml-0.5 ${chg.poly_draw > 0 ? 'text-emerald-400' : chg.poly_draw < 0 ? 'text-red-400' : muted2}`}>
+                              {arrow(chg.poly_draw)}{Math.abs(chg.poly_draw).toFixed(1)}%
                             </span>
                           )}
-                        </div>
-                      </td>
-                      <td className="py-2 px-3 text-center">
-                        <div className="flex flex-col items-center">
-                          <span className="font-bold text-red-400 text-sm">{fmt(h.away)}</span>
-                          {chg && (
-                            <span className={`text-xs ${chgColor(chg.hkjc_away, true)}`}>
-                              {arrow(chg.hkjc_away)}{Math.abs(chg.hkjc_away ?? 0).toFixed(1)}%
+                        </span>
+                      </div>
+                    </td>
+
+                    {/* Away / 客勝 */}
+                    <td className="py-3 px-3 text-center">
+                      <div className="flex flex-col items-center gap-0.5">
+                        <span className="font-bold text-red-400 text-base">{fmt(h.away)}</span>
+                        {chg && (
+                          <span className={`text-xs font-medium ${chgColor(chg.hkjc_away, true)}`}>
+                            {arrow(chg.hkjc_away)}{Math.abs(chg.hkjc_away ?? 0).toFixed(1)}%
+                          </span>
+                        )}
+                        <span className="text-orange-400 text-sm font-medium">
+                          {fmtPct(p.away)}
+                          {chg && chg.poly_away != null && (
+                            <span className={`text-xs ml-0.5 ${chg.poly_away > 0 ? 'text-emerald-400' : chg.poly_away < 0 ? 'text-red-400' : muted2}`}>
+                              {arrow(chg.poly_away)}{Math.abs(chg.poly_away).toFixed(1)}%
                             </span>
                           )}
-                        </div>
-                      </td>
-                    </tr>
-                    <tr key={`${i}-poly`} className={`border-b ${border} ${polyBg}`}>
-                      <td className="py-1.5 px-4"></td>
-                      <td className="py-1.5 px-3 text-center">
-                        <span className="text-sky-400 text-xs">{fmtPct(p.home)}</span>
-                      </td>
-                      <td className="py-1.5 px-3 text-center">
-                        <span className={`text-xs ${muted2}`}>{fmtPct(p.draw)}</span>
-                      </td>
-                      <td className="py-1.5 px-3 text-center">
-                        <span className="text-orange-400 text-xs">{fmtPct(p.away)}</span>
-                      </td>
-                    </tr>
-                  </>
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
                 );
               })}
             </tbody>
