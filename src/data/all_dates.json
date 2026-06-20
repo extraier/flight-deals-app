@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-20T08:27:26.910042",
+  "generated": "2026-06-20T08:32:31.207747",
   "results": [
     {
       "route": "HKG→MNL",
@@ -1548,99 +1548,6 @@
       "totalDestinations": 18
     },
     {
-      "route": "HKG→NGO",
-      "destination": {
-        "name": "名古屋",
-        "code": "NGO",
-        "region": "東亞"
-      },
-      "price": 2221.0,
-      "currency": "HKD",
-      "badge": {
-        "carryOn": false,
-        "cheapDays": 0
-      },
-      "typicalPrice": 2338,
-      "cheapestDates": [
-        {
-          "day": 29,
-          "month": 8,
-          "year": 2026,
-          "price": 2221.0,
-          "stay": 7,
-          "flight": {
-            "number": "690",
-            "airline": "UO",
-            "dep_time": "10:50",
-            "arr_time": "15:50",
-            "ret_date": "2026-09-05",
-            "ret_flight": "691"
-          }
-        },
-        {
-          "day": 30,
-          "month": 8,
-          "year": 2026,
-          "price": 2554.0,
-          "stay": 7,
-          "flight": {
-            "number": "690",
-            "airline": "UO",
-            "dep_time": "10:50",
-            "arr_time": "15:50",
-            "ret_date": "2026-09-06",
-            "ret_flight": "691"
-          }
-        },
-        {
-          "day": 31,
-          "month": 8,
-          "year": 2026,
-          "price": 2241.0,
-          "stay": 7,
-          "flight": {
-            "number": "690",
-            "airline": "UO",
-            "dep_time": "10:50",
-            "arr_time": "15:50",
-            "ret_date": "2026-09-07",
-            "ret_flight": "691"
-          }
-        },
-        {
-          "day": 1,
-          "month": 9,
-          "year": 2026,
-          "price": 2454.0,
-          "stay": 7,
-          "flight": {
-            "number": "670",
-            "airline": "UO",
-            "dep_time": "14:50",
-            "arr_time": "19:50",
-            "ret_date": "2026-09-08",
-            "ret_flight": "691"
-          }
-        },
-        {
-          "day": 2,
-          "month": 9,
-          "year": 2026,
-          "price": 2221.0,
-          "stay": 7,
-          "flight": {
-            "number": "690",
-            "airline": "UO",
-            "dep_time": "10:50",
-            "arr_time": "15:50",
-            "ret_date": "2026-09-09",
-            "ret_flight": "691"
-          }
-        }
-      ],
-      "totalDestinations": 19
-    },
-    {
       "route": "HKG→XIY",
       "destination": {
         "name": "西安",
@@ -1715,7 +1622,7 @@
           "stay": 7
         }
       ],
-      "totalDestinations": 20
+      "totalDestinations": 19
     },
     {
       "route": "HKG→CGK",
@@ -1805,6 +1712,99 @@
             "arr_time": "00:45",
             "ret_date": "2026-09-07",
             "ret_flight": "200"
+          }
+        }
+      ],
+      "totalDestinations": 20
+    },
+    {
+      "route": "HKG→NGO",
+      "destination": {
+        "name": "名古屋",
+        "code": "NGO",
+        "region": "東亞"
+      },
+      "price": 2534.0,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 0
+      },
+      "typicalPrice": 2390,
+      "cheapestDates": [
+        {
+          "day": 3,
+          "month": 7,
+          "year": 2026,
+          "price": 2534.0,
+          "stay": 7,
+          "flight": {
+            "number": "690",
+            "airline": "UO",
+            "dep_time": "10:50",
+            "arr_time": "15:50",
+            "ret_date": "2026-07-10",
+            "ret_flight": "691"
+          }
+        },
+        {
+          "day": 7,
+          "month": 7,
+          "year": 2026,
+          "price": 2341.0,
+          "stay": 7,
+          "flight": {
+            "number": "690",
+            "airline": "UO",
+            "dep_time": "10:50",
+            "arr_time": "15:50",
+            "ret_date": "2026-07-14",
+            "ret_flight": "691"
+          }
+        },
+        {
+          "day": 26,
+          "month": 8,
+          "year": 2026,
+          "price": 2321.0,
+          "stay": 7,
+          "flight": {
+            "number": "670",
+            "airline": "UO",
+            "dep_time": "14:50",
+            "arr_time": "19:50",
+            "ret_date": "2026-09-02",
+            "ret_flight": "691"
+          }
+        },
+        {
+          "day": 28,
+          "month": 8,
+          "year": 2026,
+          "price": 2534.0,
+          "stay": 7,
+          "flight": {
+            "number": "690",
+            "airline": "UO",
+            "dep_time": "10:50",
+            "arr_time": "15:50",
+            "ret_date": "2026-09-04",
+            "ret_flight": "691"
+          }
+        },
+        {
+          "day": 29,
+          "month": 8,
+          "year": 2026,
+          "price": 2221.0,
+          "stay": 7,
+          "flight": {
+            "number": "690",
+            "airline": "UO",
+            "dep_time": "10:50",
+            "arr_time": "15:50",
+            "ret_date": "2026-09-05",
+            "ret_flight": "691"
           }
         }
       ],
