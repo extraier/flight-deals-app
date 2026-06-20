@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-20T09:13:05.557198",
+  "generated": "2026-06-20T09:18:09.869990",
   "results": [
     {
       "route": "HKG→MNL",
@@ -3823,7 +3823,7 @@
         "carryOn": false,
         "cheapDays": 0
       },
-      "typicalPrice": 6824,
+      "typicalPrice": 6825,
       "cheapestDates": [
         {
           "day": 27,
@@ -3838,6 +3838,21 @@
             "arr_time": "07:55",
             "ret_date": "2026-07-04",
             "ret_flight": "2231"
+          }
+        },
+        {
+          "day": 1,
+          "month": 9,
+          "year": 2026,
+          "price": 6828.0,
+          "stay": 7,
+          "flight": {
+            "number": "2006",
+            "airline": "KE",
+            "dep_time": "17:55",
+            "arr_time": "22:45",
+            "ret_date": "2026-09-08",
+            "ret_flight": "38"
           }
         },
         {
@@ -3882,21 +3897,6 @@
             "dep_time": "09:25",
             "arr_time": "08:00",
             "ret_date": "2026-09-11",
-            "ret_flight": "1556"
-          }
-        },
-        {
-          "day": 5,
-          "month": 9,
-          "year": 2026,
-          "price": 6824.0,
-          "stay": 7,
-          "flight": {
-            "number": "88",
-            "airline": "DL",
-            "dep_time": "09:25",
-            "arr_time": "08:00",
-            "ret_date": "2026-09-12",
             "ret_flight": "1556"
           }
         }
