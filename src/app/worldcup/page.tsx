@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import worldcupData from '@/data/worldcup_latest.json';
 
 type Window = '1h' | '4h' | '24h';
@@ -38,161 +38,121 @@ function fmtPct(n: number | null): string {
   return (n * 100).toFixed(1) + '%';
 }
 
-const TEAM_CN: Record<string, string> = {
-  'Algeria': '阿爾及利亞',
-  'Argentina': '阿根廷',
-  'Australia': '澳洲',
-  'Austria': '奧地利',
-  'Belgium': '比利時',
-  'Bosnia and Herzegovina': '波斯尼亞',
-  'Brazil': '巴西',
-  'Cabo Verde': '佛得角',
-  'Canada': '加拿大',
-  'Colombia': '哥倫比亞',
-  'Croatia': '克羅地亞',
-  'Curaçao': '古拉索',
-  'Czechia': '捷克',
-  "Côte d'Ivoire": '科特迪瓦',
-  'DR Congo': '剛果民主共和國',
-  'Ecuador': '厄瓜多爾',
-  'Egypt': '埃及',
-  'England': '英格蘭',
-  'France': '法國',
-  'Germany': '德國',
-  'Ghana': '加納',
-  'Haiti': '海地',
-  'IR Iran': '伊朗',
-  'Iraq': '伊拉克',
-  'Japan': '日本',
-  'Jordan': '約旦',
-  'Korea Republic': '南韓',
-  'Mexico': '墨西哥',
-  'Morocco': '摩洛哥',
-  'Netherlands': '荷蘭',
-  'New Zealand': '新西蘭',
-  'Norway': '挪威',
-  'Panama': '巴拿馬',
-  'Paraguay': '巴拉圭',
-  'Portugal': '葡萄牙',
-  'Qatar': '卡塔爾',
-  'Saudi Arabia': '沙特阿拉伯',
-  'Scotland': '蘇格蘭',
-  'Senegal': '塞內加爾',
-  'South Africa': '南非',
-  'Spain': '西班牙',
-  'Sweden': '瑞典',
-  'Switzerland': '瑞士',
-  'Tunisia': '突尼斯',
-  'Türkiye': '土耳其',
-  'United States': '美國',
-  'Uruguay': '烏拉圭',
-  'Uzbekistan': '烏茲別克斯坦',
-};
+function fmtDateCN(dt: string): string {
+  if (!dt) return '';
+  const [date, time] = dt.split(' ');
+  const [y, m, d] = date.split('-');
+  return `${parseInt(m)}月${parseInt(d)}日 ${time}`;
+}
 
 function arrow(v: number | null): string {
   if (v === null || v === 0) return '→';
   return v > 0 ? '↑' : '↓';
 }
 
-function changeColor(v: number | null, inverse = false): string {
-  if (v === null || v === 0) return 'text-muted-foreground';
-  // For HK odds: higher = worse = green (good value), lower = worse = red
-  // inverse = true means lower is BETTER (like home odds dropping)
+function chgColor(v: number | null, inverse = false): string {
+  if (v === null || v === 0) return '';
   if (inverse) return v < 0 ? 'text-emerald-400' : 'text-red-400';
   return v > 0 ? 'text-emerald-400' : 'text-red-400';
 }
 
-function sortLabel(w: Window): string {
-  return { '1h': '1小時前', '4h': '4小時前', '24h': '24小時前' }[w];
-}
+const TEAM_CN: Record<string, string> = {
+  'Algeria': '阿爾及利亞', 'Argentina': '阿根廷', 'Australia': '澳洲', 'Austria': '奧地利',
+  'Belgium': '比利時', 'Bosnia and Herzegovina': '波斯尼亞', 'Brazil': '巴西', 'Cabo Verde': '佛得角',
+  'Canada': '加拿大', 'Colombia': '哥倫比亞', 'Croatia': '克羅地亞', 'Curaçao': '古拉索',
+  'Czechia': '捷克', "Côte d'Ivoire": '科特迪瓦', 'DR Congo': '剛果民主共和國', 'Ecuador': '厄瓜多爾',
+  'Egypt': '埃及', 'England': '英格蘭', 'France': '法國', 'Germany': '德國', 'Ghana': '加納',
+  'Haiti': '海地', 'IR Iran': '伊朗', 'Iraq': '伊拉克', 'Japan': '日本', 'Jordan': '約旦',
+  'Korea Republic': '南韓', 'Mexico': '墨西哥', 'Morocco': '摩洛哥', 'Netherlands': '荷蘭',
+  'New Zealand': '新西蘭', 'Norway': '挪威', 'Panama': '巴拿馬', 'Paraguay': '巴拉圭',
+  'Portugal': '葡萄牙', 'Qatar': '卡塔爾', 'Saudi Arabia': '沙特阿拉伯', 'Scotland': '蘇格蘭',
+  'Senegal': '塞內加爾', 'South Africa': '南非', 'Spain': '西班牙', 'Sweden': '瑞典',
+  'Switzerland': '瑞士', 'Tunisia': '突尼斯', 'Türkiye': '土耳其', 'United States': '美國',
+  'Uruguay': '烏拉圭', 'Uzbekistan': '烏茲別克斯坦',
+};
+
+const sortLabel = (w: Window) => ({ '1h': '1小時前', '4h': '4小時前', '24h': '24小時前' }[w]);
 
 export default function WorldCupPage() {
   const [window, setWindow] = useState<Window>('24h');
   const [sortBy, setSortBy] = useState<'time' | 'change'>('time');
+  const [dark, setDark] = useState(true);
 
-  const refLabel = data[`ref_${window}`] as string | null;
+  const bg = dark ? 'dark bg-[#0f1117]' : 'bg-white';
+  const text = dark ? 'text-zinc-100' : 'text-zinc-900';
+  const muted = dark ? 'text-zinc-400' : 'text-zinc-500';
+  const muted2 = dark ? 'text-zinc-500' : 'text-zinc-400';
+  const border = dark ? 'border-zinc-700' : 'border-zinc-200';
+  const hover = dark ? 'hover:bg-zinc-800/60' : 'hover:bg-zinc-50';
+  const thead = dark ? 'bg-zinc-800 border-zinc-700' : 'bg-zinc-100 border-zinc-200';
+  const polyBg = dark ? 'bg-zinc-800/30 border-zinc-700/40' : 'bg-zinc-50';
+  const cardBg = dark ? 'bg-zinc-800/50' : 'bg-zinc-100';
 
-  const rows = useMemo(() => {
-    const chgKey = `chg_${window}` as 'chg_1h' | 'chg_4h' | 'chg_24h';
-    let r = [...data.matches];
-
+  const rows = [...data.matches].sort((a, b) => {
     if (sortBy === 'change') {
-      r.sort((a, b) => {
-        const ca = Math.abs(a[chgKey]?.hkjc_home ?? 0);
-        const cb = Math.abs(b[chgKey]?.hkjc_home ?? 0);
-        return cb - ca;
-      });
-    } else {
-      r.sort((a, b) => (a.gameTime || '').localeCompare(b.gameTime || ''));
+      const c = `chg_${window}` as 'chg_1h' | 'chg_4h' | 'chg_24h';
+      return Math.abs(b[c]?.hkjc_home ?? 0) - Math.abs(a[c]?.hkjc_home ?? 0);
     }
-    return r;
-  }, [window, sortBy]);
+    return (a.gameTime || '').localeCompare(b.gameTime || '');
+  });
+
+  const activeBtn = 'bg-sky-600 text-white shadow-sm';
+  const inactiveBtn = dark
+    ? 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800'
+    : 'text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100';
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className={`min-h-screen ${bg} ${text} transition-colors`}>
       <div className="mx-auto max-w-5xl px-4 py-8">
 
         {/* Header */}
         <div className="mb-6 text-center">
-          <h1 className="text-3xl font-bold tracking-tight">🏆 世界盃赔率走勢</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <div className="flex items-center justify-center gap-3">
+            <h1 className="text-3xl font-bold tracking-tight">🏆 世界盃赔率走勢</h1>
+            <button
+              onClick={() => setDark(d => !d)}
+              className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${dark ? 'border-zinc-600 text-yellow-400 hover:border-yellow-400' : 'border-zinc-300 text-zinc-600 hover:border-zinc-600'}`}
+            >
+              {dark ? '☀️' : '🌙'}
+            </button>
+          </div>
+          <p className={`mt-2 text-sm ${muted}`}>
             更新 {data.latest_datetime?.replace('_', ' ')} HKT · 馬會 1x2 + Polymarket 概率
           </p>
         </div>
 
         {/* Controls */}
         <div className="mb-6 flex flex-wrap items-center gap-4">
-          {/* Window selector */}
           <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">比較：</span>
+            <span className={`text-sm ${muted}`}>比較：</span>
             <div className="inline-flex rounded-lg border border-border bg-card p-1 gap-1">
               {(['1h', '4h', '24h'] as Window[]).map(w => (
                 <button
                   key={w}
                   onClick={() => setWindow(w)}
-                  className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
-                    window === w
-                      ? 'bg-primary text-primary-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                  }`}
+                  className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${window === w ? activeBtn : inactiveBtn}`}
                 >
                   {sortLabel(w)}
                 </button>
               ))}
             </div>
           </div>
-
-          {/* Sort */}
           <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">排序：</span>
-            <button
-              onClick={() => setSortBy('time')}
-              className={`px-3 py-1.5 rounded-md text-sm transition-all ${
-                sortBy === 'time' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:bg-muted'
-              }`}
-            >
-              ⏰ 時間
-            </button>
-            <button
-              onClick={() => setSortBy('change')}
-              className={`px-3 py-1.5 rounded-md text-sm transition-all ${
-                sortBy === 'change' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:bg-muted'
-              }`}
-            >
-              📈 變動
-            </button>
+            <span className={`text-sm ${muted}`}>排序：</span>
+            <button onClick={() => setSortBy('time')} className={`px-3 py-1.5 rounded-md text-sm transition-all ${sortBy === 'time' ? activeBtn : inactiveBtn}`}>⏰ 時間</button>
+            <button onClick={() => setSortBy('change')} className={`px-3 py-1.5 rounded-md text-sm transition-all ${sortBy === 'change' ? activeBtn : inactiveBtn}`}>📈 變動</button>
           </div>
         </div>
 
         {/* Table */}
-        <div className="rounded-xl border border-border overflow-hidden">
+        <div className={`rounded-xl border ${border} overflow-hidden`}>
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-secondary border-b border-border">
-                <th className="py-3 px-4 text-left text-muted-foreground font-medium">賽事</th>
-                <th className="py-3 px-3 text-center text-muted-foreground font-medium">主勝</th>
-                <th className="py-3 px-3 text-center text-muted-foreground font-medium">和局</th>
-                <th className="py-3 px-3 text-center text-muted-foreground font-medium">客勝</th>
+              <tr className={`border-b ${thead}`}>
+                <th className={`py-3 px-4 text-left font-medium ${muted}`}>賽事</th>
+                <th className={`py-3 px-3 text-center font-medium ${muted}`}>主勝</th>
+                <th className={`py-3 px-3 text-center font-medium ${muted}`}>和局</th>
+                <th className={`py-3 px-3 text-center font-medium ${muted}`}>客勝</th>
               </tr>
             </thead>
             <tbody>
@@ -200,27 +160,22 @@ export default function WorldCupPage() {
                 const chg = match[`chg_${window}` as keyof Match] as Changes | undefined;
                 const h = match.hkjc;
                 const p = match.poly;
-                const gt = match.gameTime || '';
-                const gameDate = gt ? gt.slice(5, 10) : '';
-                const gameHour = gt.includes('T') ? gt.slice(11, 16) : gt.slice(11, 16);
+                const dtCN = fmtDateCN(match.gameTime || '');
 
                 return (
                   <>
-                    {/* HKJC row */}
-                    <tr key={`${i}-hkjc`} className="border-b border-border/50 hover:bg-secondary/50 transition-colors">
-                      {/* Match + date */}
+                    <tr key={`${i}-hkjc`} className={`border-b ${border} ${hover} transition-colors`}>
                       <td className="py-2 px-4">
-                        <div className="font-medium text-sm">{TEAM_CN[match.homeTeam] || match.homeTeam}</div>
-                        <div className="text-xs text-muted-foreground">vs</div>
-                        <div className="font-medium text-sm">{TEAM_CN[match.awayTeam] || match.awayTeam}</div>
-                        <div className="text-xs text-muted-foreground mt-1">{gameDate} {gameHour}</div>
+                        <div className={`font-medium text-sm ${text}`}>{TEAM_CN[match.homeTeam] || match.homeTeam}</div>
+                        <div className={`text-xs ${muted2}`}>vs</div>
+                        <div className={`font-medium text-sm ${text}`}>{TEAM_CN[match.awayTeam] || match.awayTeam}</div>
+                        <div className={`text-xs ${muted2} mt-1`}>{dtCN}</div>
                       </td>
-                      {/* HKJC odds */}
                       <td className="py-2 px-3 text-center">
                         <div className="flex flex-col items-center">
                           <span className="font-bold text-emerald-400 text-sm">{fmt(h.home)}</span>
                           {chg && (
-                            <span className={`text-xs ${changeColor(chg.hkjc_home, true)}`}>
+                            <span className={`text-xs ${chgColor(chg.hkjc_home, true)}`}>
                               {arrow(chg.hkjc_home)}{Math.abs(chg.hkjc_home ?? 0).toFixed(1)}%
                             </span>
                           )}
@@ -228,9 +183,9 @@ export default function WorldCupPage() {
                       </td>
                       <td className="py-2 px-3 text-center">
                         <div className="flex flex-col items-center">
-                          <span className="font-bold text-sm">{fmt(h.draw)}</span>
+                          <span className={`font-bold text-sm ${text}`}>{fmt(h.draw)}</span>
                           {chg && (
-                            <span className={`text-xs ${changeColor(chg.hkjc_draw, false)}`}>
+                            <span className={`text-xs ${chgColor(chg.hkjc_draw, false)}`}>
                               {arrow(chg.hkjc_draw)}{Math.abs(chg.hkjc_draw ?? 0).toFixed(1)}%
                             </span>
                           )}
@@ -240,21 +195,20 @@ export default function WorldCupPage() {
                         <div className="flex flex-col items-center">
                           <span className="font-bold text-red-400 text-sm">{fmt(h.away)}</span>
                           {chg && (
-                            <span className={`text-xs ${changeColor(chg.hkjc_away, true)}`}>
+                            <span className={`text-xs ${chgColor(chg.hkjc_away, true)}`}>
                               {arrow(chg.hkjc_away)}{Math.abs(chg.hkjc_away ?? 0).toFixed(1)}%
                             </span>
                           )}
                         </div>
                       </td>
                     </tr>
-                    {/* Polymarket row */}
-                    <tr key={`${i}-poly`} className="border-b border-border/30 bg-secondary/10">
+                    <tr key={`${i}-poly`} className={`border-b ${border} ${polyBg}`}>
                       <td className="py-1.5 px-4"></td>
                       <td className="py-1.5 px-3 text-center">
                         <span className="text-sky-400 text-xs">{fmtPct(p.home)}</span>
                       </td>
                       <td className="py-1.5 px-3 text-center">
-                        <span className="text-xs">{fmtPct(p.draw)}</span>
+                        <span className={`text-xs ${muted2}`}>{fmtPct(p.draw)}</span>
                       </td>
                       <td className="py-1.5 px-3 text-center">
                         <span className="text-orange-400 text-xs">{fmtPct(p.away)}</span>
@@ -267,14 +221,15 @@ export default function WorldCupPage() {
           </table>
         </div>
 
-        <div className="mt-6 rounded-xl border border-border bg-secondary/30 p-4 text-xs text-muted-foreground">
-          <h4 className="mb-2 font-medium text-foreground">📖 說明</h4>
+        <div className={`mt-6 rounded-xl border ${border} ${cardBg} p-4 text-xs ${muted}`}>
+          <h4 className={`mb-2 font-medium ${text}`}>📖 說明</h4>
           <ul className="space-y-1">
             <li>🟢 <b>馬會赔率</b>：十進制赔率 (如 1.85 = 需投注 HK$1 贏 HK$0.85)</li>
             <li>🔵 <b>Polymarket</b>：隱含概率 % (如 55% = 該選項有 55% 機會)</li>
             <li>↑/↓ = 對比較時段升/跌</li>
           </ul>
         </div>
+
       </div>
     </div>
   );
