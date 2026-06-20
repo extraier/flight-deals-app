@@ -190,7 +190,6 @@ export default function WorldCupPage() {
             <thead>
               <tr className="bg-secondary border-b border-border">
                 <th className="py-3 px-4 text-left text-muted-foreground font-medium">賽事</th>
-                <th className="py-3 px-3 text-center text-muted-foreground font-medium">時間</th>
                 <th className="py-3 px-3 text-center text-muted-foreground font-medium">主勝</th>
                 <th className="py-3 px-3 text-center text-muted-foreground font-medium">和局</th>
                 <th className="py-3 px-3 text-center text-muted-foreground font-medium">客勝</th>
@@ -209,14 +208,12 @@ export default function WorldCupPage() {
                   <>
                     {/* HKJC row */}
                     <tr key={`${i}-hkjc`} className="border-b border-border/50 hover:bg-secondary/50 transition-colors">
-                      {/* Match + time */}
+                      {/* Match + date */}
                       <td className="py-2 px-4">
                         <div className="font-medium text-sm">{TEAM_CN[match.homeTeam] || match.homeTeam}</div>
                         <div className="text-xs text-muted-foreground">vs</div>
                         <div className="font-medium text-sm">{TEAM_CN[match.awayTeam] || match.awayTeam}</div>
-                      </td>
-                      <td className="py-2 px-3 text-center text-xs text-muted-foreground whitespace-nowrap">
-                        {gameDate}<br/>{gameHour}
+                        <div className="text-xs text-muted-foreground mt-1">{gameDate} {gameHour}</div>
                       </td>
                       {/* HKJC odds */}
                       <td className="py-2 px-3 text-center">
@@ -253,7 +250,6 @@ export default function WorldCupPage() {
                     {/* Polymarket row */}
                     <tr key={`${i}-poly`} className="border-b border-border/30 bg-secondary/10">
                       <td className="py-1.5 px-4"></td>
-                      <td className="py-1.5 px-3"></td>
                       <td className="py-1.5 px-3 text-center">
                         <span className="text-sky-400 text-xs">{fmtPct(p.home)}</span>
                       </td>
