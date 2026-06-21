@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { Nav } from '@/components/Nav';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,7 +20,6 @@ export default function RootLayout({
     <html lang="zh-Hant" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider>
-          <Nav />
           <ThemeToggle />
           {children}
         </ThemeProvider>

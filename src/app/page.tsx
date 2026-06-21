@@ -185,7 +185,7 @@ export default function Home() {
         ) : (
           <>
             {/* Stats */}
-            <div className="mb-6 flex justify-center gap-8">
+            <div className="mb-6 flex justify-center flex-wrap items-end gap-x-8 gap-y-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-emerald-600">{deals.length}</div>
                 <div className="text-xs text-muted-foreground">個目的地</div>
@@ -196,6 +196,12 @@ export default function Home() {
                 </div>
                 <div className="text-xs text-muted-foreground">最低價</div>
               </div>
+              <Link
+                href="/deals"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-orange-500/40 bg-orange-500/10 px-4 py-2 text-sm font-bold text-orange-600 dark:text-orange-400 transition-all hover:bg-orange-500/20 hover:border-orange-500/60 hover:shadow-md hover:shadow-orange-500/20"
+              >
+                🔥 今日劈價
+              </Link>
             </div>
 
             {/* Filters & Sort */}
