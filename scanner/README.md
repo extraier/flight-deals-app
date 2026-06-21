@@ -52,9 +52,10 @@ These scripts are **not auto-deployed** from GitHub to the NAS directly, but
 #   - launchd runs it every 5 min via com.comparetiger.scanner-sync.plist
 
 # To install on a new Mac:
-cp sync_scanner_to_nas.sh ~/
+ln -sf "$PWD/sync_scanner_to_nas.sh" ~/sync_scanner_to_nas.sh
 cp com.comparetiger.scanner-sync.plist ~/Library/LaunchAgents/
 launchctl load ~/Library/LaunchAgents/com.comparetiger.scanner-sync.plist
+# (`ln -sf` so a `git pull` that updates the repo file also updates ~/)
 
 # To force a one-off sync:
 ~/sync_scanner_to_nas.sh
