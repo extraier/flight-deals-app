@@ -1,12 +1,15 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import allDatesHkg from '@/data/all_dates.json';
-import allDatesSzx from '@/data/all_dates_szx.json';
+// Static JSONs are kept as the build-time fallback only — the live data comes
+// from /api/deals which fetches directly from the NAS via Tailscale Funnel.
+// See src/app/api/deals/route.ts.
+import staticHkg from '@/data/all_dates.json';
+import staticSzx from '@/data/all_dates_szx.json';
 
 type SortOption = 'price' | 'discount';
 type FilterMode = 'region' | 'country';
@@ -38,15 +41,24 @@ interface Deal {
   route: string;
   destination: { name: string; code: string; region: string };
   price: number;
-  currency: string;
-  badge: { carryOn: boolean; cheapDays: number };
+  currency?: string;
+  badge?: { carryOn?: boolean; cheapDays?: number };
   typicalPrice: number;
   cheapestDates: Array<{
     day: number; month: number; year: number;
-    price: number; stay: number | null;
+    price: number; stay?: number | null;
     history?: Record<string, { price: number; diff: number; pct: number }>;
+    flight?: unknown;
   }>;
   totalDestinations: number;
+  totalDates?: number;
+}
+
+interface FlightData {
+  results?: Deal[];
+  generated?: string;
+  source?: string;
+  departure?: string;
 }
 
 type ComparePeriod = 'now' | '1d' | '4d' | '7d';
@@ -84,7 +96,39 @@ export default function Home() {
   const [selectedCountry, setSelectedCountry] = useState<string>('全部');
   const [comparePeriod, setComparePeriod] = useState<ComparePeriod>('now');
 
-  const allData = departure === 'HKG' ? allDatesHkg : allDatesSzx;
+  // Live data state — fetched from /api/deals which proxies to the NAS.
+  // We seed with the static JSON so the first paint isn't empty; then refresh.
+  const [liveData, setLiveData] = useState<FlightData>(staticHkg as unknown as FlightData);
+  const [dataAge, setDataAge] = useState<number>(0);
+  const [dataSource, setDataSource] = useState<'live' | 'static'>('static');
+
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const res = await fetch(`/api/deals?dep=${departure}`, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json: FlightData = await res.json();
+        if (cancelled) return;
+        setLiveData(json);
+        const ageHeader = res.headers.get('x-data-age-ms');
+        setDataAge(ageHeader ? Number(ageHeader) : 0);
+        setDataSource(res.headers.get('x-data-source') === 'static-fallback' ? 'static' : 'live');
+      } catch (err) {
+        console.warn('Failed to fetch live deals, using static:', err);
+        if (!cancelled) {
+          setLiveData((departure === 'HKG' ? staticHkg : staticSzx) as unknown as FlightData);
+          setDataSource('static');
+        }
+      }
+    };
+    load();
+    // Refresh every 90s in the background so the page stays current
+    const interval = setInterval(load, 90_000);
+    return () => { cancelled = true; clearInterval(interval); };
+  }, [departure]);
+
+  const allData = liveData;
   const deals = (allData.results || []) as Deal[];
   const szxLoading = departure === 'SZX' && deals.length === 0;
 
@@ -147,6 +191,13 @@ export default function Home() {
         <div className="mb-6 text-center">
           <h1 className="text-4xl font-bold tracking-tight text-foreground">CompareTiger</h1>
           <p className="mt-2 text-lg text-muted-foreground">{DEPARTURE_LABELS[departure].subtitle}</p>
+          <p className="mt-1 text-xs text-muted-foreground/70">
+            {dataSource === 'live' ? (
+              <>🟢 即時資料 · 更新於 {Math.max(1, Math.round(dataAge / 1000))} 秒前</>
+            ) : (
+              <>🟡 顯示靜態備份資料（NAS 連線中斷）</>
+            )}
+          </p>
         </div>
 
         {/* Departure Selector */}
