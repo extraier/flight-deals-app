@@ -17,6 +17,7 @@
 #   fli_4x_continuous.py               → restarts fli-scheduler (wraps the above two in a loop)
 #   fli_detail_scan_aggressive.py      → restarts fli-detail-hkg
 #   fli_detail_scan_szx.py             → restarts fli-detail-szx
+#   fli_db.py                          → restarts all 4 writers (shared helper)
 #   export_all_dates_hkg_v2.py         → restarts fli-scheduler
 #   export_all_dates_szx.py            → restarts fli-scheduler
 
@@ -26,6 +27,7 @@ NAS_HOST="192.168.50.35"
 NAS_USER="openclaw"
 NAS_SSH_KEY="$HOME/.ssh/ugreen_nas"
 NAS_DIR="/volume1/flight-scanner"
+APP_SCANNER_DIR="$HOME/flight-deals-app/scanner"
 LOG="/tmp/scanner_sync.log"
 
 FILES=(
@@ -34,8 +36,10 @@ FILES=(
   "fli_4x_continuous.py"
   "fli_detail_scan_aggressive.py"
   "fli_detail_scan_szx.py"
+  "fli_db.py"
   "export_all_dates_hkg_v2.py"
   "export_all_dates_szx.py"
+  "export_worldcup_v2.py"      # run via ssh from sync_worldcup.sh, not in any container
 )
 
 ts() { date '+%m-%d %H:%M:%S'; }
@@ -65,7 +69,15 @@ fi
 
 changed=()
 for f in "${FILES[@]}"; do
-  local_path="$HOME/$f"
+  # Most files live in $HOME (~/), but a few live under flight-deals-app/scanner/.
+  # Try both locations.
+  if [ -f "$APP_SCANNER_DIR/$f" ]; then
+    local_path="$APP_SCANNER_DIR/$f"
+  elif [ -f "$HOME/$f" ]; then
+    local_path="$HOME/$f"
+  else
+    continue
+  fi
   [ -f "$local_path" ] || continue
 
   # Hash check: only push when content actually differs (mtime alone is unreliable
@@ -89,7 +101,13 @@ fi
 # Push changed files via cat-over-ssh (scp is unreliable from this Mac to NAS)
 push_failed=0
 for f in "${changed[@]}"; do
-  if cat "$HOME/$f" | nas_ssh "cat > '$NAS_DIR/$f'"; then
+  # Resolve local path the same way the hash-check did (APP_SCANNER_DIR first, then $HOME)
+  if [ -f "$APP_SCANNER_DIR/$f" ]; then
+    local_path="$APP_SCANNER_DIR/$f"
+  else
+    local_path="$HOME/$f"
+  fi
+  if cat "$local_path" | nas_ssh "cat > '$NAS_DIR/$f'"; then
     log "PUSHED: $f"
   else
     log "PUSH FAILED: $f"
@@ -119,6 +137,16 @@ restart_list=""
 [ "$need_scheduler"  -eq 1 ] && restart_list="$restart_list fli-scheduler"
 [ "$need_detail_hkg" -eq 1 ] && restart_list="$restart_list fli-detail-hkg"
 [ "$need_detail_szx" -eq 1 ] && restart_list="$restart_list fli-detail-szx"
+# Hermes: fli_db.py is imported by all 4 writers — if it changes, restart
+# every writer so they all see the new helper on next start.
+[ "$need_scheduler"  -eq 0 ] && [ "$need_detail_hkg" -eq 0 ] && [ "$need_detail_szx" -eq 0 ] && {
+  for f in "${changed[@]}"; do
+    case "$f" in
+      fli_db.py) restart_list="$restart_list fli-scheduler fli-detail-hkg fli-detail-szx" ;;
+    esac
+  done
+}
+restart_list=$(echo "$restart_list" | tr ' ' '\n' | sort -u | tr '\n' ' ')
 
 if [ -n "$restart_list" ]; then
   # No-op if a container is already stopped (don't accidentally start it)

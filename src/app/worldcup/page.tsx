@@ -104,6 +104,18 @@ export default function WorldCupPage() {
     return (a.gameTime || '').localeCompare(b.gameTime || '');
   });
 
+  // Hide matches that kicked off more than 3h ago — keeps closing odds visible
+  // for recently-started games while clearing out yesterday's results.
+  // We compute "now" on the client so this stays accurate across deploys.
+  const nowMs = Date.now();
+  const HIDE_AFTER_MS = 3 * 60 * 60 * 1000; // 3 hours post-kickoff
+  const visibleRows = rows.filter((m) => {
+    if (!m.gameTime) return true; // no time → show
+    const t = Date.parse(m.gameTime.replace(' ', 'T') + '+08:00'); // HKT
+    if (isNaN(t)) return true;
+    return nowMs - t < HIDE_AFTER_MS;
+  });
+
   const activeBtn = 'bg-sky-600 text-white shadow-sm';
   const inactiveBtn = isDark
     ? 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800'
@@ -117,7 +129,7 @@ export default function WorldCupPage() {
         <div className="mb-6 text-center">
           <h1 className="text-3xl font-bold tracking-tight">🏆 世界盃賠率走勢</h1>
           <p className={`mt-2 text-sm ${muted}`}>
-            更新 {data.latest_datetime?.replace('_', ' ')} HKT · 馬會 1x2 + Polymarket 概率
+            更新 {data.latest_datetime?.replace('_', ' ')} HKT · 馬會 1x2 + Polymarket 概率 · 顯示 {visibleRows.length} / {rows.length} 場
           </p>
         </div>
 
@@ -156,7 +168,9 @@ export default function WorldCupPage() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((match, i) => {
+              {visibleRows.length === 0 ? (
+                <tr><td colSpan={4} className={`py-12 text-center ${muted}`}>今日沒有即將開賽的賽事 🎉</td></tr>
+              ) : visibleRows.map((match, i) => {
                 const chg = match[`chg_${window}` as keyof Match] as Changes | undefined;
                 const h = match.hkjc;
                 const p = match.poly;
