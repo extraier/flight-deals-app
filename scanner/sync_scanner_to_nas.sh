@@ -14,6 +14,7 @@
 # Files tracked (keep in sync with ~/flight-deals-app/scanner/):
 #   fli_4x_daily.py                    → restarts fli-scheduler
 #   fli_4x_daily_szx.py                → restarts fli-scheduler
+#   fli_4x_continuous.py               → restarts fli-scheduler (wraps the above two in a loop)
 #   fli_detail_scan_aggressive.py      → restarts fli-detail-hkg
 #   fli_detail_scan_szx.py             → restarts fli-detail-szx
 #   export_all_dates_hkg_v2.py         → restarts fli-scheduler
@@ -30,6 +31,7 @@ LOG="/tmp/scanner_sync.log"
 FILES=(
   "fli_4x_daily.py"
   "fli_4x_daily_szx.py"
+  "fli_4x_continuous.py"
   "fli_detail_scan_aggressive.py"
   "fli_detail_scan_szx.py"
   "export_all_dates_hkg_v2.py"
@@ -107,9 +109,9 @@ need_detail_hkg=0
 need_detail_szx=0
 for f in "${changed[@]}"; do
   case "$f" in
-    fli_4x_daily*|export_all_dates*) need_scheduler=1 ;;
-    fli_detail_scan_aggressive.py)   need_detail_hkg=1 ;;
-    fli_detail_scan_szx.py)          need_detail_szx=1 ;;
+    fli_4x_daily*|fli_4x_continuous*|export_all_dates*) need_scheduler=1 ;;
+    fli_detail_scan_aggressive.py)                     need_detail_hkg=1 ;;
+    fli_detail_scan_szx.py)                            need_detail_szx=1 ;;
   esac
 done
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """SZX Calendar Scanner - scans SZX→XXX routes and saves to flight_dates with departure='SZX'."""
-import sys, sqlite3, time
+import sys, os, sqlite3, time
 from datetime import datetime, timedelta
 from statistics import median
 sys.path.insert(0, '/install')
@@ -13,6 +13,9 @@ from fli.models import Airport
 DB_PATH = '/data/fli_calendar.db'
 LOG_FILE = '/tmp/fli_4x_szx.log'
 DEPARTURE = 'SZX'
+# Hermes: per-route delay (seconds). Read from env, default 2s for batch mode.
+# Continuous mode (fli_4x_continuous.py) sets this to 60 to avoid Google rate limits.
+ROUTE_DELAY = int(os.environ.get('ROUTE_DELAY_SECONDS', '2'))
 
 ROUTES = [
     'SZX→AKL', 'SZX→AMS', 'SZX→BCN', 'SZX→BKK', 'SZX→BOM',
@@ -176,7 +179,7 @@ def run_scan():
             log(f"  {len(prices)} dates, {saved} new")
         else:
             log(f"  no data")
-        time.sleep(2)
+        time.sleep(ROUTE_DELAY)
 
     log(f"SZX scan complete! Saved {total_saved} obs from {success}/{len(ROUTES)} routes")
     conn.close()

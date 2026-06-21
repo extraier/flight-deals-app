@@ -3,8 +3,7 @@
 Fli 4x Daily Scanner + WordPress Update
 Runs at 6am, 12pm, 6pm, midnight
 """
-import sys
-import sqlite3
+import sys, os, sqlite3
 import urllib.request
 import json
 from datetime import datetime, timedelta
@@ -20,6 +19,10 @@ from fli.models import Airport
 
 DB_PATH = '/data/fli_calendar.db'
 LOG_FILE = '/tmp/fli_4x.log'
+
+# Hermes: per-route delay (seconds). Read from env, default 2s for batch mode.
+# Continuous mode (fli_4x_continuous.py) sets this to 60 to avoid Google rate limits.
+ROUTE_DELAY = int(os.environ.get('ROUTE_DELAY_SECONDS', '2'))
 
 # WordPress config
 WP_USER = "Comparetiger"
@@ -185,7 +188,7 @@ def run_scan():
             log(f"  no data")
         
         import time
-        time.sleep(2)
+        time.sleep(ROUTE_DELAY)
     
     log(f"Scan complete! Saved {total_saved} obs from {success}/{len(ROUTES)} routes")
     conn.close()
