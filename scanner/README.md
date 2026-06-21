@@ -37,8 +37,30 @@ All writers share **one** SQLite database. To avoid lock contention we use:
 
 ## Deploy / sync
 
-These scripts are **not auto-synced** from this repo. The Mac copies in `~/` and
-the NAS copies in `/volume1/flight-scanner/` are the live source. After editing:
+These scripts are **not auto-deployed** from GitHub to the NAS directly, but
+`sync_scanner_to_nas.sh` keeps them in sync:
+
+```bash
+# Mac copies live in ~/ (e.g. ~/fli_4x_daily_szx.py)
+# NAS copies live in /volume1/flight-scanner/
+
+# sync_scanner_to_nas.sh (Mac → NAS):
+#   - MD5-checks every script (skip if identical)
+#   - cat-over-ssh to push (scp is flaky from this Mac)
+#   - restarts only the affected containers
+#   - logs to /tmp/scanner_sync.log (auto-trimmed to last 2000 lines)
+#   - launchd runs it every 5 min via com.comparetiger.scanner-sync.plist
+
+# To install on a new Mac:
+cp sync_scanner_to_nas.sh ~/
+cp com.comparetiger.scanner-sync.plist ~/Library/LaunchAgents/
+launchctl load ~/Library/LaunchAgents/com.comparetiger.scanner-sync.plist
+
+# To force a one-off sync:
+~/sync_scanner_to_nas.sh
+```
+
+Manual override (skips the MD5 check, always pushes + restarts):
 
 ```bash
 scp -i ~/.ssh/ugreen_nas ~/fli_4x_daily_szx.py openclaw@192.168.50.35:/volume1/flight-scanner/
