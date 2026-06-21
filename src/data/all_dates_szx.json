@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-22T01:12:41.266892",
+  "generated": "2026-06-22T03:54:58.637547",
   "source": "fli_calendar.db",
   "departure": "SZX",
   "results": [
@@ -14,7 +14,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 293
+        "cheapDays": 301
       },
       "typicalPrice": 1258,
       "cheapestDates": [
@@ -235,7 +235,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 286
+        "cheapDays": 324
       },
       "typicalPrice": 1563,
       "cheapestDates": [
@@ -402,21 +402,21 @@
           }
         },
         {
-          "day": 21,
-          "month": 6,
+          "day": 27,
+          "month": 10,
           "year": 2026,
-          "price": 1517,
-          "stay": 3,
+          "price": 1413,
+          "stay": 14,
           "flight": {
             "airline": "_9C",
             "flight_no": "8753",
-            "dep_time": "06:25",
-            "arr_time": "09:05",
+            "dep_time": "06:15",
+            "arr_time": "08:55",
             "return_airline": "_9C",
             "return_flight": "8754",
-            "return_dep_time": "10:10",
-            "return_arr_time": "13:05",
-            "ret_date": "2026-06-24"
+            "return_dep_time": "10:00",
+            "return_arr_time": "12:50",
+            "ret_date": "2026-11-10"
           }
         }
       ],
@@ -433,7 +433,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 379
+        "cheapDays": 385
       },
       "typicalPrice": 1714,
       "cheapestDates": [
@@ -701,7 +701,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 256
+        "cheapDays": 264
       },
       "typicalPrice": 1708,
       "cheapestDates": [
@@ -958,7 +958,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 61
+        "cheapDays": 252
       },
       "typicalPrice": 1865,
       "cheapestDates": [
@@ -1013,14 +1013,14 @@
           }
         },
         {
-          "day": 26,
-          "month": 8,
+          "day": 7,
+          "month": 9,
           "year": 2026,
-          "price": 1865,
-          "stay": 3,
+          "price": 1696,
+          "stay": 7,
           "history": {
             "1d": {
-              "price": 1865,
+              "price": 1696,
               "diff": 0,
               "pct": 0.0
             }
@@ -1030,47 +1030,47 @@
             "flight_no": "523",
             "dep_time": "02:45",
             "arr_time": "06:45",
-            "return_airline": "ZH",
-            "return_flight": "208",
-            "return_dep_time": "02:55",
-            "return_arr_time": "05:20",
-            "ret_date": "2026-08-29"
-          }
-        },
-        {
-          "day": 27,
-          "month": 8,
-          "year": 2026,
-          "price": 1865,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 1865,
-              "diff": 0,
-              "pct": 0.0
-            }
-          },
-          "flight": {
-            "airline": "MH",
-            "flight_no": "523",
-            "dep_time": "02:45",
-            "arr_time": "06:45",
-            "return_airline": "ZH",
-            "return_flight": "206",
-            "return_dep_time": "02:55",
-            "return_arr_time": "05:20",
-            "ret_date": "2026-08-30"
+            "return_airline": "MH",
+            "return_flight": "709",
+            "return_dep_time": "06:50",
+            "return_arr_time": "10:35",
+            "ret_date": "2026-09-14"
           }
         },
         {
           "day": 10,
           "month": 9,
           "year": 2026,
-          "price": 1865,
-          "stay": 3,
+          "price": 1696,
+          "stay": 7,
           "history": {
             "1d": {
               "price": 1865,
+              "diff": -169,
+              "pct": -9.1
+            }
+          },
+          "flight": {
+            "airline": "MH",
+            "flight_no": "523",
+            "dep_time": "02:45",
+            "arr_time": "06:45",
+            "return_airline": "MH",
+            "return_flight": "709",
+            "return_dep_time": "06:50",
+            "return_arr_time": "10:35",
+            "ret_date": "2026-09-17"
+          }
+        },
+        {
+          "day": 11,
+          "month": 9,
+          "year": 2026,
+          "price": 1696,
+          "stay": 7,
+          "history": {
+            "1d": {
+              "price": 1696,
               "diff": 0,
               "pct": 0.0
             }
@@ -1080,24 +1080,24 @@
             "flight_no": "523",
             "dep_time": "02:45",
             "arr_time": "06:45",
-            "return_airline": "ZH",
-            "return_flight": "206",
-            "return_dep_time": "02:55",
-            "return_arr_time": "05:20",
-            "ret_date": "2026-09-13"
+            "return_airline": "MH",
+            "return_flight": "709",
+            "return_dep_time": "06:50",
+            "return_arr_time": "10:35",
+            "ret_date": "2026-09-18"
           }
         },
         {
           "day": 12,
           "month": 9,
           "year": 2026,
-          "price": 1865,
-          "stay": 3,
+          "price": 1696,
+          "stay": 7,
           "history": {
             "1d": {
               "price": 1865,
-              "diff": 0,
-              "pct": 0.0
+              "diff": -169,
+              "pct": -9.1
             }
           },
           "flight": {
@@ -1105,24 +1105,74 @@
             "flight_no": "523",
             "dep_time": "02:45",
             "arr_time": "06:45",
-            "return_airline": "ZH",
-            "return_flight": "208",
-            "return_dep_time": "02:55",
-            "return_arr_time": "05:20",
-            "ret_date": "2026-09-15"
+            "return_airline": "MH",
+            "return_flight": "709",
+            "return_dep_time": "06:50",
+            "return_arr_time": "10:35",
+            "ret_date": "2026-09-19"
+          }
+        },
+        {
+          "day": 13,
+          "month": 9,
+          "year": 2026,
+          "price": 1696,
+          "stay": 7,
+          "history": {
+            "1d": {
+              "price": 2275,
+              "diff": -579,
+              "pct": -25.5
+            }
+          },
+          "flight": {
+            "airline": "MH",
+            "flight_no": "523",
+            "dep_time": "02:45",
+            "arr_time": "06:45",
+            "return_airline": "MH",
+            "return_flight": "709",
+            "return_dep_time": "06:50",
+            "return_arr_time": "10:35",
+            "ret_date": "2026-09-20"
+          }
+        },
+        {
+          "day": 10,
+          "month": 10,
+          "year": 2026,
+          "price": 1696,
+          "stay": 7,
+          "history": {
+            "1d": {
+              "price": 1865,
+              "diff": -169,
+              "pct": -9.1
+            }
+          },
+          "flight": {
+            "airline": "MH",
+            "flight_no": "523",
+            "dep_time": "02:45",
+            "arr_time": "06:45",
+            "return_airline": "MH",
+            "return_flight": "709",
+            "return_dep_time": "06:50",
+            "return_arr_time": "10:35",
+            "ret_date": "2026-10-17"
           }
         },
         {
           "day": 12,
           "month": 10,
           "year": 2026,
-          "price": 1865,
-          "stay": 3,
+          "price": 1696,
+          "stay": 7,
           "history": {
             "1d": {
               "price": 1865,
-              "diff": 0,
-              "pct": 0.0
+              "diff": -169,
+              "pct": -9.1
             }
           },
           "flight": {
@@ -1130,49 +1180,24 @@
             "flight_no": "523",
             "dep_time": "02:45",
             "arr_time": "06:45",
-            "return_airline": "ZH",
-            "return_flight": "208",
-            "return_dep_time": "02:55",
-            "return_arr_time": "05:20",
-            "ret_date": "2026-10-15"
-          }
-        },
-        {
-          "day": 9,
-          "month": 9,
-          "year": 2026,
-          "price": 1865,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 1865,
-              "diff": 0,
-              "pct": 0.0
-            }
-          },
-          "flight": {
-            "airline": "MH",
-            "flight_no": "523",
-            "dep_time": "02:45",
-            "arr_time": "06:45",
-            "return_airline": "ZH",
-            "return_flight": "208",
-            "return_dep_time": "02:55",
-            "return_arr_time": "05:20",
-            "ret_date": "2026-09-12"
+            "return_airline": "MH",
+            "return_flight": "709",
+            "return_dep_time": "06:50",
+            "return_arr_time": "10:35",
+            "ret_date": "2026-10-19"
           }
         },
         {
           "day": 13,
           "month": 10,
           "year": 2026,
-          "price": 1865,
-          "stay": 3,
+          "price": 1696,
+          "stay": 7,
           "history": {
             "1d": {
               "price": 1865,
-              "diff": 0,
-              "pct": 0.0
+              "diff": -169,
+              "pct": -9.1
             }
           },
           "flight": {
@@ -1180,36 +1205,11 @@
             "flight_no": "523",
             "dep_time": "02:45",
             "arr_time": "06:45",
-            "return_airline": "ZH",
-            "return_flight": "206",
-            "return_dep_time": "02:55",
-            "return_arr_time": "05:20",
-            "ret_date": "2026-10-16"
-          }
-        },
-        {
-          "day": 25,
-          "month": 8,
-          "year": 2026,
-          "price": 1865,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 1865,
-              "diff": 0,
-              "pct": 0.0
-            }
-          },
-          "flight": {
-            "airline": "MH",
-            "flight_no": "523",
-            "dep_time": "02:45",
-            "arr_time": "06:45",
-            "return_airline": "ZH",
-            "return_flight": "206",
-            "return_dep_time": "02:55",
-            "return_arr_time": "05:20",
-            "ret_date": "2026-08-28"
+            "return_airline": "MH",
+            "return_flight": "709",
+            "return_dep_time": "06:50",
+            "return_arr_time": "10:35",
+            "ret_date": "2026-10-20"
           }
         }
       ],
@@ -1226,7 +1226,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 272
+        "cheapDays": 278
       },
       "typicalPrice": 1784,
       "cheapestDates": [
@@ -1406,7 +1406,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 593
+        "cheapDays": 597
       },
       "typicalPrice": 1817,
       "cheapestDates": [
@@ -1674,7 +1674,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 291
+        "cheapDays": 301
       },
       "typicalPrice": 2027,
       "cheapestDates": [
@@ -1942,7 +1942,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 551
+        "cheapDays": 557
       },
       "typicalPrice": 2383,
       "cheapestDates": [
@@ -2210,7 +2210,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 383
+        "cheapDays": 384
       },
       "typicalPrice": 2089,
       "cheapestDates": [
@@ -3196,7 +3196,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 376
+        "cheapDays": 380
       },
       "typicalPrice": 2564,
       "cheapestDates": [
@@ -3248,6 +3248,31 @@
             "return_dep_time": "14:50",
             "return_arr_time": "16:45",
             "ret_date": "2026-09-10"
+          }
+        },
+        {
+          "day": 4,
+          "month": 9,
+          "year": 2026,
+          "price": 2448,
+          "stay": 14,
+          "history": {
+            "1d": {
+              "price": 2449,
+              "diff": -1,
+              "pct": -0.0
+            }
+          },
+          "flight": {
+            "airline": "CI",
+            "flight_no": "528",
+            "dep_time": "18:05",
+            "arr_time": "20:00",
+            "return_airline": "CI",
+            "return_flight": "527",
+            "return_dep_time": "14:50",
+            "return_arr_time": "16:45",
+            "ret_date": "2026-09-18"
           }
         },
         {
@@ -3424,31 +3449,6 @@
             "return_arr_time": "16:45",
             "ret_date": "2026-09-03"
           }
-        },
-        {
-          "day": 3,
-          "month": 9,
-          "year": 2026,
-          "price": 2449,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 2449,
-              "diff": 0,
-              "pct": 0.0
-            }
-          },
-          "flight": {
-            "airline": "CI",
-            "flight_no": "528",
-            "dep_time": "18:05",
-            "arr_time": "20:00",
-            "return_airline": "CI",
-            "return_flight": "527",
-            "return_dep_time": "14:50",
-            "return_arr_time": "16:45",
-            "ret_date": "2026-09-10"
-          }
         }
       ],
       "totalDestinations": 50
@@ -3464,7 +3464,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 381
+        "cheapDays": 384
       },
       "typicalPrice": 2778,
       "cheapestDates": [
@@ -3718,7 +3718,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 204
+        "cheapDays": 214
       },
       "typicalPrice": 2885,
       "cheapestDates": [
@@ -3948,28 +3948,21 @@
           }
         },
         {
-          "day": 26,
-          "month": 8,
+          "day": 25,
+          "month": 10,
           "year": 2026,
-          "price": 2885,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 2885,
-              "diff": 0,
-              "pct": 0.0
-            }
-          },
+          "price": 2884,
+          "stay": 3,
           "flight": {
             "airline": "NH",
             "flight_no": "966",
-            "dep_time": "17:00",
+            "dep_time": "17:25",
             "arr_time": "22:20",
-            "return_airline": "NH",
-            "return_flight": "240",
+            "return_airline": "_7G",
+            "return_flight": "40",
             "return_dep_time": "07:00",
-            "return_arr_time": "08:40",
-            "ret_date": "2026-09-02"
+            "return_arr_time": "08:30",
+            "ret_date": "2026-10-28"
           }
         }
       ],
@@ -3986,7 +3979,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 382
+        "cheapDays": 388
       },
       "typicalPrice": 2929,
       "cheapestDates": [
@@ -4254,7 +4247,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 273
+        "cheapDays": 280
       },
       "typicalPrice": 2910,
       "cheapestDates": [
@@ -4522,9 +4515,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 165
+        "cheapDays": 292
       },
-      "typicalPrice": 4386,
+      "typicalPrice": 4297,
       "cheapestDates": [
         {
           "day": 17,
@@ -4542,6 +4535,24 @@
             "return_dep_time": "13:40",
             "return_arr_time": "15:50",
             "ret_date": "2026-12-01"
+          }
+        },
+        {
+          "day": 12,
+          "month": 1,
+          "year": 2027,
+          "price": 3091,
+          "stay": 14,
+          "flight": {
+            "airline": "NH",
+            "flight_no": "966",
+            "dep_time": "17:25",
+            "arr_time": "22:20",
+            "return_airline": "KE",
+            "return_flight": "744",
+            "return_dep_time": "09:00",
+            "return_arr_time": "11:05",
+            "ret_date": "2027-01-26"
           }
         },
         {
@@ -4694,24 +4705,6 @@
             "return_arr_time": "11:20",
             "ret_date": "2026-09-14"
           }
-        },
-        {
-          "day": 6,
-          "month": 9,
-          "year": 2026,
-          "price": 3648,
-          "stay": 7,
-          "flight": {
-            "airline": "KE",
-            "flight_no": "836",
-            "dep_time": "12:45",
-            "arr_time": "17:35",
-            "return_airline": "KE",
-            "return_flight": "742",
-            "return_dep_time": "13:40",
-            "return_arr_time": "15:40",
-            "ret_date": "2026-09-13"
-          }
         }
       ],
       "totalDestinations": 50
@@ -4727,7 +4720,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 12
+        "cheapDays": 23
       },
       "typicalPrice": 5327,
       "cheapestDates": [
@@ -4812,6 +4805,20 @@
         },
         {
           "day": 3,
+          "month": 1,
+          "year": 2027,
+          "price": 3381,
+          "stay": 14
+        },
+        {
+          "day": 30,
+          "month": 6,
+          "year": 2026,
+          "price": 5356,
+          "stay": 7
+        },
+        {
+          "day": 3,
           "month": 7,
           "year": 2026,
           "price": 5402,
@@ -4825,6 +4832,20 @@
           }
         },
         {
+          "day": 7,
+          "month": 7,
+          "year": 2026,
+          "price": 5472,
+          "stay": 3
+        },
+        {
+          "day": 1,
+          "month": 7,
+          "year": 2026,
+          "price": 5657,
+          "stay": 14
+        },
+        {
           "day": 23,
           "month": 8,
           "year": 2026,
@@ -4833,41 +4854,6 @@
           "history": {
             "1d": {
               "price": 5842,
-              "diff": 0,
-              "pct": 0.0
-            }
-          }
-        },
-        {
-          "day": 14,
-          "month": 7,
-          "year": 2026,
-          "price": 6432,
-          "stay": 7
-        },
-        {
-          "day": 31,
-          "month": 8,
-          "year": 2026,
-          "price": 6478,
-          "stay": 7
-        },
-        {
-          "day": 4,
-          "month": 9,
-          "year": 2026,
-          "price": 6582,
-          "stay": 3
-        },
-        {
-          "day": 30,
-          "month": 10,
-          "year": 2026,
-          "price": 7011,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 7011,
               "diff": 0,
               "pct": 0.0
             }
@@ -4887,7 +4873,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 620
+        "cheapDays": 621
       },
       "typicalPrice": 3432,
       "cheapestDates": [
@@ -5365,7 +5351,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 214
+        "cheapDays": 224
       },
       "typicalPrice": 3178,
       "cheapestDates": [
@@ -5470,6 +5456,60 @@
           }
         },
         {
+          "day": 29,
+          "month": 10,
+          "year": 2026,
+          "price": 3177,
+          "stay": 14,
+          "flight": {
+            "airline": "CI",
+            "flight_no": "586",
+            "dep_time": "11:35",
+            "arr_time": "13:05",
+            "return_airline": "CI",
+            "return_flight": "585",
+            "return_dep_time": "08:35",
+            "return_arr_time": "10:15",
+            "ret_date": "2026-11-12"
+          }
+        },
+        {
+          "day": 24,
+          "month": 12,
+          "year": 2026,
+          "price": 3177,
+          "stay": 7,
+          "flight": {
+            "airline": "CI",
+            "flight_no": "586",
+            "dep_time": "11:35",
+            "arr_time": "13:05",
+            "return_airline": "CI",
+            "return_flight": "585",
+            "return_dep_time": "08:35",
+            "return_arr_time": "10:15",
+            "ret_date": "2026-12-31"
+          }
+        },
+        {
+          "day": 24,
+          "month": 12,
+          "year": 2026,
+          "price": 3177,
+          "stay": 3,
+          "flight": {
+            "airline": "CI",
+            "flight_no": "586",
+            "dep_time": "11:35",
+            "arr_time": "13:05",
+            "return_airline": "CI",
+            "return_flight": "585",
+            "return_dep_time": "08:35",
+            "return_arr_time": "10:15",
+            "ret_date": "2026-12-27"
+          }
+        },
+        {
           "day": 13,
           "month": 8,
           "year": 2026,
@@ -5543,81 +5583,6 @@
             "return_arr_time": "10:10",
             "ret_date": "2026-07-23"
           }
-        },
-        {
-          "day": 23,
-          "month": 7,
-          "year": 2026,
-          "price": 3178,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 3178,
-              "diff": 0,
-              "pct": 0.0
-            }
-          },
-          "flight": {
-            "airline": "CI",
-            "flight_no": "586",
-            "dep_time": "11:30",
-            "arr_time": "13:10",
-            "return_airline": "CI",
-            "return_flight": "585",
-            "return_dep_time": "08:35",
-            "return_arr_time": "10:10",
-            "ret_date": "2026-07-26"
-          }
-        },
-        {
-          "day": 23,
-          "month": 7,
-          "year": 2026,
-          "price": 3178,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 3178,
-              "diff": 0,
-              "pct": 0.0
-            }
-          },
-          "flight": {
-            "airline": "CI",
-            "flight_no": "586",
-            "dep_time": "11:30",
-            "arr_time": "13:10",
-            "return_airline": "CI",
-            "return_flight": "585",
-            "return_dep_time": "08:35",
-            "return_arr_time": "10:10",
-            "ret_date": "2026-07-30"
-          }
-        },
-        {
-          "day": 30,
-          "month": 7,
-          "year": 2026,
-          "price": 3178,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 3178,
-              "diff": 0,
-              "pct": 0.0
-            }
-          },
-          "flight": {
-            "airline": "CI",
-            "flight_no": "586",
-            "dep_time": "11:30",
-            "arr_time": "13:10",
-            "return_airline": "CI",
-            "return_flight": "585",
-            "return_dep_time": "08:35",
-            "return_arr_time": "10:10",
-            "ret_date": "2026-08-02"
-          }
         }
       ],
       "totalDestinations": 50
@@ -5633,7 +5598,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 55
+        "cheapDays": 66
       },
       "typicalPrice": 3276,
       "cheapestDates": [
@@ -6367,9 +6332,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 125
+        "cheapDays": 196
       },
-      "typicalPrice": 6213,
+      "typicalPrice": 3739,
       "cheapestDates": [
         {
           "day": 19,
@@ -6422,43 +6387,47 @@
           }
         },
         {
-          "day": 19,
+          "day": 30,
           "month": 8,
           "year": 2026,
-          "price": 3778,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 3778,
-              "diff": 0,
-              "pct": 0.0
-            }
-          },
+          "price": 3739,
+          "stay": 7,
           "flight": {
             "airline": "AK",
-            "flight_no": "123",
-            "dep_time": "20:55",
-            "arr_time": "01:00",
+            "flight_no": "127",
+            "dep_time": "11:25",
+            "arr_time": "15:35",
             "return_airline": "D7",
             "return_flight": "219",
             "return_dep_time": "06:15",
             "return_arr_time": "12:55",
-            "ret_date": "2026-08-22"
+            "ret_date": "2026-09-06"
           }
         },
         {
-          "day": 13,
-          "month": 8,
+          "day": 3,
+          "month": 9,
           "year": 2026,
-          "price": 5475,
+          "price": 3739,
+          "stay": 3,
+          "flight": {
+            "airline": "AK",
+            "flight_no": "129",
+            "dep_time": "03:20",
+            "arr_time": "07:20",
+            "return_airline": "D7",
+            "return_flight": "219",
+            "return_dep_time": "06:15",
+            "return_arr_time": "12:55",
+            "ret_date": "2026-09-06"
+          }
+        },
+        {
+          "day": 3,
+          "month": 9,
+          "year": 2026,
+          "price": 3739,
           "stay": 7,
-          "history": {
-            "1d": {
-              "price": 4953,
-              "diff": 522,
-              "pct": 10.5
-            }
-          },
           "flight": {
             "airline": "AK",
             "flight_no": "129",
@@ -6468,15 +6437,15 @@
             "return_flight": "213",
             "return_dep_time": "21:45",
             "return_arr_time": "04:25",
-            "ret_date": "2026-08-20"
+            "ret_date": "2026-09-10"
           }
         },
         {
-          "day": 8,
+          "day": 4,
           "month": 9,
           "year": 2026,
-          "price": 5571,
-          "stay": 14,
+          "price": 3739,
+          "stay": 3,
           "flight": {
             "airline": "AK",
             "flight_no": "129",
@@ -6486,132 +6455,79 @@
             "return_flight": "219",
             "return_dep_time": "06:15",
             "return_arr_time": "12:55",
-            "ret_date": "2026-09-22"
-          }
-        },
-        {
-          "day": 15,
-          "month": 8,
-          "year": 2026,
-          "price": 5908,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 4953,
-              "diff": 955,
-              "pct": 19.3
-            }
-          },
-          "flight": {
-            "airline": "HU",
-            "flight_no": "7026",
-            "dep_time": "20:35",
-            "arr_time": "22:00",
-            "return_airline": "D7",
-            "return_flight": "219",
-            "return_dep_time": "06:15",
-            "return_arr_time": "12:55",
-            "ret_date": "2026-08-22"
-          }
-        },
-        {
-          "day": 10,
-          "month": 8,
-          "year": 2026,
-          "price": 6213,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 5766,
-              "diff": 447,
-              "pct": 7.8
-            }
-          },
-          "flight": {
-            "airline": "HU",
-            "flight_no": "7026",
-            "dep_time": "21:25",
-            "arr_time": "22:50",
-            "return_airline": "MH",
-            "return_flight": "128",
-            "return_dep_time": "23:30",
-            "return_arr_time": "06:00",
-            "ret_date": "2026-08-17"
+            "ret_date": "2026-09-07"
           }
         },
         {
           "day": 7,
-          "month": 8,
+          "month": 9,
           "year": 2026,
-          "price": 6250,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 7299,
-              "diff": -1049,
-              "pct": -14.4
-            }
-          },
+          "price": 3739,
+          "stay": 3,
           "flight": {
-            "airline": "HU",
-            "flight_no": "7028",
-            "dep_time": "23:15",
-            "arr_time": "00:40",
-            "return_airline": "HU",
-            "return_flight": "484",
-            "return_dep_time": "19:45",
-            "return_arr_time": "03:45",
-            "ret_date": "2026-08-14"
+            "airline": "AK",
+            "flight_no": "129",
+            "dep_time": "03:20",
+            "arr_time": "07:20",
+            "return_airline": "D7",
+            "return_flight": "213",
+            "return_dep_time": "21:45",
+            "return_arr_time": "04:25",
+            "ret_date": "2026-09-10"
           }
         },
         {
-          "day": 14,
-          "month": 8,
+          "day": 7,
+          "month": 9,
           "year": 2026,
-          "price": 6250,
+          "price": 3739,
           "stay": 7,
-          "history": {
-            "1d": {
-              "price": 6571,
-              "diff": -321,
-              "pct": -4.9
-            }
-          },
           "flight": {
-            "airline": "HU",
-            "flight_no": "7028",
-            "dep_time": "23:15",
-            "arr_time": "00:40",
-            "return_airline": "HU",
-            "return_flight": "484",
-            "return_dep_time": "19:45",
-            "return_arr_time": "03:45",
-            "ret_date": "2026-08-21"
+            "airline": "AK",
+            "flight_no": "129",
+            "dep_time": "03:20",
+            "arr_time": "07:20",
+            "return_airline": "D7",
+            "return_flight": "219",
+            "return_dep_time": "06:15",
+            "return_arr_time": "12:55",
+            "ret_date": "2026-09-14"
           }
         },
         {
-          "day": 16,
-          "month": 8,
+          "day": 8,
+          "month": 9,
           "year": 2026,
-          "price": 6250,
+          "price": 3739,
           "stay": 7,
-          "history": {
-            "1d": {
-              "price": 6795,
-              "diff": -545,
-              "pct": -8.0
-            }
-          },
           "flight": {
-            "airline": "HU",
-            "flight_no": "7028",
-            "dep_time": "23:15",
-            "arr_time": "00:40",
-            "return_airline": "HU",
-            "return_flight": "484",
-            "return_dep_time": "19:45",
-            "return_arr_time": "03:45",
-            "ret_date": "2026-08-23"
+            "airline": "AK",
+            "flight_no": "129",
+            "dep_time": "03:20",
+            "arr_time": "07:20",
+            "return_airline": "D7",
+            "return_flight": "219",
+            "return_dep_time": "06:15",
+            "return_arr_time": "12:55",
+            "ret_date": "2026-09-15"
+          }
+        },
+        {
+          "day": 9,
+          "month": 9,
+          "year": 2026,
+          "price": 3739,
+          "stay": 3,
+          "flight": {
+            "airline": "AK",
+            "flight_no": "129",
+            "dep_time": "03:20",
+            "arr_time": "07:20",
+            "return_airline": "D7",
+            "return_flight": "219",
+            "return_dep_time": "06:15",
+            "return_arr_time": "12:55",
+            "ret_date": "2026-09-12"
           }
         }
       ],
@@ -6628,7 +6544,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 331
+        "cheapDays": 337
       },
       "typicalPrice": 4665,
       "cheapestDates": [
@@ -6882,7 +6798,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 288
+        "cheapDays": 293
       },
       "typicalPrice": 4877,
       "cheapestDates": [
@@ -7041,6 +6957,42 @@
           }
         },
         {
+          "day": 6,
+          "month": 1,
+          "year": 2027,
+          "price": 4402,
+          "stay": 14,
+          "flight": {
+            "airline": "EK",
+            "flight_no": "329",
+            "dep_time": "00:45",
+            "arr_time": "05:25",
+            "return_airline": "EK",
+            "return_flight": "328",
+            "return_dep_time": "10:45",
+            "return_arr_time": "22:00",
+            "ret_date": "2027-01-20"
+          }
+        },
+        {
+          "day": 13,
+          "month": 1,
+          "year": 2027,
+          "price": 4402,
+          "stay": 7,
+          "flight": {
+            "airline": "EK",
+            "flight_no": "329",
+            "dep_time": "00:45",
+            "arr_time": "05:25",
+            "return_airline": "EK",
+            "return_flight": "328",
+            "return_dep_time": "10:45",
+            "return_arr_time": "22:00",
+            "ret_date": "2027-01-20"
+          }
+        },
+        {
           "day": 29,
           "month": 12,
           "year": 2026,
@@ -7057,42 +7009,6 @@
             "return_arr_time": "22:00",
             "ret_date": "2027-01-12"
           }
-        },
-        {
-          "day": 23,
-          "month": 12,
-          "year": 2026,
-          "price": 4506,
-          "stay": 3,
-          "flight": {
-            "airline": "EK",
-            "flight_no": "329",
-            "dep_time": "00:45",
-            "arr_time": "05:25",
-            "return_airline": "CZ",
-            "return_flight": "3042",
-            "return_dep_time": "23:00",
-            "return_arr_time": "10:15",
-            "ret_date": "2026-12-26"
-          }
-        },
-        {
-          "day": 31,
-          "month": 12,
-          "year": 2026,
-          "price": 4506,
-          "stay": 7,
-          "flight": {
-            "airline": "EK",
-            "flight_no": "329",
-            "dep_time": "00:45",
-            "arr_time": "05:25",
-            "return_airline": "CZ",
-            "return_flight": "8436",
-            "return_dep_time": "00:15",
-            "return_arr_time": "10:55",
-            "ret_date": "2027-01-07"
-          }
         }
       ],
       "totalDestinations": 50
@@ -7108,9 +7024,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 3
+        "cheapDays": 9
       },
-      "typicalPrice": 4654,
+      "typicalPrice": 4828,
       "cheapestDates": [
         {
           "day": 17,
@@ -7131,6 +7047,96 @@
           }
         },
         {
+          "day": 12,
+          "month": 11,
+          "year": 2026,
+          "price": 4655,
+          "stay": 7,
+          "flight": {
+            "airline": "KE",
+            "flight_no": "836",
+            "dep_time": "12:40",
+            "arr_time": "17:00",
+            "return_airline": "KE",
+            "return_flight": "2032",
+            "return_dep_time": "17:50",
+            "return_arr_time": "21:30",
+            "ret_date": "2026-11-19"
+          }
+        },
+        {
+          "day": 28,
+          "month": 10,
+          "year": 2026,
+          "price": 4771,
+          "stay": 14,
+          "flight": {
+            "airline": "KE",
+            "flight_no": "836",
+            "dep_time": "12:40",
+            "arr_time": "17:00",
+            "return_airline": "KE",
+            "return_flight": "2032",
+            "return_dep_time": "17:50",
+            "return_arr_time": "21:30",
+            "ret_date": "2026-11-11"
+          }
+        },
+        {
+          "day": 6,
+          "month": 11,
+          "year": 2026,
+          "price": 4886,
+          "stay": 3,
+          "flight": {
+            "airline": "KE",
+            "flight_no": "836",
+            "dep_time": "12:40",
+            "arr_time": "17:00",
+            "return_airline": "KE",
+            "return_flight": "2032",
+            "return_dep_time": "17:50",
+            "return_arr_time": "21:30",
+            "ret_date": "2026-11-09"
+          }
+        },
+        {
+          "day": 19,
+          "month": 1,
+          "year": 2027,
+          "price": 5222,
+          "stay": 3,
+          "flight": {
+            "airline": "KE",
+            "flight_no": "836",
+            "dep_time": "12:40",
+            "arr_time": "17:00",
+            "return_airline": "KE",
+            "return_flight": "2032",
+            "return_dep_time": "17:50",
+            "return_arr_time": "21:30",
+            "ret_date": "2027-01-22"
+          }
+        },
+        {
+          "day": 8,
+          "month": 1,
+          "year": 2027,
+          "price": 5338,
+          "stay": 14,
+          "flight": {
+            "airline": "KE",
+            "flight_no": "836",
+            "dep_time": "12:40",
+            "arr_time": "17:00",
+            "return_airline": "KE",
+            "return_flight": "2032",
+            "return_dep_time": "17:50",
+            "return_arr_time": "21:30",
+            "ret_date": "2027-01-22"
+          }
+        },
+        {
           "day": 30,
           "month": 12,
           "year": 2026,
@@ -7143,6 +7149,13 @@
               "pct": 0.0
             }
           }
+        },
+        {
+          "day": 1,
+          "month": 1,
+          "year": 2027,
+          "price": 7352,
+          "stay": 7
         },
         {
           "day": 30,
@@ -7386,7 +7399,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 216
+        "cheapDays": 225
       },
       "typicalPrice": 4803,
       "cheapestDates": [
@@ -7654,9 +7667,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 73
+        "cheapDays": 79
       },
-      "typicalPrice": 5404,
+      "typicalPrice": 5363,
       "cheapestDates": [
         {
           "day": 6,
@@ -7894,7 +7907,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 38
+        "cheapDays": 51
       },
       "typicalPrice": 5055,
       "cheapestDates": [
@@ -7995,18 +8008,11 @@
           "stay": 7
         },
         {
-          "day": 5,
-          "month": 11,
+          "day": 13,
+          "month": 7,
           "year": 2026,
-          "price": 6616,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 6616,
-              "diff": 0,
-              "pct": 0.0
-            }
-          }
+          "price": 6570,
+          "stay": 7
         }
       ],
       "totalDestinations": 50
@@ -8685,7 +8691,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 462
+        "cheapDays": 467
       },
       "typicalPrice": 6152,
       "cheapestDates": [
@@ -8953,7 +8959,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 119
+        "cheapDays": 129
       },
       "typicalPrice": 6152,
       "cheapestDates": [
@@ -8973,6 +8979,24 @@
             "return_dep_time": "00:10",
             "return_arr_time": "04:20",
             "ret_date": "2026-10-30"
+          }
+        },
+        {
+          "day": 13,
+          "month": 9,
+          "year": 2026,
+          "price": 6153,
+          "stay": 3,
+          "flight": {
+            "airline": "OZ",
+            "flight_no": "372",
+            "dep_time": "13:50",
+            "arr_time": "18:30",
+            "return_airline": "OZ",
+            "return_flight": "271",
+            "return_dep_time": "00:10",
+            "return_arr_time": "04:30",
+            "ret_date": "2026-09-16"
           }
         },
         {
@@ -9032,6 +9056,27 @@
           }
         },
         {
+          "day": 1,
+          "month": 11,
+          "year": 2026,
+          "price": 7449,
+          "stay": 3
+        },
+        {
+          "day": 6,
+          "month": 11,
+          "year": 2026,
+          "price": 7449,
+          "stay": 7,
+          "history": {
+            "1d": {
+              "price": 7448,
+              "diff": 1,
+              "pct": 0.0
+            }
+          }
+        },
+        {
           "day": 29,
           "month": 12,
           "year": 2026,
@@ -9044,48 +9089,6 @@
           "year": 2026,
           "price": 7541,
           "stay": 14
-        },
-        {
-          "day": 2,
-          "month": 7,
-          "year": 2026,
-          "price": 7692,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 7692,
-              "diff": 0,
-              "pct": 0.0
-            }
-          }
-        },
-        {
-          "day": 9,
-          "month": 7,
-          "year": 2026,
-          "price": 8028,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 8028,
-              "diff": 0,
-              "pct": 0.0
-            }
-          }
-        },
-        {
-          "day": 12,
-          "month": 1,
-          "year": 2027,
-          "price": 8120,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 8120,
-              "diff": 0,
-              "pct": 0.0
-            }
-          }
         }
       ],
       "totalDestinations": 50
@@ -9101,7 +9104,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 195
+        "cheapDays": 205
       },
       "typicalPrice": 6239,
       "cheapestDates": [
@@ -9637,7 +9640,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 377
+        "cheapDays": 384
       },
       "typicalPrice": 7048,
       "cheapestDates": [
@@ -9905,7 +9908,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 142
+        "cheapDays": 151
       },
       "typicalPrice": 7177,
       "cheapestDates": [
@@ -10159,7 +10162,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 68
+        "cheapDays": 69
       },
       "typicalPrice": 7091,
       "cheapestDates": [
@@ -10406,7 +10409,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 368
+        "cheapDays": 376
       },
       "typicalPrice": 7113,
       "cheapestDates": [
@@ -10444,6 +10447,31 @@
             "return_dep_time": "01:10",
             "return_arr_time": "05:00",
             "ret_date": "2026-11-14"
+          }
+        },
+        {
+          "day": 28,
+          "month": 10,
+          "year": 2026,
+          "price": 6927,
+          "stay": 14,
+          "history": {
+            "1d": {
+              "price": 6927,
+              "diff": 0,
+              "pct": 0.0
+            }
+          },
+          "flight": {
+            "airline": "KE",
+            "flight_no": "836",
+            "dep_time": "12:40",
+            "arr_time": "17:00",
+            "return_airline": "KE",
+            "return_flight": "72",
+            "return_dep_time": "14:00",
+            "return_arr_time": "17:45",
+            "ret_date": "2026-11-11"
           }
         },
         {
@@ -10620,31 +10648,6 @@
             "return_arr_time": "04:25",
             "ret_date": "2026-09-27"
           }
-        },
-        {
-          "day": 14,
-          "month": 9,
-          "year": 2026,
-          "price": 6928,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 6928,
-              "diff": 0,
-              "pct": 0.0
-            }
-          },
-          "flight": {
-            "airline": "KE",
-            "flight_no": "836",
-            "dep_time": "12:45",
-            "arr_time": "17:35",
-            "return_airline": "KE",
-            "return_flight": "76",
-            "return_dep_time": "00:55",
-            "return_arr_time": "04:25",
-            "ret_date": "2026-09-17"
-          }
         }
       ],
       "totalDestinations": 50
@@ -10660,7 +10663,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 139
+        "cheapDays": 141
       },
       "typicalPrice": 7456,
       "cheapestDates": [
@@ -10914,7 +10917,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 214
+        "cheapDays": 221
       },
       "typicalPrice": 7657,
       "cheapestDates": [
@@ -11182,9 +11185,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 140
+        "cheapDays": 147
       },
-      "typicalPrice": 8481,
+      "typicalPrice": 8284,
       "cheapestDates": [
         {
           "day": 6,
@@ -11415,9 +11418,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 37
+        "cheapDays": 47
       },
-      "typicalPrice": 9752,
+      "typicalPrice": 9753,
       "cheapestDates": [
         {
           "day": 28,
@@ -11460,6 +11463,42 @@
             "return_dep_time": "05:18",
             "return_arr_time": "07:58",
             "ret_date": "2026-11-16"
+          }
+        },
+        {
+          "day": 10,
+          "month": 9,
+          "year": 2026,
+          "price": 9478,
+          "stay": 14,
+          "flight": {
+            "airline": "NH",
+            "flight_no": "966",
+            "dep_time": "17:00",
+            "arr_time": "22:20",
+            "return_airline": "NH",
+            "return_flight": "111",
+            "return_dep_time": "17:45",
+            "return_arr_time": "21:15",
+            "ret_date": "2026-09-24"
+          }
+        },
+        {
+          "day": 10,
+          "month": 11,
+          "year": 2026,
+          "price": 9478,
+          "stay": 14,
+          "flight": {
+            "airline": "NH",
+            "flight_no": "966",
+            "dep_time": "17:25",
+            "arr_time": "22:20",
+            "return_airline": "NH",
+            "return_flight": "111",
+            "return_dep_time": "16:25",
+            "return_arr_time": "21:05",
+            "ret_date": "2026-11-24"
           }
         },
         {
@@ -11549,96 +11588,39 @@
           }
         },
         {
-          "day": 1,
-          "month": 11,
+          "day": 7,
+          "month": 9,
           "year": 2026,
-          "price": 9766,
-          "stay": 14,
+          "price": 9753,
+          "stay": 3,
           "flight": {
-            "airline": "NH",
-            "flight_no": "966",
-            "dep_time": "17:25",
-            "arr_time": "22:20",
+            "airline": "KE",
+            "flight_no": "836",
+            "dep_time": "12:45",
+            "arr_time": "17:35",
             "return_airline": "NH",
             "return_flight": "111",
-            "return_dep_time": "16:25",
-            "return_arr_time": "21:05",
-            "ret_date": "2026-11-15"
+            "return_dep_time": "17:45",
+            "return_arr_time": "21:15",
+            "ret_date": "2026-09-10"
           }
         },
         {
-          "day": 1,
-          "month": 7,
+          "day": 13,
+          "month": 11,
           "year": 2026,
-          "price": 10319,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 10319,
-              "diff": 0,
-              "pct": 0.0
-            }
-          },
+          "price": 9753,
+          "stay": 7,
           "flight": {
             "airline": "KE",
             "flight_no": "836",
-            "dep_time": "12:45",
-            "arr_time": "17:35",
+            "dep_time": "12:40",
+            "arr_time": "17:00",
             "return_airline": "AA",
-            "return_flight": "1902",
-            "return_dep_time": "07:00",
-            "return_arr_time": "09:35",
-            "ret_date": "2026-07-04"
-          }
-        },
-        {
-          "day": 1,
-          "month": 7,
-          "year": 2026,
-          "price": 10319,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 10319,
-              "diff": 0,
-              "pct": 0.0
-            }
-          },
-          "flight": {
-            "airline": "KE",
-            "flight_no": "836",
-            "dep_time": "12:45",
-            "arr_time": "17:35",
-            "return_airline": "KE",
-            "return_flight": "38",
-            "return_dep_time": "12:30",
-            "return_arr_time": "16:50",
-            "ret_date": "2026-07-08"
-          }
-        },
-        {
-          "day": 31,
-          "month": 8,
-          "year": 2026,
-          "price": 10865,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 10865,
-              "diff": 0,
-              "pct": 0.0
-            }
-          },
-          "flight": {
-            "airline": "NH",
-            "flight_no": "966",
-            "dep_time": "17:00",
-            "arr_time": "22:20",
-            "return_airline": "UA",
-            "return_flight": "970",
-            "return_dep_time": "15:45",
-            "return_arr_time": "07:55",
-            "ret_date": "2026-09-07"
+            "return_flight": "1838",
+            "return_dep_time": "05:18",
+            "return_arr_time": "07:58",
+            "ret_date": "2026-11-20"
           }
         }
       ],
@@ -11655,7 +11637,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 22
+        "cheapDays": 32
       },
       "typicalPrice": 31370,
       "cheapestDates": [
@@ -11764,6 +11746,78 @@
           }
         },
         {
+          "day": 5,
+          "month": 9,
+          "year": 2026,
+          "price": 31259,
+          "stay": 14,
+          "flight": {
+            "airline": "NH",
+            "flight_no": "966",
+            "dep_time": "17:00",
+            "arr_time": "22:20",
+            "return_airline": "JL",
+            "return_flight": "3800",
+            "return_dep_time": "09:15",
+            "return_arr_time": "10:35",
+            "ret_date": "2026-09-19"
+          }
+        },
+        {
+          "day": 3,
+          "month": 11,
+          "year": 2026,
+          "price": 31259,
+          "stay": 3,
+          "flight": {
+            "airline": "NH",
+            "flight_no": "966",
+            "dep_time": "17:25",
+            "arr_time": "22:20",
+            "return_airline": "JL",
+            "return_flight": "3808",
+            "return_dep_time": "16:55",
+            "return_arr_time": "18:15",
+            "ret_date": "2026-11-06"
+          }
+        },
+        {
+          "day": 12,
+          "month": 1,
+          "year": 2027,
+          "price": 31259,
+          "stay": 3,
+          "flight": {
+            "airline": "NH",
+            "flight_no": "966",
+            "dep_time": "17:25",
+            "arr_time": "22:20",
+            "return_airline": "JL",
+            "return_flight": "3808",
+            "return_dep_time": "16:55",
+            "return_arr_time": "18:15",
+            "ret_date": "2027-01-15"
+          }
+        },
+        {
+          "day": 13,
+          "month": 1,
+          "year": 2027,
+          "price": 31259,
+          "stay": 14,
+          "flight": {
+            "airline": "NH",
+            "flight_no": "966",
+            "dep_time": "17:25",
+            "arr_time": "22:20",
+            "return_airline": "JL",
+            "return_flight": "3808",
+            "return_dep_time": "16:55",
+            "return_arr_time": "18:15",
+            "ret_date": "2027-01-27"
+          }
+        },
+        {
           "day": 29,
           "month": 8,
           "year": 2026,
@@ -11786,78 +11840,6 @@
             "return_dep_time": "16:50",
             "return_arr_time": "18:10",
             "ret_date": "2026-09-01"
-          }
-        },
-        {
-          "day": 15,
-          "month": 11,
-          "year": 2026,
-          "price": 31370,
-          "stay": 7,
-          "flight": {
-            "airline": "NH",
-            "flight_no": "966",
-            "dep_time": "17:25",
-            "arr_time": "22:20",
-            "return_airline": "JL",
-            "return_flight": "3808",
-            "return_dep_time": "16:55",
-            "return_arr_time": "18:15",
-            "ret_date": "2026-11-22"
-          }
-        },
-        {
-          "day": 28,
-          "month": 8,
-          "year": 2026,
-          "price": 31370,
-          "stay": 7,
-          "flight": {
-            "airline": "NH",
-            "flight_no": "966",
-            "dep_time": "17:00",
-            "arr_time": "22:20",
-            "return_airline": "JL",
-            "return_flight": "3800",
-            "return_dep_time": "09:15",
-            "return_arr_time": "10:35",
-            "ret_date": "2026-09-04"
-          }
-        },
-        {
-          "day": 7,
-          "month": 11,
-          "year": 2026,
-          "price": 31370,
-          "stay": 14,
-          "flight": {
-            "airline": "NH",
-            "flight_no": "966",
-            "dep_time": "17:25",
-            "arr_time": "22:20",
-            "return_airline": "JL",
-            "return_flight": "3808",
-            "return_dep_time": "16:55",
-            "return_arr_time": "18:15",
-            "ret_date": "2026-11-21"
-          }
-        },
-        {
-          "day": 22,
-          "month": 12,
-          "year": 2026,
-          "price": 31370,
-          "stay": 7,
-          "flight": {
-            "airline": "NH",
-            "flight_no": "966",
-            "dep_time": "17:25",
-            "arr_time": "22:20",
-            "return_airline": "JL",
-            "return_flight": "3808",
-            "return_dep_time": "16:55",
-            "return_arr_time": "18:15",
-            "ret_date": "2026-12-29"
           }
         }
       ],
