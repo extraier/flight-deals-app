@@ -6,14 +6,14 @@
       "awayTeam": "Saudi Arabia",
       "gameTime": "2026-06-22 00:00",
       "hkjc": {
-        "home": 1.05,
-        "draw": 7.75,
-        "away": 20.0
+        "home": 1.001,
+        "draw": 100.0,
+        "away": 800.0
       },
       "poly": {
-        "home": 0.885,
-        "draw": 0.075,
-        "away": 0.0365
+        "home": 0.996,
+        "draw": 0.0025,
+        "away": 0.0005
       },
       "chg_1h": {
         "hkjc_home": 0.0,
@@ -27,17 +27,17 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": -1.12,
+        "poly_home": 0.0,
         "poly_draw": 0.0,
-        "poly_away": -2.67
+        "poly_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": 0.0,
-        "hkjc_draw": -6.06,
-        "hkjc_away": -9.09,
-        "poly_home": 0.0,
-        "poly_draw": -11.76,
-        "poly_away": 8.96
+        "hkjc_home": -4.67,
+        "hkjc_draw": 1112.12,
+        "hkjc_away": 3536.36,
+        "poly_home": 12.54,
+        "poly_draw": -97.06,
+        "poly_away": -98.36
       }
     },
     {
@@ -46,9 +46,9 @@
       "awayTeam": "IR Iran",
       "gameTime": "2026-06-22 03:00",
       "hkjc": {
-        "home": 1.28,
-        "draw": 4.5,
-        "away": 7.75
+        "home": 1.27,
+        "draw": 4.55,
+        "away": 8.0
       },
       "poly": {
         "home": 0.695,
@@ -67,14 +67,14 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": 1.46,
+        "poly_home": 0.0,
         "poly_draw": 0.0,
-        "poly_away": -8.0
+        "poly_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": -4.48,
-        "hkjc_draw": 8.43,
-        "hkjc_away": 10.71,
+        "hkjc_home": -5.22,
+        "hkjc_draw": 9.64,
+        "hkjc_away": 14.29,
         "poly_home": 2.96,
         "poly_draw": -4.88,
         "poly_away": 0.0
@@ -104,10 +104,10 @@
         "poly_away": 0.0
       },
       "chg_4h": {
-        "hkjc_home": -1.53,
-        "hkjc_draw": 1.23,
-        "hkjc_away": 6.06,
-        "poly_home": 1.48,
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
         "poly_draw": 0.0,
         "poly_away": 0.0
       },
@@ -127,7 +127,7 @@
       "gameTime": "2026-06-22 09:00",
       "hkjc": {
         "home": 5.8,
-        "draw": 3.7,
+        "draw": 3.75,
         "away": 1.45
       },
       "poly": {
@@ -153,7 +153,7 @@
       },
       "chg_24h": {
         "hkjc_home": 3.57,
-        "hkjc_draw": 2.78,
+        "hkjc_draw": 4.17,
         "hkjc_away": -2.03,
         "poly_home": -6.06,
         "poly_draw": 0.0,
@@ -166,9 +166,9 @@
       "awayTeam": "Austria",
       "gameTime": "2026-06-23 01:00",
       "hkjc": {
-        "home": 1.43,
-        "draw": 3.85,
-        "away": 5.8
+        "home": 1.4,
+        "draw": 3.9,
+        "away": 6.0
       },
       "poly": {
         "home": 0.635,
@@ -192,9 +192,9 @@
         "poly_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": -4.67,
-        "hkjc_draw": 6.94,
-        "hkjc_away": 9.43,
+        "hkjc_home": -6.67,
+        "hkjc_draw": 8.33,
+        "hkjc_away": 13.21,
         "poly_home": 1.6,
         "poly_draw": -4.26,
         "poly_away": -6.9
@@ -206,8 +206,8 @@
       "awayTeam": "Iraq",
       "gameTime": "2026-06-23 05:00",
       "hkjc": {
-        "home": 1.05,
-        "draw": 7.5,
+        "home": 1.04,
+        "draw": 8.0,
         "away": 22.0
       },
       "poly": {
@@ -232,8 +232,8 @@
         "poly_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": 0.96,
-        "hkjc_draw": -3.23,
+        "hkjc_home": 0.0,
+        "hkjc_draw": 3.23,
         "hkjc_away": -8.33,
         "poly_home": 0.0,
         "poly_draw": 0.0,
@@ -246,9 +246,9 @@
       "awayTeam": "Senegal",
       "gameTime": "2026-06-23 08:00",
       "hkjc": {
-        "home": 2.05,
-        "draw": 3.15,
-        "away": 3.05
+        "home": 1.99,
+        "draw": 3.2,
+        "away": 3.15
       },
       "poly": {
         "home": 0.425,
@@ -272,9 +272,9 @@
         "poly_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": 1.99,
-        "hkjc_draw": 0.0,
-        "hkjc_away": -3.17,
+        "hkjc_home": -1.0,
+        "hkjc_draw": 1.59,
+        "hkjc_away": 0.0,
         "poly_home": 0.0,
         "poly_draw": 0.0,
         "poly_away": -3.28
@@ -345,8 +345,8 @@
       },
       "chg_4h": {
         "hkjc_home": 0.0,
-        "hkjc_draw": 1.54,
-        "hkjc_away": -6.25,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0,
         "poly_home": 0.0,
         "poly_draw": 0.0,
         "poly_away": 0.0
@@ -675,9 +675,9 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": -7.27,
+        "poly_home": -3.77,
         "poly_draw": 0.0,
-        "poly_away": 2.02
+        "poly_away": 4.12
       }
     },
     {
@@ -747,7 +747,7 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": -3.64,
+        "poly_home": 0.0,
         "poly_draw": 0.0,
         "poly_away": 0.0
       },
@@ -812,7 +812,7 @@
       },
       "poly": {
         "home": 0.495,
-        "draw": 0.285,
+        "draw": 0.275,
         "away": 0.225
       },
       "chg_1h": {
@@ -827,16 +827,16 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": 2.06,
+        "poly_home": 0.0,
         "poly_draw": 0.0,
-        "poly_away": -4.26
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": -10.23,
         "hkjc_draw": 8.06,
         "hkjc_away": 6.67,
         "poly_home": 13.79,
-        "poly_draw": 3.64,
+        "poly_draw": 0.0,
         "poly_away": -23.73
       }
     },
@@ -853,7 +853,7 @@
       "poly": {
         "home": 0.045,
         "draw": 0.105,
-        "away": 0.855
+        "away": 0.865
       },
       "chg_1h": {
         "hkjc_home": 0.0,
@@ -869,7 +869,7 @@
         "hkjc_away": 0.0,
         "poly_home": 0.0,
         "poly_draw": 0.0,
-        "poly_away": 1.18
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 23.81,
@@ -877,7 +877,7 @@
         "hkjc_away": -7.56,
         "poly_home": -52.63,
         "poly_draw": -36.36,
-        "poly_away": 13.25
+        "poly_away": 14.57
       }
     },
     {
@@ -947,7 +947,7 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": -3.39,
+        "poly_home": 0.0,
         "poly_draw": 0.0,
         "poly_away": 0.0
       },
@@ -989,7 +989,7 @@
         "hkjc_away": 0.0,
         "poly_home": 0.0,
         "poly_draw": 0.0,
-        "poly_away": -1.8
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
@@ -1051,9 +1051,9 @@
         "away": 2.53
       },
       "poly": {
-        "home": 0.345,
-        "draw": 0.265,
-        "away": 0.395
+        "home": 0.385,
+        "draw": 0.255,
+        "away": 0.37
       },
       "chg_1h": {
         "hkjc_home": 0.0,
@@ -1067,17 +1067,17 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": 2.99,
+        "poly_home": 0.0,
         "poly_draw": 0.0,
-        "poly_away": -2.47
+        "poly_away": 0.0
       },
       "chg_24h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": 2.99,
-        "poly_draw": 0.0,
-        "poly_away": -2.47
+        "poly_home": 14.93,
+        "poly_draw": -3.77,
+        "poly_away": -8.64
       }
     },
     {
@@ -1092,8 +1092,8 @@
       },
       "poly": {
         "home": 0.155,
-        "draw": 0.225,
-        "away": 0.635
+        "draw": 0.215,
+        "away": 0.645
       },
       "chg_1h": {
         "hkjc_home": 0.0,
@@ -1107,7 +1107,7 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": 3.33,
+        "poly_home": 0.0,
         "poly_draw": 0.0,
         "poly_away": 0.0
       },
@@ -1116,8 +1116,8 @@
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
         "poly_home": 0.0,
-        "poly_draw": 0.0,
-        "poly_away": 0.0
+        "poly_draw": -4.44,
+        "poly_away": 1.57
       }
     },
     {
@@ -1307,7 +1307,7 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": -3.64,
+        "poly_home": 0.0,
         "poly_draw": 0.0,
         "poly_away": 0.0
       },
@@ -1371,7 +1371,7 @@
         "away": 1.09
       },
       "poly": {
-        "home": 0.066,
+        "home": 0.0665,
         "draw": 0.115,
         "away": 0.825
       },
@@ -1387,7 +1387,7 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": 0.76,
+        "poly_home": 0.0,
         "poly_draw": 0.0,
         "poly_away": 0.0
       },
@@ -1395,7 +1395,7 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": 7.32,
+        "poly_home": 8.13,
         "poly_draw": 0.0,
         "poly_away": 1.23
       }
@@ -1441,10 +1441,10 @@
       }
     }
   ],
-  "generated": "2026-06-22T00:26:30.851830+08:00",
-  "latest_datetime": "2026-06-21 23:36:34",
-  "latest_ts": 1782056194.991433,
-  "ref_1h": "2026-06-21 23:36:34",
-  "ref_4h": "2026-06-21 20:36:21",
-  "ref_24h": "2026-06-21 00:30:47"
+  "generated": "2026-06-22T01:17:37.260738+08:00",
+  "latest_datetime": "2026-06-22 00:36:43",
+  "latest_ts": 1782059803.217917,
+  "ref_1h": "2026-06-22 00:36:43",
+  "ref_4h": "2026-06-22 00:36:43",
+  "ref_24h": "2026-06-21 01:15:47"
 }
