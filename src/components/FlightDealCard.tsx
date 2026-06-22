@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { X } from 'lucide-react';
+import { X, AlertTriangle } from 'lucide-react';
 
 interface FlightInfo {
   airline: string;
@@ -18,6 +18,14 @@ interface FlightInfo {
   ret_date?: string;
 }
 
+// Hermes: matches export_all_dates_*.py — history.1d is the price recorded
+// yesterday; if it differs from the current price the calendar cell is stale.
+interface HistoryPoint {
+  price: number;
+  diff: number;
+  pct: number;
+}
+
 interface DateInfo {
   day: number;
   month: number;
@@ -25,6 +33,7 @@ interface DateInfo {
   price: number;
   stay: number | null;
   flight?: FlightInfo;
+  history?: Record<string, HistoryPoint>;
 }
 
 interface Deal {
@@ -131,25 +140,59 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: Flight
                   <div className="flex flex-wrap gap-2">
                     {dates
                       .sort((a, b) => a.day - b.day)
-                      .map((date, idx) => (
+                      .map((date, idx) => {
+                        // Hermes: stale-cell detection.
+                        //   history.1d.diff = current_price - yesterday's_price
+                        //     diff < 0  →  row is CHEAPER than yesterday (good)
+                        //     diff > 0  →  row is MORE EXPENSIVE than yesterday
+                        //   BUT — the scanner writes the LATEST scanned price,
+                        //   while the calendar scanner reports a price that
+                        //   may already be higher than what the row says. So
+                        //   the row can show $4930 while yesterday's actual
+                        //   was $5520 → diff = -590 → STALE (row lags reality).
+                        //   The re-scan smart-skip policy (see detail scanner)
+                        //   will catch up to $5520 within ~50 min.
+                        const h1 = date.history?.['1d'];
+                        const isStaleDown = !!h1 && h1.diff < -50;
+                        const staleBadgeText = isStaleDown
+                          ? `昨日HK$${Math.round(h1.price).toLocaleString()}`
+                          : null;
+
+                        return (
                         <button
                           key={idx}
                           onClick={() => setSelectedDate(date)}
-                          className={`inline-flex flex-col items-center gap-1 rounded-lg border px-3 py-1.5 text-sm transition-all cursor-pointer ${
-                            date.flight
+                          title={isStaleDown
+                            ? `昨日實際 HK$${Math.round(h1.price).toLocaleString()} · 此價格可能已回升，下次掃描約 50 分鐘內更新`
+                            : undefined}
+                          className={`relative inline-flex flex-col items-center gap-1 rounded-lg border px-3 py-1.5 text-sm transition-all cursor-pointer ${
+                            isStaleDown
+                              ? 'border-amber-500/40 bg-amber-500/10 hover:border-amber-500/60 hover:bg-amber-500/20'
+                              : date.flight
                               ? 'border-emerald-500/30 bg-emerald-500/10 hover:border-emerald-500/50 hover:bg-emerald-500/20'
                               : 'border-border bg-secondary/30 hover:border-muted-foreground/30 hover:bg-secondary/50'
                           }`}
                         >
                           <div className="flex items-center gap-2">
-                            <span className={`font-medium ${date.flight ? 'text-emerald-600 dark:text-emerald-400' : 'text-foreground'}`}>
+                            <span className={`font-medium ${
+                              isStaleDown
+                                ? 'text-amber-700 dark:text-amber-400'
+                                : date.flight
+                                ? 'text-emerald-600 dark:text-emerald-400'
+                                : 'text-foreground'
+                            }`}>
                               {date.day}號
                             </span>
                             {date.stay && (
                               <span className="text-xs text-muted-foreground">{date.stay}日</span>
                             )}
                           </div>
-                          {date.flight ? (
+                          {isStaleDown ? (
+                            <div className="flex items-center gap-1 text-xs text-amber-700 dark:text-amber-400">
+                              <AlertTriangle className="h-3 w-3" />
+                              <span>{staleBadgeText}</span>
+                            </div>
+                          ) : date.flight ? (
                             <div className="flex items-center gap-1 text-xs text-muted-foreground">
                               <span>{date.flight.airline}</span>
                               <span>{date.flight.dep_time}</span>
@@ -158,7 +201,8 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: Flight
                             <div className="text-xs text-muted-foreground">詳情待確認</div>
                           )}
                         </button>
-                      ))}
+                        );
+                      })}
                   </div>
                 </div>
               ))}

@@ -17,6 +17,8 @@
 #   fli_4x_continuous.py               → restarts fli-scheduler (wraps the above two in a loop)
 #   fli_detail_scan_aggressive.py      → restarts fli-detail-hkg
 #   fli_detail_scan_szx.py             → restarts fli-detail-szx
+#   hkg_detail_loop.sh                 → restarts fli-detail-hkg (per-round pause knob)
+#   szx_detail_loop.sh                 → restarts fli-detail-szx (per-round pause knob)
 #   fli_db.py                          → restarts all 4 writers (shared helper)
 #   export_all_dates_hkg_v2.py         → restarts fli-scheduler
 #   export_all_dates_szx.py            → restarts fli-scheduler
@@ -36,6 +38,8 @@ FILES=(
   "fli_4x_continuous.py"
   "fli_detail_scan_aggressive.py"
   "fli_detail_scan_szx.py"
+  "hkg_detail_loop.sh"
+  "szx_detail_loop.sh"
   "fli_db.py"
   "export_all_dates_hkg_v2.py"
   "export_all_dates_szx.py"
@@ -108,6 +112,10 @@ for f in "${changed[@]}"; do
     local_path="$HOME/$f"
   fi
   if cat "$local_path" | nas_ssh "cat > '$NAS_DIR/$f'"; then
+    # Restore executable bit for .sh files (cat > strips it on most volumes)
+    case "$f" in
+      *.sh) nas_ssh "chmod +x '$NAS_DIR/$f'" >/dev/null 2>&1 ;;
+    esac
     log "PUSHED: $f"
   else
     log "PUSH FAILED: $f"
@@ -128,8 +136,8 @@ need_detail_szx=0
 for f in "${changed[@]}"; do
   case "$f" in
     fli_4x_daily*|fli_4x_continuous*|export_all_dates*) need_scheduler=1 ;;
-    fli_detail_scan_aggressive.py)                     need_detail_hkg=1 ;;
-    fli_detail_scan_szx.py)                            need_detail_szx=1 ;;
+    fli_detail_scan_aggressive.py|hkg_detail_loop.sh)   need_detail_hkg=1 ;;
+    fli_detail_scan_szx.py|szx_detail_loop.sh)          need_detail_szx=1 ;;
   esac
 done
 

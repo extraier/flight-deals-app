@@ -4,13 +4,16 @@ import sys, os, sqlite3, time
 from datetime import datetime, timedelta
 from statistics import median
 sys.path.insert(0, '/install')
+sys.path.insert(0, '/data')  # Hermes: fli_db.py lives next to the scanners
 from fli.search import SearchDates
 from fli.models.google_flights.dates import DateSearchFilters
 from fli.models.google_flights.base import FlightSegment, TripType, PassengerInfo
 from fli.core.parsers import resolve_enum
 from fli.models import Airport
 
-DB_PATH = '/data/fli_calendar.db'
+import fli_db  # Hermes: shared DB helper — see fli_db.py for the flock+busy story
+
+DB_PATH = '/data/fli_calendar.db'  # legacy, used by export scripts only
 LOG_FILE = '/tmp/fli_4x_szx.log'
 DEPARTURE = 'SZX'
 # Hermes: per-route delay (seconds). Read from env, default 2s for batch mode.
@@ -137,32 +140,40 @@ def scan_route(searcher, origin, dest):
     return results
 
 def save_prices(conn, route, prices, recorded_date, departure='SZX'):
-    c = conn.cursor()
+    """Save prices with the bulletproof write_transaction — see
+    fli_4x_daily.save_prices for the full story. Identical pattern."""
     saved = 0
-    for p in prices:
-        try:
-            # Mirror HKG: INSERT OR REPLACE into historical_prices (per departure)
-            c.execute('''
-                INSERT OR REPLACE INTO historical_prices (route, dep_date, ret_date, price, recorded_date, departure)
-                VALUES (?, ?, ?, ?, ?, ?)
-            ''', (route, p['dep_date'], p['ret_date'], p['price'], recorded_date, departure))
-            # Also update flight_dates with current prices (INSERT OR IGNORE so existing detail rows aren't clobbered)
-            c.execute('''
-                INSERT OR IGNORE INTO flight_dates (route, dep_date, ret_date, price, duration, scan_time, departure)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            ''', (route, p['dep_date'], p['ret_date'], p['price'], 7, recorded_date, departure))
-            saved += 1
-        except:
-            pass
-    conn.commit()
+    try:
+        with fli_db.write_transaction(conn, label=f"save SZX {route}", flock_timeout_s=60) as tx:
+            for p in prices:
+                # Mirror HKG: INSERT OR REPLACE into historical_prices (per departure)
+                tx.execute('''
+                    INSERT OR REPLACE INTO historical_prices (route, dep_date, ret_date, price, recorded_date, departure)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                ''', (route, p['dep_date'], p['ret_date'], p['price'], recorded_date, departure))
+                # Also update flight_dates with current prices (INSERT OR IGNORE so existing detail rows aren't clobbered)
+                tx.execute('''
+                    INSERT OR IGNORE INTO flight_dates (route, dep_date, ret_date, price, duration, scan_time, departure)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                ''', (route, p['dep_date'], p['ret_date'], p['price'], 7, recorded_date, departure))
+                saved += 1
+    except TimeoutError as e:
+        log(f"Save lock timeout for {route}: {e}")
+    except sqlite3.OperationalError as e:
+        if "locked" in str(e).lower():
+            log(f"Save persistent lock failure for {route}: {e}")
+        else:
+            log(f"Save error for {route}: {e}")
+    except Exception as e:
+        log(f"Save unexpected error for {route}: {e}")
     return saved
 
 def run_scan():
     log("=" * 50)
     log("SZX CALENDAR SCAN STARTING")
     recorded_date = datetime.now().strftime("%Y-%m-%d")
-    conn = sqlite3.connect(DB_PATH, timeout=30)
-    conn.execute("PRAGMA busy_timeout = 30000")
+    # Hermes: use fli_db so WAL + busy_timeout are set idempotently
+    conn = fli_db.connect()
     init_db(conn)
     searcher = SearchDates()
     total_saved = 0

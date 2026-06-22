@@ -6,6 +6,7 @@ import time
 from datetime import datetime
 
 sys.path.insert(0, '/install')
+sys.path.insert(0, '/data')  # Hermes: fli_db.py lives next to the scanners
 
 from fli.search import SearchFlights
 from fli.models.google_flights.base import TripType, FlightSegment
@@ -13,7 +14,9 @@ from fli.models.google_flights.flights import FlightSearchFilters
 from fli.core.parsers import resolve_enum
 from fli.models import Airport
 
-DB_PATH = '/data/fli_calendar.db'
+import fli_db  # Hermes: shared DB helper — see fli_db.py for the flock+busy story
+
+DB_PATH = '/data/fli_calendar.db'  # legacy, used by export scripts only
 
 ROUTES = [
     'HKG→AKL', 'HKG→AMS', 'HKG→BCN', 'HKG→BKK', 'HKG→BOM',
@@ -34,8 +37,9 @@ def log(msg):
     sys.stdout.flush()
 
 def init_db():
-    conn = sqlite3.connect(DB_PATH)
-    conn.execute("PRAGMA busy_timeout = 30000")
+    # Hermes: route schema setup through fli_db so WAL + busy_timeout are
+    # applied idempotently alongside the schema.
+    conn = fli_db.connect()
     c = conn.cursor()
     c.execute('''
         CREATE TABLE IF NOT EXISTS flight_details (
@@ -172,45 +176,82 @@ def main():
         
         saved_for_route = 0
         for dep_date, ret_date, price in dates_to_scan:
-            # Check if we already have details
+            # Hermes: smart re-scan policy. Google Flights prices revert constantly
+            # (a $4,930 deal can be $5,520 the next day), but re-querying every
+            # detail call would blow our 429 budget. Instead:
+            #   1. Always run the cheap pre-check from flight_dates (current
+            #      calendar price) against flight_details (last queried price).
+            #   2. If they match within $5, skip the Google query — almost
+            #      certainly unchanged.
+            #   3. If they diverge, re-query Google to update flight_details AND
+            #      mirror today's price into historical_prices so history.1d/4d/7d
+            #      always reflects the latest scan, not a stale snapshot.
             c = conn.cursor()
-            c.execute("SELECT COUNT(*) FROM flight_details WHERE route=? AND dep_date=? AND ret_date=?", 
+            c.execute("SELECT price FROM flight_details WHERE route=? AND dep_date=? AND ret_date=?",
                      (route, dep_date, ret_date))
-            if c.fetchone()[0] > 0:
+            row = c.fetchone()
+            existing_price = row[0] if row else None
+
+            # Skip when the calendar price matches what we have — safe heuristic.
+            if existing_price is not None and abs(existing_price - price) < 5.0:
                 saved_for_route += 1
                 continue
-            
+
             details = get_flight_details(searcher, origin, dest, dep_date, ret_date)
-            
+
             if details:
+                # Hermes: per-row write with write_transaction (flock + BEGIN
+                # IMMEDIATE). Critical section is tiny (one row + commit), so
+                # the 4x scans only wait a few ms even when we're churning
+                # through many rows.
                 try:
-                    c.execute('''
-                        INSERT OR REPLACE INTO flight_details 
-                        (route, dep_date, ret_date, price, outbound_airline, outbound_flight,
-                         outbound_dep_time, outbound_arr_time, outbound_stops, outbound_aircraft,
-                         return_airline, return_flight, return_dep_time, return_arr_time,
-                         return_stops, return_aircraft, total_duration, scan_time)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    ''', (
-                        route, dep_date, ret_date, details['price'],
-                        details['outbound_airline'], details['outbound_flight'],
-                        details['outbound_dep_time'], details['outbound_arr_time'],
-                        details['outbound_stops'], details['outbound_aircraft'],
-                        details['return_airline'], details['return_flight'],
-                        details['return_dep_time'], details['return_arr_time'],
-                        details['return_stops'], details['return_aircraft'],
-                        details['total_duration'], recorded_date
-                    ))
-                    conn.commit()
+                    with fli_db.write_transaction(conn, label=f"detail {route} {dep_date}", flock_timeout_s=30) as tx:
+                        tx.execute('''
+                            INSERT OR REPLACE INTO flight_details
+                            (route, dep_date, ret_date, price, outbound_airline, outbound_flight,
+                             outbound_dep_time, outbound_arr_time, outbound_stops, outbound_aircraft,
+                             return_airline, return_flight, return_dep_time, return_arr_time,
+                             return_stops, return_aircraft, total_duration, scan_time)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        ''', (
+                            route, dep_date, ret_date, details['price'],
+                            details['outbound_airline'], details['outbound_flight'],
+                            details['outbound_dep_time'], details['outbound_arr_time'],
+                            details['outbound_stops'], details['outbound_aircraft'],
+                            details['return_airline'], details['return_flight'],
+                            details['return_dep_time'], details['return_arr_time'],
+                            details['return_stops'], details['return_aircraft'],
+                            details['total_duration'], recorded_date
+                        ))
+                        # Mirror the live price into today's historical_prices
+                        # row so history.1d/4d/7d always reflect actual scans,
+                        # not stale DB rows that survived a price revert.
+                        tx.execute('''
+                            INSERT OR REPLACE INTO historical_prices
+                            (route, dep_date, ret_date, price, currency, recorded_date)
+                            VALUES (?, ?, ?, ?, 'HKD', date('now'))
+                        ''', (route, dep_date, ret_date, details['price']))
                     total_saved += 1
                     saved_for_route += 1
-                    log(f"  {dep_date}→{ret_date}: {details['outbound_airline']} {details['outbound_flight']} @ HK${details['price']}")
+                    if existing_price is not None:
+                        delta = details['price'] - existing_price
+                        direction = '↑' if delta > 0 else ('↓' if delta < 0 else '·')
+                        log(f"  {dep_date}→{ret_date}: {details['outbound_airline']} {details['outbound_flight']} @ HK${details['price']}  {direction}{abs(int(delta))}")
+                    else:
+                        log(f"  {dep_date}→{ret_date}: {details['outbound_airline']} {details['outbound_flight']} @ HK${details['price']}")
+                except TimeoutError as e:
+                    log(f"  Lock timeout (4x scan holding lock >30s), skipping this row: {e}")
+                except sqlite3.OperationalError as e:
+                    if "locked" in str(e).lower():
+                        log(f"  Persistent lock failure: {e}")
+                    else:
+                        log(f"  DB error: {e}")
                 except Exception as e:
                     log(f"  DB error: {e}")
             else:
                 log(f"  {dep_date}→{ret_date}: No details")
-            
-            time.sleep(1.5)
+
+            time.sleep(2.5)  # Hermes: was 1.5s, raised to ease 429 pressure from Google Flights
         
         if saved_for_route > 0:
             success += 1

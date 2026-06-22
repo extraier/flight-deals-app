@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from statistics import median
 
 sys.path.insert(0, '/install')
+sys.path.insert(0, '/data')  # Hermes: fli_db.py lives next to the scanners
 
 from fli.search import SearchDates
 from fli.models.google_flights.dates import DateSearchFilters
@@ -17,7 +18,9 @@ from fli.models.google_flights.base import FlightSegment, TripType, PassengerInf
 from fli.core.parsers import resolve_enum
 from fli.models import Airport
 
-DB_PATH = '/data/fli_calendar.db'
+import fli_db  # Hermes: shared DB helper — see fli_db.py for the flock+busy story
+
+DB_PATH = '/data/fli_calendar.db'  # legacy, used by export scripts only
 LOG_FILE = '/tmp/fli_4x.log'
 
 # Hermes: per-route delay (seconds). Read from env, default 2s for batch mode.
@@ -70,8 +73,10 @@ def log(msg):
         pass
 
 def init_db():
-    conn = sqlite3.connect(DB_PATH, timeout=30)
-    conn.execute("PRAGMA busy_timeout = 30000")
+    # Hermes: route the schema setup through fli_db so WAL + busy_timeout are
+    # applied idempotently alongside the schema. This replaces the raw
+    # sqlite3.connect + ad-hoc PRAGMA from the old version.
+    conn = fli_db.connect()
     c = conn.cursor()
     c.execute('''
         CREATE TABLE IF NOT EXISTS historical_prices (
@@ -141,26 +146,44 @@ def scan_route(searcher, origin, dest):
     return results
 
 def save_prices(conn, route, prices, recorded_date):
-    c = conn.cursor()
+    """Save prices with the bulletproof write_transaction.
+
+    Combines: cross-process flock (excludes other writers) +
+    BEGIN IMMEDIATE (fails fast on lock contention) + auto-commit +
+    rollback-on-exception. The whole batch is atomic.
+
+    If we get a transient SQLITE_BUSY, write_transaction retries with
+    backoff. If we get a real error (Google rate limit, bad data, etc.)
+    the exception is logged and we return what was saved so far.
+    """
     saved = 0
-    for p in prices:
-        try:
-            # Update historical_prices with INSERT OR REPLACE (was INSERT OR IGNORE)
-            c.execute('''
-                INSERT OR REPLACE INTO historical_prices (route, dep_date, ret_date, price, recorded_date)
-                VALUES (?, ?, ?, ?, ?)
-            ''', (route, p['dep_date'], p['ret_date'], p['price'], recorded_date))
-            
-            # Also update flight_dates with current prices using INSERT OR REPLACE
-            c.execute('''
-                INSERT OR REPLACE INTO flight_dates (route, dep_date, ret_date, price, currency, duration, scan_time)
-                VALUES (?, ?, ?, ?, ?, ?, datetime())
-            ''', (route, p['dep_date'], p['ret_date'], p['price'], p.get('currency', 'HKD'), p.get('duration', 7)))
-            
-            saved += 1
-        except Exception as e:
-            log(f"Save error: {e}")
-    conn.commit()
+    try:
+        with fli_db.write_transaction(conn, label=f"save {route}", flock_timeout_s=60) as tx:
+            for p in prices:
+                # Update historical_prices with INSERT OR REPLACE (was INSERT OR IGNORE)
+                tx.execute('''
+                    INSERT OR REPLACE INTO historical_prices (route, dep_date, ret_date, price, recorded_date)
+                    VALUES (?, ?, ?, ?, ?)
+                ''', (route, p['dep_date'], p['ret_date'], p['price'], recorded_date))
+
+                # Also update flight_dates with current prices using INSERT OR REPLACE
+                tx.execute('''
+                    INSERT OR REPLACE INTO flight_dates (route, dep_date, ret_date, price, currency, duration, scan_time)
+                    VALUES (?, ?, ?, ?, ?, ?, datetime())
+                ''', (route, p['dep_date'], p['ret_date'], p['price'], p.get('currency', 'HKD'), p.get('duration', 7)))
+
+                saved += 1
+    except TimeoutError as e:
+        log(f"Save lock timeout for {route} (other writer held lock >60s): {e}")
+    except sqlite3.OperationalError as e:
+        if "locked" in str(e).lower():
+            # write_transaction retried 5x and still failed — shouldn't happen
+            # unless a foreign connection is holding a long write transaction.
+            log(f"Save persistent lock failure for {route}: {e}")
+        else:
+            log(f"Save error for {route}: {e}")
+    except Exception as e:
+        log(f"Save unexpected error for {route}: {e}")
     return saved
 
 def run_scan():
@@ -214,8 +237,9 @@ def post_to_wp(html):
         return False
 
 def generate_report():
-    conn = sqlite3.connect(DB_PATH, timeout=30)
-    conn.execute("PRAGMA busy_timeout = 30000")
+    # Hermes: read-only, but use fli_db.connect for consistent WAL/busy
+    # settings so we never block the writers for more than a microsecond.
+    conn = fli_db.connect()
     c = conn.cursor()
     
     c.execute('SELECT route, dep_date, MIN(price) as min_price FROM flight_dates GROUP BY route, dep_date ORDER BY route')
