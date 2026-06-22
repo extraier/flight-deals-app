@@ -1,11 +1,9 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import allDatesHkg from '@/data/all_dates.json';
-import allDatesSzx from '@/data/all_dates_szx.json';
 
 type Departure = 'HKG' | 'SZX';
 
@@ -102,10 +100,46 @@ const regionColors: Record<string, string> = {
 
 export default function DealsPage() {
   const [departure, setDeparture] = useState<Departure>('HKG');
+  // Hermes: live data — fetch from /api/deals which proxies the NAS funnel
+  // (60s in-memory cache). Avoids the Vercel static-prerender problem where
+  // the bundled src/data/all_dates*.json can be hours stale.
+  const [hkgDeals, setHkgDeals] = useState<Deal[]>([]);
+  const [szxDeals, setSzxDeals] = useState<Deal[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      setLoading(true);
+      setFetchError(null);
+      try {
+        const [hkgRes, szxRes] = await Promise.all([
+          fetch('/api/deals?dep=HKG&force=1', { cache: 'no-store' }),
+          fetch('/api/deals?dep=SZX&force=1', { cache: 'no-store' }),
+        ]);
+        if (!hkgRes.ok) throw new Error(`HKG fetch ${hkgRes.status}`);
+        if (!szxRes.ok) throw new Error(`SZX fetch ${szxRes.status}`);
+        const [hkgJson, szxJson] = await Promise.all([hkgRes.json(), szxRes.json()]);
+        if (cancelled) return;
+        setHkgDeals((hkgJson.results || []) as Deal[]);
+        setSzxDeals((szxJson.results || []) as Deal[]);
+      } catch (e) {
+        if (!cancelled) setFetchError(e instanceof Error ? e.message : String(e));
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    load();
+    // Refresh every 90s so the page stays close to live without hitting the
+    // API on every render. /api/deals has its own 60s in-memory cache.
+    const t = setInterval(load, 90_000);
+    return () => { cancelled = true; clearInterval(t); };
+  }, []);
 
   // Process both files once
-  const hkgRows = useMemo(() => buildDropList((allDatesHkg.results || []) as Deal[], 'HKG'), []);
-  const szxRows = useMemo(() => buildDropList((allDatesSzx.results || []) as Deal[], 'SZX'), []);
+  const hkgRows = useMemo(() => buildDropList(hkgDeals, 'HKG'), [hkgDeals]);
+  const szxRows = useMemo(() => buildDropList(szxDeals, 'SZX'), [szxDeals]);
 
   const rows = departure === 'HKG' ? hkgRows : szxRows;
 
@@ -158,11 +192,17 @@ export default function DealsPage() {
         {departure === 'SZX' && szxEmpty ? (
           <Card className="border-dashed">
             <CardContent className="py-16 text-center">
-              <div className="text-4xl mb-3">⏳</div>
-              <p className="text-lg font-medium text-foreground">SZX 劈價數據準備中</p>
+              <div className="text-4xl mb-3">{loading ? '⏳' : '⏳'}</div>
+              <p className="text-lg font-medium text-foreground">
+                {fetchError ? '無法載入劈價數據' : loading ? '載入中…' : 'SZX 劈價數據準備中'}
+              </p>
               <p className="text-sm text-muted-foreground mt-2">
-                SZX 掃描器已開始記錄歷史價格，下一次掃描後即可顯示劈價列表。<br />
-                預計 1-2 日內可見數據。
+                {fetchError
+                  ? `錯誤：${fetchError}`
+                  : loading
+                    ? '從 NAS 取得最新價格中…'
+                    : 'SZX 掃描器已開始記錄歷史價格，下一次掃描後即可顯示劈價列表。'}
+                {!loading && !fetchError && <><br />預計 1-2 日內可見數據。</>}
               </p>
               <div className="mt-4 text-xs text-muted-foreground">
                 💡 HKG 已有 {hkgRows.length} 個劈價航線
@@ -172,10 +212,16 @@ export default function DealsPage() {
         ) : renderedRows.length === 0 ? (
           <Card className="border-dashed">
             <CardContent className="py-16 text-center">
-              <div className="text-4xl mb-3">📈</div>
-              <p className="text-lg font-medium text-foreground">今日無劈價</p>
+              <div className="text-4xl mb-3">{loading ? '⏳' : fetchError ? '⚠️' : '📈'}</div>
+              <p className="text-lg font-medium text-foreground">
+                {fetchError ? '無法載入劈價數據' : loading ? '載入中…' : '今日無劈價'}
+              </p>
               <p className="text-sm text-muted-foreground mt-2">
-                所有航線價格都比昨日高或持平，無可顯示嘅劈價。
+                {fetchError
+                  ? `錯誤：${fetchError}`
+                  : loading
+                    ? '從 NAS 取得最新價格中…'
+                    : '所有航線價格都比昨日高或持平，無可顯示嘅劈價。'}
               </p>
             </CardContent>
           </Card>
