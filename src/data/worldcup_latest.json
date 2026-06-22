@@ -16,12 +16,12 @@
         "away": 0.285
       },
       "chg_1h": {
-        "hkjc_home": -61.76,
-        "hkjc_draw": -21.07,
-        "hkjc_away": 136.67,
-        "poly_home": 151.52,
-        "poly_draw": 29.79,
-        "poly_away": -52.1
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": -66.38,
@@ -56,9 +56,9 @@
         "away": 0.135
       },
       "chg_1h": {
-        "hkjc_home": -0.71,
+        "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
-        "hkjc_away": 3.33,
+        "hkjc_away": 0.0,
         "poly_home": 0.0,
         "poly_draw": 0.0,
         "poly_away": 0.0
@@ -77,7 +77,7 @@
         "hkjc_away": 16.98,
         "poly_home": 1.57,
         "poly_draw": 0.0,
-        "poly_away": -6.9
+        "poly_away": 0.0
       }
     },
     {
@@ -109,7 +109,7 @@
         "hkjc_away": 0.0,
         "poly_home": 0.0,
         "poly_draw": 0.0,
-        "poly_away": -13.56
+        "poly_away": -10.53
       },
       "chg_24h": {
         "hkjc_home": 0.0,
@@ -117,7 +117,7 @@
         "hkjc_away": -8.33,
         "poly_home": 0.0,
         "poly_draw": 0.0,
-        "poly_away": -10.53
+        "poly_away": -7.27
       }
     },
     {
@@ -476,7 +476,7 @@
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
         "poly_home": 1.23,
-        "poly_draw": -7.41,
+        "poly_draw": 0.0,
         "poly_away": 0.0
       }
     },
@@ -635,9 +635,9 @@
         "hkjc_home": -32.14,
         "hkjc_draw": 0.0,
         "hkjc_away": 12.0,
-        "poly_home": 29.27,
+        "poly_home": 0.0,
         "poly_draw": -7.84,
-        "poly_away": -9.01
+        "poly_away": 4.12
       }
     },
     {
@@ -677,7 +677,7 @@
         "hkjc_away": 1.83,
         "poly_home": 0.0,
         "poly_draw": 10.53,
-        "poly_away": -1.17
+        "poly_away": 0.0
       }
     },
     {
@@ -748,7 +748,7 @@
         "hkjc_draw": 0.0,
         "hkjc_away": -0.91,
         "poly_home": 0.0,
-        "poly_draw": -9.52,
+        "poly_draw": 0.0,
         "poly_away": 0.0
       },
       "chg_24h": {
@@ -936,18 +936,18 @@
         "away": 0.325
       },
       "chg_1h": {
-        "hkjc_home": -3.66,
-        "hkjc_draw": 4.76,
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": -2.41,
+        "poly_home": 0.0,
         "poly_draw": 0.0,
-        "poly_away": -2.99
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": -3.66,
         "hkjc_draw": 4.76,
         "hkjc_away": 0.0,
-        "poly_home": 10.96,
+        "poly_home": 8.0,
         "poly_draw": 8.16,
         "poly_away": -15.58
       },
@@ -981,7 +981,7 @@
         "hkjc_away": 0.0,
         "poly_home": 0.0,
         "poly_draw": 0.0,
-        "poly_away": 1.55
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
@@ -1059,15 +1059,15 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": 15.38,
+        "poly_home": 0.0,
         "poly_draw": 0.0,
-        "poly_away": -1.24
+        "poly_away": 0.0
       },
       "chg_4h": {
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": 0.0,
+        "poly_home": 15.38,
         "poly_draw": 0.0,
         "poly_away": -1.24
       },
@@ -1115,7 +1115,7 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": 13.33,
+        "poly_home": 0.0,
         "poly_draw": 0.0,
         "poly_away": 0.0
       }
@@ -1197,7 +1197,7 @@
         "hkjc_away": 0.0,
         "poly_home": 0.0,
         "poly_draw": -3.77,
-        "poly_away": 0.0
+        "poly_away": -1.04
       }
     },
     {
@@ -1259,7 +1259,7 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": -0.72,
+        "poly_home": 0.0,
         "poly_draw": 0.0,
         "poly_away": 0.0
       },
@@ -1267,7 +1267,7 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": 0.0,
+        "poly_home": -0.72,
         "poly_draw": 0.0,
         "poly_away": 0.0
       },
@@ -1321,10 +1321,10 @@
       }
     }
   ],
-  "generated": "2026-06-22T09:38:14.491251+08:00",
+  "generated": "2026-06-22T10:28:18.031915+08:00",
   "latest_datetime": "2026-06-22 09:37:19",
   "latest_ts": 1782092239.633372,
-  "ref_1h": "2026-06-22 08:37:16",
-  "ref_4h": "2026-06-22 05:37:08",
-  "ref_24h": "2026-06-21 09:35:28"
+  "ref_1h": "2026-06-22 09:37:19",
+  "ref_4h": "2026-06-22 06:37:11",
+  "ref_24h": "2026-06-21 10:30:46"
 }
