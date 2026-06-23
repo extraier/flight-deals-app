@@ -302,9 +302,14 @@ for o in output:
 # Persist a {route_key: iso_timestamp} map in /data/drop_first_detected.json
 # so the deals page can show "first detected N hours ago" and sort by recency.
 # Only routes currently showing a real drop (today_low < yesterday's min
-# destination low by >=1%) are stamped; the entry sticks around for 14 days
-# even after the drop disappears so the page can show "this drop started X
-# days ago" instead of vanishing.
+# destination low by >=1%) are stamped.
+#
+# Reset rule (2026-06-23 fix): when a route stops being in a real-drop state
+# the stamp is CLEARED immediately, instead of persisting for 14 days. This
+# prevents stale "2 days ago" alerts from showing on the deals page after the
+# price rebounds or a new cheaper date enters the top-30. The deals page
+# client code also consumes `dropAmount` / `dropPct` (now stamped onto every
+# route) so the single-date comparison bug in page.tsx no longer matters.
 FIRST_DETECTED_PATH = '/data/drop_first_detected.json'
 FIRST_DETECTED_MAX_AGE_DAYS = 14
 now_iso = datetime.now().isoformat()
@@ -317,10 +322,14 @@ except (FileNotFoundError, json.JSONDecodeError):
     first_detected_map = {}
 
 stamped = 0
+cleared = 0
 for o in output:
     dates = o.get('cheapestDates') or []
     if not dates:
         o['firstDetected'] = None
+        o['dropAmount'] = 0
+        o['dropPct'] = 0
+        o['dropPrice'] = 0
         continue
     # Today's destination lowest (matches the deals page + Telegram logic)
     today_low = min((cd.get('price') or 0) for cd in dates) or 0
@@ -341,16 +350,29 @@ for o in output:
             stamped += 1
         o['firstDetected'] = first_detected_map[key]
     else:
-        # No active drop — keep existing stamp (if any) for history view
-        o['firstDetected'] = first_detected_map.get(key)
+        # No active drop — clear the stamp so the deals page stops showing
+        # this route as an active alert. (Pre-2026-06-23 bug: the stamp was
+        # kept for 14d, producing "2 days ago" ghost alerts on PUS and other
+        # routes that had already rebounded.)
+        if key in first_detected_map:
+            del first_detected_map[key]
+            cleared += 1
+        o['firstDetected'] = None
 
-# Garbage-collect stale entries (older than 14 days)
+    # Always stamp destination-level drop numbers on the route so the
+    # client can display them without re-deriving single-date comparisons.
+    o['dropAmount'] = int(today_low - yest_low) if (yest_low and yest_low > 0 and today_low > 0) else 0
+    o['dropPct'] = round(drop_pct, 1) if (yest_low and yest_low > 0 and today_low > 0) else 0.0
+    o['dropPrice'] = int(today_low)
+
+# Garbage-collect stale entries (older than 14 days) — defense in depth
+# even though we now clear the stamp immediately on no-drop.
 cutoff = (datetime.now() - timedelta(days=FIRST_DETECTED_MAX_AGE_DAYS)).isoformat()
 before_gc = len(first_detected_map)
 first_detected_map = {k: v for k, v in first_detected_map.items() if v >= cutoff}
 
 print(f"Routes: {len(output)}, Dates: {sum(len(o['cheapestDates']) for o in output)}")
-print(f"First-detected: {stamped} new entries stamped, {before_gc - len(first_detected_map)} stale entries GC'd")
+print(f"First-detected: {stamped} new entries stamped, {cleared} cleared (no longer dropping), {before_gc - len(first_detected_map)} stale entries GC'd")
 
 with open('/data/all_dates.json', 'w') as f:
     json.dump({'results': output, 'generated': now_iso}, f, default=str, ensure_ascii=False)

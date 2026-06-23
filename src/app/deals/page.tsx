@@ -17,6 +17,14 @@ interface Deal {
   badge?: { carryOn?: boolean; cheapDays?: number };
   typicalPrice?: number;
   firstDetected?: string | null;  // ISO timestamp from scanner export
+  // Hermes 2026-06-23: destination-level drop stamped by the scanner export
+  // (export_all_dates_*.py). When present, the client uses these instead of
+  // re-deriving from cheapestDates[0].history.1d (which is a single-date
+  // comparison, not destination-level). Pre-2026-06-23 routes won't have
+  // these fields, so buildDropList falls back to the old logic.
+  dropAmount?: number;
+  dropPct?: number;
+  dropPrice?: number;
   cheapestDates: Array<{
     day: number; month: number; year: number;
     price: number; stay: number | null;
@@ -42,21 +50,58 @@ interface DropRow {
   firstDetected?: string | null; // ISO timestamp when this drop was first seen
 }
 
-// Extract a single "best drop" per destination — based on the cheapest
-// cheapestDates[0] entry, comparing today's price to yesterday's lowest.
+// Hermes 2026-06-23: buildDropList now consumes the destination-level
+// dropAmount/dropPct/dropPrice stamped onto each route by the scanner
+// export (export_all_dates_*.py). That fixes the "PUS 2-day stuck alert"
+// bug: the old code compared cheapestDates[0] (single date) to its own
+// history.1d (single date's yesterday) instead of destination-level.
+//
+// Logic: if the export provided destination-level drop data, use it and
+// show the route. Otherwise fall back to the single-date comparison so
+// the page still works on legacy data.
 function buildDropList(deals: Deal[], departure: Departure): DropRow[] {
   const rows: DropRow[] = [];
   for (const d of deals) {
-    const cd = d.cheapestDates?.[0];
+    // Prefer destination-level drop stamped by the export.
+    const expDropAmount = d.dropAmount;
+    const expDropPct = d.dropPct;
+    const expDropPrice = d.dropPrice;
+    const hasExportDrop = typeof expDropAmount === 'number'
+      && typeof expDropPct === 'number'
+      && expDropAmount > 0
+      && expDropPct < 0;
+
+    let oldPrice = 0;
+    let newPrice = 0;
+    let dropAmount = 0;
+    let dropPct = 0;
+    let cd: Deal['cheapestDates'][number] | undefined;
+
+    if (hasExportDrop && expDropPrice != null) {
+      // Destination-level: today's lowest = expDropPrice, yesterday's
+      // lowest = expDropPrice - expDropAmount. We still need a single
+      // date+airline to display in the card, so pick the cheapest date
+      // that has flight info (falling back to cheapestDates[0]).
+      cd = pickDisplayDate(d.cheapestDates, expDropPrice);
+      oldPrice = expDropPrice - expDropAmount;
+      newPrice = expDropPrice;
+      dropAmount = expDropAmount;
+      dropPct = Math.round(-expDropPct); // server uses signed negative
+    } else {
+      // Legacy single-date fallback.
+      cd = d.cheapestDates?.[0];
+      if (!cd) continue;
+      const h1d = cd.history?.['1d'];
+      if (!h1d) continue;
+      oldPrice = h1d.price;
+      newPrice = cd.price;
+      if (oldPrice <= 0 || newPrice <= 0) continue;
+      dropAmount = oldPrice - newPrice;
+      if (dropAmount <= 0) continue;
+      dropPct = Math.round((dropAmount / oldPrice) * 100);
+    }
     if (!cd) continue;
-    const h1d = cd.history?.['1d'];
-    if (!h1d) continue;                        // no yesterday baseline
-    const oldPrice = h1d.price;
-    const newPrice = cd.price;
-    if (oldPrice <= 0 || newPrice <= 0) continue;
-    const dropAmount = oldPrice - newPrice;    // > 0 means price dropped
-    if (dropAmount <= 0) continue;             // we only show drops
-    const dropPct = Math.round((dropAmount / oldPrice) * 100);
+
     const f = cd.flight || undefined;
     const typical = d.typicalPrice || undefined;
     const discountVsTypical = typical && typical > 0
@@ -80,6 +125,31 @@ function buildDropList(deals: Deal[], departure: Departure): DropRow[] {
     });
   }
   return rows;
+}
+
+// Hermes 2026-06-23: pick the cheapest date that has flight info and
+// matches (or is closest to) the displayed dropPrice. Without this, the
+// card would show a flightless date for routes where the min-price date
+// has no flight details, even when another date with the same price
+// (or within a few HKD) has airline info.
+function pickDisplayDate(
+  dates: Deal['cheapestDates'],
+  dropPrice: number,
+): Deal['cheapestDates'][number] | undefined {
+  if (!dates || dates.length === 0) return undefined;
+  // Prefer a date whose price == dropPrice AND has flight info.
+  for (const cd of dates) {
+    if (cd.price === dropPrice && cd.flight) return cd;
+  }
+  // Otherwise prefer a date with flight info, nearest to dropPrice.
+  const withFlight = dates.filter(cd => cd.flight);
+  if (withFlight.length > 0) {
+    return withFlight.reduce((best, cur) =>
+      Math.abs(cur.price - dropPrice) < Math.abs(best.price - dropPrice) ? cur : best
+    );
+  }
+  // Last resort: first date.
+  return dates[0];
 }
 
 // Format an ISO timestamp into a friendly "N hours ago" / "Jun 23 09:14" label.
