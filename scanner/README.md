@@ -9,20 +9,29 @@ the exported JSONs.
 
 | Script | Container | Role |
 |---|---|---|
-| `fli_scheduler_4x.py` | `fli-scheduler` | Master cron — runs the 4× daily scan at 06:00 / 12:00 / 18:00 / 00:00 HKT |
-| `fli_4x_daily.py` | `fli-scheduler` (invoked) | HKG → 50+ routes calendar scan |
-| `fli_4x_daily_szx.py` | `fli-scheduler` (invoked) | SZX → 50+ routes calendar scan |
+| `scheduler_supervisor.sh` | `fli-scheduler` | Wraps the scanner in a restart loop (so it survives earlyoom). Default `SCAN_MODE=continuous`. |
+| `fli_4x_continuous.py` | `fli-scheduler` (default) | Master scanner — 60s/route, 10min between cycles, 24/7. Calls `fli_4x_daily.py` + `fli_4x_daily_szx.py` per cycle. |
+| `fli_4x_daily.py` | `fli-scheduler` (invoked) | HKG → 50+ routes calendar scan (one cycle) |
+| `fli_4x_daily_szx.py` | `fli-scheduler` (invoked) | SZX → 50+ routes calendar scan (one cycle) |
 | `fli_detail_scan_aggressive.py` | `fli-detail-hkg` | HKG detail (airline, times) per date |
 | `fli_detail_scan_szx.py` | `fli-detail-szx` | SZX detail (airline, times) per date |
 | `export_all_dates_hkg_v2.py` | `fli-scheduler` | Exports HKG DB rows → `/data/all_dates.json` |
 | `export_all_dates_szx.py` | `fli-scheduler` | Exports SZX DB rows → `/data/all_dates_szx.json` |
 
-## Sync → Vercel
+> **2026-06-23 note**: the old `fli_scheduler_4x.py` (UTC 0/6/12/18 burst) was
+> over-bursty on Google and was replaced by `fli_4x_continuous.py`. The
+> `SCAN_MODE=4x` branch in `scheduler_supervisor.sh` is kept as a fallback
+> option but is no longer the default.
+
+## Sync → Vercel fallback
 
 `~/sync_flightdeals.sh` (on the Mac) pulls the exported JSONs from the NAS
-container every 5 min (self-throttled to once per 50 min to stay under
-Vercel's 100 deploys/day limit), commits them, and pushes to GitHub. Vercel
-auto-redeploys on push to `main`.
+container every 5 min and **updates the local `src/data/all_dates*.json`
+files only** (the Vercel static fallback for when the funnel is
+unreachable). It does **not** commit or push — that flow was removed on
+2026-06-22 because it burned through Vercel Hobby's 100-deploys/day
+limit. With Tailscale Funnel serving live data via `/api/deals`, code
+commits go through a separate manual workflow.
 
 ## Concurrency model
 
