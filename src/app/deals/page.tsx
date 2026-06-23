@@ -2,10 +2,12 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import { ArrowLeft, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
 type Departure = 'HKG' | 'SZX';
+type SortMode = 'discount' | 'recency';
 
 interface Deal {
   route: string;
@@ -14,6 +16,7 @@ interface Deal {
   currency?: string;           // optional: not always present in scanner JSON
   badge?: { carryOn?: boolean; cheapDays?: number };
   typicalPrice?: number;
+  firstDetected?: string | null;  // ISO timestamp from scanner export
   cheapestDates: Array<{
     day: number; month: number; year: number;
     price: number; stay: number | null;
@@ -36,6 +39,7 @@ interface DropRow {
   cheapestDate: { day: number; month: number; year: number; stay: number | null; airline?: string; dep_time?: string };
   typicalPrice?: number;
   discountVsTypical?: number; // pct off the typical price (informational)
+  firstDetected?: string | null; // ISO timestamp when this drop was first seen
 }
 
 // Extract a single "best drop" per destination — based on the cheapest
@@ -72,9 +76,34 @@ function buildDropList(deals: Deal[], departure: Departure): DropRow[] {
       },
       typicalPrice: typical,
       discountVsTypical,
+      firstDetected: d.firstDetected ?? null,
     });
   }
   return rows;
+}
+
+// Format an ISO timestamp into a friendly "N hours ago" / "Jun 23 09:14" label.
+// Returns null if the input is null/invalid so the UI can render a placeholder.
+function formatAlertTime(iso: string | null | undefined): string | null {
+  if (!iso) return null;
+  const t = Date.parse(iso);
+  if (isNaN(t)) return null;
+  const now = Date.now();
+  const diffSec = Math.round((now - t) / 1000);
+  if (diffSec < 0) {
+    // Future timestamp (clock skew or just imported) → show absolute
+    return new Date(t).toLocaleString('zh-HK', {
+      month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+    });
+  }
+  if (diffSec < 60) return `${diffSec} 秒前`;
+  if (diffSec < 3600) return `${Math.floor(diffSec / 60)} 分鐘前`;
+  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)} 小時前`;
+  if (diffSec < 86400 * 7) return `${Math.floor(diffSec / 86400)} 日前`;
+  // Older than a week → show absolute date
+  return new Date(t).toLocaleString('zh-HK', {
+    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+  });
 }
 
 function heat(pct: number): { emoji: string; label: string; cls: string } {
@@ -100,11 +129,14 @@ const regionColors: Record<string, string> = {
 
 export default function DealsPage() {
   const [departure, setDeparture] = useState<Departure>('HKG');
+  const [sortMode, setSortMode] = useState<SortMode>('discount');
   // Hermes: live data — fetch from /api/deals which proxies the NAS funnel
   // (60s in-memory cache). Avoids the Vercel static-prerender problem where
   // the bundled src/data/all_dates*.json can be hours stale.
   const [hkgDeals, setHkgDeals] = useState<Deal[]>([]);
   const [szxDeals, setSzxDeals] = useState<Deal[]>([]);
+  const [hkgGenerated, setHkgGenerated] = useState<string>('');
+  const [szxGenerated, setSzxGenerated] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
@@ -124,6 +156,8 @@ export default function DealsPage() {
         if (cancelled) return;
         setHkgDeals((hkgJson.results || []) as Deal[]);
         setSzxDeals((szxJson.results || []) as Deal[]);
+        setHkgGenerated(hkgJson.generated || '');
+        setSzxGenerated(szxJson.generated || '');
       } catch (e) {
         if (!cancelled) setFetchError(e instanceof Error ? e.message : String(e));
       } finally {
@@ -142,12 +176,24 @@ export default function DealsPage() {
   const szxRows = useMemo(() => buildDropList(szxDeals, 'SZX'), [szxDeals]);
 
   const rows = departure === 'HKG' ? hkgRows : szxRows;
+  const currentGenerated = departure === 'HKG' ? hkgGenerated : szxGenerated;
 
   const szxEmpty = szxRows.length === 0;
 
   const renderedRows = useMemo(() => {
-    return [...rows].sort((a, b) => b.dropPct - a.dropPct);
-  }, [rows]);
+    const copy = [...rows];
+    if (sortMode === 'recency') {
+      // Newest first. Routes without firstDetected sort to the bottom.
+      copy.sort((a, b) => {
+        const ta = a.firstDetected ? Date.parse(a.firstDetected) : -Infinity;
+        const tb = b.firstDetected ? Date.parse(b.firstDetected) : -Infinity;
+        return tb - ta;
+      });
+    } else {
+      copy.sort((a, b) => b.dropPct - a.dropPct);
+    }
+    return copy;
+  }, [rows, sortMode]);
 
   // Stats
   const stats = useMemo(() => {
@@ -161,16 +207,33 @@ export default function DealsPage() {
   return (
     <div className="min-h-screen bg-background py-8">
       <div className="mx-auto max-w-5xl px-4">
+        {/* Back button */}
+        <div className="mb-3">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            返回主頁
+          </Link>
+        </div>
+
         {/* Header */}
         <div className="mb-4 text-center">
           <h1 className="text-3xl font-bold tracking-tight text-foreground">🔥 今日劈價</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             對比昨日最低價 · 顯示實際跌價嘅航線 · 按跌幅 % 排序
           </p>
+          {currentGenerated && (
+            <p className="mt-1 text-xs text-muted-foreground/80 inline-flex items-center gap-1">
+              <Clock className="h-3 w-3" />
+              最後更新：{formatAlertTime(currentGenerated) || currentGenerated.slice(0, 16).replace('T', ' ')}
+            </p>
+          )}
         </div>
 
-        {/* Departure tabs */}
-        <div className="mb-6 flex justify-center">
+        {/* Departure + sort tabs */}
+        <div className="mb-6 flex flex-col sm:flex-row items-center justify-center gap-3">
           <div className="inline-flex rounded-lg border border-border bg-card p-1 gap-1">
             {(['HKG', 'SZX'] as Departure[]).map((d) => (
               <button
@@ -186,6 +249,33 @@ export default function DealsPage() {
               </button>
             ))}
           </div>
+          {/* Sort toggle — only meaningful when there are rows */}
+          {renderedRows.length > 0 && (
+            <div className="inline-flex rounded-lg border border-border bg-card p-1 gap-1">
+              <button
+                onClick={() => setSortMode('discount')}
+                className={`px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                  sortMode === 'discount'
+                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                }`}
+                title="按跌幅百分比由大到小"
+              >
+                🔥 最大跌幅
+              </button>
+              <button
+                onClick={() => setSortMode('recency')}
+                className={`px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                  sortMode === 'recency'
+                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                }`}
+                title="按首次發現時間由新到舊"
+              >
+                🕒 最新
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Empty state for SZX */}
@@ -250,6 +340,7 @@ export default function DealsPage() {
               {renderedRows.map((r, idx) => {
                 const h = heat(r.dropPct);
                 const dateLabel = `${r.cheapestDate.year}年${r.cheapestDate.month}月${r.cheapestDate.day}日`;
+                const alertLabel = formatAlertTime(r.firstDetected);
                 return (
                   <Link
                     key={`${r.departure}-${r.route}-${idx}`}
@@ -314,6 +405,21 @@ export default function DealsPage() {
                                 )}
                               </div>
                             </div>
+                            {/* Alert time — bottom row, full width */}
+                            {alertLabel && (
+                              <div className="mt-2 pt-2 border-t border-border/50 flex items-center gap-1 text-[11px] text-muted-foreground">
+                                <Clock className="h-3 w-3" />
+                                首次發現：{alertLabel}
+                                {r.firstDetected && (
+                                  <span className="text-muted-foreground/60 ml-1">
+                                    ({new Date(r.firstDetected).toLocaleString('zh-HK', {
+                                      month: 'numeric', day: 'numeric',
+                                      hour: '2-digit', minute: '2-digit',
+                                    })})
+                                  </span>
+                                )}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </CardContent>
@@ -325,7 +431,7 @@ export default function DealsPage() {
 
             {/* Footer note */}
             <p className="mt-6 text-center text-xs text-muted-foreground">
-              * 「昨日最低價」來自系統自動記錄嘅歷史掃描數據，每 6 小時更新一次
+              * 「昨日最低價」來自系統自動記錄嘅歷史掃描數據 · 頁面每 90 秒自動刷新
             </p>
           </>
         )}

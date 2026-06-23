@@ -5,6 +5,7 @@ Includes historical price comparisons (1d, 4d, 7d ago).
 """
 import sqlite3
 import json
+import os
 from datetime import datetime, timedelta
 
 DB_PATH = '/data/fli_calendar.db'
@@ -76,11 +77,25 @@ COUNTRY_CN = {
 }
 TODAY = datetime.now().strftime('%Y-%m-%d')
 
+# Hermes: staleness threshold for flight_details rows. If a detail row's
+# scan_time is older than this, the export falls back to flight_dates for
+# the price (flight info is still used if available). Prevents stale
+# detail-scanner prices from masking fresh calendar-scanner prices.
+# Detail scanner scans one route deeply (1.5s × 100+ dates × 50 routes),
+# so individual (route, dep_date) rows can be days old. Calendar scanner
+# hits every (route, dep_date) every 50 min, so its prices are always
+# calendar scanner wins.
+DETAIL_MAX_AGE_HOURS = int(os.environ.get('DETAIL_MAX_AGE_HOURS', '24'))
+
 conn = sqlite3.connect(DB_PATH, timeout=30)
 conn.execute("PRAGMA busy_timeout = 30000")
 c = conn.cursor()
 
 # ── Current live prices (flight_details) ──────────────────────────────────
+# Hermes: filter out stale rows. Compare scan_time (stored as 'YYYY-MM-DD HH:MM:SS',
+# local HKT) against now(). Rows older than DETAIL_MAX_AGE_HOURS hours are
+# excluded here, which means the NOT IN subquery below also excludes them,
+# and the matching flight_dates row falls through as a fresh-price fallback.
 c.execute("""
     SELECT route, dep_date, ret_date, price,
            outbound_airline, outbound_flight, outbound_dep_time, outbound_arr_time,
@@ -88,9 +103,11 @@ c.execute("""
            scan_time
     FROM flight_details
     WHERE departure='HKG'
+      AND scan_time >= datetime('now', ?)
     ORDER BY route, dep_date
-""")
+""", (f'-{DETAIL_MAX_AGE_HOURS} hours',))
 detail_rows = c.fetchall()
+print(f"Detail rows (≤{DETAIL_MAX_AGE_HOURS}h old): {len(detail_rows)}")
 
 # ── Fallback: flight_dates with no detail scan ────────────────────────────
 c.execute("""
@@ -98,10 +115,11 @@ c.execute("""
     FROM flight_dates
     WHERE departure='HKG'
       AND (route, dep_date, ret_date) NOT IN (
-          SELECT route, dep_date, ret_date FROM flight_details WHERE departure='HKG'
+          SELECT route, dep_date, ret_date FROM flight_details
+          WHERE departure='HKG' AND scan_time >= datetime('now', ?)
       )
     ORDER BY route, dep_date
-""")
+""", (f'-{DETAIL_MAX_AGE_HOURS} hours',))
 fallback_rows = c.fetchall()
 conn.close()
 
@@ -280,7 +298,64 @@ output.sort(key=lambda x: x['price'])
 for o in output:
     o['totalDestinations'] = len(output)
 
+# ── Compute destination-level drops and stamp firstDetected ──────────────
+# Persist a {route_key: iso_timestamp} map in /data/drop_first_detected.json
+# so the deals page can show "first detected N hours ago" and sort by recency.
+# Only routes currently showing a real drop (today_low < yesterday's min
+# destination low by >=1%) are stamped; the entry sticks around for 14 days
+# even after the drop disappears so the page can show "this drop started X
+# days ago" instead of vanishing.
+FIRST_DETECTED_PATH = '/data/drop_first_detected.json'
+FIRST_DETECTED_MAX_AGE_DAYS = 14
+now_iso = datetime.now().isoformat()
+try:
+    with open(FIRST_DETECTED_PATH) as _f:
+        first_detected_map = json.load(_f)
+        if not isinstance(first_detected_map, dict):
+            first_detected_map = {}
+except (FileNotFoundError, json.JSONDecodeError):
+    first_detected_map = {}
+
+stamped = 0
+for o in output:
+    dates = o.get('cheapestDates') or []
+    if not dates:
+        o['firstDetected'] = None
+        continue
+    # Today's destination lowest (matches the deals page + Telegram logic)
+    today_low = min((cd.get('price') or 0) for cd in dates) or 0
+    # Yesterday's destination lowest
+    yest_prices = [
+        (cd.get('history') or {}).get('1d', {}).get('price')
+        for cd in dates
+    ]
+    yest_prices = [p for p in yest_prices if p and p > 0]
+    yest_low = min(yest_prices) if yest_prices else None
+    drop_pct = ((today_low - yest_low) / yest_low * 100) if (yest_low and yest_low > 0 and today_low > 0) else 0
+
+    key = f"HKG→{o.get('destination', {}).get('code', '')}"
+    if drop_pct <= -1.0:
+        # Active drop — stamp if missing
+        if key not in first_detected_map:
+            first_detected_map[key] = now_iso
+            stamped += 1
+        o['firstDetected'] = first_detected_map[key]
+    else:
+        # No active drop — keep existing stamp (if any) for history view
+        o['firstDetected'] = first_detected_map.get(key)
+
+# Garbage-collect stale entries (older than 14 days)
+cutoff = (datetime.now() - timedelta(days=FIRST_DETECTED_MAX_AGE_DAYS)).isoformat()
+before_gc = len(first_detected_map)
+first_detected_map = {k: v for k, v in first_detected_map.items() if v >= cutoff}
+
 print(f"Routes: {len(output)}, Dates: {sum(len(o['cheapestDates']) for o in output)}")
+print(f"First-detected: {stamped} new entries stamped, {before_gc - len(first_detected_map)} stale entries GC'd")
+
 with open('/data/all_dates.json', 'w') as f:
-    json.dump({'results': output, 'generated': datetime.now().isoformat()}, f, default=str, ensure_ascii=False)
+    json.dump({'results': output, 'generated': now_iso}, f, default=str, ensure_ascii=False)
 print("Written /data/all_dates.json")
+
+with open(FIRST_DETECTED_PATH, 'w') as f:
+    json.dump(first_detected_map, f, indent=2, ensure_ascii=False)
+print(f"Written {FIRST_DETECTED_PATH}")

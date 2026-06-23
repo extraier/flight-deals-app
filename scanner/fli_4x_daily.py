@@ -6,6 +6,8 @@ Runs at 6am, 12pm, 6pm, midnight
 import sys, os, sqlite3
 import urllib.request
 import json
+import subprocess
+import time
 from datetime import datetime, timedelta
 from statistics import median
 
@@ -200,19 +202,36 @@ def run_scan():
     for route in ROUTES:
         origin, dest = route.split('→')
         log(f"Scanning {route}...")
-        
+
         prices = scan_route(searcher, origin, dest)
         if prices:
             saved = save_prices(conn, route, prices, recorded_date)
             total_saved += saved
             success += 1
             log(f"  {len(prices)} dates, {saved} new")
+            # Hermes: per-route incremental export — pushes freshest price to
+            # /data/all_dates.json within ~3s of saving, so the web app sees
+            # the new SFO/LHR/etc. price the moment that route is scanned
+            # instead of waiting up to 50 min for the full cycle to finish.
+            # 2.6s per call × 50 routes = 130s overhead per cycle, negligible.
+            try:
+                r = subprocess.run(
+                    [sys.executable, '-u', '/data/export_all_dates_hkg_v2.py'],
+                    check=False, timeout=60,
+                )
+                if r.returncode == 0:
+                    log(f"  exported {route} → /data/all_dates.json (incremental)")
+                else:
+                    log(f"  export FAILED exit={r.returncode} for {route} — JSON stale, will retry next cycle")
+            except subprocess.TimeoutExpired:
+                log(f"  export TIMEOUT for {route} — JSON stale, will retry next cycle")
+            except Exception as e:
+                log(f"  export EXCEPTION for {route}: {e}")
         else:
             log(f"  no data")
-        
-        import time
+
         time.sleep(ROUTE_DELAY)
-    
+
     log(f"Scan complete! Saved {total_saved} obs from {success}/{len(ROUTES)} routes")
     conn.close()
     return total_saved, success

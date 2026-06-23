@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """SZX Calendar Scanner - scans SZX→XXX routes and saves to flight_dates with departure='SZX'."""
-import sys, os, sqlite3, time
+import sys, os, sqlite3, time, subprocess
 from datetime import datetime, timedelta
 from statistics import median
 sys.path.insert(0, '/install')
@@ -188,6 +188,23 @@ def run_scan():
             total_saved += saved
             success += 1
             log(f"  {len(prices)} dates, {saved} new")
+            # Hermes: per-route incremental export — pushes freshest SZX price to
+            # /data/all_dates_szx.json within ~3s of saving, so the web app sees
+            # the new price the moment that route is scanned instead of waiting
+            # up to ~50 min for the full cycle to finish. See HKG variant.
+            try:
+                r = subprocess.run(
+                    [sys.executable, '-u', '/data/export_all_dates_szx.py'],
+                    check=False, timeout=60,
+                )
+                if r.returncode == 0:
+                    log(f"  exported {route} → /data/all_dates_szx.json (incremental)")
+                else:
+                    log(f"  export FAILED exit={r.returncode} for {route} — JSON stale, will retry next cycle")
+            except subprocess.TimeoutExpired:
+                log(f"  export TIMEOUT for {route} — JSON stale, will retry next cycle")
+            except Exception as e:
+                log(f"  export EXCEPTION for {route}: {e}")
         else:
             log(f"  no data")
         time.sleep(ROUTE_DELAY)
