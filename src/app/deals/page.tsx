@@ -59,6 +59,47 @@ interface DropRow {
 // Logic: if the export provided destination-level drop data, use it and
 // show the route. Otherwise fall back to the single-date comparison so
 // the page still works on legacy data.
+// Hermes 2026-06-25: also compute destination-level drops client-side
+// when the export didn't stamp them. This brings the deals page in sync
+// with send_flight_report.py — both now show the same routes that have
+// a real yesterday-vs-today drop at the destination level, not just the
+// ones the export script happened to flag.
+function computeDestLevelDrop(d: Deal): {
+  oldPrice: number; newPrice: number; dropAmount: number; dropPct: number;
+  cd: Deal['cheapestDates'][number] | undefined;
+} | null {
+  const dates = d.cheapestDates || [];
+  if (dates.length === 0) return null;
+  // Today's destination low: cheapest price across all dates (ties broken
+  // by earliest calendar date so the displayed dep is the soonest useful).
+  const priced = dates
+    .filter((cd) => cd.price > 0)
+    .sort((a, b) =>
+      a.price - b.price
+      || (a.month ?? 99) - (b.month ?? 99)
+      || (a.day ?? 99) - (b.day ?? 99)
+    );
+  if (priced.length === 0) return null;
+  const todayLow = priced[0].price;
+  const todayCd = priced[0];
+  // Yesterday's destination low: min over history.1d.price (only positive values).
+  // Cast through unknown to satisfy TS — '1d' is a valid key but the type
+  // was inferred before we added the destination-level drop fallback.
+  const yestPairs = dates
+    .map((cd) => {
+      const h = cd.history as Record<string, { price?: number }> | undefined;
+      const p = h?.['1d']?.price ?? 0;
+      return p;
+    })
+    .filter((p) => p > 0);
+  if (yestPairs.length === 0) return null;
+  const yestLow = Math.min(...yestPairs);
+  const dropAmount = yestLow - todayLow; // positive = drop
+  if (dropAmount <= 0) return null;
+  const dropPct = Math.round((dropAmount / yestLow) * 100);
+  return { oldPrice: yestLow, newPrice: todayLow, dropAmount, dropPct, cd: todayCd };
+}
+
 function buildDropList(deals: Deal[], departure: Departure): DropRow[] {
   const rows: DropRow[] = [];
   for (const d of deals) {
@@ -66,41 +107,50 @@ function buildDropList(deals: Deal[], departure: Departure): DropRow[] {
     const expDropAmount = d.dropAmount;
     const expDropPct = d.dropPct;
     const expDropPrice = d.dropPrice;
+    // Note: export uses signed-negative convention (dropAmount = -X means
+    // a drop of X). Some older/legacy files use positive dropAmount. We
+    // accept either as long as the sign tells us it's a real drop.
     const hasExportDrop = typeof expDropAmount === 'number'
       && typeof expDropPct === 'number'
-      && expDropAmount > 0
-      && expDropPct < 0;
+      && expDropPrice != null
+      && (
+        (expDropAmount > 0 && expDropPct < 0)   // positive dropAmount + negative pct (legacy)
+        || (expDropAmount < 0 && expDropPct < 0) // signed-negative (current convention)
+      );
 
     let oldPrice = 0;
     let newPrice = 0;
     let dropAmount = 0;
     let dropPct = 0;
     let cd: Deal['cheapestDates'][number] | undefined;
+    let computedFallback = false;
 
-    if (hasExportDrop && expDropPrice != null) {
+    if (hasExportDrop) {
       // Destination-level: today's lowest = expDropPrice, yesterday's
-      // lowest = expDropPrice - expDropAmount. We still need a single
-      // date+airline to display in the card, so pick the cheapest date
-      // that has flight info (falling back to cheapestDates[0]).
-      cd = pickDisplayDate(d.cheapestDates, expDropPrice);
-      oldPrice = expDropPrice - expDropAmount;
-      newPrice = expDropPrice;
-      dropAmount = expDropAmount;
-      dropPct = Math.round(-expDropPct); // server uses signed negative
-    } else {
-      // Legacy single-date fallback.
-      cd = d.cheapestDates?.[0];
-      if (!cd) continue;
-      const h1d = cd.history?.['1d'];
-      if (!h1d) continue;
-      oldPrice = h1d.price;
-      newPrice = cd.price;
-      if (oldPrice <= 0 || newPrice <= 0) continue;
-      dropAmount = oldPrice - newPrice;
-      if (dropAmount <= 0) continue;
+      // lowest = expDropPrice - expDropAmount (where dropAmount is
+      // negative-signed, so oldPrice = expDropPrice + |expDropAmount|).
+      cd = pickDisplayDate(d.cheapestDates, expDropPrice!);
+      // Normalize to positive dropAmount = old - new.
+      dropAmount = Math.abs(expDropAmount);
+      oldPrice = expDropPrice! + dropAmount;
+      newPrice = expDropPrice!;
       dropPct = Math.round((dropAmount / oldPrice) * 100);
+    } else {
+      // No stamped drop — compute it client-side from cheapestDates.
+      // Same algorithm as send_flight_report.py so the deals page and
+      // the Telegram alert show the same routes.
+      const computed = computeDestLevelDrop(d);
+      if (!computed) continue;
+      cd = pickDisplayDate(d.cheapestDates, computed.newPrice) ?? computed.cd;
+      oldPrice = computed.oldPrice;
+      newPrice = computed.newPrice;
+      dropAmount = computed.dropAmount;
+      dropPct = computed.dropPct;
+      computedFallback = true;
     }
     if (!cd) continue;
+    // Drop below 1% is noise — same threshold as send_flight_report.py.
+    if (dropPct < 1) continue;
 
     const f = cd.flight || undefined;
     const typical = d.typicalPrice || undefined;
@@ -122,7 +172,8 @@ function buildDropList(deals: Deal[], departure: Departure): DropRow[] {
       typicalPrice: typical,
       discountVsTypical,
       firstDetected: d.firstDetected ?? null,
-    });
+      _computedFallback: computedFallback,
+    } as DropRow & { _computedFallback?: boolean });
   }
   return rows;
 }
