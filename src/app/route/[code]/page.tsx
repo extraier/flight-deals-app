@@ -9,13 +9,49 @@ interface PageProps {
   searchParams: Promise<{ dep?: string }>;
 }
 
+// Hermes 2026-07-01: route page used to read ONLY the bundled static JSON,
+// which is stale by hours. Now it first fetches live data from /api/deals
+// (same upstream chain as the deals page — Tailscale Funnel → CDN → static
+// fallback). The static JSON is kept as the last-resort fallback so the
+// page still renders something if every upstream fails.
+async function fetchDealsLive(dep: 'HKG' | 'SZX'): Promise<any[] | null> {
+  const base = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : process.env.NEXT_PUBLIC_BASE_URL || '';
+  // Server-side fetch from the in-project API route. Cache 60s per dep
+  // so multiple route clicks within the same minute don't hammer upstream.
+  const url = `${base}/api/deals?dep=${dep}`;
+  try {
+    const res = await fetch(url, { next: { revalidate: 60 } });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return (json.results || []) as any[];
+  } catch {
+    return null;
+  }
+}
+
 export default async function RoutePage({ params, searchParams }: PageProps) {
   const { code } = await params;
   const { dep } = await searchParams;
   const departure = (dep === 'SZX' ? 'SZX' : 'HKG') as 'HKG' | 'SZX';
-  const allData = departure === 'HKG' ? allDatesHkg : allDatesSzx;
-  const deals = (allData.results || []) as any[];
-  const deal = deals.find((d: any) => d.destination.code === code);
+  // Hermes 2026-07-01: uppercase the URL code before lookup. The case-
+  // insensitive middleware may have lowercased the path (e.g. /route/BKK
+  // → /route/bkk) before this handler runs. Codes in the data are always
+  // uppercase (BKK, ICN, JFK etc), so normalizing the input here restores
+  // the correct lookup.
+  const normalizedCode = (code || '').toUpperCase();
+
+  // Hermes 2026-07-01: try live data first, fall back to bundled JSON.
+  let deals: any[] = [];
+  const live = await fetchDealsLive(departure);
+  if (live && live.length > 0) {
+    deals = live;
+  } else {
+    const allData = departure === 'HKG' ? allDatesHkg : allDatesSzx;
+    deals = (allData.results || []) as any[];
+  }
+  const deal = deals.find((d: any) => d.destination.code === normalizedCode);
 
   return (
     <div className="min-h-screen bg-background py-12">
@@ -46,8 +82,16 @@ export default async function RoutePage({ params, searchParams }: PageProps) {
         ) : (
           <div className="rounded-2xl border border-border bg-card p-8 text-center">
             <p className="text-muted-foreground">
-              {departure === 'SZX' ? '深圳航班資料掃描中...' : `找不到 ${code} 的數據`}
+              {departure === 'SZX'
+                ? '深圳航班資料掃描中...'
+                : `找不到 ${normalizedCode} 的數據`}
             </p>
+            <Link
+              href={`/?dep=${departure}`}
+              className="mt-4 inline-block text-sm text-sky-600 hover:text-sky-500"
+            >
+              ← 返回機票列表
+            </Link>
           </div>
         )}
       </div>

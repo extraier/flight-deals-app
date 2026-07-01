@@ -32,6 +32,29 @@ const regionColors: Record<string, string> = {
 
 const regions = ['全部', '東亞', '東南亞', '中國', '大洋洲', '北美洲', '歐洲', '南亞', '中東', '非洲', '南美洲'];
 
+// Hermes 2026-07-01: airline name map for the main-page filter chips.
+// Mirrors the same map in src/app/deals/page.tsx so labels stay
+// consistent across both pages.
+const AIRLINE_NAMES: Record<string, string> = {
+  'UO': '香港快運', 'CX': '國泰', 'KA': '國泰港龍', 'HK': '港航', 'HKE': '港航',
+  'BX': '釜山航空', 'KE': '大韓', 'OZ': '韓亞',
+  'NH': '全日空', 'JL': '日航', 'MM': '樂桃', 'TR': '酷航',
+  'AK': '亞航', 'D7': 'AirAsia X', 'VJ': '越捷',
+  'AI': '印度航空', 'SL': '獅航', 'PR': '菲律賓航空', '5J': 'Cebu Pacific',
+  'TG': '泰航', 'UA': '聯合航空', 'AC': '加拿大航空', 'AA': '美國航空',
+  'DL': '達美', 'BR': '長榮', 'CI': '中華',
+  'EK': '阿聯酋', 'EY': '阿提哈德', 'QR': '卡塔爾', 'TK': '土耳其航空',
+  'BA': '英航', 'AF': '法航', 'KL': '荷航', 'LH': '漢莎', 'LX': '瑞航',
+  'QF': '澳航', 'BI': '汶萊皇家', 'GK': '日航春秋',
+  'SC': '山東航空', 'HU': '海航', 'CZ': '南航', 'MU': '東航', 'CA': '國航', 'FM': '上航',
+  'AY': '芬航', 'KQ': '肯亞航空', 'SK': '北歐航空',
+};
+
+function airlineLabel(code: string): string {
+  const name = AIRLINE_NAMES[code];
+  return name ? `${name} (${code})` : code;
+}
+
 const DEPARTURE_LABELS: Record<Departure, { label: string; subtitle: string }> = {
   HKG: { label: '香港國際機場', subtitle: '香港國際機場 ✈️ 最低機票' },
   SZX: { label: '深圳寶安機場', subtitle: '深圳寶安機場 ✈️ 最低機票' },
@@ -95,6 +118,10 @@ export default function Home() {
   const [selectedRegion, setSelectedRegion] = useState<string>('全部');
   const [selectedCountry, setSelectedCountry] = useState<string>('全部');
   const [comparePeriod, setComparePeriod] = useState<ComparePeriod>('now');
+  // Hermes 2026-07-01: airline filter (multi-airline, like deals page).
+  // null = show all airlines. When set to an IATA code, only deals whose
+  // cheapestDate.flight.airline matches are kept.
+  const [airlineFilter, setAirlineFilter] = useState<string | null>(null);
 
   // Live data state — fetched from /api/deals which proxies to the NAS.
   // We seed with the static JSON so the first paint isn't empty; then refresh.
@@ -137,6 +164,23 @@ export default function Home() {
     return ['全部', ...uniqueCountries.sort()];
   }, [deals]);
 
+  // Hermes 2026-07-01: airline options for the multi-airline filter.
+  // Build from current deals' cheapestDate[0].flight.airline (the same
+  // source the deals page uses). Counts reflect how many deals each
+  // airline currently has on the page.
+  const airlineOptions = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const d of deals) {
+      const cd = d.cheapestDates?.[0];
+      const f = (cd?.flight as { airline?: string } | undefined) || undefined;
+      const code = (f?.airline || '').replace(/^_/, '').toUpperCase();
+      if (!code || code === 'UNKNOWN') continue;
+      counts.set(code, (counts.get(code) || 0) + 1);
+    }
+    return [...counts.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  }, [deals]);
+
   const filteredAndSortedDeals = useMemo(() => {
     let result = [...deals];
     if (filterMode === 'region') {
@@ -148,6 +192,16 @@ export default function Home() {
         result = result.filter((d) => getCountry(d) === selectedCountry);
       }
     }
+    // Hermes 2026-07-01: airline filter — when set, keep only deals whose
+    // displayed cheapest date is operated by the selected airline.
+    // Deals without flight info are excluded from any airline-filtered view.
+    if (airlineFilter) {
+      result = result.filter((d) => {
+        const cd = d.cheapestDates?.[0];
+        const f = (cd?.flight as { airline?: string } | undefined) || undefined;
+        return (f?.airline || '').replace(/^_/, '').toUpperCase() === airlineFilter;
+      });
+    }
     if (sortBy === 'price') {
       result.sort((a, b) => a.price - b.price);
     } else if (sortBy === 'discount') {
@@ -158,7 +212,7 @@ export default function Home() {
       });
     }
     return result;
-  }, [deals, sortBy, filterMode, selectedRegion, selectedCountry]);
+  }, [deals, sortBy, filterMode, selectedRegion, selectedCountry, airlineFilter]);
 
   const discount = (deal: Deal) => {
     if (!deal.typicalPrice || deal.typicalPrice <= 0) return null;
@@ -354,6 +408,37 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+
+              {/* Hermes 2026-07-01: multi-airline filter chips. Same shape
+                  and behavior as the deals page — "✈️ 全部" clears the
+                  filter, each airline chip narrows to that airline and
+                  shows the count. Click the same chip again to deselect. */}
+              {airlineOptions.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant={airlineFilter === null ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setAirlineFilter(null)}
+                    className="text-xs"
+                    title="顯示所有航空公司嘅目的地"
+                  >
+                    ✈️ 全部 ({deals.length})
+                  </Button>
+                  {airlineOptions.map(([code, count]) => (
+                    <Button
+                      key={code}
+                      variant={airlineFilter === code ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setAirlineFilter(airlineFilter === code ? null : code)}
+                      className="text-xs"
+                      title={`只顯示由 ${airlineLabel(code)} 營運`}
+                      aria-pressed={airlineFilter === code}
+                    >
+                      {airlineLabel(code)} ({count})
+                    </Button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Results count */}
