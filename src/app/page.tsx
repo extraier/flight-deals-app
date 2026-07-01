@@ -409,34 +409,34 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Hermes 2026-07-01: multi-airline filter chips. Same shape
-                  and behavior as the deals page — "✈️ 全部" clears the
-                  filter, each airline chip narrows to that airline and
-                  shows the count. Click the same chip again to deselect. */}
+              {/* Hermes 2026-07-01: multi-airline filter as a dropdown. Replaces
+                  the previous chip-row layout which got unwieldy with 20+
+                  airlines. Native <select> for accessibility + zero deps. */}
               {airlineOptions.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    variant={airlineFilter === null ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setAirlineFilter(null)}
-                    className="text-xs"
-                    title="顯示所有航空公司嘅目的地"
+                <div className="flex items-center gap-2">
+                  <label
+                    htmlFor="airline-filter"
+                    className="text-sm text-muted-foreground shrink-0"
                   >
-                    ✈️ 全部 ({deals.length})
-                  </Button>
-                  {airlineOptions.map(([code, count]) => (
-                    <Button
-                      key={code}
-                      variant={airlineFilter === code ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setAirlineFilter(airlineFilter === code ? null : code)}
-                      className="text-xs"
-                      title={`只顯示由 ${airlineLabel(code)} 營運`}
-                      aria-pressed={airlineFilter === code}
-                    >
-                      {airlineLabel(code)} ({count})
-                    </Button>
-                  ))}
+                    ✈️ 航空公司:
+                  </label>
+                  <select
+                    id="airline-filter"
+                    value={airlineFilter ?? '__all__'}
+                    onChange={(e) =>
+                      setAirlineFilter(
+                        e.target.value === '__all__' ? null : e.target.value,
+                      )
+                    }
+                    className="flex-1 max-w-xs h-9 rounded-md border border-input bg-background px-3 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  >
+                    <option value="__all__">全部 ({deals.length})</option>
+                    {airlineOptions.map(([code, count]) => (
+                      <option key={code} value={code}>
+                        {airlineLabel(code)} ({code}) · {count}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               )}
             </div>
