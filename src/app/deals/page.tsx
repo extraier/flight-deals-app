@@ -425,7 +425,7 @@ export default function DealsPage() {
                 title="只顯示由香港快運 (UO) 營運嘅劈價"
                 aria-pressed={uoOnly}
               >
-                {uoOnly ? '✅ UO only' : '🛩 UO only'}
+                {uoOnly ? '✅ 香港快運' : '🛩 香港快運'}
               </button>
             </div>
           )}
