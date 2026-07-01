@@ -483,39 +483,36 @@ export default function DealsPage() {
               </button>
             </div>
           )}
-          {/* Hermes 2026-07-01: multi-airline filter chips. Always visible on both
-              HKG and SZX tabs when there are rows, so the user can drill
-              into any airline that currently has drops. The "全部" chip
-              clears the filter (default state). Each airline chip shows
-              the count of deals it would match. */}
+          {/* Hermes 2026-07-01: multi-airline filter as a dropdown. Replaces
+              the previous chip-row layout (which got unwieldy with 10+
+              airlines on the deals page). Same filter behavior as the home
+              page — null = show all airlines, otherwise narrow to that
+              airline's drops. */}
           {renderedRows.length > 0 && airlineOptions.length > 0 && (
-            <div className="inline-flex flex-wrap rounded-lg border border-border bg-card p-1 gap-1">
-              <button
-                onClick={() => setAirlineFilter(null)}
-                className={`px-3 py-2 rounded-md text-xs font-medium transition-all ${
-                  airlineFilter === null
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                }`}
-                title="顯示所有航空公司嘅劈價"
+            <div className="flex items-center gap-2">
+              <label
+                htmlFor="airline-filter-deals"
+                className="text-sm text-muted-foreground shrink-0"
               >
-                ✈️ 全部 ({rows.length})
-              </button>
-              {airlineOptions.map(([code, count]) => (
-                <button
-                  key={code}
-                  onClick={() => setAirlineFilter(airlineFilter === code ? null : code)}
-                  className={`px-3 py-2 rounded-md text-xs font-medium transition-all ${
-                    airlineFilter === code
-                      ? 'bg-primary text-primary-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                  }`}
-                  title={`只顯示由 ${airlineLabel(code)} 營運嘅劈價`}
-                  aria-pressed={airlineFilter === code}
-                >
-                  {airlineFilter === code ? '✅ ' : ''}{airlineLabel(code)} ({count})
-                </button>
-              ))}
+                ✈️ 航空公司:
+              </label>
+              <select
+                id="airline-filter-deals"
+                value={airlineFilter ?? '__all__'}
+                onChange={(e) =>
+                  setAirlineFilter(
+                    e.target.value === '__all__' ? null : e.target.value,
+                  )
+                }
+                className="h-9 rounded-md border border-input bg-background px-3 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500/40 max-w-xs"
+              >
+                <option value="__all__">全部 ({rows.length})</option>
+                {airlineOptions.map(([code, count]) => (
+                  <option key={code} value={code}>
+                    {airlineLabel(code)} ({code}) · {count}
+                  </option>
+                ))}
+              </select>
             </div>
           )}
         </div>
