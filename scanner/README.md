@@ -76,3 +76,5 @@ Manual override (skips the MD5 check, always pushes + restarts):
 scp -i ~/.ssh/ugreen_nas ~/fli_4x_daily_szx.py openclaw@192.168.50.35:/volume1/flight-scanner/
 ssh -i ~/.ssh/ugreen_nas openclaw@192.168.50.35 "docker restart fli-scheduler fli-detail-hkg fli-detail-szx"
 ```
+
+<!-- forced-rebuild 1782917994 -->
