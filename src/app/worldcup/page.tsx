@@ -50,7 +50,9 @@ function fmtDateCN(dt: string): string {
 }
 
 function arrow(v: number | null): string {
-  if (v === null || v === 0) return '→';
+  // null = no baseline (hide). 0 = baseline existed but no movement (hide too —
+  // we don't want noise on rows that didn't actually change).
+  if (v === null || v === 0) return '';
   return v > 0 ? '↑' : '↓';
 }
 
@@ -83,7 +85,10 @@ export default function WorldCupPage() {
   useEffect(() => setMounted(true), []);
   const isDark = mounted ? theme === 'dark' : true;
 
-  const [window, setWindow] = useState<Window>('24h');
+  // Default to 4h because yesterday (06-30) had no matches, so chg_24h would
+  // be null for every row and the table would be full of "—". 4h is the
+  // sweet spot — odds typically have a 4h-ish narrative arc over a day.
+  const [window, setWindow] = useState<Window>('4h');
   const [sortBy, setSortBy] = useState<'time' | 'change'>('time');
 
   const bg = isDark ? 'dark bg-[#0f1117]' : 'bg-white';
@@ -188,14 +193,14 @@ export default function WorldCupPage() {
                     <td className="py-3 px-3 text-center">
                       <div className="flex flex-col items-center gap-0.5">
                         <span className="font-bold text-emerald-400 text-base">{fmt(h.home)}</span>
-                        {chg && (
+                        {chg && chg.hkjc_home != null && chg.hkjc_home !== 0 && (
                           <span className={`text-xs font-medium ${chgColor(chg.hkjc_home, true)}`}>
-                            {arrow(chg.hkjc_home)}{Math.abs(chg.hkjc_home ?? 0).toFixed(1)}%
+                            {arrow(chg.hkjc_home)}{Math.abs(chg.hkjc_home).toFixed(1)}%
                           </span>
                         )}
                         <span className="text-sky-400 text-sm font-medium">
                           {fmtPct(p.home)}
-                          {chg && chg.poly_home != null && (
+                          {chg && chg.poly_home != null && chg.poly_home !== 0 && (
                             <span className={`text-xs ml-0.5 ${chg.poly_home > 0 ? 'text-emerald-400' : chg.poly_home < 0 ? 'text-red-400' : muted2}`}>
                               {arrow(chg.poly_home)}{Math.abs(chg.poly_home).toFixed(1)}%
                             </span>
@@ -208,14 +213,14 @@ export default function WorldCupPage() {
                     <td className="py-3 px-3 text-center">
                       <div className="flex flex-col items-center gap-0.5">
                         <span className={`font-bold text-base ${text}`}>{fmt(h.draw)}</span>
-                        {chg && (
+                        {chg && chg.hkjc_draw != null && chg.hkjc_draw !== 0 && (
                           <span className={`text-xs font-medium ${chgColor(chg.hkjc_draw, false)}`}>
-                            {arrow(chg.hkjc_draw)}{Math.abs(chg.hkjc_draw ?? 0).toFixed(1)}%
+                            {arrow(chg.hkjc_draw)}{Math.abs(chg.hkjc_draw).toFixed(1)}%
                           </span>
                         )}
                         <span className={`text-sm font-medium ${muted2}`}>
                           {fmtPct(p.draw)}
-                          {chg && chg.poly_draw != null && (
+                          {chg && chg.poly_draw != null && chg.poly_draw !== 0 && (
                             <span className={`text-xs ml-0.5 ${chg.poly_draw > 0 ? 'text-emerald-400' : chg.poly_draw < 0 ? 'text-red-400' : muted2}`}>
                               {arrow(chg.poly_draw)}{Math.abs(chg.poly_draw).toFixed(1)}%
                             </span>
@@ -228,14 +233,14 @@ export default function WorldCupPage() {
                     <td className="py-3 px-3 text-center">
                       <div className="flex flex-col items-center gap-0.5">
                         <span className="font-bold text-red-400 text-base">{fmt(h.away)}</span>
-                        {chg && (
+                        {chg && chg.hkjc_away != null && chg.hkjc_away !== 0 && (
                           <span className={`text-xs font-medium ${chgColor(chg.hkjc_away, true)}`}>
-                            {arrow(chg.hkjc_away)}{Math.abs(chg.hkjc_away ?? 0).toFixed(1)}%
+                            {arrow(chg.hkjc_away)}{Math.abs(chg.hkjc_away).toFixed(1)}%
                           </span>
                         )}
                         <span className="text-orange-400 text-sm font-medium">
                           {fmtPct(p.away)}
-                          {chg && chg.poly_away != null && (
+                          {chg && chg.poly_away != null && chg.poly_away !== 0 && (
                             <span className={`text-xs ml-0.5 ${chg.poly_away > 0 ? 'text-emerald-400' : chg.poly_away < 0 ? 'text-red-400' : muted2}`}>
                               {arrow(chg.poly_away)}{Math.abs(chg.poly_away).toFixed(1)}%
                             </span>

@@ -179,10 +179,86 @@ def build_comparison():
 
     latest = max(today_snaps, key=lambda s: s["timestamp"])
 
-    # Reference snapshots
-    ref_1h = nearest_snapshot(now - timedelta(hours=1), today_snaps)
-    ref_4h = nearest_snapshot(now - timedelta(hours=4), today_snaps)
-    ref_24h = nearest_snapshot(now - timedelta(hours=24), yesterday_snaps if yesterday_snaps else today_snaps)
+    # Reference snapshots. The reference must come from a DIFFERENT snap than
+    # the latest, otherwise chg_* is identically zero and the table lies.
+    # Strategy:
+    #   chg_1h / chg_4h: scan up to 7 days back, take closest snap ≥ target_dt.
+    #                    If the only "today" snap is younger than target_dt
+    #                    (we just rolled past HKT midnight), fall through to
+    #                    the previous day's file.
+    #   chg_24h:         strict — use yesterday's file (or older) so the
+    #                    window actually represents 24h, not the past 2 hours.
+    today_dt = datetime.strptime(today, "%Y-%m-%d").replace(tzinfo=HKT)
+    yesterday_dt = today_dt - timedelta(days=1)
+
+    def _ref_with_fallback(target_dt, max_lookback_days=7):
+        """Walk back through files day-by-day to find a nearest snapshot to
+        target_dt. Returns None if no usable reference exists in the window."""
+        for back in range(0, max_lookback_days + 1):
+            day_dt = target_dt - timedelta(days=back)
+            day_str = day_dt.strftime("%Y-%m-%d")
+            candidate_file = NAS_PATH / f"odds_{day_str}.json"
+            if not candidate_file.exists():
+                continue
+            with open(candidate_file) as f:
+                snaps = json.load(f)
+            if not snaps:
+                continue
+            cand = nearest_snapshot(target_dt, snaps)
+            if cand is None:
+                continue
+            # Skip if candidate is essentially the same as latest (≤90s drift)
+            if cand.get("timestamp") and latest.get("timestamp"):
+                if abs(cand["timestamp"] - latest["timestamp"]) < 90:
+                    continue
+            return cand, day_str
+        return None, None
+
+    ref_1h_raw, _ = _ref_with_fallback(now - timedelta(hours=1))
+    ref_4h_raw, _ = _ref_with_fallback(now - timedelta(hours=4))
+    ref_24h_raw, _ = _ref_with_fallback(now - timedelta(hours=24))
+
+    ref_1h = ref_1h_raw
+    ref_4h = ref_4h_raw
+    ref_24h = ref_24h_raw
+
+    # For chg_24h, if the strict 24h reference doesn't contain this match
+    # (knockout games that were only registered in the last 24h, or yesterday
+    # had no matches), fall back to whichever earlier day last had this match.
+    earliest_today = None
+    for s in today_snaps:
+        if s.get("odds"):
+            if earliest_today is None or s["timestamp"] < earliest_today["timestamp"]:
+                earliest_today = s
+
+    latest_match_names = set(latest.get("odds", {}).keys())
+    needs_fallback = (
+        not ref_24h
+        or not ref_24h.get("odds")
+        or not (latest_match_names & set(ref_24h["odds"].keys()))
+    )
+
+    fallback_ref_24h = None
+    if needs_fallback:
+        # Walk back day-by-day until we find a snap whose odds dict actually
+        # contains one of today's matches. That snap becomes our 24h baseline.
+        for back in range(1, 8):
+            day = (_hkt_now() - timedelta(days=back)).strftime("%Y-%m-%d")
+            f = NAS_PATH / f"odds_{day}.json"
+            if not f.exists():
+                continue
+            with open(f) as fp:
+                ds = json.load(fp)
+            # Snap must be older than latest AND must contain a real match for us
+            cands = [s for s in ds if s.get("odds") and (latest_ts_diff := latest.get("timestamp", 0) - s.get("timestamp", 0)) >= 3600]
+            if cands:
+                # Pick the LATEST such snap (closest to 24h but still >24h old if possible)
+                cands.sort(key=lambda s: s["timestamp"], reverse=True)
+                fallback_ref_24h = cands[0]
+                break
+
+        if not fallback_ref_24h and earliest_today:
+            fallback_ref_24h = earliest_today
 
     # Fetch game times from Polymarket
     poly_times = fetch_polymarket_games()
@@ -256,16 +332,22 @@ def build_comparison():
                 "poly_draw": calc_change(poly_draw, old.get("poly_draw")),
                 "poly_away": calc_change(poly_away, old.get("poly_away")),
             }
-        if ref_24h:
+        # Pick the best 24h reference. Per match, prefer the strict ref_24h
+        # IF it actually has this match; otherwise use the earliest-today
+        # fallback so chg is always informative (not all null).
+        old = {}
+        if ref_24h and match_name in ref_24h.get("odds", {}):
             old = ref_24h["odds"].get(match_name, {})
-            match_data["chg_24h"] = {
-                "hkjc_home": calc_change(hkjc_home, old.get("hkjc_home")),
-                "hkjc_draw": calc_change(hkjc_draw, old.get("hkjc_draw")),
-                "hkjc_away": calc_change(hkjc_away, old.get("hkjc_away")),
-                "poly_home": calc_change(poly_home, old.get("poly_home")),
-                "poly_draw": calc_change(poly_draw, old.get("poly_draw")),
-                "poly_away": calc_change(poly_away, old.get("poly_away")),
-            }
+        elif fallback_ref_24h:
+            old = fallback_ref_24h["odds"].get(match_name, {})
+        match_data["chg_24h"] = {
+            "hkjc_home": calc_change(hkjc_home, old.get("hkjc_home")),
+            "hkjc_draw": calc_change(hkjc_draw, old.get("hkjc_draw")),
+            "hkjc_away": calc_change(hkjc_away, old.get("hkjc_away")),
+            "poly_home": calc_change(poly_home, old.get("poly_home")),
+            "poly_draw": calc_change(poly_draw, old.get("poly_draw")),
+            "poly_away": calc_change(poly_away, old.get("poly_away")),
+        }
 
         matches.append(match_data)
 

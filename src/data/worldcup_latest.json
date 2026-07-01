@@ -6,38 +6,38 @@
       "awayTeam": "DR Congo",
       "gameTime": "2026-07-02 00:00",
       "hkjc": {
-        "home": 1.2,
-        "draw": 4.65,
-        "away": 12.0
+        "home": 1.68,
+        "draw": 3.0,
+        "away": 4.9
       },
       "poly": {
-        "home": 0.765,
-        "draw": 0.185,
-        "away": 0.055
+        "home": 0.565,
+        "draw": 0.255,
+        "away": 0.175
       },
       "chg_1h": {
-        "hkjc_home": 0.0,
-        "hkjc_draw": 0.0,
-        "hkjc_away": 0.0,
-        "poly_home": 0.0,
-        "poly_draw": 0.0,
-        "poly_away": 0.0
+        "hkjc_home": 40.0,
+        "hkjc_draw": -35.48,
+        "hkjc_away": -59.17,
+        "poly_home": -26.14,
+        "poly_draw": 37.84,
+        "poly_away": 218.18
       },
       "chg_4h": {
-        "hkjc_home": 0.0,
-        "hkjc_draw": 0.0,
-        "hkjc_away": 0.0,
-        "poly_home": 0.0,
-        "poly_draw": 0.0,
-        "poly_away": 0.0
+        "hkjc_home": 40.0,
+        "hkjc_draw": -35.48,
+        "hkjc_away": -59.17,
+        "poly_home": -26.14,
+        "poly_draw": 37.84,
+        "poly_away": 218.18
       },
       "chg_24h": {
-        "hkjc_home": null,
-        "hkjc_draw": null,
-        "hkjc_away": null,
-        "poly_home": null,
-        "poly_draw": null,
-        "poly_away": null
+        "hkjc_home": 40.0,
+        "hkjc_draw": -35.48,
+        "hkjc_away": -59.17,
+        "poly_home": -26.14,
+        "poly_draw": 37.84,
+        "poly_away": 218.18
       }
     },
     {
@@ -46,38 +46,38 @@
       "awayTeam": "Senegal",
       "gameTime": "2026-07-02 04:00",
       "hkjc": {
-        "home": 1.9,
+        "home": 1.93,
         "draw": 2.98,
-        "away": 3.65
+        "away": 3.55
       },
       "poly": {
         "home": 0.455,
         "draw": 0.295,
-        "away": 0.255
+        "away": 0.245
       },
       "chg_1h": {
-        "hkjc_home": 0.0,
-        "hkjc_draw": 0.0,
+        "hkjc_home": -1.03,
+        "hkjc_draw": 1.36,
         "hkjc_away": 0.0,
         "poly_home": 0.0,
         "poly_draw": 0.0,
-        "poly_away": 0.0
+        "poly_away": -3.92
       },
       "chg_4h": {
-        "hkjc_home": 0.0,
+        "hkjc_home": 1.58,
         "hkjc_draw": 0.0,
+        "hkjc_away": -2.74,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": -3.92
+      },
+      "chg_24h": {
+        "hkjc_home": -1.03,
+        "hkjc_draw": 1.36,
         "hkjc_away": 0.0,
         "poly_home": 0.0,
         "poly_draw": 0.0,
-        "poly_away": 0.0
-      },
-      "chg_24h": {
-        "hkjc_home": null,
-        "hkjc_draw": null,
-        "hkjc_away": null,
-        "poly_home": null,
-        "poly_draw": null,
-        "poly_away": null
+        "poly_away": -3.92
       }
     },
     {
@@ -86,9 +86,9 @@
       "awayTeam": "Bosnia and Herzegovina",
       "gameTime": "2026-07-02 08:00",
       "hkjc": {
-        "home": 1.29,
-        "draw": 4.3,
-        "away": 8.25
+        "home": 1.27,
+        "draw": 4.4,
+        "away": 8.75
       },
       "poly": {
         "home": 0.705,
@@ -96,28 +96,28 @@
         "away": 0.105
       },
       "chg_1h": {
-        "hkjc_home": 0.0,
-        "hkjc_draw": 0.0,
-        "hkjc_away": 0.0,
+        "hkjc_home": -1.55,
+        "hkjc_draw": 2.33,
+        "hkjc_away": 6.06,
         "poly_home": 0.0,
         "poly_draw": 0.0,
         "poly_away": 0.0
       },
       "chg_4h": {
-        "hkjc_home": 1.57,
-        "hkjc_draw": -4.44,
-        "hkjc_away": -5.71,
+        "hkjc_home": -0.78,
+        "hkjc_draw": -2.22,
+        "hkjc_away": 2.94,
         "poly_home": 0.0,
         "poly_draw": 0.0,
         "poly_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": null,
-        "hkjc_draw": null,
-        "hkjc_away": null,
-        "poly_home": null,
-        "poly_draw": null,
-        "poly_away": null
+        "hkjc_home": -1.55,
+        "hkjc_draw": 2.33,
+        "hkjc_away": 6.06,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -147,17 +147,17 @@
         "hkjc_home": 0.0,
         "hkjc_draw": 0.0,
         "hkjc_away": 0.0,
-        "poly_home": 0.0,
+        "poly_home": -1.34,
         "poly_draw": 0.0,
         "poly_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": null,
-        "hkjc_draw": null,
-        "hkjc_away": null,
-        "poly_home": null,
-        "poly_draw": null,
-        "poly_away": null
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -184,20 +184,20 @@
         "poly_away": 0.0
       },
       "chg_4h": {
-        "hkjc_home": 1.89,
-        "hkjc_draw": -1.52,
-        "hkjc_away": -4.0,
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0,
         "poly_home": 0.0,
         "poly_draw": 0.0,
         "poly_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": null,
-        "hkjc_draw": null,
-        "hkjc_away": null,
-        "poly_home": null,
-        "poly_draw": null,
-        "poly_away": null
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -232,12 +232,12 @@
         "poly_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": null,
-        "hkjc_draw": null,
-        "hkjc_away": null,
-        "poly_home": null,
-        "poly_draw": null,
-        "poly_away": null
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -272,12 +272,12 @@
         "poly_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": null,
-        "hkjc_draw": null,
-        "hkjc_away": null,
-        "poly_home": null,
-        "poly_draw": null,
-        "poly_away": null
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -293,7 +293,7 @@
       "poly": {
         "home": 0.845,
         "draw": 0.115,
-        "away": 0.0435
+        "away": 0.044
       },
       "chg_1h": {
         "hkjc_home": 0.0,
@@ -301,7 +301,7 @@
         "hkjc_away": 0.0,
         "poly_home": 0.0,
         "poly_draw": 0.0,
-        "poly_away": 0.0
+        "poly_away": 1.15
       },
       "chg_4h": {
         "hkjc_home": 0.0,
@@ -309,15 +309,15 @@
         "hkjc_away": 0.0,
         "poly_home": 0.0,
         "poly_draw": 0.0,
-        "poly_away": -3.33
+        "poly_away": -1.12
       },
       "chg_24h": {
-        "hkjc_home": null,
-        "hkjc_draw": null,
-        "hkjc_away": null,
-        "poly_home": null,
-        "poly_draw": null,
-        "poly_away": null
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 1.15
       }
     },
     {
@@ -352,12 +352,12 @@
         "poly_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": null,
-        "hkjc_draw": null,
-        "hkjc_away": null,
-        "poly_home": null,
-        "poly_draw": null,
-        "poly_away": null
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     },
     {
@@ -392,19 +392,19 @@
         "poly_away": 0.0
       },
       "chg_24h": {
-        "hkjc_home": null,
-        "hkjc_draw": null,
-        "hkjc_away": null,
-        "poly_home": null,
-        "poly_draw": null,
-        "poly_away": null
+        "hkjc_home": 0.0,
+        "hkjc_draw": 0.0,
+        "hkjc_away": 0.0,
+        "poly_home": 0.0,
+        "poly_draw": 0.0,
+        "poly_away": 0.0
       }
     }
   ],
-  "generated": "2026-07-01T22:53:00.325051+08:00",
-  "latest_datetime": "2026-07-01 22:14:10",
-  "latest_ts": 1782915250.8717,
-  "ref_1h": "2026-07-01 22:14:10",
-  "ref_4h": "2026-07-01 19:14:00",
-  "ref_24h": "2026-06-30 22:47:50"
+  "generated": "2026-07-02T00:52:35.834210+08:00",
+  "latest_datetime": "2026-07-02 00:14:17",
+  "latest_ts": 1782922457.808324,
+  "ref_1h": "2026-07-01 23:14:13",
+  "ref_4h": "2026-07-01 21:14:08",
+  "ref_24h": "2026-07-01 00:47:56"
 }
