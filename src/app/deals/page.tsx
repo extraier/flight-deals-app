@@ -248,13 +248,72 @@ const regionColors: Record<string, string> = {
   '其他': 'bg-slate-500/10 text-slate-600 border-slate-500/30',
 };
 
+// Hermes 2026-07-01: airline name map for the multi-airline filter chips.
+// Display full Chinese name when known; otherwise just show the IATA code.
+const AIRLINE_NAMES: Record<string, string> = {
+  'UO': '香港快運',
+  'CX': '國泰',
+  'KA': '國泰港龍',
+  'HK': '港航',
+  'HKE': '港航',
+  'BX': '釜山航空',
+  'KE': '大韓',
+  'OZ': '韓亞',
+  'NH': '全日空',
+  'JL': '日航',
+  'MM': '樂桃',
+  'TR': '酷航',
+  'AK': '亞航',
+  'D7': 'AirAsia X',
+  'VJ': '越捷',
+  'AI': '印度航空',
+  'SL': '獅航',
+  'PR': '菲律賓航空',
+  '5J': 'Cebu Pacific',
+  'TG': '泰航',
+  'UA': '聯合航空',
+  'AC': '加拿大航空',
+  'AA': '美國航空',
+  'DL': '達美',
+  'BR': '長榮',
+  'CI': '中華',
+  'EK': '阿聯酋',
+  'EY': '阿提哈德',
+  'QR': '卡塔爾',
+  'TK': '土耳其航空',
+  'BA': '英航',
+  'AF': '法航',
+  'KL': '荷航',
+  'LH': '漢莎',
+  'LX': '瑞航',
+  'QF': '澳航',
+  'BI': '汶萊皇家',
+  'GK': '日航春秋',
+  'SC': '山東航空',
+  'HU': '海航',
+  'CZ': '南航',
+  'MU': '東航',
+  'CA': '國航',
+  'FM': '上航',
+  'AY': '芬航',
+  'KQ': '肯亞航空',
+  'SK': '北歐航空',
+};
+
+function airlineLabel(code: string): string {
+  const name = AIRLINE_NAMES[code];
+  return name ? `${name} (${code})` : code;
+}
+
 export default function DealsPage() {
   const [departure, setDeparture] = useState<Departure>('HKG');
   const [sortMode, setSortMode] = useState<SortMode>('discount');
-  // Hermes 2026-06-30: HK Express-only filter. When ON, only routes whose
-  // displayed cheapest date is operated by UO are shown. Mirrors the
-  // "✈️ UO 獨家跌價" section in the Telegram alert.
-  const [uoOnly, setUoOnly] = useState(false);
+  // Hermes 2026-07-01: multi-airline filter. null = show all airlines.
+  // When set to an IATA code (e.g. 'UO', 'CX'), only routes whose displayed
+  // cheapest date is operated by that airline are shown. Replaces the
+  // previous boolean uoOnly toggle with a chip row so the user can pick
+  // any airline that currently has drops.
+  const [airlineFilter, setAirlineFilter] = useState<string | null>(null);
   // Hermes: live data — fetch from /api/deals which proxies the NAS funnel
   // (60s in-memory cache). Avoids the Vercel static-prerender problem where
   // the bundled src/data/all_dates*.json can be hours stale.
@@ -305,14 +364,29 @@ export default function DealsPage() {
 
   const szxEmpty = szxRows.length === 0;
 
+  // Compute the set of airlines that currently have at least one drop,
+  // ordered by frequency (most-frequent first). Used to render the
+  // multi-airline chip row.
+  const airlineOptions = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const r of rows) {
+      const code = (r.cheapestDate.airline || '').replace(/^_/, '').toUpperCase();
+      if (!code || code === 'UNKNOWN') continue;
+      counts.set(code, (counts.get(code) || 0) + 1);
+    }
+    return [...counts.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  }, [rows]);
+
   const renderedRows = useMemo(() => {
     let copy = [...rows];
-    // Hermes 2026-06-30: UO-only filter — show only routes whose displayed
-    // cheapest date is operated by HK Express. Matches the Telegram
-    // "✈️ UO 獨家跌價" section semantics (Approach A).
-    if (uoOnly) {
+    // Hermes 2026-07-01: multi-airline filter. When airlineFilter is set
+    // (e.g. 'UO'), only routes whose displayed cheapest date is operated
+    // by that airline are kept. Routes with no flight info are dropped
+    // from any airline-filtered view (can't attribute them).
+    if (airlineFilter) {
       copy = copy.filter(
-        (r) => (r.cheapestDate.airline || '').replace(/^_/, '').toUpperCase() === 'UO'
+        (r) => (r.cheapestDate.airline || '').replace(/^_/, '').toUpperCase() === airlineFilter
       );
     }
     if (sortMode === 'recency') {
@@ -326,7 +400,7 @@ export default function DealsPage() {
       copy.sort((a, b) => b.dropPct - a.dropPct);
     }
     return copy;
-  }, [rows, sortMode, uoOnly]);
+  }, [rows, sortMode, airlineFilter]);
 
   // Stats
   const stats = useMemo(() => {
@@ -409,24 +483,39 @@ export default function DealsPage() {
               </button>
             </div>
           )}
-          {/* Hermes 2026-07-01: HK Express-only filter — always show the
-              toggle on HKG tab so the user can confirm "no UO drops today"
-              rather than wondering if the filter exists. Showing 0 results
-              is more informative than hiding the control. */}
-          {departure === 'HKG' && (
-            <div className="inline-flex rounded-lg border border-border bg-card p-1 gap-1">
+          {/* Hermes 2026-07-01: multi-airline filter chips. Always visible on both
+              HKG and SZX tabs when there are rows, so the user can drill
+              into any airline that currently has drops. The "全部" chip
+              clears the filter (default state). Each airline chip shows
+              the count of deals it would match. */}
+          {renderedRows.length > 0 && airlineOptions.length > 0 && (
+            <div className="inline-flex flex-wrap rounded-lg border border-border bg-card p-1 gap-1">
               <button
-                onClick={() => setUoOnly((v) => !v)}
+                onClick={() => setAirlineFilter(null)}
                 className={`px-3 py-2 rounded-md text-xs font-medium transition-all ${
-                  uoOnly
+                  airlineFilter === null
                     ? 'bg-primary text-primary-foreground shadow-sm'
                     : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 }`}
-                title="只顯示由香港快運 (UO) 營運嘅劈價"
-                aria-pressed={uoOnly}
+                title="顯示所有航空公司嘅劈價"
               >
-                {uoOnly ? '✅ 香港快運' : '🛩 香港快運'}
+                ✈️ 全部 ({rows.length})
               </button>
+              {airlineOptions.map(([code, count]) => (
+                <button
+                  key={code}
+                  onClick={() => setAirlineFilter(airlineFilter === code ? null : code)}
+                  className={`px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                    airlineFilter === code
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                  }`}
+                  title={`只顯示由 ${airlineLabel(code)} 營運嘅劈價`}
+                  aria-pressed={airlineFilter === code}
+                >
+                  {airlineFilter === code ? '✅ ' : ''}{airlineLabel(code)} ({count})
+                </button>
+              ))}
             </div>
           )}
         </div>
