@@ -251,6 +251,10 @@ const regionColors: Record<string, string> = {
 export default function DealsPage() {
   const [departure, setDeparture] = useState<Departure>('HKG');
   const [sortMode, setSortMode] = useState<SortMode>('discount');
+  // Hermes 2026-06-30: HK Express-only filter. When ON, only routes whose
+  // displayed cheapest date is operated by UO are shown. Mirrors the
+  // "✈️ UO 獨家跌價" section in the Telegram alert.
+  const [uoOnly, setUoOnly] = useState(false);
   // Hermes: live data — fetch from /api/deals which proxies the NAS funnel
   // (60s in-memory cache). Avoids the Vercel static-prerender problem where
   // the bundled src/data/all_dates*.json can be hours stale.
@@ -302,7 +306,15 @@ export default function DealsPage() {
   const szxEmpty = szxRows.length === 0;
 
   const renderedRows = useMemo(() => {
-    const copy = [...rows];
+    let copy = [...rows];
+    // Hermes 2026-06-30: UO-only filter — show only routes whose displayed
+    // cheapest date is operated by HK Express. Matches the Telegram
+    // "✈️ UO 獨家跌價" section semantics (Approach A).
+    if (uoOnly) {
+      copy = copy.filter(
+        (r) => (r.cheapestDate.airline || '').replace(/^_/, '').toUpperCase() === 'UO'
+      );
+    }
     if (sortMode === 'recency') {
       // Newest first. Routes without firstDetected sort to the bottom.
       copy.sort((a, b) => {
@@ -314,7 +326,7 @@ export default function DealsPage() {
       copy.sort((a, b) => b.dropPct - a.dropPct);
     }
     return copy;
-  }, [rows, sortMode]);
+  }, [rows, sortMode, uoOnly]);
 
   // Stats
   const stats = useMemo(() => {
@@ -394,6 +406,26 @@ export default function DealsPage() {
                 title="按首次發現時間由新到舊"
               >
                 🕒 最新
+              </button>
+            </div>
+          )}
+          {/* Hermes 2026-07-01: HK Express-only filter — always show the
+              toggle on HKG tab so the user can confirm "no UO drops today"
+              rather than wondering if the filter exists. Showing 0 results
+              is more informative than hiding the control. */}
+          {departure === 'HKG' && (
+            <div className="inline-flex rounded-lg border border-border bg-card p-1 gap-1">
+              <button
+                onClick={() => setUoOnly((v) => !v)}
+                className={`px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                  uoOnly
+                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                }`}
+                title="只顯示由香港快運 (UO) 營運嘅劈價"
+                aria-pressed={uoOnly}
+              >
+                {uoOnly ? '✅ UO only' : '🛩 UO only'}
               </button>
             </div>
           )}
