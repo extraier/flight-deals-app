@@ -14,6 +14,17 @@ from pathlib import Path
 NAS_PATH = Path("/volume1/flight-scanner/hkjc_data/odds_history")
 
 POLYMARKET_BUILD = "build-TfctsWXpff2fKS"
+# That Next.js build hash went stale in June 2026. We now hit Gamma's
+# REST API directly for both per-fixture odds and game times.
+POLYMARKET_GAMMA_URL = (
+    "https://gamma-api.polymarket.com/events"
+    "?series_slug=soccer-fifwc&closed=false&active=true&limit=500"
+)
+# Ancillary slug fragments — drop player-props, exact-score, halftime, etc.
+POLYMARKET_ANCILLARY = (
+    "player-props", "exact-score", "halftime", "second-half",
+    "total-corners", "first-to-score", "more-markets", "spread",
+)
 
 # HKJC scraper writes odds files using HKT dates. The NAS runs UTC by default,
 # and Python's datetime.now() honors whatever the OS localtime is — which on
@@ -45,68 +56,87 @@ def normalize_team(name):
     return ''.join(c.lower() for c in name if c.isalnum() or c.isspace()).strip()
 
 def fetch_polymarket_games():
-    """Fetch game times from Polymarket Next.js data file."""
-    url = f"https://polymarket.com/_next/data/{POLYMARKET_BUILD}/sports/world-cup/games.json?locale=en&category=world-cup&slug=games"
+    """Fetch game times + 1x2 prices from Polymarket Gamma API.
+
+    Returns a dict keyed by both possible "Home vs Away" and "Away vs Home"
+    orders (so callers can match against HKJC's order without caring which
+    side of the fixture was listed first).
+
+    Each value is `{'gameTime', 'home', 'away', 'home', 'draw', 'away'}` in
+    HKT strings/decimal probability.
+    """
     try:
-        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        req = urllib.request.Request(POLYMARKET_GAMMA_URL, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req, timeout=30) as resp:
-            data = json.loads(resp.read().decode())
+            events = json.loads(resp.read().decode())
     except Exception as e:
         print(f"Polymarket fetch failed: {e}", file=sys.stderr)
         return {}
 
-    pp = data.get('pageProps', {})
-    is_b64 = pp.get('initialState', '')
-    if not is_b64:
-        return {}
-
-    try:
-        missing_padding = len(is_b64) % 4
-        padded = is_b64 + '=' * (4 - missing_padding) if missing_padding else is_b64
-        decoded = base64.urlsafe_b64decode(padded)
-        decompressed = zlib.decompress(decoded, wbits=15)
-        state = json.loads(decompressed.decode('utf-8'))
-    except Exception as e:
-        print(f"Polymarket decode failed: {e}", file=sys.stderr)
-        return {}
-
-    events = state.get('events', {})
     game_times = {}
-
-    for slug, event in events.items():
-        start_time_utc = event.get('startTime', '')
-        if not start_time_utc:
+    for ev in events:
+        slug = ev.get('slug', '')
+        title = ev.get('title', '')
+        if not slug.startswith('fifwc-'):
+            continue
+        if any(x in slug for x in POLYMARKET_ANCILLARY):
+            continue
+        if ' vs. ' not in title:
             continue
 
-        try:
-            dt = datetime.fromisoformat(start_time_utc.replace('Z', '+00:00'))
-            hkt_tz = timezone(timedelta(hours=8))
-            dt_hkt = dt.astimezone(hkt_tz)
-            start_time_hkt = dt_hkt.strftime('%Y-%m-%d %H:%M')
-        except Exception:
-            start_time_hkt = ''
+        home, away = title.split(' vs. ', 1)
 
-        teams = state.get('teams', {}).get(slug, {})
-        home = teams.get('home', {}).get('name', '')
-        away = teams.get('away', {}).get('name', '')
+        # HKT kickoff from `startTime` if present, else `endDate`
+        hkt_str = ''
+        raw_dt = ev.get('startTime') or ev.get('endDate') or ''
+        if raw_dt:
+            try:
+                dt = datetime.fromisoformat(raw_dt.replace('Z', '+00:00'))
+                dt_hkt = dt.astimezone(timezone(timedelta(hours=8)))
+                hkt_str = dt_hkt.strftime('%Y-%m-%d %H:%M')
+            except Exception:
+                pass
 
-        if home and away:
-            # Key by normalized team names
-            key = f"{home} vs {away}"
-            game_times[key] = {
-                'gameTime': start_time_hkt,
-                'home': home,
-                'away': away,
-            }
-            # Also try both orders for neutral venue
-            key2 = f"{away} vs {home}"
-            game_times[key2] = {
-                'gameTime': start_time_hkt,
-                'home': home,
-                'away': away,
-            }
+        # Three markets: home win / draw / away win
+        home_p = draw_p = away_p = None
+        for m in ev.get('markets', []):
+            q = (m.get('question') or '')
+            outcomes = m.get('outcomes', [])
+            prices = m.get('outcomePrices', [])
+            if isinstance(prices, str):
+                try: prices = json.loads(prices)
+                except Exception: continue
+            if isinstance(outcomes, str):
+                try: outcomes = json.loads(outcomes)
+                except Exception: continue
+            if not outcomes or not prices:
+                continue
+            try:
+                p_yes = float(prices[0])
+            except Exception:
+                continue
+            group = (m.get('groupItemTitle') or '').lower()
+            if 'draw' in group:
+                draw_p = p_yes
+                continue
+            q_low = q.lower()
+            if home.lower() in q_low and ' win ' in q_low:
+                home_p = p_yes
+            elif away.lower() in q_low and ' win ' in q_low:
+                away_p = p_yes
 
-    print(f"Fetched {len(game_times)} game times from Polymarket", file=sys.stderr)
+        info = {
+            'gameTime': hkt_str,
+            'home': home,
+            'away': away,
+            'home_odds': home_p,
+            'draw_odds': draw_p,
+            'away_odds': away_p,
+        }
+        game_times[f"{home} vs {away}"] = info
+        game_times[f"{away} vs {home}"] = info  # reverse-order lookup
+
+    print(f"Fetched {len(game_times)//2} game times from Polymarket", file=sys.stderr)
     return game_times
 
 def build_comparison():
