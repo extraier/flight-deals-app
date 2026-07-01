@@ -1,13 +1,17 @@
 /**
  * Flight deals API route.
  *
- * Fetches live data from the UGREEN NAS via Tailscale Funnel
- * (https://ugreen-nas.tail20bf1.ts.net/...) with a 60-second in-memory cache.
- * Falls back to the bundled static JSON if the upstream is unreachable.
+ * Hermes 2026-07-01: rewrote upstream strategy.
+ *   1. Try Tailscale Funnel (https://ugreen-nas.tail20bf1.ts.net) — same-LAN fast path.
+ *      Often unreachable from Vercel edge workers because Tailscale peer discovery
+ *      fails across regions.
+ *   2. Fall back to public HTTPS CDN (cdn.savetheday.io/deals) — reachable
+ *      from anywhere, served via nginx on the NAS fronted by cloudflared.
+ *      This is the new primary on Vercel since the funnel breaks.
+ *   3. Last resort: bundled static JSON in src/data/.
  *
- * Why this exists: removes the need to git-push + Vercel-deploy every time
- * the scanner finishes a cycle. Now data updates appear within ~5 minutes
- * (worst case ~60s cache + 1 funnel hop) without touching the repo.
+ * Cache: 60s in-memory. The 90s page refresh interval plus the CDN's 300s
+ * max-age mean we never hammer upstream.
  */
 
 import { promises as fs } from 'node:fs';
@@ -17,6 +21,7 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 const FUNNEL_BASE = 'https://ugreen-nas.tail20bf1.ts.net';
+const CDN_BASE = 'https://cdn.savetheday.io/deals';
 const CACHE_TTL_MS = 60_000; // 60 seconds
 const UPSTREAM_TIMEOUT_MS = 8_000; // Vercel hobby default is 10s; leave headroom
 
@@ -25,7 +30,7 @@ type Departure = 'HKG' | 'SZX';
 interface CacheEntry {
   body: unknown;
   fetchedAt: number;
-  source: 'funnel' | 'static-fallback';
+  source: 'funnel' | 'cdn' | 'static-fallback';
   upstreamMtime: number | null;
 }
 
@@ -43,20 +48,53 @@ async function readStaticFallback(dep: Departure): Promise<unknown> {
   return JSON.parse(raw);
 }
 
-async function fetchFromFunnel(dep: Departure, signal: AbortSignal): Promise<{ body: unknown; mtime: number | null }> {
-  const url = `${FUNNEL_BASE}/all_dates${dep === 'SZX' ? '_szx' : ''}.json`;
-  const res = await fetch(url, {
-    signal,
-    headers: { 'User-Agent': 'flight-deals-app/1.0 (vercel-edge)' },
-    cache: 'no-store',
-  });
-  if (!res.ok) {
-    throw new Error(`upstream ${res.status} ${res.statusText} for ${url}`);
+/**
+ * Try upstreams in order: funnel first (fastest when reachable), then public
+ * CDN. Returns the first successful response. Throws if all upstream fetches
+ * failed so the static-fallback path can run.
+ */
+async function fetchFromAnyUpstream(
+  dep: Departure,
+  parentSignal: AbortSignal,
+): Promise<{ body: unknown; mtime: number | null; source: 'funnel' | 'cdn' }> {
+  const upstreams: { name: 'funnel' | 'cdn'; url: string }[] = [
+    {
+      name: 'funnel',
+      url: `${FUNNEL_BASE}/all_dates${dep === 'SZX' ? '_szx' : ''}.json`,
+    },
+    {
+      name: 'cdn',
+      url: `${CDN_BASE}/all_dates${dep === 'SZX' ? '_szx' : ''}.json`,
+    },
+  ];
+
+  const errors: unknown[] = [];
+  for (const u of upstreams) {
+    const ac = new AbortController();
+    const timeout = setTimeout(() => ac.abort(), UPSTREAM_TIMEOUT_MS);
+    const abortParent = () => ac.abort();
+    parentSignal.addEventListener('abort', abortParent);
+    try {
+      const res = await fetch(u.url, {
+        signal: ac.signal,
+        headers: { 'User-Agent': 'flight-deals-app/1.1 (vercel-edge)' },
+        cache: 'no-store',
+      });
+      if (!res.ok) throw new Error(`upstream ${res.status} ${res.statusText}`);
+      const body = await res.json();
+      const mtime = Number(res.headers.get('x-file-mtime') ?? 0) || null;
+      return { body, mtime, source: u.name };
+    } catch (err) {
+      errors.push({ source: u.name, err });
+    } finally {
+      clearTimeout(timeout);
+      parentSignal.removeEventListener('abort', abortParent);
+    }
   }
-  const body = await res.json();
-  const mtimeHeader = res.headers.get('x-file-mtime');
-  const mtime = mtimeHeader ? Number(mtimeHeader) : null;
-  return { body, mtime };
+  // All upstreams failed — throw the last error so the static fallback runs.
+  throw new Error(
+    `all upstreams failed for ${dep}: ${errors.map((e) => JSON.stringify(e)).join('; ')}`,
+  );
 }
 
 async function getDeals(dep: Departure, force = false): Promise<CacheEntry> {
@@ -67,28 +105,26 @@ async function getDeals(dep: Departure, force = false): Promise<CacheEntry> {
   }
 
   const ac = new AbortController();
-  const timer = setTimeout(() => ac.abort(), UPSTREAM_TIMEOUT_MS);
+  // Outer watchdog: 8s per upstream * 2 upstreams + buffer = 18s, but clamp at 16s
+  const overallTimer = setTimeout(() => ac.abort(), UPSTREAM_TIMEOUT_MS * 2);
   try {
-    const { body, mtime } = await fetchFromFunnel(dep, ac.signal);
-    const entry: CacheEntry = { body, fetchedAt: now, source: 'funnel', upstreamMtime: mtime };
+    const { body, mtime, source } = await fetchFromAnyUpstream(dep, ac.signal);
+    const entry: CacheEntry = { body, fetchedAt: now, source, upstreamMtime: mtime };
     cache.set(dep, entry);
     return entry;
   } catch (err) {
-    console.warn(`[api/deals] funnel fetch failed for ${dep}:`, err);
-    // Fall back to static JSON if we have nothing fresh
+    console.warn(`[api/deals] all upstreams failed for ${dep}, falling back to static:`, err);
     const body = await readStaticFallback(dep);
     const entry: CacheEntry = {
       body,
-      fetchedAt: now,
+      fetchedAt: now - (CACHE_TTL_MS / 2), // expire halfway
       source: 'static-fallback',
       upstreamMtime: null,
     };
-    // Don't cache the fallback for the full TTL — try again next request
-    entry.fetchedAt = now - (CACHE_TTL_MS / 2); // expire halfway
     cache.set(dep, entry);
     return entry;
   } finally {
-    clearTimeout(timer);
+    clearTimeout(overallTimer);
   }
 }
 
