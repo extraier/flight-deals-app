@@ -111,6 +111,21 @@ function getCountry(deal: Deal): string {
   return CITY_TO_COUNTRY[deal.destination.code] || deal.destination.region;
 }
 
+// Hermes 2026-07-01: return ALL airline codes that operate any of this
+// deal's cheapest dates. A single route can be flown by multiple carriers
+// (e.g. HKG→NRT is JL + NH + TR + UO) and a route that has a UO flight
+// even at a non-lead-in price should still surface under the UO filter.
+function dealAirlines(deal: Deal): Set<string> {
+  const codes = new Set<string>();
+  const dates = deal.cheapestDates || [];
+  for (const cd of dates) {
+    const f = cd?.flight as { airline?: string } | undefined;
+    const code = (f?.airline || '').replace(/^_/, '').toUpperCase();
+    if (code) codes.add(code);
+  }
+  return codes;
+}
+
 export default function Home() {
   const [departure, setDeparture] = useState<Departure>('HKG');
   const [sortBy, setSortBy] = useState<SortOption>('price');
@@ -165,17 +180,16 @@ export default function Home() {
   }, [deals]);
 
   // Hermes 2026-07-01: airline options for the multi-airline filter.
-  // Build from current deals' cheapestDate[0].flight.airline (the same
-  // source the deals page uses). Counts reflect how many deals each
-  // airline currently has on the page.
+  // Build from ALL cheapestDates' flight.airline, not just [0] — a route
+  // can be operated by multiple airlines (e.g. NRT has JL/NH/TR/UO) and
+  // the user expects the count to reflect any deal that airline flies.
   const airlineOptions = useMemo(() => {
     const counts = new Map<string, number>();
     for (const d of deals) {
-      const cd = d.cheapestDates?.[0];
-      const f = (cd?.flight as { airline?: string } | undefined) || undefined;
-      const code = (f?.airline || '').replace(/^_/, '').toUpperCase();
-      if (!code || code === 'UNKNOWN') continue;
-      counts.set(code, (counts.get(code) || 0) + 1);
+      for (const code of dealAirlines(d)) {
+        if (code === 'UNKNOWN') continue;
+        counts.set(code, (counts.get(code) || 0) + 1);
+      }
     }
     return [...counts.entries()]
       .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
@@ -192,15 +206,12 @@ export default function Home() {
         result = result.filter((d) => getCountry(d) === selectedCountry);
       }
     }
-    // Hermes 2026-07-01: airline filter — when set, keep only deals whose
-    // displayed cheapest date is operated by the selected airline.
-    // Deals without flight info are excluded from any airline-filtered view.
+    // Hermes 2026-07-01: airline filter — keep a deal if ANY of its
+    // cheapestDates was operated by the selected airline. Previously we
+    // only checked cheapestDates[0], which hid routes that the airline
+    // flies but at a slightly higher price than the lead-in fare.
     if (airlineFilter) {
-      result = result.filter((d) => {
-        const cd = d.cheapestDates?.[0];
-        const f = (cd?.flight as { airline?: string } | undefined) || undefined;
-        return (f?.airline || '').replace(/^_/, '').toUpperCase() === airlineFilter;
-      });
+      result = result.filter((d) => dealAirlines(d).has(airlineFilter));
     }
     if (sortBy === 'price') {
       result.sort((a, b) => a.price - b.price);
