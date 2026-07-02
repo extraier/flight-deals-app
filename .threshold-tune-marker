@@ -1,0 +1,1 @@
+# stale threshold tune: HEALTH_STALE_AFTER_SEC 2700 -> 4000 (~67min for new 95min alternating cycle)
