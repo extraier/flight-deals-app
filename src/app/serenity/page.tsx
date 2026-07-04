@@ -20,6 +20,7 @@ interface Tweet {
   isRetweet: boolean;
   cashtags: string[];
   quotedTweet?: unknown;
+  text_cn?: string;
 }
 
 interface TickerEntry {
@@ -60,6 +61,7 @@ interface Data {
   posts: Tweet[];
   rankings: TickerEntry[];
   tickers: Record<string, TickerEntry>;
+  translations: Record<string, string>;
   stats: {
     tweets_total: number;
     tweets_with_cashtags: number;
@@ -69,6 +71,7 @@ interface Data {
     mention_prices_yahoo: number;
     mention_prices_carry: number;
     mention_prices_unresolved: number;
+    translations_covered: number;
   };
 }
 
@@ -216,6 +219,7 @@ type Tab = 'feed' | 'performance';
 function TweetCard({ tweet, isDark }: { tweet: Tweet; isDark: boolean }) {
   const tickers = (tweet.cashtags || []).map((t) => String(t).toUpperCase()).filter(Boolean);
   const text = tweet.text || '';
+  const textCn = tweet.text_cn || null;
 
   return (
     <div className={`border rounded-lg ${card(isDark)} overflow-hidden`}>
@@ -233,8 +237,17 @@ function TweetCard({ tweet, isDark }: { tweet: Tweet; isDark: boolean }) {
           {text}
         </p>
 
+        {textCn && (
+          <div className={`mt-3 pt-3 border-t ${borderSubtle(isDark)}`}>
+            <div className="text-xs text-emerald-500 mb-1 font-medium">🇭🇰 粵語/繁體中文翻譯</div>
+            <p className={`text-sm leading-relaxed whitespace-pre-wrap ${isDark ? 'text-zinc-300' : 'text-zinc-600'}`}>
+              {textCn}
+            </p>
+          </div>
+        )}
+
         {tickers.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-2">
+          <div className="flex flex-wrap gap-1.5 mt-3">
             {tickers.map((t) => {
               const tkr = data.tickers[t];
               const cur = tkr?.current_price;
@@ -283,6 +296,16 @@ function FeedTab({ isDark }: { isDark: boolean }) {
   );
   const visible = showAll ? sorted : sorted.slice(0, 12);
 
+  // Decorate each tweet with its translation (if available)
+  const decorated = useMemo(
+    () =>
+      visible.map((t) => ({
+        ...t,
+        text_cn: t.text_cn || data.translations?.[t.id] || undefined,
+      })),
+    [visible],
+  );
+
   if (sorted.length === 0) {
     return (
       <div className="text-center py-16 text-zinc-400">
@@ -297,7 +320,7 @@ function FeedTab({ isDark }: { isDark: boolean }) {
 
   return (
     <div className="space-y-3">
-      {visible.map((t) => (
+      {decorated.map((t) => (
         <TweetCard key={t.id} tweet={t} isDark={isDark} />
       ))}
       {!showAll && sorted.length > 12 && (
