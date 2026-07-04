@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import trumpData from '@/data/trump_alerts.json';
 import futuAd from './futu_ad.jpg';
+import { SerenityFeedTab, SerenityPerformanceTab } from './serenity-tabs';
 
 interface Filing {
   ticker: string;
@@ -43,7 +44,7 @@ const data = trumpData as unknown as {
   quiver_trades: Trade[];
 };
 
-type Tab = 'trades' | 'truth';
+type Tab = 'trades' | 'truth' | 'serenity-feed' | 'serenity-perf';
 
 // Light/dark aware color helpers
 function card(isDark: boolean) {
@@ -298,7 +299,7 @@ export default function TrumpPage() {
 
       {/* Tabs */}
       <div className={`${bgSurface(isDark)} border-b ${borderSubtle(isDark)} px-6 py-3`}>
-        <div className="max-w-3xl mx-auto flex gap-1 flex-wrap">
+        <div className="max-w-3xl mx-auto flex gap-1 flex-wrap items-center">
           <button
             onClick={() => setTab('trades')}
             className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -315,22 +316,26 @@ export default function TrumpPage() {
           >
             📱 Truth Social
           </button>
-          {/* Cross-page Serenity navigation — two sub-tabs styled like inactive tabs */}
+          {/* Serenity sub-tabs — divider, then two cyan-styled inactive tabs */}
           <span className={`mx-1 ${textFaint(isDark)}`}>|</span>
-          <a
-            href="/serenity?tab=feed"
-            className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${bgSurface(isDark)} ${isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-700' : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200'}`}
+          <button
+            onClick={() => setTab('serenity-feed')}
+            className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
+              tab === 'serenity-feed' ? 'bg-cyan-600 text-white' : `${bgSurface(isDark)} ${isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-700' : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200'}`
+            }`}
             title="Serenity 推文動態"
           >
             📰 Serenity推文
-          </a>
-          <a
-            href="/serenity?tab=performance"
-            className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${bgSurface(isDark)} ${isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-700' : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200'}`}
+          </button>
+          <button
+            onClick={() => setTab('serenity-perf')}
+            className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
+              tab === 'serenity-perf' ? 'bg-cyan-600 text-white' : `${bgSurface(isDark)} ${isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-700' : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200'}`
+            }`}
             title="Serenity 持股回報"
           >
             📈 Serenity持股
-          </a>
+          </button>
         </div>
       </div>
 
@@ -361,13 +366,16 @@ export default function TrumpPage() {
       </div>
 
       {/* Content */}
-      <div className={`max-w-3xl mx-auto px-4 py-6`}>
-        {tab === 'trades' ? <TransactionsTab isDark={isDark} /> : <TruthSocialTab isDark={isDark} />}
+      <div className={`max-w-5xl mx-auto px-4 py-6`}>
+        {tab === 'trades' && <TransactionsTab isDark={isDark} />}
+        {tab === 'truth' && <TruthSocialTab isDark={isDark} />}
+        {tab === 'serenity-feed' && <SerenityFeedTab isDark={isDark} />}
+        {tab === 'serenity-perf' && <SerenityPerformanceTab isDark={isDark} />}
       </div>
 
       {/* Footer */}
       <div className={`text-center text-xs py-6 border-t ${borderSubtle(isDark)} ${textFaint(isDark)}`}>
-        數據來源：Truth Social · QuiverQuant · SEC EDGAR · 最後更新 {updated}
+        數據來源：Truth Social · QuiverQuant · SEC EDGAR · trackserenity.com · Yahoo Finance · 最後更新 {updated}
       </div>
     </div>
   );
