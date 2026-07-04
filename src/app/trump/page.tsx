@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import trumpData from '@/data/trump_alerts.json';
 import futuAd from './futu_ad.jpg';
@@ -316,14 +315,22 @@ export default function TrumpPage() {
           >
             📱 Truth Social
           </button>
-          {/* Cross-page link to Serenity tracker — uses an <a> styled like an inactive tab. */}
-          <Link
-            href="/serenity"
+          {/* Cross-page Serenity navigation — two sub-tabs styled like inactive tabs */}
+          <span className={`mx-1 ${textFaint(isDark)}`}>|</span>
+          <a
+            href="/serenity?tab=feed"
             className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${bgSurface(isDark)} ${isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-700' : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200'}`}
-            title="Serenity (@aleabitoreddit) 持股追蹤"
+            title="Serenity 推文動態"
           >
-            📈 Serenity
-          </Link>
+            📰 Serenity推文
+          </a>
+          <a
+            href="/serenity?tab=performance"
+            className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${bgSurface(isDark)} ${isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-700' : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200'}`}
+            title="Serenity 持股回報"
+          >
+            📈 Serenity持股
+          </a>
         </div>
       </div>
 

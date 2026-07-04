@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, Suspense } from 'react';
 import { useTheme } from 'next-themes';
+import { useSearchParams } from 'next/navigation';
 import serenityData from '@/data/serenity_data.json';
 import { STOCK_PROFILES } from '@/data/serenity_stock_profiles';
 
@@ -451,8 +452,10 @@ function PerformanceTab({ isDark }: { isDark: boolean }) {
 // Page
 // ──────────────────────────────────────────────────────────────────────────
 
-export default function SerenityPage() {
-  const [tab, setTab] = useState<Tab>('feed');
+function SerenityPageContent() {
+  const searchParams = useSearchParams();
+  const initialTab: Tab = searchParams.get('tab') === 'performance' ? 'performance' : 'feed';
+  const [tab, setTab] = useState<Tab>(initialTab);
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -530,5 +533,13 @@ function Stat({ label, value, isDark }: { label: string; value: number; isDark: 
       <span className={`text-xl font-bold ${isDark ? 'text-cyan-400' : 'text-cyan-700'}`}>{value}</span>
       <span className={`text-xs ${textFaint(isDark)}`}>{label}</span>
     </div>
+  );
+}
+
+export default function SerenityPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen" />}>
+      <SerenityPageContent />
+    </Suspense>
   );
 }
