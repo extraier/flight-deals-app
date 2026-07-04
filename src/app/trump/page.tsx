@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import trumpData from '@/data/trump_alerts.json';
 import futuAd from './futu_ad.jpg';
@@ -298,7 +299,7 @@ export default function TrumpPage() {
 
       {/* Tabs */}
       <div className={`${bgSurface(isDark)} border-b ${borderSubtle(isDark)} px-6 py-3`}>
-        <div className="max-w-3xl mx-auto flex gap-1">
+        <div className="max-w-3xl mx-auto flex gap-1 flex-wrap">
           <button
             onClick={() => setTab('trades')}
             className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -315,6 +316,14 @@ export default function TrumpPage() {
           >
             📱 Truth Social
           </button>
+          {/* Cross-page link to Serenity tracker — uses an <a> styled like an inactive tab. */}
+          <Link
+            href="/serenity"
+            className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${bgSurface(isDark)} ${isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-700' : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200'}`}
+            title="Serenity (@aleabitoreddit) 持股追蹤"
+          >
+            📈 Serenity
+          </Link>
         </div>
       </div>
 
