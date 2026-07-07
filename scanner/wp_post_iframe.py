@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
 """
-Push a fullscreen iframe to CompareTiger WP page 5161 that wraps
-https://flight-deals-app-seven.vercel.app so visitors see the live app.
+Push a meta-refresh redirect to CompareTiger WP page 5161 → Vercel
+flight-deals-app.
 
-WP's kses sanitiser strips inline <style>/<script> from page content, so
-all dimensions must live in the iframe's `style="..."` attribute (which is
-preserved verbatim — only element tags are filtered). The iframe stays
-position:fixed at the top of the layout stack so it covers the WP theme's
-header, sidebar and footer.
+Why redirect, not iframe:
+- Telegram iOS WebView sometimes leaves iframe `position:fixed`
+  visually pinned but routes touch scrolls to the parent WP page
+  underneath. The user sees the iframe overlay covering everything
+  but cannot scroll inside it; the sidebar / footer of WP theme
+  respond to gestures instead.
+- `<meta http-equiv="refresh">` does away with all of that: the whole
+  page becomes Vercel, no iframe, no z-index, no scrolling conflict.
+
+Posts via WP REST using the same app-password auth the previous
+fli_4x_daily.py used, so no new credential is required.
 """
 import base64
 import json
@@ -20,16 +26,9 @@ WP_APP_PASSWORD = "ohWl WFCL g0rd RwJo kqle Ibep"
 WP_PAGE = "5161"
 VIEWSITE_URL = "https://flight-deals-app-seven.vercel.app"
 
-# Inline style only — no <style>/<script>. WP kses preserves iframe + style attr.
 HTML = (
-    '<p><iframe id="fdframe" src="' + VIEWSITE_URL + '" allowfullscreen '
-    'scrolling="no" frameborder="0" '
-    'style="position:fixed !important;top:0 !important;left:0 !important;'
-    'width:100vw !important;height:100vh !important;'
-    'min-height:100vh !important;min-width:100vw !important;'
-    'border:0 !important;margin:0 !important;padding:0 !important;'
-    'display:block !important;z-index:2147483647 !important;'
-    'background:#fff !important" loading="eager"></iframe></p>'
+    '<meta http-equiv="refresh" content="0; url=' + VIEWSITE_URL + '">\n'
+    '<p>Loading <a href="' + VIEWSITE_URL + '">' + VIEWSITE_URL + '</a>…</p>'
 )
 
 
@@ -45,7 +44,7 @@ def post_to_wp(html: str) -> bool:
         headers={
             "Authorization": f"Basic {auth}",
             "Content-Type": "application/json",
-            "User-Agent": "flight-deals-wp-post-iframe/1.0",
+            "User-Agent": "flight-deals-wp-redirect/1.0",
         },
     )
     try:
@@ -63,6 +62,6 @@ def post_to_wp(html: str) -> bool:
 
 
 if __name__ == "__main__":
-    print(f"[start] posting iframe → {VIEWSITE_URL} on WP page {WP_PAGE}", flush=True)
+    print(f"[start] posting meta-refresh → " + VIEWSITE_URL + " on WP page " + WP_PAGE, flush=True)
     ok = post_to_wp(HTML)
     sys.exit(0 if ok else 1)
