@@ -1,9 +1,29 @@
 #!/usr/bin/env python3
-"""SZX Detail Scanner - scan flight details for SZX→XXX routes."""
-import sys, sqlite3, time
+"""SZX Detail Scanner - scan flight details for SZX→XXX routes.
+
+Hermes 2026-07-09: SZX routes are the most likely to trip Google's
+per-IP rate limit because they're less common and Google treats the
+traffic pattern as anomalous. So SZX-only uses the free HTTPS proxy
+pool from /data/proxy_pool.py — HKG scan is left untouched and goes
+direct via the home IP (fast + already in Google's normal pattern).
+
+To disable the proxy pool temporarily, set environment variable
+PROXY_POOL_ENABLED=0 before launching the container.
+"""
+import os, sys, sqlite3, time
 from datetime import datetime
 sys.path.insert(0, '/install')
-sys.path.insert(0, '/data')  # Hermes: fli_db.py lives next to the scanners
+sys.path.insert(0, '/data')  # Hermes: fli_db.py + proxy_pool.py live next to the scanners
+# Activate free proxy pool before importing fli.search so the
+# monkey-patch on fli.search.client.Client._session fires before
+# any thread creates its first session.
+try:
+    import proxy_pool
+    proxy_pool.activate()
+except Exception as _pool_err:
+    # Don't fail the whole scan if the pool can't bootstrap — we'll
+    # just fall back to direct connections (current behaviour).
+    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] proxy pool activate failed, falling back to direct: {_pool_err}")
 from fli.search import SearchFlights
 from fli.models.google_flights.base import TripType, FlightSegment
 from fli.models.google_flights.flights import FlightSearchFilters
@@ -176,6 +196,11 @@ def main():
                 continue
 
             details = get_details(searcher, origin, dest, dep_date, ret_date)
+            # Hermes: get_details() catches all exceptions internally and
+            # returns None. We can't distinguish 429 from other failures
+            # here without re-architecting. The proxy pool's TTL/cooldown
+            # (5 min / 60 s) provides natural back-pressure — no per-call
+            # 429 reporting needed for v1.
             if details:
                 # Hermes: per-row write_transaction — see HKG detail scanner
                 # for the full story. Identical pattern, different schema.
