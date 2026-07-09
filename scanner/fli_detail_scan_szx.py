@@ -118,6 +118,47 @@ def get_dates(conn, route, max_dates=9999):
     ''', (route, DEPARTURE, threshold, max_dates))
     return c.fetchall()
 
+def _is_suspicious_response(details: dict) -> str | None:
+    """Hermes 2026-07-09: CAPTCHA / proxy-garbage detector.
+
+    When a proxy returns a CAPTCHA challenge page or HTML error, the parser
+    still extracts numeric fields but they're garbage. This function returns
+    a reason string if the details look fishy, or None if plausible.
+
+    Heuristics (ordered cheap → expensive):
+    - Price outside plausible SZX range: HK$300–HK$15,000 short-haul,
+      HK$2,000–HK$30,000 long-haul (long-haul = NA/EU/Africa routes).
+    - Outbound flight number is missing (parser failed silently).
+    - Outbound dep_time missing (parser failed silently).
+    """
+    if not details:
+        return None  # empty result is not necessarily suspicious (legit no-flights)
+    price = details.get('price')
+    if price is None or price <= 0:
+        return "price missing/non-positive"
+    # Plausible price range — covers short and long-haul with safety margin.
+    # Anything outside this is almost certainly a CAPTCHA-parse artifact.
+    if price < 300 or price > 30000:
+        return f"implausible price HK${int(price)} (range 300-30000)"
+    # Parser must have populated flight-level fields. If both are missing,
+    # the response was likely HTML garbage.
+    if not details.get('outbound_flight') and not details.get('outbound_airline'):
+        return "no flight number/airline in response"
+    return None
+
+def _is_long_haul_route(route: str) -> bool:
+    """Hermes 2026-07-09: long-haul SZX routes need a higher price ceiling
+    (NA/EU/Africa can legitimately be HK$8,000-15,000)."""
+    long_haul_codes = {
+        'AKL', 'AMS', 'BCN', 'CDG', 'CGK', 'CMB', 'CTS', 'CTU',
+        'DEL', 'DOH', 'DPS', 'DXB', 'FCO', 'FRA', 'FUK', 'HAN',
+        'HKT', 'ICN', 'JFK', 'JNB', 'KIX', 'KUL', 'LAX', 'LHR',
+        'MAD', 'MEL', 'NGO', 'NRT', 'ORD', 'PEK', 'PEN', 'PUS',
+        'PVG', 'RMQ', 'SEA', 'SFO', 'SIN', 'SYD', 'TPE', 'XIY', 'YVR',
+    }
+    dest = route.split('→', 1)[1] if '→' in route else ''
+    return dest in long_haul_codes
+
 def get_details(searcher, origin, dest, dep_date, ret_date):
     try:
         orig_apt = resolve_enum(Airport, origin)
@@ -179,6 +220,7 @@ def main():
     searcher = SearchFlights()
     total_saved = 0
     success = 0
+    junk_for_round = 0  # Hermes 2026-07-09: CAPTCHA/garbage responses dropped before DB write
 
     for route in ROUTES:
         if route == 'SZX→SZX':
@@ -219,6 +261,19 @@ def main():
             # (5 min / 60 s) provides natural back-pressure — no per-call
             # 429 reporting needed for v1.
             if details:
+                # Hermes 2026-07-09: CAPTCHA/garbage guard. When Google returns
+                # a challenge page through a proxy, the parser still extracts
+                # numeric fields but they're nonsense (e.g. price=HK$3M from
+                # matching a phone number on the challenge page). Drop these
+                # BEFORE writing to the DB so we never poison flight_details.
+                suspicious = _is_suspicious_response(details)
+                if suspicious:
+                    # Track per-round junk for observability. We don't tell
+                    # the proxy pool to mark_dead here — the parser can't
+                    # distinguish CAPTCHA from real "no flights" cases.
+                    log(f"  {dep_date}→{ret_date}: SUSPECT ({suspicious}) — dropped")
+                    junk_for_round += 1
+                    continue
                 # Hermes: per-row write_transaction — see HKG detail scanner
                 # for the full story. Identical pattern, different schema.
                 try:
@@ -271,7 +326,7 @@ def main():
         if saved_for_route > 0:
             success += 1.
 
-    log(f"SZX scan complete! Saved {total_saved} details from {success}/{len(ROUTES)} routes")
+    log(f"SZX scan complete! Saved {total_saved} details from {success}/{len(ROUTES)} routes, dropped {junk_for_round} suspicious (CAPTCHA/garbage)")
     conn.close()
     return total_saved, success
 
