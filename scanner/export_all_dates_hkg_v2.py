@@ -298,7 +298,7 @@ output.sort(key=lambda x: x['price'])
 for o in output:
     o['totalDestinations'] = len(output)
 
-# ── Compute destination-level drops and stamp firstDetected ──────────────
+# ── Compute destination-level drops + firstDetected + pendingScans ─────────
 # Persist a {route_key: iso_timestamp} map in /data/drop_first_detected.json
 # so the deals page can show "first detected N hours ago" and sort by recency.
 # Only routes currently showing a real drop (today_low < yesterday's min
@@ -310,8 +310,22 @@ for o in output:
 # price rebounds or a new cheaper date enters the top-30. The deals page
 # client code also consumes `dropAmount` / `dropPct` (now stamped onto every
 # route) so the single-date comparison bug in page.tsx no longer matters.
+#
+# Hermes 2026-07-09: pendingScans stamp. For routes that don't have a
+# confirmed drop (because the cheapest date lacks a history.1d baseline
+# — the detail scanner hasn't processed it yet) but whose calendar price
+# is well below typical, stamp `pendingScans: <N>` so the deals page can
+# render them in a "Pending" state. This closes the gap where the calendar
+# scanner detects a price change but the detail scanner hasn't confirmed
+# it yet (typically 10-60 s). The N is the number of top-30 cheapest dates
+# that are missing detail/baseline — a heuristic signal for "still scanning".
 FIRST_DETECTED_PATH = '/data/drop_first_detected.json'
 FIRST_DETECTED_MAX_AGE_DAYS = 14
+# Hermes 2026-07-09: if calendar price is <= this fraction of typical, we
+# call it a likely drop even without baseline confirmation. 0.85 matches
+# the Telegram "🟢 平過典型" threshold (15% below typical), but applied
+# here to the *cheapest* date as a soft drop signal.
+PENDING_PRICE_RATIO = 0.85
 now_iso = datetime.now().isoformat()
 try:
     with open(FIRST_DETECTED_PATH) as _f:
@@ -323,6 +337,7 @@ except (FileNotFoundError, json.JSONDecodeError):
 
 stamped = 0
 cleared = 0
+pending = 0
 for o in output:
     dates = o.get('cheapestDates') or []
     if not dates:
@@ -330,6 +345,7 @@ for o in output:
         o['dropAmount'] = 0
         o['dropPct'] = 0
         o['dropPrice'] = 0
+        o['pendingScans'] = 0
         continue
     # Today's destination lowest (matches the deals page + Telegram logic)
     today_low = min((cd.get('price') or 0) for cd in dates) or 0
@@ -365,6 +381,38 @@ for o in output:
     o['dropPct'] = round(drop_pct, 1) if (yest_low and yest_low > 0 and today_low > 0) else 0.0
     o['dropPrice'] = int(today_low)
 
+    # Hermes 2026-07-09: pendingScans = how many of the top-N cheapest dates
+    # still need detail-scan confirmation (no flight info, no history.1d
+    # baseline). Only count it for routes that are likely drops (price well
+    # below typical) but not yet confirmed. This is the signal the deals
+    # page uses to render a "Pending" badge while the detail scanner
+    # catches up.
+    if drop_pct > -1.0:  # i.e. NOT a confirmed drop
+        typical = o.get('typicalPrice') or 0
+        if typical > 0 and today_low > 0 and today_low <= typical * PENDING_PRICE_RATIO:
+            # Count how many of the cheapest dates lack detail or baseline.
+            # Top 8 is enough — these are the cheapest, most likely drops.
+            n_pending = sum(
+                1 for cd in sorted(dates, key=lambda x: x.get('price', 99999))[:8]
+                if not cd.get('flight') and not (cd.get('history') or {}).get('1d', {}).get('price')
+            )
+            o['pendingScans'] = n_pending
+            if n_pending > 0:
+                pending += 1
+            # Hermes 2026-07-09: also keep a baseline "firstDetected"-like
+            # timestamp for pending routes, so the deals page can show
+            # "spotted 30 秒前" recency. We use a separate field so we
+            # don't pollute the confirmed-drop firstDetected store.
+            o['pendingFirstSeen'] = now_iso
+        else:
+            o['pendingScans'] = 0
+            o['pendingFirstSeen'] = None
+    else:
+        # Already a confirmed drop — pendingScans is moot but we still
+        # stamp 0 so the client has a defined shape.
+        o['pendingScans'] = 0
+        o['pendingFirstSeen'] = None
+
 # Garbage-collect stale entries (older than 14 days) — defense in depth
 # even though we now clear the stamp immediately on no-drop.
 cutoff = (datetime.now() - timedelta(days=FIRST_DETECTED_MAX_AGE_DAYS)).isoformat()
@@ -373,6 +421,7 @@ first_detected_map = {k: v for k, v in first_detected_map.items() if v >= cutoff
 
 print(f"Routes: {len(output)}, Dates: {sum(len(o['cheapestDates']) for o in output)}")
 print(f"First-detected: {stamped} new entries stamped, {cleared} cleared (no longer dropping), {before_gc - len(first_detected_map)} stale entries GC'd")
+print(f"Pending scans: {pending} route(s) waiting for detail confirmation")
 
 with open('/data/all_dates.json', 'w') as f:
     json.dump({'results': output, 'generated': now_iso}, f, default=str, ensure_ascii=False)
