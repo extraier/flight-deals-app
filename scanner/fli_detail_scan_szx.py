@@ -118,7 +118,7 @@ def get_dates(conn, route, max_dates=9999):
     ''', (route, DEPARTURE, threshold, max_dates))
     return c.fetchall()
 
-def _is_suspicious_response(details: dict) -> str | None:
+def _is_suspicious_response(details: dict, seen_tuples: set | None = None) -> str | None:
     """Hermes 2026-07-09: CAPTCHA / proxy-garbage detector.
 
     When a proxy returns a CAPTCHA challenge page or HTML error, the parser
@@ -126,10 +126,12 @@ def _is_suspicious_response(details: dict) -> str | None:
     a reason string if the details look fishy, or None if plausible.
 
     Heuristics (ordered cheap → expensive):
-    - Price outside plausible SZX range: HK$300–HK$15,000 short-haul,
-      HK$2,000–HK$30,000 long-haul (long-haul = NA/EU/Africa routes).
+    - Price outside plausible SZX range: HK$300–HK$30,000.
     - Outbound flight number is missing (parser failed silently).
     - Outbound dep_time missing (parser failed silently).
+    - (airline, flight, price) tuple already seen this round — CAPTCHA
+      pages return the same canned "result" for different queries, so
+      duplicates are a strong signal of garbage.
     """
     if not details:
         return None  # empty result is not necessarily suspicious (legit no-flights)
@@ -144,6 +146,18 @@ def _is_suspicious_response(details: dict) -> str | None:
     # the response was likely HTML garbage.
     if not details.get('outbound_flight') and not details.get('outbound_airline'):
         return "no flight number/airline in response"
+    # Hermes 2026-07-09: duplicate-tuple detection. CAPTCHA pages tend to
+    # return the same canned "result" for every query. We track the tuple
+    # (airline, flight, price) per round and reject repeats.
+    if seen_tuples is not None:
+        sig = (
+            details.get('outbound_airline') or '',
+            details.get('outbound_flight') or '',
+            int(price),
+        )
+        if sig in seen_tuples:
+            return f"duplicate ({sig[0]} {sig[1]} HK${sig[2]}) — likely CAPTCHA repeat"
+        seen_tuples.add(sig)
     return None
 
 def _is_long_haul_route(route: str) -> bool:
@@ -221,6 +235,7 @@ def main():
     total_saved = 0
     success = 0
     junk_for_round = 0  # Hermes 2026-07-09: CAPTCHA/garbage responses dropped before DB write
+    seen_tuples: set = set()  # Hermes 2026-07-09: detect CAPTCHA repeats (same airline/flight/price across queries)
 
     for route in ROUTES:
         if route == 'SZX→SZX':
@@ -266,7 +281,7 @@ def main():
                 # numeric fields but they're nonsense (e.g. price=HK$3M from
                 # matching a phone number on the challenge page). Drop these
                 # BEFORE writing to the DB so we never poison flight_details.
-                suspicious = _is_suspicious_response(details)
+                suspicious = _is_suspicious_response(details, seen_tuples)
                 if suspicious:
                     # Track per-round junk for observability. We don't tell
                     # the proxy pool to mark_dead here — the parser can't
