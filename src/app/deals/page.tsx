@@ -17,7 +17,7 @@ interface Deal {
   badge?: { carryOn?: boolean; cheapDays?: number };
   typicalPrice?: number;
   firstDetected?: string | null;  // ISO timestamp from scanner export
-  // Hermes 2026-06-23: destination-level drop stamped by the scanner export
+  // Hermes 2026-07-09: destination-level drop stamped by the scanner export
   // (export_all_dates_*.py). When present, the client uses these instead of
   // re-deriving from cheapestDates[0].history.1d (which is a single-date
   // comparison, not destination-level). Pre-2026-06-23 routes won't have
@@ -25,6 +25,15 @@ interface Deal {
   dropAmount?: number;
   dropPct?: number;
   dropPrice?: number;
+  // Hermes 2026-07-09: pending-scan stamp. When the calendar scanner sees a
+  // price well below typical but the detail scanner hasn't yet confirmed the
+  // drop (no history.1d baseline exists for the cheapest date), the export
+  // sets pendingScans to the count of top-30 cheapest dates lacking detail
+  // info. The deals page renders these in a separate "Pending" section with
+  // a ⏳ badge so the user sees likely-drops sooner than waiting for the
+  // detail scanner's confirmation cycle.
+  pendingScans?: number;
+  pendingFirstSeen?: string | null;
   cheapestDates: Array<{
     day: number; month: number; year: number;
     price: number; stay: number | null;
@@ -48,6 +57,24 @@ interface DropRow {
   typicalPrice?: number;
   discountVsTypical?: number; // pct off the typical price (informational)
   firstDetected?: string | null; // ISO timestamp when this drop was first seen
+}
+
+// Hermes 2026-07-09: PendingRow for routes that haven't yet been confirmed
+// as drops by the detail scanner, but whose calendar price suggests they
+// likely will be. Shown above the confirmed drops so the user sees likely
+// deals before the detail scanner's confirmation cycle.
+interface PendingRow {
+  route: string;
+  destCode: string;
+  destName: string;
+  region: string;
+  departure: Departure;
+  newPrice: number;             // current calendar low (no oldPrice yet)
+  typicalPrice?: number;
+  discountVsTypical?: number;
+  pendingScans: number;         // count of top-N cheapest dates lacking detail
+  pendingFirstSeen?: string | null;
+  cheapestDate: { day: number; month: number; year: number; stay: number | null };
 }
 
 // Hermes 2026-06-23: buildDropList now consumes the destination-level
@@ -101,7 +128,7 @@ function computeDestLevelDrop(d: Deal): {
 }
 
 function buildDropList(deals: Deal[], departure: Departure): DropRow[] {
-  const rows: DropRow[] = [];
+  const rows: DropRow[] = []
   for (const d of deals) {
     // Prefer destination-level drop stamped by the export.
     const expDropAmount = d.dropAmount;
@@ -176,6 +203,71 @@ function buildDropList(deals: Deal[], departure: Departure): DropRow[] {
     } as DropRow & { _computedFallback?: boolean });
   }
   return rows;
+}
+
+// Hermes 2026-07-09: buildPendingList surfaces routes whose calendar price
+// is well below typical but whose destination-low drop hasn't been
+// confirmed by the detail scanner yet (i.e. dropAmount/dropPct from the
+// export are 0, but pendingScans > 0). These are "the calendar scanner
+// detected a likely drop, awaiting detail confirmation" — show them
+// above the confirmed drops so the user sees likely deals sooner.
+//
+// We only show pending routes whose cheapest date's price is meaningfully
+// below typical (>=15% off, same threshold the Telegram "🟢 stable" section
+// uses). And we cap at PENDING_MAX to keep the section tidy.
+const PENDING_MIN_DISCOUNT_PCT = 15;
+const PENDING_MAX = 8;
+
+function buildPendingList(deals: Deal[], departure: Departure): PendingRow[] {
+  const rows: PendingRow[] = [];
+  for (const d of deals) {
+    // Skip if already a confirmed drop — it lives in DropRow, not here.
+    const expDropAmount = d.dropAmount;
+    const expDropPct = d.dropPct;
+    const hasExportDrop = typeof expDropAmount === 'number'
+      && typeof expDropPct === 'number'
+      && (
+        (expDropAmount > 0 && expDropPct < 0)
+        || (expDropAmount < 0 && expDropPct < 0)
+      );
+    if (hasExportDrop) continue;
+
+    const pending = d.pendingScans || 0;
+    if (pending <= 0) continue;
+
+    const newPrice = d.price;
+    const typical = d.typicalPrice || 0;
+    const discountVsTypical = typical > 0
+      ? Math.round(((typical - newPrice) / typical) * 100)
+      : 0;
+    if (discountVsTypical < PENDING_MIN_DISCOUNT_PCT) continue;
+
+    // Pick the cheapest date (any one with no flight info is OK —
+    // pending routes by definition lack detail anyway).
+    const dates = (d.cheapestDates || []).slice().sort((a, b) => (a.price || 99999) - (b.price || 99999));
+    const cd = dates[0];
+    if (!cd) continue;
+
+    rows.push({
+      route: d.route,
+      destCode: d.destination.code,
+      destName: d.destination.name,
+      region: d.destination.region,
+      departure,
+      newPrice,
+      typicalPrice: typical || undefined,
+      discountVsTypical,
+      pendingScans: pending,
+      pendingFirstSeen: d.pendingFirstSeen ?? null,
+      cheapestDate: {
+        day: cd.day, month: cd.month, year: cd.year,
+        stay: cd.stay ?? null,
+      },
+    });
+  }
+  // Sort: biggest discount vs typical first (most likely a real deal).
+  rows.sort((a, b) => (b.discountVsTypical || 0) - (a.discountVsTypical || 0));
+  return rows.slice(0, PENDING_MAX);
 }
 
 // Hermes 2026-06-23: pick the cheapest date that has flight info and
@@ -370,8 +462,13 @@ export default function DealsPage() {
   // Process both files once
   const hkgRows = useMemo(() => buildDropList(hkgDeals, 'HKG'), [hkgDeals]);
   const szxRows = useMemo(() => buildDropList(szxDeals, 'SZX'), [szxDeals]);
+  // Hermes 2026-07-09: pending lists (likely-drops awaiting detail
+  // confirmation). Rendered above the confirmed drops.
+  const hkgPending = useMemo(() => buildPendingList(hkgDeals, 'HKG'), [hkgDeals]);
+  const szxPending = useMemo(() => buildPendingList(szxDeals, 'SZX'), [szxDeals]);
 
   const rows = departure === 'HKG' ? hkgRows : szxRows;
+  const pendingRows = departure === 'HKG' ? hkgPending : szxPending;
   const currentGenerated = departure === 'HKG' ? hkgGenerated : szxGenerated;
 
   const szxEmpty = szxRows.length === 0;
@@ -550,7 +647,7 @@ export default function DealsPage() {
               </div>
             </CardContent>
           </Card>
-        ) : renderedRows.length === 0 ? (
+        ) : renderedRows.length === 0 && pendingRows.length === 0 ? (
           <Card className="border-dashed">
             <CardContent className="py-16 text-center">
               <div className="text-4xl mb-3">{loading ? '⏳' : fetchError ? '⚠️' : '📈'}</div>
@@ -582,6 +679,96 @@ export default function DealsPage() {
                 <div className="rounded-lg border border-border bg-card p-3 text-center">
                   <div className="text-2xl font-bold text-orange-500">-{stats.avg}%</div>
                   <div className="text-xs text-muted-foreground">平均跌幅</div>
+                </div>
+              </div>
+            )}
+
+            {/* Hermes 2026-07-09: Pending section — likely-drops awaiting
+                detail scanner confirmation. Rendered above the confirmed
+                drops so the user sees them sooner. */}
+            {pendingRows.length > 0 && (
+              <div className="mb-6">
+                <div className="mb-3 flex items-center justify-between gap-2 px-1">
+                  <h2 className="text-lg font-bold text-foreground inline-flex items-center gap-2">
+                    ⏳ 掃描中 ({pendingRows.length} 條)
+                    <span className="text-xs font-normal text-muted-foreground hidden sm:inline">
+                      · 價格已大跌 · 等詳情掃描確認中
+                    </span>
+                  </h2>
+                </div>
+                <div className="space-y-3">
+                  {pendingRows.map((p, idx) => {
+                    const dateLabel = `${p.cheapestDate.year}年${p.cheapestDate.month}月${p.cheapestDate.day}日`;
+                    const seenLabel = formatAlertTime(p.pendingFirstSeen);
+                    return (
+                      <Link
+                        key={`pending-${p.departure}-${p.route}-${idx}`}
+                        href={`/route/${p.destCode}?dep=${p.departure}`}
+                        className="block group"
+                      >
+                        <Card className="transition-all hover:border-sky-500/50 hover:shadow-lg hover:shadow-sky-500/10 border-dashed">
+                          <CardContent className="p-4">
+                            <div className="flex items-start gap-4">
+                              {/* Pending icon */}
+                              <div className="shrink-0 text-2xl select-none pt-1 animate-pulse" aria-label="掃描中">
+                                ⏳
+                              </div>
+                              {/* Main info */}
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-start justify-between gap-2 flex-wrap">
+                                  <div className="min-w-0">
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                      <span className="text-lg font-bold text-foreground">{p.destName}</span>
+                                      <Badge variant="outline" className={`text-xs ${regionColors[p.region] || regionColors['其他']}`}>
+                                        {p.region}
+                                      </Badge>
+                                      <Badge variant="outline" className="text-xs bg-sky-500/10 text-sky-600 border-sky-500/30">
+                                        ⏳ 掃描中
+                                      </Badge>
+                                    </div>
+                                    <div className="text-xs text-muted-foreground mt-1">
+                                      <span className="mr-2">{p.route}</span>
+                                      {p.cheapestDate.stay && (
+                                        <span>📅 {p.cheapestDate.stay} 日</span>
+                                      )}
+                                    </div>
+                                    <div className="text-xs text-muted-foreground mt-0.5">
+                                      最平出發：{dateLabel}
+                                    </div>
+                                  </div>
+                                  {/* Price */}
+                                  <div className="text-right shrink-0">
+                                    <div className="flex items-baseline gap-2 justify-end">
+                                      <span className="text-2xl font-bold text-sky-600">
+                                        ${p.newPrice.toLocaleString()}
+                                      </span>
+                                    </div>
+                                    {p.discountVsTypical !== undefined && p.discountVsTypical > 0 && (
+                                      <div className="mt-1">
+                                        <Badge variant="outline" className="text-xs bg-sky-500/10 text-sky-600 border-sky-500/30">
+                                          比一般價平 {p.discountVsTypical}%
+                                        </Badge>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                                {/* Footer */}
+                                <div className="mt-2 pt-2 border-t border-border/50 flex items-center justify-between gap-1 text-[11px] text-muted-foreground">
+                                  <span className="inline-flex items-center gap-1">
+                                    <Clock className="h-3 w-3" />
+                                    {seenLabel ? `發現：${seenLabel}` : '等待詳情掃描'}
+                                  </span>
+                                  <span className="text-muted-foreground/60">
+                                    {p.pendingScans} 個平價日期待確認
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -682,7 +869,7 @@ export default function DealsPage() {
 
             {/* Footer note */}
             <p className="mt-6 text-center text-xs text-muted-foreground">
-              * 「昨日最低價」來自系統自動記錄嘅歷史掃描數據 · 頁面每 90 秒自動刷新
+              * 「昨日最低價」來自系統自動記錄嘅歷史掃描數據 · 頁面每 20 秒自動刷新
             </p>
           </>
         )}
