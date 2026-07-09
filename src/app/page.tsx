@@ -165,9 +165,24 @@ export default function Home() {
       }
     };
     load();
-    // Refresh every 90s in the background so the page stays current
-    const interval = setInterval(load, 90_000);
-    return () => { cancelled = true; clearInterval(interval); };
+    // Hermes 2026-07-09: dropped 90s → 20s so drops appear on the home
+    // page within ~30 s of the export cycle (was 5+ min). Combined with
+    // the deals page's on-focus refresh, opening the app from a Telegram
+    // notification now shows the matching alert immediately.
+    const interval = setInterval(load, 20_000);
+    // Hermes 2026-07-09: refresh on tab focus so a backgrounded tab gets
+    // fresh data the moment the user opens the app — closes the
+    // "I just got a Telegram alert but the page still shows yesterday's
+    // drops" gap.
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') load();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
   }, [departure]);
 
   const allData = liveData;

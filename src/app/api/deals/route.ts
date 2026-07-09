@@ -22,7 +22,9 @@ export const runtime = 'nodejs';
 
 const FUNNEL_BASE = 'https://ugreen-nas.tail20bf1.ts.net';
 const CDN_BASE = 'https://cdn.savetheday.io/deals';
-const CACHE_TTL_MS = 60_000; // 60 seconds
+const CACHE_TTL_MS = 20_000; // 20 seconds — Hermes 2026-07-09 dropped from
+// 60s so the deals page's 20s poll cycle actually sees fresh data each tick.
+// The upstream funnel/CDN has its own ~300s max-age so we never hammer it.
 const UPSTREAM_TIMEOUT_MS = 8_000; // Vercel hobby default is 10s; leave headroom
 
 type Departure = 'HKG' | 'SZX';
