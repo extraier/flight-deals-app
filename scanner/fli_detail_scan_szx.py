@@ -48,6 +48,21 @@ ROUTES = [
     'SZX→SIN', 'SZX→SYD', 'SZX→SZX', 'SZX→TPE', 'SZX→XIY', 'SZX→YVR'
 ]
 
+# Hermes 2026-07-09: PILOT_ROUTES — when set to a comma-separated list of
+# SZX→XXX codes (e.g. "SZX→BKK,SZX→SIN"), only those routes are scanned.
+# Used by the conservative proxy-pool pilot (see szx_pilot_loop.sh) to
+# validate that free proxies can sustain a small number of routes before
+# scaling to the full 50. Empty/unset = scan all routes (production mode).
+def _apply_pilot():
+    global ROUTES
+    pilot = os.environ.get('PILOT_ROUTES', '').strip()
+    if not pilot:
+        return
+    pilot_set = {r.strip() for r in pilot.split(',') if r.strip()}
+    before = len(ROUTES)
+    ROUTES = [r for r in ROUTES if r in pilot_set]
+    log(f"PILOT MODE: scanning {len(ROUTES)}/{before} routes: {ROUTES}")
+
 def log(msg):
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] {msg}")
     sys.stdout.flush()
@@ -157,6 +172,8 @@ def get_details(searcher, origin, dest, dep_date, ret_date):
 def main():
     log("=" * 50)
     log("SZX DETAIL SCAN STARTING")
+    # Hermes 2026-07-09: PILOT_ROUTES filter (conservative proxy pilot)
+    _apply_pilot()
     recorded_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     conn = init_db()
     searcher = SearchFlights()
