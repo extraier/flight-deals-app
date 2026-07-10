@@ -32,15 +32,16 @@ from fli.models import Airport
 
 import fli_db  # Hermes: shared DB helper — see fli_db.py for the flock+busy story
 
-# Hermes 2026-07-10: cap fli.search's internal ThreadPoolExecutor at 3
+# Hermes 2026-07-10: cap fli.search's internal ThreadPoolExecutor at 2
 # workers. Default is 10 which causes ~200-300MB RSS just for the
 # executor's idle curl_cffi sessions, pushing us over the 256MB
-# container cgroup limit and triggering OOM kill (exit 137). 3 workers
-# keeps RSS under ~100MB while still letting the token-bucket rate
-# limiter saturate (Google's 10 req/sec ceiling per IP).
+# container cgroup limit and triggering OOM kill (exit 137). 2 workers
+# keeps RSS around 60-70MB. Token-bucket rate limiter still allows
+# 10 req/sec per IP; with rotation across ~6 proxies in the pool,
+# total throughput is 60 req/sec — way more than we need.
 try:
     from fli.search._concurrency import configure_concurrency
-    configure_concurrency(3)
+    configure_concurrency(2)
 except Exception:
     pass  # Not fatal — fall back to default if API changes
 

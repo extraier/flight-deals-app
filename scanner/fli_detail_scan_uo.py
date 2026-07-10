@@ -23,15 +23,16 @@ from datetime import datetime, timedelta
 sys.path.insert(0, '/install')
 sys.path.insert(0, '/data')  # Hermes: fli_db.py lives next to the scanners
 
-# Hermes 2026-07-10: cap fli.search's internal ThreadPoolExecutor at 3
+# Hermes 2026-07-10: cap fli.search's internal ThreadPoolExecutor at 2
 # workers. Default is 10 which causes ~200-300MB RSS just for the
 # executor's idle curl_cffi sessions, pushing us over the 256MB
-# container cgroup limit and triggering OOM kill (exit 137). 3 workers
-# keeps RSS under ~100MB while still letting the token-bucket rate
-# limiter saturate Google's 10 req/sec ceiling per IP.
+# container cgroup limit and triggering OOM kill (exit 137). 2 workers
+# keeps RSS around 60-70MB. When UO pilot runs alongside SZX pilot,
+# both processes together stay around 140-160MB total — under the
+# container cgroup limit.
 try:
     from fli.search._concurrency import configure_concurrency
-    configure_concurrency(3)
+    configure_concurrency(2)
 except Exception:
     pass  # Not fatal — fall back to default if API changes
 

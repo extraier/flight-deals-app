@@ -8,6 +8,17 @@ from datetime import datetime
 sys.path.insert(0, '/install')
 sys.path.insert(0, '/data')  # Hermes: fli_db.py lives next to the scanners
 
+# Hermes 2026-07-10: cap fli.search's internal ThreadPoolExecutor at 2
+# workers. Same OOM-fix as SZX/UO pilots — see fli_detail_scan_szx.py
+# for full rationale. With 3 concurrent scanners (4x daily, 4x
+# continuous, aggressive) we hit the 256MB container cgroup limit
+# without this. 2 workers keeps each process around 60-70MB.
+try:
+    from fli.search._concurrency import configure_concurrency
+    configure_concurrency(2)
+except Exception:
+    pass
+
 from fli.search import SearchFlights
 from fli.models.google_flights.base import TripType, FlightSegment
 from fli.models.google_flights.flights import FlightSearchFilters
