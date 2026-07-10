@@ -141,11 +141,64 @@ def scan_route(searcher, origin, dest):
 
 def save_prices(conn, route, prices, recorded_date, departure='SZX'):
     """Save prices with the bulletproof write_transaction — see
-    fli_4x_daily.save_prices for the full story. Identical pattern."""
+    fli_4x_daily.save_prices for the full story. Identical pattern.
+
+    Hermes 2026-07-10: added CAPTCHA/garbage safeguard. The SearchDates
+    call is the same surface as detail SearchFlights, so CAPTCHA parse
+    noise can land in flight_dates too. We drop prices that:
+    - Are outside the absolute range HK$300-HK$30,000
+    - Are < 30% of the per-route typical (when typical >= HK$3,000)
+    - Are > 5x the per-route typical
+    Typical is computed from the past 60 days of flight_dates rows for
+    the same route. Without this guard, CAPTCHA noise polluted
+    flight_dates and inflated the "today's low" baseline on the deals
+    page (the calculator was treating HK$749 SZX→AMS as legitimate).
+    """
+    # Lazy-load the per-route typical. Compute once per route per scan.
+    # This is the same baseline that fli_detail_scan_szx._get_route_typical
+    # uses — kept inline here to avoid an import that would also pull in
+    # proxy_pool and the fli SDK (overkill for a calendar scanner).
+    rt = None
+    try:
+        rt_conn = sqlite3.connect(DB_PATH, timeout=10)
+        rt_cur = rt_conn.cursor()
+        rt_cur.execute("""
+            SELECT price FROM flight_dates
+            WHERE route = ? AND dep_date >= date('now', '-60 days')
+              AND departure = ?
+        """, (route, departure))
+        rt_prices = [row[0] for row in rt_cur.fetchall() if row[0] and row[0] > 0]
+        rt_conn.close()
+        if len(rt_prices) >= 10:
+            rt_prices.sort()
+            rt = rt_prices[len(rt_prices) // 2]
+    except Exception:
+        pass  # rt stays None; we fall back to absolute range check only.
+
     saved = 0
+    junk = 0
     try:
         with fli_db.write_transaction(conn, label=f"save SZX {route}", flock_timeout_s=60) as tx:
             for p in prices:
+                price = p.get('price')
+                if price is None or price <= 0:
+                    junk += 1
+                    continue
+                # Absolute range check — short + long-haul with safety margin.
+                if price < 300 or price > 30000:
+                    log(f"  {route} {p.get('dep_date')}: SUSPECT (implausible price HK${int(price)} (range 300-30000)) — dropped")
+                    junk += 1
+                    continue
+                # Per-route typical check. Catches "looks legit but 90% too
+                # cheap" (HK$749 SZX→AMS vs typical HK$7,802) and the
+                # high-side HK$1.2B noise we saw from one CAPTCHA reply.
+                if rt is not None and rt >= 3000:
+                    floor = max(500, rt * 0.30)
+                    cap = rt * 5
+                    if price < floor or price > cap:
+                        log(f"  {route} {p.get('dep_date')}: SUSPECT (price HK${int(price)} outside [HK${int(floor)}, HK${int(cap)}] for route typical HK${int(rt)}) — dropped")
+                        junk += 1
+                        continue
                 # Mirror HKG: INSERT OR REPLACE into historical_prices (per departure)
                 tx.execute('''
                     INSERT OR REPLACE INTO historical_prices (route, dep_date, ret_date, price, recorded_date, departure)
@@ -157,6 +210,8 @@ def save_prices(conn, route, prices, recorded_date, departure='SZX'):
                     VALUES (?, ?, ?, ?, ?, ?, ?)
                 ''', (route, p['dep_date'], p['ret_date'], p['price'], 7, recorded_date, departure))
                 saved += 1
+        if junk:
+            log(f"  {route}: saved {saved} prices, dropped {junk} SUSPECT (CAPTCHA/garbage)")
     except TimeoutError as e:
         log(f"Save lock timeout for {route}: {e}")
     except sqlite3.OperationalError as e:

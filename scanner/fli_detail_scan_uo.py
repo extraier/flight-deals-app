@@ -170,7 +170,7 @@ def _apply_pilot():
 # - Price outside plausible UO range: HK$300–HK$30,000.
 # - Outbound flight number AND airline both missing → HTML garbage.
 # - Duplicate (airline, flight, price) tuple across queries → CAPTCHA repeat.
-def _is_suspicious_response(details, seen_tuples=None):
+def _is_suspicious_response(details, seen_tuples=None, route_typical=None):
     if not details:
         return None
     price = details.get('price')
@@ -180,6 +180,20 @@ def _is_suspicious_response(details, seen_tuples=None):
         return f"implausible price HK${int(price)} (range 300-30000)"
     if not details.get('outbound_flight') and not details.get('outbound_airline'):
         return "no flight number/airline in response"
+    # Hermes 2026-07-10: per-route typical check. Catches "looks legit but
+    # 90% too cheap" — e.g. HKG→FUK at HK$500 vs typical HK$2,300.
+    if route_typical is not None and route_typical >= 3000:
+        floor = max(500, route_typical * 0.30)
+        if price < floor:
+            return (f"price HK${int(price)} < 30% of route typical "
+                    f"HK${int(route_typical)} (floor HK${int(floor)})")
+        # Hermes 2026-07-10: catch HIGH outliers too — CAPTCHA parse noise
+        # sometimes picks up 7-8 digit numbers (HK$41M, HK$1.2B) instead
+        # of the real price. 5× typical is a safe cap.
+        cap = route_typical * 5
+        if price > cap:
+            return (f"price HK${int(price)} > 5x route typical "
+                    f"HK${int(route_typical)} (cap HK${int(cap)})")
     if seen_tuples is not None:
         sig = (
             details.get('outbound_airline') or '',

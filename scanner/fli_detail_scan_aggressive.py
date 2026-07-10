@@ -172,11 +172,47 @@ def main():
     searcher = SearchFlights()
     total_saved = 0
     success = 0
-    
+
+    # Hermes 2026-07-10: per-route typical price cache for the CAPTCHA
+    # safeguard below. Loaded lazily — most routes need it, and computing
+    # all 51 medians upfront takes ~1s for ~30k rows.
+    route_typical_map = {}
+
+    def _load_route_typical(r):
+        """Median price from flight_dates for the past 60 days. Same
+        baseline as fli_detail_scan_szx._get_route_typical — kept as a
+        local helper so we don't have to refactor the import surface."""
+        try:
+            ac = sqlite3.connect(DB_PATH, timeout=10)
+            cur = ac.cursor()
+            cur.execute("""
+                SELECT price FROM flight_dates
+                WHERE route = ?
+                  AND dep_date >= date('now', '-60 days')
+            """, (r,))
+            prices = [row[0] for row in cur.fetchall() if row[0] and row[0] > 0]
+            ac.close()
+            if len(prices) < 10:
+                return None
+            prices.sort()
+            return prices[len(prices) // 2]
+        except Exception as e:
+            log(f"  _load_route_typical({r}) failed: {e}")
+            return None
+
     for route in ROUTES:
         origin, dest = route.split('→')
         log(f"Processing {route}...")
-        
+
+        # Hermes 2026-07-10: lazy-load the per-route typical once for
+        # the CAPTCHA safeguard below. Caches for the whole round so we
+        # don't query SQLite on every (dep_date, ret_date) iteration.
+        if route not in route_typical_map:
+            route_typical_map[route] = _load_route_typical(route)
+        route_typical = route_typical_map[route]
+        if route_typical is not None:
+            log(f"  route typical: HK${int(route_typical):,} (used by safeguard)")
+
         dates_to_scan = get_dates_at_cheapest_prices(conn, route, max_dates=9999)
         
         if not dates_to_scan:
@@ -211,6 +247,24 @@ def main():
             details = get_flight_details(searcher, origin, dest, dep_date, ret_date)
 
             if details:
+                # Hermes 2026-07-10: CAPTCHA/garbage guard. Mirrors the
+                # SZX/UO detail scanners' safeguard. Without this, the
+                # aggressive scanner was writing HK$1.2B and HK$146M
+                # rows from CAPTCHA parse noise.
+                if details.get('price') is not None:
+                    p = details['price']
+                    # Absolute range (covers short + long-haul with safety margin).
+                    if p < 300 or p > 30000:
+                        log(f"  {dep_date}: SUSPECT (implausible price HK${int(p)}) — dropped")
+                        continue
+                    # Per-route typical (loaded once at route start below).
+                    rt = route_typical_map.get(route)
+                    if rt is not None and rt >= 3000:
+                        floor = max(500, rt * 0.30)
+                        cap = rt * 5
+                        if p < floor or p > cap:
+                            log(f"  {dep_date}: SUSPECT (price HK${int(p)} outside [HK${int(floor)}, HK${int(cap)}] for route typical HK${int(rt)}) — dropped")
+                            continue
                 # Hermes: per-row write with write_transaction (flock + BEGIN
                 # IMMEDIATE). Critical section is tiny (one row + commit), so
                 # the 4x scans only wait a few ms even when we're churning

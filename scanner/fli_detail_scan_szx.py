@@ -131,7 +131,40 @@ def get_dates(conn, route, max_dates=9999):
     ''', (route, DEPARTURE, threshold, max_dates))
     return c.fetchall()
 
-def _is_suspicious_response(details: dict, seen_tuples: set | None = None) -> str | None:
+
+def _get_route_typical(route: str) -> float | None:
+    """Hermes 2026-07-10: per-route typical price from flight_dates table.
+
+    Returns the median price for the route, or None if the route has too
+    few samples (likely new route or never scanned). Used by the CAPTCHA
+    safeguard to catch "looks legitimate but price is 90% too cheap"
+    cases — the absolute range check (300-30000) misses these.
+
+    flight_dates is the cleaner source (no CAPTCHA parse artifacts have
+    been observed there — only flight_details is CAPTCHA-prone). We pull
+    from dep_date >= 60 days back so the median reflects current pricing.
+    """
+    try:
+        own_conn = sqlite3.connect(DB_PATH, timeout=10)
+        cur = own_conn.cursor()
+        cur.execute("""
+            SELECT price FROM flight_dates
+            WHERE route = ?
+              AND dep_date >= date('now', '-60 days')
+        """, (route,))
+        prices = [row[0] for row in cur.fetchall() if row[0] and row[0] > 0]
+        own_conn.close()
+        if len(prices) < 10:
+            return None
+        prices.sort()
+        return prices[len(prices) // 2]
+    except Exception as e:
+        log(f"  _get_route_typical({route}) failed: {e}")
+        return None
+
+
+def _is_suspicious_response(details: dict, seen_tuples: set | None = None,
+                             route_typical: float | None = None) -> str | None:
     """Hermes 2026-07-09: CAPTCHA / proxy-garbage detector.
 
     When a proxy returns a CAPTCHA challenge page or HTML error, the parser
@@ -145,13 +178,15 @@ def _is_suspicious_response(details: dict, seen_tuples: set | None = None) -> st
     - (airline, flight, price) tuple already seen this round — CAPTCHA
       pages return the same canned "result" for different queries, so
       duplicates are a strong signal of garbage.
+    - Price < 30% of per-route typical AND typical >= HK$3,000. Catches
+      the "looks legitimate but price is 90% too cheap" case that the
+      range check alone misses (e.g. SZX→AMS HK$749 vs typical HK$7,802).
     """
     if not details:
         return None  # empty result is not necessarily suspicious (legit no-flights)
     price = details.get('price')
     if price is None or price <= 0:
         return "price missing/non-positive"
-    # Plausible price range — covers short and long-haul with safety margin.
     # Anything outside this is almost certainly a CAPTCHA-parse artifact.
     if price < 300 or price > 30000:
         return f"implausible price HK${int(price)} (range 300-30000)"
@@ -159,6 +194,23 @@ def _is_suspicious_response(details: dict, seen_tuples: set | None = None) -> st
     # the response was likely HTML garbage.
     if not details.get('outbound_flight') and not details.get('outbound_airline'):
         return "no flight number/airline in response"
+    # Hermes 2026-07-10: per-route typical check. Long-haul routes have
+    # typical HK$6,000-15,000; CAPTCHA-parse noise often lands in HK$500-2,000
+    # range which passes the absolute range check above but is wildly out
+    # of line with the route. Skip for short-haul routes where typical
+    # is already < HK$3,000 (the absolute floor catches those).
+    if route_typical is not None and route_typical >= 3000:
+        floor = max(500, route_typical * 0.30)
+        if price < floor:
+            return (f"price HK${int(price)} < 30% of route typical "
+                    f"HK${int(route_typical)} (floor HK${int(floor)})")
+        # Hermes 2026-07-10: also catch HIGH outliers. CAPTCHA parse noise
+        # sometimes picks up 7-8 digit numbers (HK$41M, HK$1.2B) instead of
+        # the real price. Anything > 5× typical is almost certainly garbage.
+        cap = route_typical * 5
+        if price > cap:
+            return (f"price HK${int(price)} > 5x route typical "
+                    f"HK${int(route_typical)} (cap HK${int(cap)})")
     # Hermes 2026-07-09: duplicate-tuple detection. CAPTCHA pages tend to
     # return the same canned "result" for every query. We track the tuple
     # (airline, flight, price) per round and reject repeats.
@@ -260,6 +312,14 @@ def main():
             log(f"  No dates found")
             continue
         log(f"  Found {len(dates)} dates at cheapest prices")
+        # Hermes 2026-07-10: cache the per-route typical once per route.
+        # Used by the CAPTCHA safeguard to catch "legit-looking but 90%
+        # too cheap" rows. flight_dates is the clean baseline (no
+        # CAPTCHA noise). Computed once to avoid hammering SQLite with
+        # the same median query for every (dep_date, ret_date) combo.
+        route_typical = _get_route_typical(route)
+        if route_typical is not None:
+            log(f"  route typical: HK${int(route_typical):,} (used by safeguard)")
         saved_for_route = 0
         for dep_date, ret_date, price in dates:
             # Hermes: smart re-scan policy. Google Flights prices revert constantly
@@ -294,7 +354,11 @@ def main():
                 # numeric fields but they're nonsense (e.g. price=HK$3M from
                 # matching a phone number on the challenge page). Drop these
                 # BEFORE writing to the DB so we never poison flight_details.
-                suspicious = _is_suspicious_response(details, seen_tuples)
+                # Hermes 2026-07-10: also pass route_typical so the safeguard
+                # can catch "looks legit but price is 90% too cheap" cases
+                # (e.g. SZX→AMS HK$749 vs typical HK$7,802).
+                suspicious = _is_suspicious_response(details, seen_tuples,
+                                                     route_typical=route_typical)
                 if suspicious:
                     # Track per-round junk for observability. We don't tell
                     # the proxy pool to mark_dead here — the parser can't

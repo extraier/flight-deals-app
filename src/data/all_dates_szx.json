@@ -1,531 +1,8 @@
 {
-  "generated": "2026-07-10T09:17:58.048064",
+  "generated": "2026-07-10T11:44:36.935535",
   "source": "fli_calendar.db",
   "departure": "SZX",
   "results": [
-    {
-      "route": "SZX→AMS",
-      "destination": {
-        "name": "阿姆斯特丹",
-        "code": "AMS",
-        "region": "歐洲"
-      },
-      "price": 749,
-      "currency": "HKD",
-      "badge": {
-        "carryOn": false,
-        "cheapDays": 351
-      },
-      "typicalPrice": 962,
-      "cheapestDates": [
-        {
-          "day": 2,
-          "month": 9,
-          "year": 2026,
-          "price": 749,
-          "stay": 7,
-          "flight": {
-            "airline": "CZ",
-            "flight_no": "3175",
-            "dep_time": "09:30",
-            "arr_time": "12:40",
-            "return_airline": "CZ",
-            "return_flight": "346",
-            "return_dep_time": "21:40",
-            "return_arr_time": "13:25",
-            "ret_date": "2026-09-09"
-          }
-        },
-        {
-          "day": 27,
-          "month": 12,
-          "year": 2026,
-          "price": 789,
-          "stay": 14,
-          "flight": {
-            "airline": "CZ",
-            "flight_no": "3175",
-            "dep_time": "09:30",
-            "arr_time": "12:45",
-            "return_airline": "CZ",
-            "return_flight": "346",
-            "return_dep_time": "20:35",
-            "return_arr_time": "13:40",
-            "ret_date": "2027-01-10"
-          }
-        },
-        {
-          "day": 12,
-          "month": 8,
-          "year": 2026,
-          "price": 832,
-          "stay": 7,
-          "flight": {
-            "airline": "CZ",
-            "flight_no": "5919",
-            "dep_time": "17:15",
-            "arr_time": "19:35",
-            "return_airline": "CZ",
-            "return_flight": "346",
-            "return_dep_time": "21:40",
-            "return_arr_time": "13:25",
-            "ret_date": "2026-08-19"
-          }
-        },
-        {
-          "day": 10,
-          "month": 8,
-          "year": 2026,
-          "price": 832,
-          "stay": 7,
-          "flight": {
-            "airline": "CZ",
-            "flight_no": "5919",
-            "dep_time": "17:15",
-            "arr_time": "19:35",
-            "return_airline": "CZ",
-            "return_flight": "346",
-            "return_dep_time": "21:40",
-            "return_arr_time": "13:25",
-            "ret_date": "2026-08-17"
-          }
-        },
-        {
-          "day": 7,
-          "month": 1,
-          "year": 2027,
-          "price": 951,
-          "stay": 7,
-          "history": {
-            "7d": {
-              "price": 7466,
-              "diff": -6515,
-              "pct": -87.3
-            }
-          },
-          "flight": {
-            "airline": "EK",
-            "flight_no": "329",
-            "dep_time": "00:45",
-            "arr_time": "05:25",
-            "return_airline": "EK",
-            "return_flight": "148",
-            "return_dep_time": "14:40",
-            "return_arr_time": "00:15",
-            "ret_date": "2027-01-14"
-          }
-        },
-        {
-          "day": 8,
-          "month": 8,
-          "year": 2026,
-          "price": 962,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 8611,
-              "diff": -7649,
-              "pct": -88.8
-            }
-          },
-          "flight": {
-            "airline": "CZ",
-            "flight_no": "3155",
-            "dep_time": "19:30",
-            "arr_time": "22:45",
-            "return_airline": "CZ",
-            "return_flight": "346",
-            "return_dep_time": "21:40",
-            "return_arr_time": "13:25",
-            "ret_date": "2026-08-15"
-          }
-        },
-        {
-          "day": 9,
-          "month": 8,
-          "year": 2026,
-          "price": 962,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 7550,
-              "diff": -6588,
-              "pct": -87.3
-            }
-          },
-          "flight": {
-            "airline": "CZ",
-            "flight_no": "3175",
-            "dep_time": "09:30",
-            "arr_time": "12:40",
-            "return_airline": "CZ",
-            "return_flight": "346",
-            "return_dep_time": "21:40",
-            "return_arr_time": "13:25",
-            "ret_date": "2026-08-16"
-          }
-        },
-        {
-          "day": 5,
-          "month": 9,
-          "year": 2026,
-          "price": 1068,
-          "stay": 14,
-          "flight": {
-            "airline": "CZ",
-            "flight_no": "3175",
-            "dep_time": "09:30",
-            "arr_time": "12:40",
-            "return_airline": "CZ",
-            "return_flight": "346",
-            "return_dep_time": "21:40",
-            "return_arr_time": "13:25",
-            "ret_date": "2026-09-19"
-          }
-        },
-        {
-          "day": 27,
-          "month": 7,
-          "year": 2026,
-          "price": 1130,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 8000,
-              "diff": -6870,
-              "pct": -85.9
-            }
-          },
-          "flight": {
-            "airline": "CZ",
-            "flight_no": "3175",
-            "dep_time": "09:30",
-            "arr_time": "12:40",
-            "return_airline": "CZ",
-            "return_flight": "308",
-            "return_dep_time": "13:20",
-            "return_arr_time": "06:40",
-            "ret_date": "2026-08-03"
-          }
-        },
-        {
-          "day": 30,
-          "month": 10,
-          "year": 2026,
-          "price": 7084,
-          "stay": 7,
-          "flight": {
-            "airline": "EK",
-            "flight_no": "329",
-            "dep_time": "00:45",
-            "arr_time": "05:25",
-            "return_airline": "EK",
-            "return_flight": "150",
-            "return_dep_time": "21:45",
-            "return_arr_time": "07:30",
-            "ret_date": "2026-11-06"
-          }
-        }
-      ],
-      "totalDestinations": 50,
-      "firstDetected": "2026-07-10T00:00:17.510717",
-      "dropAmount": -6801,
-      "dropPct": -90.1,
-      "dropPrice": 749
-    },
-    {
-      "route": "SZX→AKL",
-      "destination": {
-        "name": "奧克蘭",
-        "code": "AKL",
-        "region": "大洋洲"
-      },
-      "price": 772,
-      "currency": "HKD",
-      "badge": {
-        "carryOn": false,
-        "cheapDays": 510
-      },
-      "typicalPrice": 892,
-      "cheapestDates": [
-        {
-          "day": 3,
-          "month": 9,
-          "year": 2026,
-          "price": 772,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 8166,
-              "diff": -7394,
-              "pct": -90.5
-            },
-            "7d": {
-              "price": 8234,
-              "diff": -7462,
-              "pct": -90.6
-            }
-          },
-          "flight": {
-            "airline": "HU",
-            "flight_no": "7931",
-            "dep_time": "02:05",
-            "arr_time": "16:45",
-            "return_airline": "HU",
-            "return_flight": "786",
-            "return_dep_time": "20:45",
-            "return_arr_time": "05:00",
-            "ret_date": "2026-09-06"
-          }
-        },
-        {
-          "day": 29,
-          "month": 8,
-          "year": 2026,
-          "price": 819,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 8951,
-              "diff": -8132,
-              "pct": -90.9
-            },
-            "7d": {
-              "price": 9435,
-              "diff": -8616,
-              "pct": -91.3
-            }
-          },
-          "flight": {
-            "airline": "HU",
-            "flight_no": "6335",
-            "dep_time": "14:25",
-            "arr_time": "16:45",
-            "return_airline": "HU",
-            "return_flight": "7932",
-            "return_dep_time": "19:00",
-            "return_arr_time": "03:00",
-            "ret_date": "2026-09-05"
-          }
-        },
-        {
-          "day": 29,
-          "month": 8,
-          "year": 2026,
-          "price": 819,
-          "stay": 14,
-          "history": {
-            "1d": {
-              "price": 8951,
-              "diff": -8132,
-              "pct": -90.9
-            },
-            "7d": {
-              "price": 9435,
-              "diff": -8616,
-              "pct": -91.3
-            }
-          },
-          "flight": {
-            "airline": "HU",
-            "flight_no": "6335",
-            "dep_time": "14:25",
-            "arr_time": "16:45",
-            "return_airline": "HU",
-            "return_flight": "7932",
-            "return_dep_time": "19:00",
-            "return_arr_time": "03:00",
-            "ret_date": "2026-09-12"
-          }
-        },
-        {
-          "day": 3,
-          "month": 9,
-          "year": 2026,
-          "price": 837,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 8166,
-              "diff": -7329,
-              "pct": -89.8
-            },
-            "7d": {
-              "price": 8234,
-              "diff": -7397,
-              "pct": -89.8
-            }
-          },
-          "flight": {
-            "airline": "HU",
-            "flight_no": "7931",
-            "dep_time": "02:05",
-            "arr_time": "16:45",
-            "return_airline": "HU",
-            "return_flight": "7932",
-            "return_dep_time": "19:00",
-            "return_arr_time": "03:00",
-            "ret_date": "2026-09-10"
-          }
-        },
-        {
-          "day": 5,
-          "month": 9,
-          "year": 2026,
-          "price": 837,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 8166,
-              "diff": -7329,
-              "pct": -89.8
-            },
-            "7d": {
-              "price": 8234,
-              "diff": -7397,
-              "pct": -89.8
-            }
-          },
-          "flight": {
-            "airline": "HU",
-            "flight_no": "7931",
-            "dep_time": "02:05",
-            "arr_time": "16:45",
-            "return_airline": "HU",
-            "return_flight": "7932",
-            "return_dep_time": "19:00",
-            "return_arr_time": "03:00",
-            "ret_date": "2026-09-12"
-          }
-        },
-        {
-          "day": 27,
-          "month": 8,
-          "year": 2026,
-          "price": 883,
-          "stay": 7,
-          "flight": {
-            "airline": "HU",
-            "flight_no": "6335",
-            "dep_time": "14:25",
-            "arr_time": "16:45",
-            "return_airline": "HU",
-            "return_flight": "7932",
-            "return_dep_time": "19:00",
-            "return_arr_time": "03:00",
-            "ret_date": "2026-09-03"
-          }
-        },
-        {
-          "day": 22,
-          "month": 10,
-          "year": 2026,
-          "price": 883,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 7531,
-              "diff": -6648,
-              "pct": -88.3
-            }
-          },
-          "flight": {
-            "airline": "HU",
-            "flight_no": "7931",
-            "dep_time": "02:25",
-            "arr_time": "18:20",
-            "return_airline": "HU",
-            "return_flight": "786",
-            "return_dep_time": "22:20",
-            "return_arr_time": "05:00",
-            "ret_date": "2026-10-25"
-          }
-        },
-        {
-          "day": 2,
-          "month": 11,
-          "year": 2026,
-          "price": 901,
-          "stay": 14,
-          "flight": {
-            "airline": "MH",
-            "flight_no": "523",
-            "dep_time": "02:45",
-            "arr_time": "06:45",
-            "return_airline": "MH",
-            "return_flight": "144",
-            "return_dep_time": "13:45",
-            "return_arr_time": "19:55",
-            "ret_date": "2026-11-16"
-          }
-        },
-        {
-          "day": 20,
-          "month": 8,
-          "year": 2026,
-          "price": 902,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 7336,
-              "diff": -6434,
-              "pct": -87.7
-            },
-            "7d": {
-              "price": 7818,
-              "diff": -6916,
-              "pct": -88.5
-            }
-          },
-          "flight": {
-            "airline": "HU",
-            "flight_no": "7931",
-            "dep_time": "02:05",
-            "arr_time": "16:45",
-            "return_airline": "HU",
-            "return_flight": "786",
-            "return_dep_time": "20:45",
-            "return_arr_time": "05:00",
-            "ret_date": "2026-08-23"
-          }
-        },
-        {
-          "day": 20,
-          "month": 8,
-          "year": 2026,
-          "price": 957,
-          "stay": 14,
-          "history": {
-            "1d": {
-              "price": 7336,
-              "diff": -6379,
-              "pct": -87.0
-            },
-            "7d": {
-              "price": 7818,
-              "diff": -6861,
-              "pct": -87.8
-            }
-          },
-          "flight": {
-            "airline": "HU",
-            "flight_no": "7931",
-            "dep_time": "02:05",
-            "arr_time": "16:45",
-            "return_airline": "HU",
-            "return_flight": "7932",
-            "return_dep_time": "19:00",
-            "return_arr_time": "03:00",
-            "ret_date": "2026-09-03"
-          }
-        }
-      ],
-      "totalDestinations": 50,
-      "firstDetected": "2026-07-10T00:00:17.510717",
-      "dropAmount": -6564,
-      "dropPct": -89.5,
-      "dropPrice": 772
-    },
     {
       "route": "SZX→SGN",
       "destination": {
@@ -1904,7 +1381,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 485
+        "cheapDays": 486
       },
       "typicalPrice": 12996,
       "cheapestDates": [
@@ -2049,6 +1526,31 @@
           }
         },
         {
+          "day": 7,
+          "month": 9,
+          "year": 2026,
+          "price": 17468,
+          "stay": 3,
+          "history": {
+            "1d": {
+              "price": 1892,
+              "diff": 15576,
+              "pct": 823.3
+            }
+          },
+          "flight": {
+            "airline": "CZ",
+            "flight_no": "8157",
+            "dep_time": "22:55",
+            "arr_time": "01:40",
+            "return_airline": "CZ",
+            "return_flight": "8158",
+            "return_dep_time": "02:40",
+            "return_arr_time": "07:05",
+            "ret_date": "2026-09-10"
+          }
+        },
+        {
           "day": 19,
           "month": 11,
           "year": 2026,
@@ -2076,31 +1578,6 @@
             "return_dep_time": "19:10",
             "return_arr_time": "22:35",
             "ret_date": "2026-12-03"
-          }
-        },
-        {
-          "day": 7,
-          "month": 9,
-          "year": 2026,
-          "price": 19021,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 1892,
-              "diff": 17129,
-              "pct": 905.3
-            }
-          },
-          "flight": {
-            "airline": "CZ",
-            "flight_no": "8157",
-            "dep_time": "22:55",
-            "arr_time": "01:40",
-            "return_airline": "CZ",
-            "return_flight": "8158",
-            "return_dep_time": "02:40",
-            "return_arr_time": "07:05",
-            "ret_date": "2026-09-10"
           }
         },
         {
@@ -2184,9 +1661,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 392
+        "cheapDays": 396
       },
-      "typicalPrice": 2911,
+      "typicalPrice": 2907,
       "cheapestDates": [
         {
           "day": 11,
@@ -3317,9 +2794,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 382
+        "cheapDays": 384
       },
-      "typicalPrice": 5955,
+      "typicalPrice": 6174,
       "cheapestDates": [
         {
           "day": 16,
@@ -5369,7 +4846,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 365
+        "cheapDays": 369
       },
       "typicalPrice": 5584,
       "cheapestDates": [
@@ -6102,7 +5579,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 435
+        "cheapDays": 437
       },
       "typicalPrice": 5198,
       "cheapestDates": [
@@ -6561,9 +6038,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 359
+        "cheapDays": 362
       },
-      "typicalPrice": 7260,
+      "typicalPrice": 7270,
       "cheapestDates": [
         {
           "day": 26,
@@ -6915,7 +6392,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 451
+        "cheapDays": 452
       },
       "typicalPrice": 8034,
       "cheapestDates": [
@@ -8115,6 +7592,351 @@
       "dropAmount": 0,
       "dropPct": 0.0,
       "dropPrice": 6589
+    },
+    {
+      "route": "SZX→AMS",
+      "destination": {
+        "name": "阿姆斯特丹",
+        "code": "AMS",
+        "region": "歐洲"
+      },
+      "price": 7084,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 356
+      },
+      "typicalPrice": 7489,
+      "cheapestDates": [
+        {
+          "day": 30,
+          "month": 10,
+          "year": 2026,
+          "price": 7084,
+          "stay": 7,
+          "flight": {
+            "airline": "EK",
+            "flight_no": "329",
+            "dep_time": "00:45",
+            "arr_time": "05:25",
+            "return_airline": "EK",
+            "return_flight": "150",
+            "return_dep_time": "21:45",
+            "return_arr_time": "07:30",
+            "ret_date": "2026-11-06"
+          }
+        },
+        {
+          "day": 5,
+          "month": 12,
+          "year": 2026,
+          "price": 7489,
+          "stay": 7,
+          "flight": {
+            "airline": "EK",
+            "flight_no": "329",
+            "dep_time": "00:45",
+            "arr_time": "05:25",
+            "return_airline": "EK",
+            "return_flight": "146",
+            "return_dep_time": "10:35",
+            "return_arr_time": "20:20",
+            "ret_date": "2026-12-12"
+          }
+        },
+        {
+          "day": 11,
+          "month": 8,
+          "year": 2026,
+          "price": 7550,
+          "stay": 7,
+          "flight": {
+            "airline": "CZ",
+            "flight_no": "3175",
+            "dep_time": "09:30",
+            "arr_time": "12:40",
+            "return_airline": "CZ",
+            "return_flight": "346",
+            "return_dep_time": "21:40",
+            "return_arr_time": "13:25",
+            "ret_date": "2026-08-18"
+          }
+        },
+        {
+          "day": 4,
+          "month": 11,
+          "year": 2026,
+          "price": 6819,
+          "stay": 7
+        },
+        {
+          "day": 6,
+          "month": 11,
+          "year": 2026,
+          "price": 6819,
+          "stay": 7
+        },
+        {
+          "day": 3,
+          "month": 11,
+          "year": 2026,
+          "price": 6819,
+          "stay": 7,
+          "history": {
+            "7d": {
+              "price": 6831,
+              "diff": -12,
+              "pct": -0.2
+            }
+          }
+        },
+        {
+          "day": 2,
+          "month": 9,
+          "year": 2026,
+          "price": 6819,
+          "stay": 14
+        },
+        {
+          "day": 6,
+          "month": 11,
+          "year": 2026,
+          "price": 6819,
+          "stay": 14
+        },
+        {
+          "day": 8,
+          "month": 11,
+          "year": 2026,
+          "price": 6819,
+          "stay": 7,
+          "history": {
+            "7d": {
+              "price": 9090,
+              "diff": -2271,
+              "pct": -25.0
+            }
+          }
+        },
+        {
+          "day": 25,
+          "month": 11,
+          "year": 2026,
+          "price": 6819,
+          "stay": 14,
+          "history": {
+            "1d": {
+              "price": 6697,
+              "diff": 122,
+              "pct": 1.8
+            }
+          }
+        }
+      ],
+      "totalDestinations": 50,
+      "firstDetected": null,
+      "dropAmount": 122,
+      "dropPct": 1.8,
+      "dropPrice": 6819
+    },
+    {
+      "route": "SZX→AKL",
+      "destination": {
+        "name": "奧克蘭",
+        "code": "AKL",
+        "region": "大洋洲"
+      },
+      "price": 7337,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 513
+      },
+      "typicalPrice": 8071,
+      "cheapestDates": [
+        {
+          "day": 10,
+          "month": 9,
+          "year": 2026,
+          "price": 7337,
+          "stay": 3,
+          "history": {
+            "1d": {
+              "price": 8166,
+              "diff": -829,
+              "pct": -10.2
+            },
+            "7d": {
+              "price": 8234,
+              "diff": -897,
+              "pct": -10.9
+            }
+          },
+          "flight": {
+            "airline": "HU",
+            "flight_no": "7931",
+            "dep_time": "02:05",
+            "arr_time": "16:45",
+            "return_airline": "HU",
+            "return_flight": "786",
+            "return_dep_time": "20:45",
+            "return_arr_time": "05:00",
+            "ret_date": "2026-09-13"
+          }
+        },
+        {
+          "day": 2,
+          "month": 11,
+          "year": 2026,
+          "price": 8071,
+          "stay": 14,
+          "flight": {
+            "airline": "MH",
+            "flight_no": "523",
+            "dep_time": "02:45",
+            "arr_time": "06:45",
+            "return_airline": "MH",
+            "return_flight": "144",
+            "return_dep_time": "13:45",
+            "return_arr_time": "19:55",
+            "ret_date": "2026-11-16"
+          }
+        },
+        {
+          "day": 23,
+          "month": 10,
+          "year": 2026,
+          "price": 9921,
+          "stay": 7,
+          "history": {
+            "1d": {
+              "price": 9258,
+              "diff": 663,
+              "pct": 7.2
+            }
+          },
+          "flight": {
+            "airline": "CZ",
+            "flight_no": "3071",
+            "dep_time": "18:45",
+            "arr_time": "07:25",
+            "return_airline": "NZ",
+            "return_flight": "109",
+            "return_dep_time": "20:05",
+            "return_arr_time": "21:50",
+            "ret_date": "2026-10-30"
+          }
+        },
+        {
+          "day": 27,
+          "month": 8,
+          "year": 2026,
+          "price": 6309,
+          "stay": 3
+        },
+        {
+          "day": 21,
+          "month": 8,
+          "year": 2026,
+          "price": 6309,
+          "stay": 7,
+          "history": {
+            "1d": {
+              "price": 7174,
+              "diff": -865,
+              "pct": -12.1
+            },
+            "7d": {
+              "price": 6882,
+              "diff": -573,
+              "pct": -8.3
+            }
+          }
+        },
+        {
+          "day": 22,
+          "month": 10,
+          "year": 2026,
+          "price": 6332,
+          "stay": 3,
+          "history": {
+            "1d": {
+              "price": 7531,
+              "diff": -1199,
+              "pct": -15.9
+            }
+          }
+        },
+        {
+          "day": 19,
+          "month": 10,
+          "year": 2026,
+          "price": 6455,
+          "stay": 14,
+          "history": {
+            "1d": {
+              "price": 9514,
+              "diff": -3059,
+              "pct": -32.2
+            },
+            "7d": {
+              "price": 9033,
+              "diff": -2578,
+              "pct": -28.5
+            }
+          }
+        },
+        {
+          "day": 29,
+          "month": 10,
+          "year": 2026,
+          "price": 6459,
+          "stay": 3
+        },
+        {
+          "day": 3,
+          "month": 9,
+          "year": 2026,
+          "price": 6482,
+          "stay": 3,
+          "history": {
+            "1d": {
+              "price": 8166,
+              "diff": -1684,
+              "pct": -20.6
+            },
+            "7d": {
+              "price": 8234,
+              "diff": -1752,
+              "pct": -21.3
+            }
+          }
+        },
+        {
+          "day": 4,
+          "month": 9,
+          "year": 2026,
+          "price": 6482,
+          "stay": 7,
+          "history": {
+            "1d": {
+              "price": 8339,
+              "diff": -1857,
+              "pct": -22.3
+            },
+            "7d": {
+              "price": 7217,
+              "diff": -735,
+              "pct": -10.2
+            }
+          }
+        }
+      ],
+      "totalDestinations": 50,
+      "firstDetected": "2026-07-10T11:43:40.240618",
+      "dropAmount": -865,
+      "dropPct": -12.1,
+      "dropPrice": 6309
     },
     {
       "route": "SZX→JFK",
