@@ -116,6 +116,32 @@ elif { [ "${SZX_PILOT_ENABLED:-0}" = "1" ] || [ -f "$SZX_PILOT_FLAG" ]; }; then
   log "WARN: SZX pilot requested but $SZX_PILOT_SCRIPT not found"
 fi
 
+# Hermes 2026-07-10: optional UO (HK Express) detail-scan pilot via the
+# same proxy pool. UO routes are getting 429-rate-limited by Google
+# just like SZX. Pilot starts with 2 routes (HKG→FUK, HKG→KIX) to
+# validate the proxy pool can sustain UO queries before scaling to
+# the full 36 UO routes. Activated by /data/uo_pilot.flag or
+# UO_PILOT_ENABLED=1.
+UO_PILOT_SCRIPT=/data/uo_pilot_loop.sh
+UO_PILOT_LOG=/data/fli_detail_uo_pilot.log
+UO_PILOT_FLAG=/data/uo_pilot.flag
+if { [ "${UO_PILOT_ENABLED:-0}" = "1" ] || [ -f "$UO_PILOT_FLAG" ]; } && [ -f "$UO_PILOT_SCRIPT" ]; then
+  log "Spawning UO detail-scan pilot via free proxy pool (env or flag set)"
+  (
+    while true; do
+      log "--- Starting UO pilot loop ---"
+      bash "$UO_PILOT_SCRIPT" 2>&1 | tee -a "$UO_PILOT_LOG"
+      EXIT=${PIPESTATUS[0]}
+      log "UO pilot loop exited code=$EXIT. Restart in 10s."
+      sleep 10
+    done
+  ) &
+  UO_PILOT_PID=$!
+  log "UO pilot loop PID=$UO_PILOT_PID"
+elif { [ "${UO_PILOT_ENABLED:-0}" = "1" ] || [ -f "$UO_PILOT_FLAG" ]; }; then
+  log "WARN: UO pilot requested but $UO_PILOT_SCRIPT not found"
+fi
+
 RESTART=0
 while true; do
   log "--- Starting scanner (restart #$RESTART) ---"
