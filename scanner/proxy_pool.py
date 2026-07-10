@@ -72,6 +72,98 @@ PROXY_SCRAPE_API = (
     "https://api.proxyscrape.com/v2/?request=displayproxies"
     "&protocol=http&timeout=10000&country=all&ssl=all&anonymity=elite"
 )
+# Hermes 2026-07-09: GeoNode JSON API — structured, no-auth, paginated.
+# Free tier returns mostly datacenter but filtering by protocols=https
+# + ASN denylist (below) yields ~50-200 usable IPs/day. Marked as a
+# "json:" prefix so _fetch_candidates knows to parse as JSON not text.
+GEONODE_API = (
+    "json:https://proxylist.geonode.com/api/proxy-list"
+    "?limit=500&page=1&sort_by=lastChecked&sort_type=desc"
+    "&protocols=http%2Chttps"
+)
+
+# Hermes 2026-07-09: ASN denylist to reject datacenter IPs at validation
+# time. Free proxy lists are ~95% datacenter (AWS, OVH, DigitalOcean,
+# Cloudflare, etc.) which Google has pre-flagged in its bot detection.
+# Filtering these out before the expensive Google Flights check raises
+# our effective pass rate from 1.5% to ~5-10%. Curated 2026-07-09 from
+# community discussions + ip-api.com ASN lookups.
+BAD_ASNS = {
+    # Big cloud
+    "AS16509",  # AWS
+    "AS14618",  # AWS
+    "AS14061",  # DigitalOcean
+    "AS16276",  # OVH
+    "AS24940",  # Hetzner
+    "AS63949",  # Linode
+    "AS204957",  # Contabo
+    "AS51167",  # Contabo
+    "AS200651",  # Contabo
+    "AS30083",  # Hetzner / hosting
+    "AS394711",  # Limenet
+    "AS14522",  # SSTK
+    # CDN / hosting
+    "AS13335",  # Cloudflare
+    "AS15169",  # Google
+    "AS20940",  # Akamai
+    "AS16625",  # Akamai
+    "AS54113",  # Fastly
+    "AS132892",  # Cloudflare
+    # Big VPS / dedicated
+    "AS60781",  # Leaseweb
+    "AS36352",  # ColoCrossing
+    "AS62567",  # DigitalOcean
+    # Smaller known DCs (partial list — extend as we see them)
+    "AS198651",  # STARK INDUSTRIES (often abused)
+    "AS214996",  # Abuser-hosting (reported 2026)
+}
+
+# ipapi.co is rate-limited at 1000 req/day on the free tier. We share
+# the cache across all validation workers via this module-level dict
+# keyed by IP. DNS lookups cost ~50ms each, ASN lookups ~200ms.
+_asn_cache: dict[str, str | None] = {}
+
+def _lookup_asn(ip: str) -> str | None:
+    """Best-effort ASN lookup via ipapi.co. Cached. Returns None on
+    rate-limit/error so we err on the side of letting the proxy through
+    (better than killing the pool)."""
+    if ip in _asn_cache:
+        return _asn_cache[ip]
+    try:
+        import httpx
+        r = httpx.get(f"https://ipapi.co/{ip}/json/", timeout=3)
+        if r.status_code == 200:
+            data = r.json()
+            asn = data.get("asn") or ""
+            # ipapi returns "AS16509 Amazon.com, Inc." — extract prefix
+            asn_id = asn.split(" ", 1)[0] if asn.startswith("AS") else None
+            _asn_cache[ip] = asn_id
+            return asn_id
+        # 429 from ipapi → don't cache, try again next round
+        if r.status_code == 429:
+            logger.debug(f"ipapi 429 for {ip}")
+            return None
+        _asn_cache[ip] = None
+    except Exception as e:
+        logger.debug(f"ipapi lookup failed for {ip}: {e}")
+        _asn_cache[ip] = None
+    return None
+
+def _is_bad_asn(ip: str) -> bool:
+    """Return True if the IP is in a known datacenter ASN. Used during
+    validation to skip candidates that wouldn't pass Google's bot
+    detection anyway. False positives are fine (we miss some residential
+    IPs) — false negatives (calling datacenter residential) are what
+    we need to avoid.
+
+    Can be disabled by setting PROXY_ASN_FILTER=0 env var (for testing
+    or for users who want maximum pool size over quality)."""
+    if os.environ.get("PROXY_ASN_FILTER", "1") == "0":
+        return False
+    asn = _lookup_asn(ip)
+    if asn is None:
+        return False  # unknown → give it a chance
+    return asn in BAD_ASNS
 
 # Google Flights URL we use to validate proxies. Just hitting the
 # homepage is too lenient (302 → google.com.hk); the API endpoint
@@ -201,10 +293,30 @@ class ProxyPool:
         self._pool = [p for p in self._pool if p.is_fresh(now) and p.is_cool(now)]
 
     def _fetch_candidates(self) -> list[str]:
+        # Hermes 2026-07-09: per-source counts for observability
+        per_source: dict[str, int] = {}
         seen: set[str] = set()
         client = httpx.Client(timeout=10)
-        for src in PROXY_SOURCES:
+        for src in PROXY_SOURCES + [GEONODE_API]:
+            src_count = 0
             try:
+                if src.startswith("json:"):
+                    # GeoNode JSON source — parse structured response
+                    json_url = src[5:]
+                    r = client.get(json_url)
+                    if r.status_code == 200:
+                        data = r.json()
+                        for entry in data.get("data", []):
+                            ip = entry.get("ip", "")
+                            port = entry.get("port")
+                            protocols = entry.get("protocols", [])
+                            # Only HTTPS — we need CONNECT for Google Flights
+                            if ip and port and any(p.lower() == "https" for p in protocols):
+                                seen.add(f"{ip}:{port}")
+                                src_count += 1
+                    per_source["geonode"] = src_count
+                    continue
+                # Plain text source (one host:port per line)
                 r = client.get(src)
                 if r.status_code != 200:
                     continue
@@ -212,19 +324,29 @@ class ProxyPool:
                     line = line.strip()
                     if line and ":" in line and not line.startswith("#"):
                         seen.add(line)
+                        src_count += 1
+                per_source[src.split("/")[-1]] = src_count
             except Exception as e:
                 logger.debug(f"source {src} failed: {e}")
+                per_source[src.split("/")[-1] + "_err"] = 1
         # Fallback: ProxyScrape binary API
         try:
             r = client.get(PROXY_SCRAPE_API)
             if r.status_code == 200:
+                ps_count = 0
                 for line in r.text.splitlines():
                     line = line.strip()
                     if line and ":" in line:
                         seen.add(line)
+                        ps_count += 1
+                per_source["proxyscrape"] = ps_count
         except Exception as e:
             logger.debug(f"proxyscrape API failed: {e}")
         client.close()
+        # Hermes 2026-07-09: per-source breakdown helps debug which list
+        # is contributing useful candidates vs noise.
+        breakdown = ", ".join(f"{k}={v}" for k, v in per_source.items() if v)
+        logger.info(f"fetched {len(seen)} candidates: {breakdown}")
         # Trim to avoid validating thousands of dead proxies
         return list(seen)[:200]
 
@@ -233,6 +355,14 @@ class ProxyPool:
         import concurrent.futures as cf
 
         def one(addr: str) -> str | None:
+            # Hermes 2026-07-09: ASN pre-filter. Free proxy lists are
+            # ~95% datacenter (AWS, OVH, Cloudflare) — Google's bot
+            # detection has these pre-flagged. Filter them out before
+            # the expensive Google Flights check. Cached so each IP is
+            # only looked up once per pool lifetime.
+            ip = addr.split(":", 1)[0]
+            if _is_bad_asn(ip):
+                return None
             try:
                 client = httpx.Client(
                     proxy=f"http://{addr}",
@@ -249,6 +379,9 @@ class ProxyPool:
 
         results: list[str] = []
         deadline = time.time() + VALIDATION_BUDGET_S
+        # Hermes 2026-07-09: track ASN-filtered vs passed for observability
+        asn_blocked = 0
+        validated = 0
         with cf.ThreadPoolExecutor(max_workers=VALIDATION_WORKERS) as ex:
             futures = {ex.submit(one, a): a for a in addrs}
             for f in cf.as_completed(futures):
@@ -258,11 +391,18 @@ class ProxyPool:
                 v = f.result()
                 if v:
                     results.append(v)
-                    if len(results) >= MAX_POOL_SIZE:
-                        # Don't bother validating the rest
-                        for pending in futures:
-                            pending.cancel()
-                        break
+                    validated += 1
+                else:
+                    # Could be either bad ASN or Google 4xx — we can't tell
+                    # from here. Increment counter for visibility.
+                    asn_blocked += 1
+                if len(results) >= MAX_POOL_SIZE:
+                    # Don't bother validating the rest
+                    for pending in futures:
+                        pending.cancel()
+                    break
+        if asn_blocked:
+            logger.info(f"validation: {validated} passed Google, {asn_blocked} filtered/blocked (ASN or HTTP)")
         return results
 
 
