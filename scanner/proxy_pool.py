@@ -135,7 +135,34 @@ BAD_ASNS = {
 # ipapi.co is rate-limited at 1000 req/day on the free tier. We share
 # the cache across all validation workers via this module-level dict
 # keyed by IP. DNS lookups cost ~50ms each, ASN lookups ~200ms.
-_asn_cache: dict[str, str | None] = {}
+# Hermes 2026-07-10: cache is also persisted to /data/proxy_asn_cache.json
+# so it survives container restarts. Without persistence, every restart
+# re-queries ipapi.co for every IP — burns through the 1000/day rate
+# limit and slows the first validation round to a crawl.
+import json
+_ASN_CACHE_FILE = "/data/proxy_asn_cache.json"
+try:
+    with open(_ASN_CACHE_FILE) as _f:
+        _loaded = json.load(_f)
+        # Coerce keys back to str (JSON always has str keys)
+        _asn_cache: dict[str, str | None] = {k: v for k, v in _loaded.items()}
+        logger.info(f"loaded {len(_asn_cache)} ASN cache entries from disk")
+except (FileNotFoundError, json.JSONDecodeError):
+    _asn_cache: dict[str, str | None] = {}
+except Exception as _e:
+    logger.warning(f"ASN cache load failed: {_e}, starting empty")
+    _asn_cache = {}
+
+
+def _persist_asn_cache():
+    """Save the ASN cache to disk so it survives container restarts.
+    Called periodically (every 50 entries) by _lookup_asn."""
+    try:
+        with open(_ASN_CACHE_FILE, "w") as f:
+            json.dump(_asn_cache, f)
+    except Exception as e:
+        logger.debug(f"ASN cache persist failed: {e}")
+
 
 def _lookup_asn(ip: str) -> str | None:
     """Best-effort ASN lookup via ipapi.co. Cached. Returns None on
@@ -152,6 +179,10 @@ def _lookup_asn(ip: str) -> str | None:
             # ipapi returns "AS16509 Amazon.com, Inc." — extract prefix
             asn_id = asn.split(" ", 1)[0] if asn.startswith("AS") else None
             _asn_cache[ip] = asn_id
+            # Hermes 2026-07-10: persist every 50 entries so we don't lose
+            # the cache on container restart. Cheap (~5KB write).
+            if len(_asn_cache) % 50 == 0:
+                _persist_asn_cache()
             return asn_id
         # 429 from ipapi → don't cache, try again next round
         if r.status_code == 429:
@@ -207,7 +238,14 @@ VALIDATION_WORKERS = 4
 # Cap on total validation wall-clock. After this many seconds we
 # keep whatever we've validated so far and proceed — better a small
 # pool than no pool at all.
-VALIDATION_BUDGET_S = 60
+# Hermes 2026-07-10: raised 60s → 120s. The ASN pre-filter adds ~200ms
+# per candidate (ipapi.co lookup). For 200 candidates with 4 workers
+# that's 200/4 × 200ms = 10s overhead on top of the Google validation
+# (200/4 × 5s = 250s worst case, but most fail quickly). 60s was too
+# tight when the ASN cache is cold (first run after container restart)
+# and we kept 0 working proxies. 120s gives a comfortable margin while
+# still keeping total round time predictable.
+VALIDATION_BUDGET_S = 120
 
 
 class Proxy:
@@ -317,6 +355,14 @@ class ProxyPool:
         client = httpx.Client(timeout=10)
         for src in PROXY_SOURCES + [GEONODE_API]:
             src_count = 0
+            # Hermes 2026-07-10: derive a friendly source name so the breakdown
+            # log line stays readable (was: the JSON-source URL was being
+            # logged in full when its parse threw, polluting the log).
+            if src.startswith("json:"):
+                src_name = "geonode"
+            else:
+                # Use last path component (e.g. "http.txt", "proxies-https.txt").
+                src_name = src.split("/")[-1] or src[:20]
             try:
                 if src.startswith("json:"):
                     # GeoNode JSON source — parse structured response
@@ -332,21 +378,22 @@ class ProxyPool:
                             if ip and port and any(p.lower() == "https" for p in protocols):
                                 seen.add(f"{ip}:{port}")
                                 src_count += 1
-                    per_source["geonode"] = src_count
+                    per_source[src_name] = src_count
                     continue
                 # Plain text source (one host:port per line)
                 r = client.get(src)
                 if r.status_code != 200:
+                    per_source[src_name + "_err"] = 1
                     continue
                 for line in r.text.splitlines():
                     line = line.strip()
                     if line and ":" in line and not line.startswith("#"):
                         seen.add(line)
                         src_count += 1
-                per_source[src.split("/")[-1]] = src_count
+                per_source[src_name] = src_count
             except Exception as e:
-                logger.debug(f"source {src} failed: {e}")
-                per_source[src.split("/")[-1] + "_err"] = 1
+                logger.debug(f"source {src_name} failed: {e}")
+                per_source[src_name + "_err"] = 1
         # Fallback: ProxyScrape binary API
         try:
             r = client.get(PROXY_SCRAPE_API)
