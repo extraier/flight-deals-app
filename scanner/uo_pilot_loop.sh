@@ -34,11 +34,28 @@ SCRIPT=/data/fli_detail_scan_uo.py
 LOG=/data/fli_detail_uo_pilot.log
 SLEEP_BETWEEN_ROUNDS="${SLEEP_BETWEEN_ROUNDS:-180}"
 
+# Hermes 2026-07-10: startup stagger. The SZX and UO pilots both fire
+# validation threads at container boot — 2 workers each = 4 curl_cffi
+# sessions at peak = ~120MB extra, which OOM-kills both under the
+# 256MB container cgroup limit. Sleeping 70s before round #1 puts
+# the UO pilot's validation window after the SZX pilot's, so they
+# never validate concurrently. The pause-between-rounds (180s) is
+# shorter than a full validation cycle (~120s) so even if a cycle
+# runs long, the next pilot's validation starts after the previous
+# pool is warmed and idle. Tune UO_STARTUP_DELAY_S=0 if you want
+# both pilots to fight it out (not recommended).
+UO_STARTUP_DELAY_S="${UO_STARTUP_DELAY_S:-70}"
+
 echo "[$(date)] UO PILOT detail continuous loop starting (pid=$$)"
 echo "Script: $SCRIPT"
 echo "PILOT_ROUTES: $PILOT_ROUTES"
 echo "Pause between rounds: ${SLEEP_BETWEEN_ROUNDS}s"
+echo "Startup delay: ${UO_STARTUP_DELAY_S}s (so SZX pilot validates first)"
 echo "=========================================="
+
+# Sleep before the first round only — subsequent rounds already stagger
+# via SLEEP_BETWEEN_ROUNDS.
+sleep "$UO_STARTUP_DELAY_S"
 
 while true; do
     echo "[$(date)] === UO PILOT detail round #${ROUND_NUM:-1} starting ==="

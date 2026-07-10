@@ -229,12 +229,22 @@ PROXY_TTL_S = 300
 MAX_POOL_SIZE = 30
 # How long to spend validating a single candidate.
 VALIDATION_TIMEOUT_S = 5
-# Maximum parallel validation threads. Hermes 2026-07-10: reduced from 8
-# to 4 — each thread creates a curl_cffi session and holds it for the
-# duration. With 8 threads × ~30MB each + scanner's main thread, we
-# easily hit the 256MB container cgroup limit and get OOM-killed (exit
-# 137). 4 workers keeps us around 150MB.
-VALIDATION_WORKERS = 4
+# Maximum parallel validation threads. Hermes 2026-07-10: tuned down to 2.
+# Each worker thread holds a curl_cffi session (~25-30MB) for the duration
+# of validation. With the 256MB container cgroup limit, we need to fit:
+#   - 4 baseline scanners (cn_postpatch, fli_4x_continuous, fli_4x_daily,
+#     fli_detail_scan_aggressive)        ~140MB
+#   - One SZX pilot or one UO pilot      ~95MB
+#   - Validation peak                     = workers × 30MB
+# 4 workers = +120MB peak → 355MB total → OOM
+# 2 workers = +60MB peak  → 295MB total → still tight, risky
+# 1 worker  = +30MB peak  → 265MB total → safe
+# 2 workers is the sweet spot: still 2x throughput vs 1, but the
+# validation completes in ~120s budget before the peak becomes sustained.
+# With 2 workers, 200 candidates = 100 sequential × 200ms ipapi + ~2s
+# Google = ~220s worst case (over budget, but real pass rate is ~6%
+# so we usually find 12+ within first 60s).
+VALIDATION_WORKERS = 2
 # Cap on total validation wall-clock. After this many seconds we
 # keep whatever we've validated so far and proceed — better a small
 # pool than no pool at all.
