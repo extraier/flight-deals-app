@@ -32,6 +32,18 @@ from fli.models import Airport
 
 import fli_db  # Hermes: shared DB helper — see fli_db.py for the flock+busy story
 
+# Hermes 2026-07-10: cap fli.search's internal ThreadPoolExecutor at 3
+# workers. Default is 10 which causes ~200-300MB RSS just for the
+# executor's idle curl_cffi sessions, pushing us over the 256MB
+# container cgroup limit and triggering OOM kill (exit 137). 3 workers
+# keeps RSS under ~100MB while still letting the token-bucket rate
+# limiter saturate (Google's 10 req/sec ceiling per IP).
+try:
+    from fli.search._concurrency import configure_concurrency
+    configure_concurrency(3)
+except Exception:
+    pass  # Not fatal — fall back to default if API changes
+
 DB_PATH = '/data/fli_calendar.db'  # legacy, used by export scripts only
 DEPARTURE = 'SZX'
 
@@ -338,6 +350,23 @@ def main():
             else:
                 log(f"  {dep_date}→{ret_date}: No details")
             time.sleep(2.5)  # Hermes: was 1.5s, raised to ease 429 pressure from Google Flights
+            # Hermes 2026-07-10: periodic GC every 5 dates to stop the
+            # curl_cffi session buffers from accumulating. Without this,
+            # RSS climbs ~5MB/date through the slow proxies until OOM.
+            if (junk_for_round + total_saved) % 5 == 0:
+                import gc
+                before_kb = 0
+                try:
+                    with open(f'/proc/{os.getpid()}/status') as f:
+                        for line in f:
+                            if line.startswith('VmRSS:'):
+                                before_kb = int(line.split()[1])
+                                break
+                except Exception:
+                    pass
+                gc.collect()
+                if before_kb:
+                    log(f"  [gc] RSS {before_kb/1024:.0f}MB, forcing collection")
         if saved_for_route > 0:
             success += 1.
 

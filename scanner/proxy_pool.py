@@ -61,11 +61,16 @@ logger.setLevel(logging.INFO)
 # Public, free, no-auth HTTPS proxy sources. We fetch the
 # raw text-list versions because ProxyScrape's binary API sometimes
 # 5xx's on UGREEN (saw 502 from proxy-list.download during testing).
+# Hermes 2026-07-10: switched jetkai to HTTPS-only file — the general
+# proxies.txt has 50% SOCKS ports (4145/4153) that fail as HTTP proxies,
+# polluting the pool with non-functional candidates.
 PROXY_SOURCES = [
     "https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/http.txt",
     "https://raw.githubusercontent.com/roosterkid/openproxylist/main/HTTPS_RAW.txt",
     "https://raw.githubusercontent.com/zloi-user/hideip.me/main/https.txt",
-    "https://raw.githubusercontent.com/jetkai/proxy-list/main/online-proxies/txt/proxies.txt",
+    # Residential-heavy Thai/Malaysian ISP proxies. Jetkai's HTTPS-only file
+    # is ~70% TOT/Telekom which is ISP-allocated (residential-grade).
+    "https://raw.githubusercontent.com/jetkai/proxy-list/main/online-proxies/txt/proxies-https.txt",
 ]
 # Fallback binary API — has CORS/cert issues sometimes but worth a shot
 PROXY_SCRAPE_API = (
@@ -116,6 +121,15 @@ BAD_ASNS = {
     # Smaller known DCs (partial list — extend as we see them)
     "AS198651",  # STARK INDUSTRIES (often abused)
     "AS214996",  # Abuser-hosting (reported 2026)
+    # Hermes 2026-07-10: discovered via ASN-checking 15 jetkai 1.x.x.x
+    # IPs (which are mostly residential TOT/Telekom). The 1 sample that
+    # was actually datacenter was Tencent Cloud Beijing.
+    "AS45090",   # Tencent Cloud (Beijing) — datacenter
+    "AS55990",   # Huawei Cloud
+    "AS37963",   # Alibaba Cloud
+    "AS45102",   # Alibaba Cloud
+    "AS132203",  # Tencent Cloud (international)
+    "AS24444",   # Shandong Net Silver Digital Tech (often abused)
 }
 
 # ipapi.co is rate-limited at 1000 req/day on the free tier. We share
@@ -184,8 +198,12 @@ PROXY_TTL_S = 300
 MAX_POOL_SIZE = 30
 # How long to spend validating a single candidate.
 VALIDATION_TIMEOUT_S = 5
-# Maximum parallel validation threads.
-VALIDATION_WORKERS = 8
+# Maximum parallel validation threads. Hermes 2026-07-10: reduced from 8
+# to 4 — each thread creates a curl_cffi session and holds it for the
+# duration. With 8 threads × ~30MB each + scanner's main thread, we
+# easily hit the 256MB container cgroup limit and get OOM-killed (exit
+# 137). 4 workers keeps us around 150MB.
+VALIDATION_WORKERS = 4
 # Cap on total validation wall-clock. After this many seconds we
 # keep whatever we've validated so far and proceed — better a small
 # pool than no pool at all.
