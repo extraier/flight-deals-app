@@ -97,34 +97,51 @@ function computeDestLevelDrop(d: Deal): {
 } | null {
   const dates = d.cheapestDates || [];
   if (dates.length === 0) return null;
-  // Today's destination low: cheapest price across all dates (ties broken
-  // by earliest calendar date so the displayed dep is the soonest useful).
-  const priced = dates
-    .filter((cd) => cd.price > 0)
-    .sort((a, b) =>
-      a.price - b.price
-      || (a.month ?? 99) - (b.month ?? 99)
-      || (a.day ?? 99) - (b.day ?? 99)
-    );
-  if (priced.length === 0) return null;
-  const todayLow = priced[0].price;
-  const todayCd = priced[0];
-  // Yesterday's destination low: min over history.1d.price (only positive values).
-  // Cast through unknown to satisfy TS — '1d' is a valid key but the type
-  // was inferred before we added the destination-level drop fallback.
-  const yestPairs = dates
-    .map((cd) => {
-      const h = cd.history as Record<string, { price?: number }> | undefined;
-      const p = h?.['1d']?.price ?? 0;
-      return p;
-    })
-    .filter((p) => p > 0);
-  if (yestPairs.length === 0) return null;
-  const yestLow = Math.min(...yestPairs);
-  const dropAmount = yestLow - todayLow; // positive = drop
+  // Hermes 2026-07-20: match the new exporter logic. Per-date drops scoped to
+  // TOP 5 cheapest dates; filter out non-drops (pct >= 0) BEFORE taking median.
+  // The old `todayLow = min(all_dates_prices)` + `yestLow = min(all_dates_1d_baselines)`
+  // formula produced fake drops by comparing different dates' prices.
+  const top5 = dates.slice(0, 5);
+  const perDateDrops: Array<{ pct: number; cd: typeof dates[number]; todayPrice: number; yestPrice: number }> = [];
+  for (const cd of top5) {
+    const h = cd.history as Record<string, { price?: number }> | undefined;
+    const yestPrice = h?.['1d']?.price ?? 0;
+    const todayPrice = cd.price;
+    if (yestPrice > 0 && todayPrice > 0) {
+      const pct = (todayPrice - yestPrice) / yestPrice * 100;
+      perDateDrops.push({ pct, cd, todayPrice, yestPrice });
+    }
+  }
+  if (perDateDrops.length === 0) return null;
+  // Hermes 2026-07-20: filter out non-drops before median — otherwise median of
+  // [(-8.3), 0, 0, 0, 0] = 0 hides real drops when only 1-2 of top 5 have a baseline.
+  const realDrops = perDateDrops.filter((d) => d.pct < 0);
+  let chosen: { pct: number; cd: typeof dates[number]; todayPrice: number; yestPrice: number };
+  if (realDrops.length > 0) {
+    const sorted = [...realDrops].sort((a, b) => a.pct - b.pct);
+    const mid = Math.floor(sorted.length / 2);
+    if (sorted.length % 2 === 0) {
+      const medianPct = (sorted[mid - 1].pct + sorted[mid].pct) / 2;
+      // pick the entry closest to median
+      chosen = sorted.reduce((best, cur) => Math.abs(cur.pct - medianPct) < Math.abs(best.pct - medianPct) ? cur : best);
+    } else {
+      chosen = sorted[mid];
+    }
+  } else {
+    // All top-5 are unchanged — no real drop
+    return null;
+  }
+  const { pct, todayPrice, yestPrice } = chosen;
+  const dropAmount = yestPrice - todayPrice; // positive = drop
   if (dropAmount <= 0) return null;
-  const dropPct = Math.round((dropAmount / yestLow) * 100);
-  return { oldPrice: yestLow, newPrice: todayLow, dropAmount, dropPct, cd: todayCd };
+  const dropPct = Math.round(pct * 10) / 10;
+  return {
+    oldPrice: yestPrice,
+    newPrice: todayPrice,
+    dropAmount,
+    dropPct,
+    cd: chosen.cd,
+  };
 }
 
 function buildDropList(deals: Deal[], departure: Departure): DropRow[] {
