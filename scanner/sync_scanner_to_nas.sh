@@ -111,7 +111,13 @@ for f in "${changed[@]}"; do
   else
     local_path="$HOME/$f"
   fi
-  if cat "$local_path" | nas_ssh "cat > '$NAS_DIR/$f'"; then
+  # Hermes 2026-07-26: pre-rm the destination so we can overwrite root-owned
+  # 0644 files. /volume1/flight-scanner/ is mode 0777 so unlink works for any
+  # user, but the file contents themselves may be root:root 0644 (set by the
+  # docker cp / scanner container that originally placed them there). Plain
+  # `cat > $NAS_DIR/$f` then fails with "Permission denied". rm -f first lets
+  # us recreate. No-op when the file is already openclaw-owned.
+  if cat "$local_path" | nas_ssh "rm -f '$NAS_DIR/$f' && cat > '$NAS_DIR/$f'"; then
     # Restore executable bit for .sh files (cat > strips it on most volumes)
     case "$f" in
       *.sh) nas_ssh "chmod +x '$NAS_DIR/$f'" >/dev/null 2>&1 ;;

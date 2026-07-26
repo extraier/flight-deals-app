@@ -1,8 +1,205 @@
 {
-  "generated": "2026-07-25T03:56:21.331521",
+  "generated": "2026-07-26T02:52:59.889870",
   "source": "fli_calendar.db",
   "departure": "SZX",
   "results": [
+    {
+      "route": "SZX→XIY",
+      "destination": {
+        "name": "西安",
+        "code": "XIY",
+        "region": "中國"
+      },
+      "price": 1147,
+      "currency": "HKD",
+      "badge": {
+        "carryOn": false,
+        "cheapDays": 417
+      },
+      "typicalPrice": 1864,
+      "cheapestDates": [
+        {
+          "day": 20,
+          "month": 12,
+          "year": 2026,
+          "price": 1147,
+          "stay": 3,
+          "history": {
+            "1d": {
+              "price": 1448,
+              "diff": -301,
+              "pct": -20.8
+            }
+          }
+        },
+        {
+          "day": 21,
+          "month": 12,
+          "year": 2026,
+          "price": 1147,
+          "stay": 3,
+          "history": {
+            "1d": {
+              "price": 1448,
+              "diff": -301,
+              "pct": -20.8
+            }
+          }
+        },
+        {
+          "day": 22,
+          "month": 12,
+          "year": 2026,
+          "price": 1147,
+          "stay": 3,
+          "history": {
+            "1d": {
+              "price": 1297,
+              "diff": -150,
+              "pct": -11.6
+            }
+          }
+        },
+        {
+          "day": 5,
+          "month": 12,
+          "year": 2026,
+          "price": 1292,
+          "stay": 3,
+          "history": {
+            "1d": {
+              "price": 996,
+              "diff": 296,
+              "pct": 29.7
+            },
+            "7d": {
+              "price": 1297,
+              "diff": -5,
+              "pct": -0.4
+            }
+          }
+        },
+        {
+          "day": 6,
+          "month": 12,
+          "year": 2026,
+          "price": 1292,
+          "stay": 3,
+          "history": {
+            "1d": {
+              "price": 996,
+              "diff": 296,
+              "pct": 29.7
+            },
+            "7d": {
+              "price": 1297,
+              "diff": -5,
+              "pct": -0.4
+            }
+          }
+        },
+        {
+          "day": 7,
+          "month": 12,
+          "year": 2026,
+          "price": 1292,
+          "stay": 3,
+          "history": {
+            "1d": {
+              "price": 1147,
+              "diff": 145,
+              "pct": 12.6
+            },
+            "7d": {
+              "price": 1447,
+              "diff": -155,
+              "pct": -10.7
+            }
+          }
+        },
+        {
+          "day": 8,
+          "month": 12,
+          "year": 2026,
+          "price": 1292,
+          "stay": 3,
+          "history": {
+            "1d": {
+              "price": 996,
+              "diff": 296,
+              "pct": 29.7
+            },
+            "7d": {
+              "price": 1297,
+              "diff": -5,
+              "pct": -0.4
+            }
+          }
+        },
+        {
+          "day": 9,
+          "month": 12,
+          "year": 2026,
+          "price": 1292,
+          "stay": 3,
+          "history": {
+            "1d": {
+              "price": 996,
+              "diff": 296,
+              "pct": 29.7
+            },
+            "7d": {
+              "price": 1297,
+              "diff": -5,
+              "pct": -0.4
+            }
+          }
+        },
+        {
+          "day": 3,
+          "month": 12,
+          "year": 2026,
+          "price": 1292,
+          "stay": 7,
+          "history": {
+            "1d": {
+              "price": 996,
+              "diff": 296,
+              "pct": 29.7
+            },
+            "7d": {
+              "price": 1297,
+              "diff": -5,
+              "pct": -0.4
+            }
+          }
+        },
+        {
+          "day": 4,
+          "month": 12,
+          "year": 2026,
+          "price": 1292,
+          "stay": 7,
+          "history": {
+            "1d": {
+              "price": 996,
+              "diff": 296,
+              "pct": 29.7
+            },
+            "7d": {
+              "price": 1297,
+              "diff": -5,
+              "pct": -0.4
+            }
+          }
+        }
+      ],
+      "totalDestinations": 50,
+      "firstDetected": null,
+      "dropAmount": 151,
+      "dropPct": 15.2,
+      "dropPrice": 1147
+    },
     {
       "route": "SZX→SGN",
       "destination": {
@@ -14,7 +211,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 420
+        "cheapDays": 427
       },
       "typicalPrice": 2193,
       "cheapestDates": [
@@ -26,9 +223,19 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 2030,
-              "diff": -774,
-              "pct": -38.1
+              "price": 2032,
+              "diff": -776,
+              "pct": -38.2
+            },
+            "4d": {
+              "price": 1957,
+              "diff": -701,
+              "pct": -35.8
+            },
+            "7d": {
+              "price": 1958,
+              "diff": -702,
+              "pct": -35.9
             }
           }
         },
@@ -40,9 +247,19 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 2030,
-              "diff": -774,
-              "pct": -38.1
+              "price": 2032,
+              "diff": -776,
+              "pct": -38.2
+            },
+            "4d": {
+              "price": 2031,
+              "diff": -775,
+              "pct": -38.2
+            },
+            "7d": {
+              "price": 2033,
+              "diff": -777,
+              "pct": -38.2
             }
           }
         },
@@ -54,9 +271,19 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 2030,
-              "diff": -773,
+              "price": 2032,
+              "diff": -775,
               "pct": -38.1
+            },
+            "4d": {
+              "price": 1957,
+              "diff": -700,
+              "pct": -35.8
+            },
+            "7d": {
+              "price": 1958,
+              "diff": -701,
+              "pct": -35.8
             }
           }
         },
@@ -68,9 +295,19 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 2030,
-              "diff": -773,
+              "price": 2032,
+              "diff": -775,
               "pct": -38.1
+            },
+            "4d": {
+              "price": 2031,
+              "diff": -774,
+              "pct": -38.1
+            },
+            "7d": {
+              "price": 2033,
+              "diff": -776,
+              "pct": -38.2
             }
           }
         },
@@ -82,9 +319,19 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 2313,
-              "diff": -1056,
+              "price": 2314,
+              "diff": -1057,
               "pct": -45.7
+            },
+            "4d": {
+              "price": 2119,
+              "diff": -862,
+              "pct": -40.7
+            },
+            "7d": {
+              "price": 2122,
+              "diff": -865,
+              "pct": -40.8
             }
           }
         },
@@ -96,9 +343,19 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 2030,
-              "diff": -773,
+              "price": 2032,
+              "diff": -775,
               "pct": -38.1
+            },
+            "4d": {
+              "price": 1957,
+              "diff": -700,
+              "pct": -35.8
+            },
+            "7d": {
+              "price": 1958,
+              "diff": -701,
+              "pct": -35.8
             }
           }
         },
@@ -110,9 +367,19 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 2030,
-              "diff": -773,
+              "price": 2032,
+              "diff": -775,
               "pct": -38.1
+            },
+            "4d": {
+              "price": 1957,
+              "diff": -700,
+              "pct": -35.8
+            },
+            "7d": {
+              "price": 1958,
+              "diff": -701,
+              "pct": -35.8
             }
           }
         },
@@ -124,9 +391,19 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 2030,
-              "diff": -350,
-              "pct": -17.2
+              "price": 2032,
+              "diff": -352,
+              "pct": -17.3
+            },
+            "4d": {
+              "price": 2031,
+              "diff": -351,
+              "pct": -17.3
+            },
+            "7d": {
+              "price": 2033,
+              "diff": -353,
+              "pct": -17.4
             }
           }
         },
@@ -141,6 +418,16 @@
               "price": 2055,
               "diff": -374,
               "pct": -18.2
+            },
+            "4d": {
+              "price": 2120,
+              "diff": -439,
+              "pct": -20.7
+            },
+            "7d": {
+              "price": 2122,
+              "diff": -441,
+              "pct": -20.8
             }
           }
         },
@@ -152,110 +439,28 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 2120,
-              "diff": -439,
+              "price": 2121,
+              "diff": -440,
               "pct": -20.7
+            },
+            "4d": {
+              "price": 2119,
+              "diff": -438,
+              "pct": -20.7
+            },
+            "7d": {
+              "price": 2122,
+              "diff": -441,
+              "pct": -20.8
             }
           }
         }
       ],
       "totalDestinations": 50,
       "firstDetected": "2026-07-25T00:02:07.132392",
-      "dropAmount": -774,
-      "dropPct": -38.1,
+      "dropAmount": -776,
+      "dropPct": -38.2,
       "dropPrice": 1256
-    },
-    {
-      "route": "SZX→XIY",
-      "destination": {
-        "name": "西安",
-        "code": "XIY",
-        "region": "中國"
-      },
-      "price": 1292,
-      "currency": "HKD",
-      "badge": {
-        "carryOn": false,
-        "cheapDays": 406
-      },
-      "typicalPrice": 1864,
-      "cheapestDates": [
-        {
-          "day": 5,
-          "month": 12,
-          "year": 2026,
-          "price": 1292,
-          "stay": 3
-        },
-        {
-          "day": 6,
-          "month": 12,
-          "year": 2026,
-          "price": 1292,
-          "stay": 3
-        },
-        {
-          "day": 7,
-          "month": 12,
-          "year": 2026,
-          "price": 1292,
-          "stay": 3
-        },
-        {
-          "day": 8,
-          "month": 12,
-          "year": 2026,
-          "price": 1292,
-          "stay": 3
-        },
-        {
-          "day": 9,
-          "month": 12,
-          "year": 2026,
-          "price": 1292,
-          "stay": 3
-        },
-        {
-          "day": 3,
-          "month": 12,
-          "year": 2026,
-          "price": 1292,
-          "stay": 7
-        },
-        {
-          "day": 4,
-          "month": 12,
-          "year": 2026,
-          "price": 1292,
-          "stay": 7
-        },
-        {
-          "day": 5,
-          "month": 12,
-          "year": 2026,
-          "price": 1292,
-          "stay": 7
-        },
-        {
-          "day": 6,
-          "month": 12,
-          "year": 2026,
-          "price": 1292,
-          "stay": 7
-        },
-        {
-          "day": 8,
-          "month": 12,
-          "year": 2026,
-          "price": 1292,
-          "stay": 7
-        }
-      ],
-      "totalDestinations": 50,
-      "firstDetected": null,
-      "dropAmount": 0,
-      "dropPct": 0.0,
-      "dropPrice": 1292
     },
     {
       "route": "SZX→KUL",
@@ -285,8 +490,8 @@
               "pct": -28.0
             },
             "4d": {
-              "price": 2012,
-              "diff": -541,
+              "price": 2011,
+              "diff": -540,
               "pct": -26.9
             },
             "7d": {
@@ -333,9 +538,9 @@
               "pct": -15.2
             },
             "4d": {
-              "price": 1866,
-              "diff": -284,
-              "pct": -15.2
+              "price": 1864,
+              "diff": -282,
+              "pct": -15.1
             },
             "7d": {
               "price": 1864,
@@ -352,14 +557,14 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 2011,
-              "diff": -425,
-              "pct": -21.1
-            },
-            "4d": {
               "price": 2012,
               "diff": -426,
               "pct": -21.2
+            },
+            "4d": {
+              "price": 2011,
+              "diff": -425,
+              "pct": -21.1
             },
             "7d": {
               "price": 1864,
@@ -376,14 +581,14 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 2011,
-              "diff": -425,
-              "pct": -21.1
-            },
-            "4d": {
               "price": 2012,
               "diff": -426,
               "pct": -21.2
+            },
+            "4d": {
+              "price": 2011,
+              "diff": -425,
+              "pct": -21.1
             },
             "7d": {
               "price": 1864,
@@ -429,9 +634,9 @@
               "pct": -15.0
             },
             "4d": {
-              "price": 1866,
-              "diff": -280,
-              "pct": -15.0
+              "price": 1864,
+              "diff": -278,
+              "pct": -14.9
             },
             "7d": {
               "price": 1864,
@@ -453,9 +658,9 @@
               "pct": -15.0
             },
             "4d": {
-              "price": 1866,
-              "diff": -280,
-              "pct": -15.0
+              "price": 1864,
+              "diff": -278,
+              "pct": -14.9
             },
             "7d": {
               "price": 1864,
@@ -477,9 +682,9 @@
               "pct": -22.4
             },
             "4d": {
-              "price": 2012,
-              "diff": -426,
-              "pct": -21.2
+              "price": 2011,
+              "diff": -425,
+              "pct": -21.1
             },
             "7d": {
               "price": 1864,
@@ -501,9 +706,9 @@
               "pct": -22.4
             },
             "4d": {
-              "price": 2012,
-              "diff": -426,
-              "pct": -21.2
+              "price": 2011,
+              "diff": -425,
+              "pct": -21.1
             },
             "7d": {
               "price": 1864,
@@ -526,7 +731,7 @@
         "code": "BKK",
         "region": "東南亞"
       },
-      "price": 1614,
+      "price": 1613,
       "currency": "HKD",
       "badge": {
         "carryOn": false,
@@ -534,6 +739,30 @@
       },
       "typicalPrice": 2452,
       "cheapestDates": [
+        {
+          "day": 21,
+          "month": 8,
+          "year": 2026,
+          "price": 1613,
+          "stay": 14,
+          "history": {
+            "1d": {
+              "price": 1613,
+              "diff": 0,
+              "pct": 0.0
+            },
+            "4d": {
+              "price": 1707,
+              "diff": -94,
+              "pct": -5.5
+            },
+            "7d": {
+              "price": 1614,
+              "diff": -1,
+              "pct": -0.1
+            }
+          }
+        },
         {
           "day": 17,
           "month": 8,
@@ -547,9 +776,9 @@
               "pct": 0.0
             },
             "4d": {
-              "price": 1616,
-              "diff": -2,
-              "pct": -0.1
+              "price": 1614,
+              "diff": 0,
+              "pct": 0.0
             },
             "7d": {
               "price": 1614,
@@ -571,9 +800,9 @@
               "pct": 0.0
             },
             "4d": {
-              "price": 1616,
-              "diff": -2,
-              "pct": -0.1
+              "price": 1614,
+              "diff": 0,
+              "pct": 0.0
             },
             "7d": {
               "price": 1614,
@@ -590,14 +819,14 @@
           "stay": 14,
           "history": {
             "1d": {
+              "price": 1706,
+              "diff": -92,
+              "pct": -5.4
+            },
+            "4d": {
               "price": 1614,
               "diff": 0,
               "pct": 0.0
-            },
-            "4d": {
-              "price": 1616,
-              "diff": -2,
-              "pct": -0.1
             },
             "7d": {
               "price": 1614,
@@ -619,9 +848,9 @@
               "pct": 0.0
             },
             "4d": {
-              "price": 1616,
-              "diff": -2,
-              "pct": -0.1
+              "price": 1614,
+              "diff": 0,
+              "pct": 0.0
             },
             "7d": {
               "price": 1614,
@@ -643,9 +872,9 @@
               "pct": -9.7
             },
             "4d": {
-              "price": 1616,
-              "diff": -2,
-              "pct": -0.1
+              "price": 1707,
+              "diff": -93,
+              "pct": -5.4
             },
             "7d": {
               "price": 1614,
@@ -662,14 +891,14 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 1984,
-              "diff": -370,
-              "pct": -18.6
+              "price": 2077,
+              "diff": -463,
+              "pct": -22.3
             },
             "4d": {
-              "price": 1616,
-              "diff": -2,
-              "pct": -0.1
+              "price": 1614,
+              "diff": 0,
+              "pct": 0.0
             },
             "7d": {
               "price": 1614,
@@ -691,9 +920,9 @@
               "pct": 0.0
             },
             "4d": {
-              "price": 1616,
-              "diff": -2,
-              "pct": -0.1
+              "price": 1614,
+              "diff": 0,
+              "pct": 0.0
             },
             "7d": {
               "price": 1614,
@@ -715,9 +944,9 @@
               "pct": 0.1
             },
             "4d": {
-              "price": 1616,
-              "diff": 0,
-              "pct": 0.0
+              "price": 1614,
+              "diff": 2,
+              "pct": 0.1
             },
             "7d": {
               "price": 1614,
@@ -739,38 +968,14 @@
               "pct": 0.1
             },
             "4d": {
-              "price": 1616,
-              "diff": 0,
-              "pct": 0.0
+              "price": 1614,
+              "diff": 2,
+              "pct": 0.1
             },
             "7d": {
               "price": 1614,
               "diff": 2,
               "pct": 0.1
-            }
-          }
-        },
-        {
-          "day": 5,
-          "month": 10,
-          "year": 2026,
-          "price": 1616,
-          "stay": 14,
-          "history": {
-            "1d": {
-              "price": 2355,
-              "diff": -739,
-              "pct": -31.4
-            },
-            "4d": {
-              "price": 2068,
-              "diff": -452,
-              "pct": -21.9
-            },
-            "7d": {
-              "price": 2066,
-              "diff": -450,
-              "pct": -21.8
             }
           }
         }
@@ -779,7 +984,7 @@
       "firstDetected": null,
       "dropAmount": 0,
       "dropPct": 0.0,
-      "dropPrice": 1614
+      "dropPrice": 1613
     },
     {
       "route": "SZX→MNL",
@@ -792,7 +997,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 501
+        "cheapDays": 507
       },
       "typicalPrice": 2840,
       "cheapestDates": [
@@ -823,8 +1028,8 @@
               "pct": -33.7
             },
             "4d": {
-              "price": 2588,
-              "diff": -920,
+              "price": 2586,
+              "diff": -918,
               "pct": -35.5
             },
             "7d": {
@@ -846,28 +1051,14 @@
           "month": 1,
           "year": 2027,
           "price": 1669,
-          "stay": 7,
-          "history": {
-            "7d": {
-              "price": 2712,
-              "diff": -1043,
-              "pct": -38.5
-            }
-          }
+          "stay": 7
         },
         {
           "day": 27,
           "month": 1,
           "year": 2027,
           "price": 1669,
-          "stay": 3,
-          "history": {
-            "7d": {
-              "price": 2886,
-              "diff": -1217,
-              "pct": -42.2
-            }
-          }
+          "stay": 3
         },
         {
           "day": 26,
@@ -876,10 +1067,15 @@
           "price": 1691,
           "stay": 7,
           "history": {
-            "7d": {
-              "price": 2712,
-              "diff": -1021,
-              "pct": -37.6
+            "1d": {
+              "price": 3095,
+              "diff": -1404,
+              "pct": -45.4
+            },
+            "4d": {
+              "price": 2889,
+              "diff": -1198,
+              "pct": -41.5
             }
           }
         },
@@ -888,14 +1084,7 @@
           "month": 1,
           "year": 2027,
           "price": 1691,
-          "stay": 14,
-          "history": {
-            "7d": {
-              "price": 2712,
-              "diff": -1021,
-              "pct": -37.6
-            }
-          }
+          "stay": 14
         },
         {
           "day": 10,
@@ -910,9 +1099,9 @@
               "pct": -16.5
             },
             "4d": {
-              "price": 2028,
-              "diff": -336,
-              "pct": -16.6
+              "price": 2025,
+              "diff": -333,
+              "pct": -16.4
             },
             "7d": {
               "price": 2025,
@@ -958,14 +1147,14 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 1698,
-              "diff": -4,
-              "pct": -0.2
+              "price": 1814,
+              "diff": -120,
+              "pct": -6.6
             },
             "4d": {
-              "price": 1698,
-              "diff": -4,
-              "pct": -0.2
+              "price": 1695,
+              "diff": -1,
+              "pct": -0.1
             },
             "7d": {
               "price": 1700,
@@ -987,9 +1176,9 @@
               "pct": -0.2
             },
             "4d": {
-              "price": 1698,
-              "diff": -3,
-              "pct": -0.2
+              "price": 1695,
+              "diff": 0,
+              "pct": 0.0
             },
             "7d": {
               "price": 1700,
@@ -1006,14 +1195,14 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 2043,
-              "diff": -344,
-              "pct": -16.8
+              "price": 2159,
+              "diff": -460,
+              "pct": -21.3
             },
             "4d": {
-              "price": 1698,
-              "diff": 1,
-              "pct": 0.1
+              "price": 1811,
+              "diff": -112,
+              "pct": -6.2
             },
             "7d": {
               "price": 1700,
@@ -1030,14 +1219,14 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 1698,
-              "diff": 1,
-              "pct": 0.1
+              "price": 1814,
+              "diff": -115,
+              "pct": -6.3
             },
             "4d": {
-              "price": 1698,
-              "diff": 1,
-              "pct": 0.1
+              "price": 1695,
+              "diff": 4,
+              "pct": 0.2
             },
             "7d": {
               "price": 1700,
@@ -1054,14 +1243,14 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 1927,
-              "diff": -227,
-              "pct": -11.8
+              "price": 2938,
+              "diff": -1238,
+              "pct": -42.1
             },
             "4d": {
-              "price": 1698,
-              "diff": 2,
-              "pct": 0.1
+              "price": 1695,
+              "diff": 5,
+              "pct": 0.3
             },
             "7d": {
               "price": 1700,
@@ -1078,14 +1267,14 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 2156,
-              "diff": -456,
-              "pct": -21.2
+              "price": 2503,
+              "diff": -803,
+              "pct": -32.1
             },
             "4d": {
-              "price": 1929,
-              "diff": -229,
-              "pct": -11.9
+              "price": 1923,
+              "diff": -223,
+              "pct": -11.6
             },
             "7d": {
               "price": 1700,
@@ -1107,9 +1296,9 @@
               "pct": 0.1
             },
             "4d": {
-              "price": 1698,
-              "diff": 2,
-              "pct": 0.1
+              "price": 1695,
+              "diff": 5,
+              "pct": 0.3
             },
             "7d": {
               "price": 1700,
@@ -1126,14 +1315,14 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 1930,
-              "diff": -114,
-              "pct": -5.9
+              "price": 2277,
+              "diff": -461,
+              "pct": -20.2
             },
             "4d": {
-              "price": 1814,
-              "diff": 2,
-              "pct": 0.1
+              "price": 1694,
+              "diff": 122,
+              "pct": 7.2
             },
             "7d": {
               "price": 1816,
@@ -1155,9 +1344,9 @@
               "pct": 7.1
             },
             "4d": {
-              "price": 1698,
-              "diff": 120,
-              "pct": 7.1
+              "price": 1695,
+              "diff": 123,
+              "pct": 7.3
             },
             "7d": {
               "price": 1700,
@@ -1191,7 +1380,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 542
+        "cheapDays": 544
       },
       "typicalPrice": 2397,
       "cheapestDates": [
@@ -1283,7 +1472,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 594
+        "cheapDays": 597
       },
       "typicalPrice": 2733,
       "cheapestDates": [
@@ -1295,9 +1484,19 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 2608,
-              "diff": -798,
+              "price": 2607,
+              "diff": -797,
               "pct": -30.6
+            },
+            "4d": {
+              "price": 2913,
+              "diff": -1103,
+              "pct": -37.9
+            },
+            "7d": {
+              "price": 2915,
+              "diff": -1105,
+              "pct": -37.9
             }
           }
         },
@@ -1309,8 +1508,18 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 2915,
-              "diff": -1105,
+              "price": 2914,
+              "diff": -1104,
+              "pct": -37.9
+            },
+            "4d": {
+              "price": 2913,
+              "diff": -1103,
+              "pct": -37.9
+            },
+            "7d": {
+              "price": 2914,
+              "diff": -1104,
               "pct": -37.9
             }
           }
@@ -1323,9 +1532,19 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 3099,
-              "diff": -1289,
-              "pct": -41.6
+              "price": 3216,
+              "diff": -1406,
+              "pct": -43.7
+            },
+            "4d": {
+              "price": 3221,
+              "diff": -1411,
+              "pct": -43.8
+            },
+            "7d": {
+              "price": 3226,
+              "diff": -1416,
+              "pct": -43.9
             }
           }
         },
@@ -1337,9 +1556,19 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 1818,
-              "diff": -7,
-              "pct": -0.4
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
+            },
+            "4d": {
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
+            },
+            "7d": {
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
             }
           }
         },
@@ -1351,9 +1580,19 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 1818,
-              "diff": -7,
-              "pct": -0.4
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
+            },
+            "4d": {
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
+            },
+            "7d": {
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
             }
           }
         },
@@ -1365,9 +1604,19 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 1818,
-              "diff": -7,
-              "pct": -0.4
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
+            },
+            "4d": {
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
+            },
+            "7d": {
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
             }
           }
         },
@@ -1379,9 +1628,19 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 1818,
-              "diff": -7,
-              "pct": -0.4
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
+            },
+            "4d": {
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
+            },
+            "7d": {
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
             }
           }
         },
@@ -1393,9 +1652,19 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 1818,
-              "diff": -7,
-              "pct": -0.4
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
+            },
+            "4d": {
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
+            },
+            "7d": {
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
             }
           }
         },
@@ -1407,9 +1676,19 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 1818,
-              "diff": -7,
-              "pct": -0.4
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
+            },
+            "4d": {
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
+            },
+            "7d": {
+              "price": 1817,
+              "diff": -6,
+              "pct": -0.3
             }
           }
         },
@@ -1421,16 +1700,26 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 2586,
-              "diff": -774,
+              "price": 2585,
+              "diff": -773,
               "pct": -29.9
+            },
+            "4d": {
+              "price": 2584,
+              "diff": -772,
+              "pct": -29.9
+            },
+            "7d": {
+              "price": 2575,
+              "diff": -763,
+              "pct": -29.6
             }
           }
         }
       ],
       "totalDestinations": 50,
       "firstDetected": null,
-      "dropAmount": -8,
+      "dropAmount": -7,
       "dropPct": -0.4,
       "dropPrice": 1810
     },
@@ -1445,9 +1734,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 468
+        "cheapDays": 473
       },
-      "typicalPrice": 2557,
+      "typicalPrice": 2560,
       "cheapestDates": [
         {
           "day": 12,
@@ -1476,9 +1765,9 @@
               "pct": -23.9
             },
             "4d": {
-              "price": 2563,
-              "diff": -694,
-              "pct": -27.1
+              "price": 2560,
+              "diff": -691,
+              "pct": -27.0
             },
             "7d": {
               "price": 2561,
@@ -1536,10 +1825,10 @@
           "price": 1875,
           "stay": 3,
           "history": {
-            "7d": {
-              "price": 2931,
-              "diff": -1056,
-              "pct": -36.0
+            "1d": {
+              "price": 2757,
+              "diff": -882,
+              "pct": -32.0
             }
           }
         }
@@ -1561,9 +1850,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 542
+        "cheapDays": 541
       },
-      "typicalPrice": 2808,
+      "typicalPrice": 2801,
       "cheapestDates": [
         {
           "day": 17,
@@ -1572,10 +1861,10 @@
           "price": 1965,
           "stay": 14,
           "history": {
-            "7d": {
-              "price": 1965,
-              "diff": 0,
-              "pct": 0.0
+            "4d": {
+              "price": 1967,
+              "diff": -2,
+              "pct": -0.1
             }
           }
         },
@@ -1584,19 +1873,7 @@
           "month": 10,
           "year": 2026,
           "price": 1965,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 1966,
-              "diff": -1,
-              "pct": -0.1
-            },
-            "7d": {
-              "price": 1965,
-              "diff": 0,
-              "pct": 0.0
-            }
-          }
+          "stay": 7
         },
         {
           "day": 17,
@@ -1605,10 +1882,10 @@
           "price": 1965,
           "stay": 7,
           "history": {
-            "7d": {
-              "price": 1965,
-              "diff": 0,
-              "pct": 0.0
+            "4d": {
+              "price": 1967,
+              "diff": -2,
+              "pct": -0.1
             }
           }
         },
@@ -1619,15 +1896,15 @@
           "price": 1965,
           "stay": 7,
           "history": {
-            "1d": {
-              "price": 2082,
-              "diff": -117,
-              "pct": -5.6
-            },
             "4d": {
               "price": 1965,
               "diff": 0,
               "pct": 0.0
+            },
+            "7d": {
+              "price": 2196,
+              "diff": -231,
+              "pct": -10.5
             }
           }
         },
@@ -1652,9 +1929,9 @@
           "price": 1965,
           "stay": 3,
           "history": {
-            "1d": {
-              "price": 1966,
-              "diff": -1,
+            "4d": {
+              "price": 1967,
+              "diff": -2,
               "pct": -0.1
             }
           }
@@ -1664,19 +1941,7 @@
           "month": 10,
           "year": 2026,
           "price": 1966,
-          "stay": 14,
-          "history": {
-            "1d": {
-              "price": 1966,
-              "diff": 0,
-              "pct": 0.0
-            },
-            "7d": {
-              "price": 1965,
-              "diff": 1,
-              "pct": 0.1
-            }
-          }
+          "stay": 14
         },
         {
           "day": 21,
@@ -1685,10 +1950,10 @@
           "price": 1966,
           "stay": 14,
           "history": {
-            "1d": {
-              "price": 1966,
-              "diff": 0,
-              "pct": 0.0
+            "4d": {
+              "price": 1967,
+              "diff": -1,
+              "pct": -0.1
             }
           }
         },
@@ -1697,14 +1962,7 @@
           "month": 11,
           "year": 2026,
           "price": 1966,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 1966,
-              "diff": 0,
-              "pct": 0.0
-            }
-          }
+          "stay": 3
         },
         {
           "day": 21,
@@ -1713,18 +1971,18 @@
           "price": 1967,
           "stay": 7,
           "history": {
-            "1d": {
-              "price": 1966,
-              "diff": 1,
-              "pct": 0.1
+            "4d": {
+              "price": 1967,
+              "diff": 0,
+              "pct": 0.0
             }
           }
         }
       ],
       "totalDestinations": 50,
       "firstDetected": null,
-      "dropAmount": -1,
-      "dropPct": -0.1,
+      "dropAmount": 0,
+      "dropPct": 0.0,
       "dropPrice": 1965
     },
     {
@@ -1738,7 +1996,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 625
+        "cheapDays": 622
       },
       "typicalPrice": 2411,
       "cheapestDates": [
@@ -1755,9 +2013,9 @@
               "pct": 10.7
             },
             "4d": {
-              "price": 1975,
-              "diff": 109,
-              "pct": 5.5
+              "price": 1973,
+              "diff": 111,
+              "pct": 5.6
             },
             "7d": {
               "price": 1973,
@@ -1779,9 +2037,9 @@
               "pct": 10.7
             },
             "4d": {
-              "price": 1975,
-              "diff": 109,
-              "pct": 5.5
+              "price": 1973,
+              "diff": 111,
+              "pct": 5.6
             },
             "7d": {
               "price": 1973,
@@ -1803,9 +2061,9 @@
               "pct": 10.7
             },
             "4d": {
-              "price": 1975,
-              "diff": 109,
-              "pct": 5.5
+              "price": 1973,
+              "diff": 111,
+              "pct": 5.6
             },
             "7d": {
               "price": 1973,
@@ -1827,9 +2085,9 @@
               "pct": 10.7
             },
             "4d": {
-              "price": 1975,
-              "diff": 109,
-              "pct": 5.5
+              "price": 1973,
+              "diff": 111,
+              "pct": 5.6
             },
             "7d": {
               "price": 1973,
@@ -1851,9 +2109,9 @@
               "pct": 10.7
             },
             "4d": {
-              "price": 1975,
-              "diff": 109,
-              "pct": 5.5
+              "price": 1973,
+              "diff": 111,
+              "pct": 5.6
             },
             "7d": {
               "price": 1973,
@@ -1875,9 +2133,9 @@
               "pct": 10.7
             },
             "4d": {
-              "price": 1975,
-              "diff": 109,
-              "pct": 5.5
+              "price": 1973,
+              "diff": 111,
+              "pct": 5.6
             },
             "7d": {
               "price": 1973,
@@ -1899,9 +2157,9 @@
               "pct": 10.7
             },
             "4d": {
-              "price": 1975,
-              "diff": 109,
-              "pct": 5.5
+              "price": 1973,
+              "diff": 111,
+              "pct": 5.6
             },
             "7d": {
               "price": 1973,
@@ -1923,9 +2181,9 @@
               "pct": 10.7
             },
             "4d": {
-              "price": 1975,
-              "diff": 109,
-              "pct": 5.5
+              "price": 1973,
+              "diff": 111,
+              "pct": 5.6
             },
             "7d": {
               "price": 1973,
@@ -1947,9 +2205,9 @@
               "pct": 10.7
             },
             "4d": {
-              "price": 1975,
-              "diff": 109,
-              "pct": 5.5
+              "price": 1973,
+              "diff": 111,
+              "pct": 5.6
             },
             "7d": {
               "price": 1973,
@@ -1971,9 +2229,9 @@
               "pct": 10.7
             },
             "4d": {
-              "price": 1975,
-              "diff": 109,
-              "pct": 5.5
+              "price": 1973,
+              "diff": 111,
+              "pct": 5.6
             },
             "7d": {
               "price": 1973,
@@ -2002,7 +2260,7 @@
         "carryOn": false,
         "cheapDays": 522
       },
-      "typicalPrice": 3158,
+      "typicalPrice": 3143,
       "cheapestDates": [
         {
           "day": 12,
@@ -2012,9 +2270,9 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 2183,
-              "diff": -16,
-              "pct": -0.7
+              "price": 2185,
+              "diff": -18,
+              "pct": -0.8
             },
             "4d": {
               "price": 2185,
@@ -2233,9 +2491,9 @@
               "pct": -29.2
             },
             "4d": {
-              "price": 3864,
-              "diff": -1687,
-              "pct": -43.7
+              "price": 3897,
+              "diff": -1720,
+              "pct": -44.1
             },
             "7d": {
               "price": 3860,
@@ -2247,8 +2505,8 @@
       ],
       "totalDestinations": 50,
       "firstDetected": null,
-      "dropAmount": -16,
-      "dropPct": -0.7,
+      "dropAmount": -18,
+      "dropPct": -0.8,
       "dropPrice": 2167
     },
     {
@@ -2262,7 +2520,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 442
+        "cheapDays": 445
       },
       "typicalPrice": 2564,
       "cheapestDates": [
@@ -2274,9 +2532,33 @@
           "stay": 14,
           "history": {
             "1d": {
+              "price": 2207,
+              "diff": -1,
+              "pct": -0.0
+            },
+            "7d": {
+              "price": 2324,
+              "diff": -118,
+              "pct": -5.1
+            }
+          }
+        },
+        {
+          "day": 11,
+          "month": 12,
+          "year": 2026,
+          "price": 2206,
+          "stay": 14,
+          "history": {
+            "1d": {
               "price": 2206,
               "diff": 0,
               "pct": 0.0
+            },
+            "7d": {
+              "price": 2463,
+              "diff": -257,
+              "pct": -10.4
             }
           }
         },
@@ -2288,9 +2570,14 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 2464,
-              "diff": -141,
-              "pct": -5.7
+              "price": 2466,
+              "diff": -143,
+              "pct": -5.8
+            },
+            "7d": {
+              "price": 2324,
+              "diff": -1,
+              "pct": -0.0
             }
           }
         },
@@ -2302,9 +2589,14 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 2464,
-              "diff": -141,
-              "pct": -5.7
+              "price": 2308,
+              "diff": 15,
+              "pct": 0.6
+            },
+            "7d": {
+              "price": 2323,
+              "diff": 0,
+              "pct": 0.0
             }
           }
         },
@@ -2316,9 +2608,14 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 2381,
-              "diff": -56,
-              "pct": -2.4
+              "price": 2380,
+              "diff": -55,
+              "pct": -2.3
+            },
+            "7d": {
+              "price": 2324,
+              "diff": 1,
+              "pct": 0.0
             }
           }
         },
@@ -2330,9 +2627,14 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 2381,
-              "diff": -56,
-              "pct": -2.4
+              "price": 2276,
+              "diff": 49,
+              "pct": 2.2
+            },
+            "7d": {
+              "price": 2282,
+              "diff": 43,
+              "pct": 1.9
             }
           }
         },
@@ -2344,9 +2646,14 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 2357,
-              "diff": 0,
-              "pct": 0.0
+              "price": 2466,
+              "diff": -109,
+              "pct": -4.4
+            },
+            "7d": {
+              "price": 2324,
+              "diff": 33,
+              "pct": 1.4
             }
           }
         },
@@ -2361,6 +2668,11 @@
               "price": 2207,
               "diff": 238,
               "pct": 10.8
+            },
+            "7d": {
+              "price": 2324,
+              "diff": 121,
+              "pct": 5.2
             }
           }
         },
@@ -2375,6 +2687,11 @@
               "price": 2357,
               "diff": 89,
               "pct": 3.8
+            },
+            "7d": {
+              "price": 2282,
+              "diff": 164,
+              "pct": 7.2
             }
           }
         },
@@ -2389,20 +2706,11 @@
               "price": 2207,
               "diff": 239,
               "pct": 10.8
-            }
-          }
-        },
-        {
-          "day": 27,
-          "month": 12,
-          "year": 2026,
-          "price": 2446,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 2207,
-              "diff": 239,
-              "pct": 10.8
+            },
+            "7d": {
+              "price": 2324,
+              "diff": 122,
+              "pct": 5.2
             }
           }
         }
@@ -2424,7 +2732,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 527
+        "cheapDays": 528
       },
       "typicalPrice": 3909,
       "cheapestDates": [
@@ -2440,19 +2748,7 @@
           "month": 10,
           "year": 2026,
           "price": 2305,
-          "stay": 14,
-          "history": {
-            "1d": {
-              "price": 2318,
-              "diff": -13,
-              "pct": -0.6
-            },
-            "7d": {
-              "price": 2317,
-              "diff": -12,
-              "pct": -0.5
-            }
-          }
+          "stay": 14
         },
         {
           "day": 12,
@@ -2468,10 +2764,10 @@
           "price": 2311,
           "stay": 3,
           "history": {
-            "4d": {
-              "price": 2317,
-              "diff": -6,
-              "pct": -0.3
+            "7d": {
+              "price": 3727,
+              "diff": -1416,
+              "pct": -38.0
             }
           }
         },
@@ -2487,7 +2783,19 @@
           "month": 1,
           "year": 2027,
           "price": 2311,
-          "stay": 7
+          "stay": 7,
+          "history": {
+            "4d": {
+              "price": 4551,
+              "diff": -2240,
+              "pct": -49.2
+            },
+            "7d": {
+              "price": 4546,
+              "diff": -2235,
+              "pct": -49.2
+            }
+          }
         },
         {
           "day": 19,
@@ -2497,9 +2805,9 @@
           "stay": 3,
           "history": {
             "7d": {
-              "price": 2317,
-              "diff": -6,
-              "pct": -0.3
+              "price": 3656,
+              "diff": -1345,
+              "pct": -36.8
             }
           }
         },
@@ -2527,8 +2835,8 @@
       ],
       "totalDestinations": 50,
       "firstDetected": null,
-      "dropAmount": -13,
-      "dropPct": -0.6,
+      "dropAmount": 0,
+      "dropPct": 0.0,
       "dropPrice": 2305
     },
     {
@@ -2542,7 +2850,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 546
+        "cheapDays": 549
       },
       "typicalPrice": 6197,
       "cheapestDates": [
@@ -2554,19 +2862,19 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 2879,
-              "diff": -374,
-              "pct": -13.0
+              "price": 3015,
+              "diff": -510,
+              "pct": -16.9
             },
             "4d": {
-              "price": 2553,
-              "diff": -48,
-              "pct": -1.9
+              "price": 3041,
+              "diff": -536,
+              "pct": -17.6
             },
             "7d": {
-              "price": 3566,
-              "diff": -1061,
-              "pct": -29.8
+              "price": 3600,
+              "diff": -1095,
+              "pct": -30.4
             }
           }
         },
@@ -2578,14 +2886,14 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 3188,
-              "diff": -405,
-              "pct": -12.7
+              "price": 3246,
+              "diff": -463,
+              "pct": -14.3
             },
             "4d": {
-              "price": 2986,
-              "diff": -203,
-              "pct": -6.8
+              "price": 3189,
+              "diff": -406,
+              "pct": -12.7
             },
             "7d": {
               "price": 3191,
@@ -2607,9 +2915,9 @@
               "pct": -17.9
             },
             "4d": {
-              "price": 3709,
-              "diff": -889,
-              "pct": -24.0
+              "price": 3099,
+              "diff": -279,
+              "pct": -9.0
             },
             "7d": {
               "price": 3566,
@@ -2626,14 +2934,14 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 3810,
-              "diff": -951,
-              "pct": -25.0
+              "price": 3169,
+              "diff": -310,
+              "pct": -9.8
             },
             "4d": {
-              "price": 2773,
-              "diff": 86,
-              "pct": 3.1
+              "price": 3131,
+              "diff": -272,
+              "pct": -8.7
             },
             "7d": {
               "price": 3566,
@@ -2650,19 +2958,19 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 3331,
-              "diff": -467,
-              "pct": -14.0
+              "price": 3567,
+              "diff": -703,
+              "pct": -19.7
             },
             "4d": {
-              "price": 3721,
-              "diff": -857,
-              "pct": -23.0
+              "price": 3180,
+              "diff": -316,
+              "pct": -9.9
             },
             "7d": {
-              "price": 3577,
-              "diff": -713,
-              "pct": -19.9
+              "price": 3612,
+              "diff": -748,
+              "pct": -20.7
             }
           }
         },
@@ -2679,14 +2987,14 @@
               "pct": -6.5
             },
             "4d": {
-              "price": 3570,
-              "diff": -620,
-              "pct": -17.4
+              "price": 3154,
+              "diff": -204,
+              "pct": -6.5
             },
             "7d": {
-              "price": 3249,
-              "diff": -299,
-              "pct": -9.2
+              "price": 3156,
+              "diff": -206,
+              "pct": -6.5
             }
           }
         },
@@ -2703,14 +3011,14 @@
               "pct": -2.1
             },
             "4d": {
-              "price": 3195,
-              "diff": -128,
-              "pct": -4.0
+              "price": 3133,
+              "diff": -66,
+              "pct": -2.1
             },
             "7d": {
-              "price": 3087,
-              "diff": -20,
-              "pct": -0.6
+              "price": 3029,
+              "diff": 38,
+              "pct": 1.3
             }
           }
         },
@@ -2727,9 +3035,14 @@
               "pct": -1.0
             },
             "4d": {
-              "price": 3079,
-              "diff": -4,
-              "pct": -0.1
+              "price": 3108,
+              "diff": -33,
+              "pct": -1.1
+            },
+            "7d": {
+              "price": 3075,
+              "diff": 0,
+              "pct": 0.0
             }
           }
         },
@@ -2741,19 +3054,19 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 3486,
-              "diff": -397,
-              "pct": -11.4
+              "price": 3382,
+              "diff": -293,
+              "pct": -8.7
             },
             "4d": {
-              "price": 3086,
-              "diff": 3,
-              "pct": 0.1
+              "price": 3145,
+              "diff": -56,
+              "pct": -1.8
             },
             "7d": {
-              "price": 3381,
-              "diff": -292,
-              "pct": -8.6
+              "price": 3485,
+              "diff": -396,
+              "pct": -11.4
             }
           }
         },
@@ -2770,22 +3083,22 @@
               "pct": -1.1
             },
             "4d": {
-              "price": 3195,
-              "diff": -94,
-              "pct": -2.9
+              "price": 3133,
+              "diff": -32,
+              "pct": -1.0
             },
             "7d": {
-              "price": 3087,
-              "diff": 14,
-              "pct": 0.5
+              "price": 3029,
+              "diff": 72,
+              "pct": 2.4
             }
           }
         }
       ],
       "totalDestinations": 50,
       "firstDetected": "2026-07-14T00:04:17.761127",
-      "dropAmount": -374,
-      "dropPct": -13.0,
+      "dropAmount": -510,
+      "dropPct": -16.9,
       "dropPrice": 2505
     },
     {
@@ -2799,7 +3112,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 289
+        "cheapDays": 298
       },
       "typicalPrice": 6584,
       "cheapestDates": [
@@ -2808,42 +3121,21 @@
           "month": 2,
           "year": 2027,
           "price": 2643,
-          "stay": 7,
-          "history": {
-            "1d": {
-              "price": 2643,
-              "diff": 0,
-              "pct": 0.0
-            }
-          }
+          "stay": 7
         },
         {
           "day": 14,
           "month": 2,
           "year": 2027,
           "price": 2898,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 2898,
-              "diff": 0,
-              "pct": 0.0
-            }
-          }
+          "stay": 3
         },
         {
           "day": 14,
           "month": 2,
           "year": 2027,
           "price": 2898,
-          "stay": 14,
-          "history": {
-            "1d": {
-              "price": 2898,
-              "diff": 0,
-              "pct": 0.0
-            }
-          }
+          "stay": 14
         },
         {
           "day": 17,
@@ -2892,14 +3184,7 @@
           "month": 1,
           "year": 2027,
           "price": 3313,
-          "stay": 14,
-          "history": {
-            "7d": {
-              "price": 4123,
-              "diff": -810,
-              "pct": -19.6
-            }
-          }
+          "stay": 14
         }
       ],
       "totalDestinations": 50,
@@ -2919,7 +3204,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 477
+        "cheapDays": 482
       },
       "typicalPrice": 4608,
       "cheapestDates": [
@@ -2936,9 +3221,9 @@
               "pct": -0.4
             },
             "4d": {
-              "price": 2666,
-              "diff": -13,
-              "pct": -0.5
+              "price": 2663,
+              "diff": -10,
+              "pct": -0.4
             },
             "7d": {
               "price": 2663,
@@ -2960,9 +3245,9 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 2666,
-              "diff": -4,
-              "pct": -0.2
+              "price": 2663,
+              "diff": -1,
+              "pct": -0.0
             },
             "7d": {
               "price": 2663,
@@ -2984,9 +3269,9 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 2666,
-              "diff": -4,
-              "pct": -0.2
+              "price": 2663,
+              "diff": -1,
+              "pct": -0.0
             },
             "7d": {
               "price": 2663,
@@ -3008,9 +3293,9 @@
               "pct": -0.0
             },
             "4d": {
-              "price": 2666,
-              "diff": -3,
-              "pct": -0.1
+              "price": 2663,
+              "diff": 0,
+              "pct": 0.0
             },
             "7d": {
               "price": 2663,
@@ -3032,9 +3317,9 @@
               "pct": -0.0
             },
             "4d": {
-              "price": 2666,
-              "diff": -3,
-              "pct": -0.1
+              "price": 2663,
+              "diff": 0,
+              "pct": 0.0
             },
             "7d": {
               "price": 2663,
@@ -3051,14 +3336,14 @@
           "stay": 14,
           "history": {
             "1d": {
+              "price": 2664,
+              "diff": -1,
+              "pct": -0.0
+            },
+            "4d": {
               "price": 2663,
               "diff": 0,
               "pct": 0.0
-            },
-            "4d": {
-              "price": 2666,
-              "diff": -3,
-              "pct": -0.1
             },
             "7d": {
               "price": 2663,
@@ -3080,9 +3365,9 @@
               "pct": 0.0
             },
             "4d": {
-              "price": 2666,
-              "diff": -2,
-              "pct": -0.1
+              "price": 2663,
+              "diff": 1,
+              "pct": 0.0
             },
             "7d": {
               "price": 2663,
@@ -3104,9 +3389,9 @@
               "pct": 0.0
             },
             "4d": {
-              "price": 2666,
-              "diff": -2,
-              "pct": -0.1
+              "price": 2663,
+              "diff": 1,
+              "pct": 0.0
             },
             "7d": {
               "price": 2663,
@@ -3128,9 +3413,9 @@
               "pct": 0.1
             },
             "4d": {
-              "price": 2666,
-              "diff": 0,
-              "pct": 0.0
+              "price": 2663,
+              "diff": 3,
+              "pct": 0.1
             },
             "7d": {
               "price": 2663,
@@ -3147,26 +3432,26 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 2780,
-              "diff": -10,
-              "pct": -0.4
+              "price": 3938,
+              "diff": -1168,
+              "pct": -29.7
             },
             "4d": {
-              "price": 2666,
-              "diff": 104,
-              "pct": 3.9
-            },
-            "7d": {
               "price": 2663,
               "diff": 107,
               "pct": 4.0
+            },
+            "7d": {
+              "price": 2779,
+              "diff": -9,
+              "pct": -0.3
             }
           }
         }
       ],
       "totalDestinations": 50,
       "firstDetected": null,
-      "dropAmount": -10,
+      "dropAmount": -11,
       "dropPct": -0.4,
       "dropPrice": 2653
     },
@@ -3181,28 +3466,16 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 517
+        "cheapDays": 521
       },
-      "typicalPrice": 4664,
+      "typicalPrice": 4627,
       "cheapestDates": [
         {
           "day": 30,
           "month": 11,
           "year": 2026,
           "price": 2842,
-          "stay": 3,
-          "history": {
-            "1d": {
-              "price": 2971,
-              "diff": -129,
-              "pct": -4.3
-            },
-            "7d": {
-              "price": 2842,
-              "diff": 0,
-              "pct": 0.0
-            }
-          }
+          "stay": 3
         },
         {
           "day": 14,
@@ -3216,7 +3489,14 @@
           "month": 12,
           "year": 2026,
           "price": 2842,
-          "stay": 3
+          "stay": 3,
+          "history": {
+            "4d": {
+              "price": 2842,
+              "diff": 0,
+              "pct": 0.0
+            }
+          }
         },
         {
           "day": 12,
@@ -3226,13 +3506,22 @@
           "stay": 3,
           "history": {
             "4d": {
-              "price": 2842,
-              "diff": 1,
-              "pct": 0.0
-            },
-            "7d": {
-              "price": 2842,
-              "diff": 1,
+              "price": 2845,
+              "diff": -2,
+              "pct": -0.1
+            }
+          }
+        },
+        {
+          "day": 5,
+          "month": 12,
+          "year": 2026,
+          "price": 2843,
+          "stay": 3,
+          "history": {
+            "1d": {
+              "price": 2843,
+              "diff": 0,
               "pct": 0.0
             }
           }
@@ -3242,14 +3531,33 @@
           "month": 12,
           "year": 2026,
           "price": 2845,
-          "stay": 3
+          "stay": 3,
+          "history": {
+            "4d": {
+              "price": 2845,
+              "diff": 0,
+              "pct": 0.0
+            },
+            "7d": {
+              "price": 2842,
+              "diff": 3,
+              "pct": 0.1
+            }
+          }
         },
         {
           "day": 23,
           "month": 11,
           "year": 2026,
           "price": 2845,
-          "stay": 3
+          "stay": 3,
+          "history": {
+            "4d": {
+              "price": 2845,
+              "diff": 0,
+              "pct": 0.0
+            }
+          }
         },
         {
           "day": 13,
@@ -3264,9 +3572,9 @@
               "pct": 6.6
             },
             "4d": {
-              "price": 2741,
-              "diff": 191,
-              "pct": 7.0
+              "price": 2735,
+              "diff": 197,
+              "pct": 7.2
             },
             "7d": {
               "price": 2915,
@@ -3288,9 +3596,9 @@
               "pct": -8.1
             },
             "4d": {
-              "price": 3196,
-              "diff": -259,
-              "pct": -8.1
+              "price": 3192,
+              "diff": -255,
+              "pct": -8.0
             },
             "7d": {
               "price": 2937,
@@ -3312,38 +3620,14 @@
               "pct": -8.1
             },
             "4d": {
-              "price": 3196,
-              "diff": -259,
-              "pct": -8.1
+              "price": 3192,
+              "diff": -255,
+              "pct": -8.0
             },
             "7d": {
               "price": 2937,
               "diff": 0,
               "pct": 0.0
-            }
-          }
-        },
-        {
-          "day": 13,
-          "month": 8,
-          "year": 2026,
-          "price": 2937,
-          "stay": 14,
-          "history": {
-            "1d": {
-              "price": 3277,
-              "diff": -340,
-              "pct": -10.4
-            },
-            "4d": {
-              "price": 3277,
-              "diff": -340,
-              "pct": -10.4
-            },
-            "7d": {
-              "price": 2995,
-              "diff": -58,
-              "pct": -1.9
             }
           }
         }
@@ -3365,9 +3649,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 552
+        "cheapDays": 551
       },
-      "typicalPrice": 3672,
+      "typicalPrice": 3695,
       "cheapestDates": [
         {
           "day": 7,
@@ -3381,7 +3665,14 @@
           "month": 10,
           "year": 2026,
           "price": 2872,
-          "stay": 14
+          "stay": 14,
+          "history": {
+            "1d": {
+              "price": 2981,
+              "diff": -109,
+              "pct": -3.7
+            }
+          }
         },
         {
           "day": 11,
@@ -3405,14 +3696,9 @@
           "stay": 14,
           "history": {
             "4d": {
-              "price": 3213,
-              "diff": -338,
-              "pct": -10.5
-            },
-            "7d": {
-              "price": 3213,
-              "diff": -338,
-              "pct": -10.5
+              "price": 3215,
+              "diff": -340,
+              "pct": -10.6
             }
           }
         },
@@ -3424,14 +3710,14 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 4396,
-              "diff": -1521,
-              "pct": -34.6
+              "price": 3966,
+              "diff": -1091,
+              "pct": -27.5
             },
             "4d": {
-              "price": 3911,
-              "diff": -1036,
-              "pct": -26.5
+              "price": 3907,
+              "diff": -1032,
+              "pct": -26.4
             },
             "7d": {
               "price": 2982,
@@ -3466,25 +3752,13 @@
           "month": 11,
           "year": 2026,
           "price": 2875,
-          "stay": 7,
-          "history": {
-            "4d": {
-              "price": 2983,
-              "diff": -108,
-              "pct": -3.6
-            },
-            "7d": {
-              "price": 2982,
-              "diff": -107,
-              "pct": -3.6
-            }
-          }
+          "stay": 7
         }
       ],
       "totalDestinations": 50,
       "firstDetected": "2026-07-18T07:43:57.116662",
-      "dropAmount": -1524,
-      "dropPct": -34.7,
+      "dropAmount": -109,
+      "dropPct": -3.7,
       "dropPrice": 2872
     },
     {
@@ -3498,9 +3772,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 534
+        "cheapDays": 535
       },
-      "typicalPrice": 3536,
+      "typicalPrice": 3489,
       "cheapestDates": [
         {
           "day": 1,
@@ -3515,9 +3789,9 @@
               "pct": -3.6
             },
             "4d": {
-              "price": 3009,
-              "diff": -111,
-              "pct": -3.7
+              "price": 3006,
+              "diff": -108,
+              "pct": -3.6
             },
             "7d": {
               "price": 3008,
@@ -3539,9 +3813,9 @@
               "pct": -3.6
             },
             "4d": {
-              "price": 3009,
-              "diff": -111,
-              "pct": -3.7
+              "price": 3006,
+              "diff": -108,
+              "pct": -3.6
             },
             "7d": {
               "price": 3008,
@@ -3563,9 +3837,9 @@
               "pct": -3.6
             },
             "4d": {
-              "price": 3009,
-              "diff": -111,
-              "pct": -3.7
+              "price": 3006,
+              "diff": -108,
+              "pct": -3.6
             },
             "7d": {
               "price": 3008,
@@ -3587,9 +3861,9 @@
               "pct": -3.6
             },
             "4d": {
-              "price": 3009,
-              "diff": -109,
-              "pct": -3.6
+              "price": 3006,
+              "diff": -106,
+              "pct": -3.5
             },
             "7d": {
               "price": 3008,
@@ -3611,8 +3885,13 @@
               "pct": -3.6
             },
             "4d": {
-              "price": 3009,
-              "diff": -109,
+              "price": 3006,
+              "diff": -106,
+              "pct": -3.5
+            },
+            "7d": {
+              "price": 3008,
+              "diff": -108,
               "pct": -3.6
             }
           }
@@ -3630,9 +3909,9 @@
               "pct": -3.6
             },
             "4d": {
-              "price": 3009,
-              "diff": -109,
-              "pct": -3.6
+              "price": 3006,
+              "diff": -106,
+              "pct": -3.5
             },
             "7d": {
               "price": 3008,
@@ -3654,9 +3933,9 @@
               "pct": -3.6
             },
             "4d": {
-              "price": 3241,
-              "diff": -341,
-              "pct": -10.5
+              "price": 3006,
+              "diff": -106,
+              "pct": -3.5
             },
             "7d": {
               "price": 3008,
@@ -3678,9 +3957,9 @@
               "pct": -3.6
             },
             "4d": {
-              "price": 3009,
-              "diff": -109,
-              "pct": -3.6
+              "price": 3006,
+              "diff": -106,
+              "pct": -3.5
             },
             "7d": {
               "price": 3008,
@@ -3702,9 +3981,9 @@
               "pct": -38.1
             },
             "4d": {
-              "price": 4284,
-              "diff": -1384,
-              "pct": -32.3
+              "price": 4685,
+              "diff": -1785,
+              "pct": -38.1
             },
             "7d": {
               "price": 3992,
@@ -3726,9 +4005,9 @@
               "pct": -20.4
             },
             "4d": {
-              "price": 3473,
-              "diff": -573,
-              "pct": -16.5
+              "price": 3643,
+              "diff": -743,
+              "pct": -20.4
             },
             "7d": {
               "price": 3239,
@@ -3755,7 +4034,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 568
+        "cheapDays": 566
       },
       "typicalPrice": 3668,
       "cheapestDates": [
@@ -3767,14 +4046,14 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 3545,
-              "diff": -640,
-              "pct": -18.1
+              "price": 4495,
+              "diff": -1590,
+              "pct": -35.4
             },
             "4d": {
-              "price": 3849,
-              "diff": -944,
-              "pct": -24.5
+              "price": 3845,
+              "diff": -940,
+              "pct": -24.4
             },
             "7d": {
               "price": 3847,
@@ -3796,14 +4075,14 @@
               "pct": -25.4
             },
             "4d": {
-              "price": 3896,
-              "diff": -991,
-              "pct": -25.4
+              "price": 3544,
+              "diff": -639,
+              "pct": -18.0
             },
             "7d": {
-              "price": 4148,
-              "diff": -1243,
-              "pct": -30.0
+              "price": 3546,
+              "diff": -641,
+              "pct": -18.1
             }
           }
         },
@@ -3820,14 +4099,14 @@
               "pct": -13.9
             },
             "4d": {
-              "price": 3375,
-              "diff": -470,
-              "pct": -13.9
+              "price": 3372,
+              "diff": -467,
+              "pct": -13.8
             },
             "7d": {
-              "price": 3199,
-              "diff": -294,
-              "pct": -9.2
+              "price": 3546,
+              "diff": -641,
+              "pct": -18.1
             }
           }
         },
@@ -3844,9 +4123,9 @@
               "pct": -8.1
             },
             "4d": {
-              "price": 3189,
-              "diff": -260,
-              "pct": -8.2
+              "price": 3185,
+              "diff": -256,
+              "pct": -8.0
             },
             "7d": {
               "price": 3187,
@@ -3868,9 +4147,9 @@
               "pct": -8.1
             },
             "4d": {
-              "price": 3189,
-              "diff": -260,
-              "pct": -8.2
+              "price": 3185,
+              "diff": -256,
+              "pct": -8.0
             },
             "7d": {
               "price": 3187,
@@ -3892,9 +4171,9 @@
               "pct": -8.1
             },
             "4d": {
-              "price": 3189,
-              "diff": -260,
-              "pct": -8.2
+              "price": 3185,
+              "diff": -256,
+              "pct": -8.0
             },
             "7d": {
               "price": 3187,
@@ -3916,9 +4195,9 @@
               "pct": -3.2
             },
             "4d": {
-              "price": 3028,
-              "diff": -99,
-              "pct": -3.3
+              "price": 3185,
+              "diff": -256,
+              "pct": -8.0
             },
             "7d": {
               "price": 3187,
@@ -3940,9 +4219,9 @@
               "pct": -3.2
             },
             "4d": {
-              "price": 3189,
-              "diff": -260,
-              "pct": -8.2
+              "price": 3024,
+              "diff": -95,
+              "pct": -3.1
             },
             "7d": {
               "price": 3187,
@@ -3964,9 +4243,9 @@
               "pct": -3.2
             },
             "4d": {
-              "price": 3189,
-              "diff": -260,
-              "pct": -8.2
+              "price": 3024,
+              "diff": -95,
+              "pct": -3.1
             },
             "7d": {
               "price": 3187,
@@ -3988,9 +4267,9 @@
               "pct": -3.2
             },
             "4d": {
-              "price": 3189,
-              "diff": -260,
-              "pct": -8.2
+              "price": 3024,
+              "diff": -95,
+              "pct": -3.1
             },
             "7d": {
               "price": 3187,
@@ -4017,9 +4296,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 490
+        "cheapDays": 495
       },
-      "typicalPrice": 3843,
+      "typicalPrice": 3844,
       "cheapestDates": [
         {
           "day": 12,
@@ -4034,9 +4313,9 @@
               "pct": -3.6
             },
             "4d": {
-              "price": 3016,
-              "diff": -111,
-              "pct": -3.7
+              "price": 3013,
+              "diff": -108,
+              "pct": -3.6
             },
             "7d": {
               "price": 3015,
@@ -4058,9 +4337,9 @@
               "pct": -3.6
             },
             "4d": {
-              "price": 3016,
-              "diff": -109,
-              "pct": -3.6
+              "price": 3013,
+              "diff": -106,
+              "pct": -3.5
             },
             "7d": {
               "price": 3015,
@@ -4082,9 +4361,9 @@
               "pct": -10.4
             },
             "4d": {
-              "price": 3248,
-              "diff": -341,
-              "pct": -10.5
+              "price": 3244,
+              "diff": -337,
+              "pct": -10.4
             },
             "7d": {
               "price": 3015,
@@ -4106,14 +4385,14 @@
               "pct": -3.6
             },
             "4d": {
-              "price": 3306,
-              "diff": -399,
-              "pct": -12.1
+              "price": 3013,
+              "diff": -106,
+              "pct": -3.5
             },
             "7d": {
-              "price": 3015,
-              "diff": -108,
-              "pct": -3.6
+              "price": 3304,
+              "diff": -397,
+              "pct": -12.0
             }
           }
         },
@@ -4130,9 +4409,9 @@
               "pct": -3.5
             },
             "4d": {
-              "price": 3016,
-              "diff": -108,
-              "pct": -3.6
+              "price": 3013,
+              "diff": -105,
+              "pct": -3.5
             },
             "7d": {
               "price": 3015,
@@ -4154,9 +4433,9 @@
               "pct": -10.3
             },
             "4d": {
-              "price": 3248,
-              "diff": -338,
-              "pct": -10.4
+              "price": 3244,
+              "diff": -334,
+              "pct": -10.3
             },
             "7d": {
               "price": 3015,
@@ -4178,9 +4457,9 @@
               "pct": -10.3
             },
             "4d": {
-              "price": 3248,
-              "diff": -338,
-              "pct": -10.4
+              "price": 3244,
+              "diff": -334,
+              "pct": -10.3
             },
             "7d": {
               "price": 3015,
@@ -4202,9 +4481,9 @@
               "pct": -10.3
             },
             "4d": {
-              "price": 3248,
-              "diff": -338,
-              "pct": -10.4
+              "price": 3244,
+              "diff": -334,
+              "pct": -10.3
             },
             "7d": {
               "price": 3246,
@@ -4226,9 +4505,9 @@
               "pct": -10.3
             },
             "4d": {
-              "price": 3248,
-              "diff": -338,
-              "pct": -10.4
+              "price": 3244,
+              "diff": -334,
+              "pct": -10.3
             },
             "7d": {
               "price": 3246,
@@ -4250,9 +4529,9 @@
               "pct": -3.3
             },
             "4d": {
-              "price": 3016,
-              "diff": -100,
-              "pct": -3.3
+              "price": 3013,
+              "diff": -97,
+              "pct": -3.2
             },
             "7d": {
               "price": 3015,
@@ -4279,7 +4558,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 583
+        "cheapDays": 581
       },
       "typicalPrice": 6917,
       "cheapestDates": [
@@ -4296,14 +4575,14 @@
               "pct": -0.4
             },
             "4d": {
-              "price": 2921,
-              "diff": -14,
-              "pct": -0.5
-            },
-            "7d": {
               "price": 2918,
               "diff": -11,
               "pct": -0.4
+            },
+            "7d": {
+              "price": 2917,
+              "diff": -10,
+              "pct": -0.3
             }
           }
         },
@@ -4320,14 +4599,14 @@
               "pct": -0.2
             },
             "4d": {
-              "price": 2921,
-              "diff": -8,
-              "pct": -0.3
-            },
-            "7d": {
               "price": 2918,
               "diff": -5,
               "pct": -0.2
+            },
+            "7d": {
+              "price": 2917,
+              "diff": -4,
+              "pct": -0.1
             }
           }
         },
@@ -4344,14 +4623,14 @@
               "pct": -0.2
             },
             "4d": {
-              "price": 2921,
-              "diff": -8,
-              "pct": -0.3
-            },
-            "7d": {
               "price": 2918,
               "diff": -5,
               "pct": -0.2
+            },
+            "7d": {
+              "price": 2917,
+              "diff": -4,
+              "pct": -0.1
             }
           }
         },
@@ -4368,13 +4647,13 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 2921,
-              "diff": -6,
-              "pct": -0.2
-            },
-            "7d": {
               "price": 2918,
               "diff": -3,
+              "pct": -0.1
+            },
+            "7d": {
+              "price": 2917,
+              "diff": -2,
               "pct": -0.1
             }
           }
@@ -4387,18 +4666,18 @@
           "stay": 14,
           "history": {
             "1d": {
+              "price": 2919,
+              "diff": -4,
+              "pct": -0.1
+            },
+            "4d": {
               "price": 2918,
               "diff": -3,
               "pct": -0.1
             },
-            "4d": {
-              "price": 2921,
-              "diff": -6,
-              "pct": -0.2
-            },
             "7d": {
-              "price": 2918,
-              "diff": -3,
+              "price": 2917,
+              "diff": -2,
               "pct": -0.1
             }
           }
@@ -4416,14 +4695,14 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 2921,
-              "diff": -4,
-              "pct": -0.1
-            },
-            "7d": {
               "price": 2918,
               "diff": -1,
               "pct": -0.0
+            },
+            "7d": {
+              "price": 2917,
+              "diff": 0,
+              "pct": 0.0
             }
           }
         },
@@ -4440,14 +4719,14 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 2921,
-              "diff": -4,
-              "pct": -0.1
-            },
-            "7d": {
               "price": 2918,
               "diff": -1,
               "pct": -0.0
+            },
+            "7d": {
+              "price": 2917,
+              "diff": 0,
+              "pct": 0.0
             }
           }
         },
@@ -4464,14 +4743,14 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 2921,
-              "diff": -4,
-              "pct": -0.1
-            },
-            "7d": {
               "price": 2918,
               "diff": -1,
               "pct": -0.0
+            },
+            "7d": {
+              "price": 2917,
+              "diff": 0,
+              "pct": 0.0
             }
           }
         },
@@ -4488,14 +4767,14 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 2921,
-              "diff": -4,
-              "pct": -0.1
-            },
-            "7d": {
               "price": 2918,
               "diff": -1,
               "pct": -0.0
+            },
+            "7d": {
+              "price": 2917,
+              "diff": 0,
+              "pct": 0.0
             }
           }
         },
@@ -4512,21 +4791,21 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 2921,
-              "diff": -4,
-              "pct": -0.1
-            },
-            "7d": {
               "price": 2918,
               "diff": -1,
               "pct": -0.0
+            },
+            "7d": {
+              "price": 2917,
+              "diff": 0,
+              "pct": 0.0
             }
           }
         }
       ],
       "totalDestinations": 50,
       "firstDetected": null,
-      "dropAmount": -11,
+      "dropAmount": -12,
       "dropPct": -0.4,
       "dropPrice": 2907
     },
@@ -4541,7 +4820,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 352
+        "cheapDays": 360
       },
       "typicalPrice": 3561,
       "cheapestDates": [
@@ -4570,6 +4849,11 @@
               "price": 3297,
               "diff": -30,
               "pct": -0.9
+            },
+            "4d": {
+              "price": 3295,
+              "diff": -28,
+              "pct": -0.8
             }
           }
         },
@@ -4584,6 +4868,11 @@
               "price": 3390,
               "diff": -123,
               "pct": -3.6
+            },
+            "4d": {
+              "price": 3295,
+              "diff": -28,
+              "pct": -0.8
             }
           }
         },
@@ -4598,6 +4887,11 @@
               "price": 3390,
               "diff": -123,
               "pct": -3.6
+            },
+            "4d": {
+              "price": 3295,
+              "diff": -28,
+              "pct": -0.8
             }
           }
         },
@@ -4641,14 +4935,7 @@
           "month": 9,
           "year": 2026,
           "price": 3269,
-          "stay": 7,
-          "history": {
-            "4d": {
-              "price": 3298,
-              "diff": -29,
-              "pct": -0.9
-            }
-          }
+          "stay": 7
         }
       ],
       "totalDestinations": 50,
@@ -4668,9 +4955,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 620
+        "cheapDays": 621
       },
-      "typicalPrice": 3808,
+      "typicalPrice": 3809,
       "cheapestDates": [
         {
           "day": 29,
@@ -4685,9 +4972,9 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 3468,
-              "diff": -7,
-              "pct": -0.2
+              "price": 3464,
+              "diff": -3,
+              "pct": -0.1
             },
             "7d": {
               "price": 3465,
@@ -4709,9 +4996,9 @@
               "pct": -4.2
             },
             "4d": {
-              "price": 3619,
-              "diff": -158,
-              "pct": -4.4
+              "price": 3615,
+              "diff": -154,
+              "pct": -4.3
             },
             "7d": {
               "price": 3616,
@@ -4733,9 +5020,9 @@
               "pct": -4.2
             },
             "4d": {
-              "price": 3619,
-              "diff": -158,
-              "pct": -4.4
+              "price": 3615,
+              "diff": -154,
+              "pct": -4.3
             },
             "7d": {
               "price": 3616,
@@ -4757,9 +5044,9 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 3468,
-              "diff": -7,
-              "pct": -0.2
+              "price": 3464,
+              "diff": -3,
+              "pct": -0.1
             },
             "7d": {
               "price": 3465,
@@ -4781,9 +5068,9 @@
               "pct": 9.9
             },
             "4d": {
-              "price": 3155,
-              "diff": 306,
-              "pct": 9.7
+              "price": 3152,
+              "diff": 309,
+              "pct": 9.8
             },
             "7d": {
               "price": 3152,
@@ -4805,9 +5092,9 @@
               "pct": -1.1
             },
             "4d": {
-              "price": 3503,
-              "diff": -42,
-              "pct": -1.2
+              "price": 3499,
+              "diff": -38,
+              "pct": -1.1
             },
             "7d": {
               "price": 3500,
@@ -4829,9 +5116,9 @@
               "pct": -3.9
             },
             "4d": {
-              "price": 3607,
-              "diff": -146,
-              "pct": -4.0
+              "price": 3603,
+              "diff": -142,
+              "pct": -3.9
             },
             "7d": {
               "price": 3604,
@@ -4853,9 +5140,9 @@
               "pct": -11.1
             },
             "4d": {
-              "price": 3749,
-              "diff": -288,
-              "pct": -7.7
+              "price": 3745,
+              "diff": -284,
+              "pct": -7.6
             },
             "7d": {
               "price": 3745,
@@ -4877,9 +5164,9 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 3468,
-              "diff": -7,
-              "pct": -0.2
+              "price": 3464,
+              "diff": -3,
+              "pct": -0.1
             },
             "7d": {
               "price": 3465,
@@ -4896,14 +5183,14 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 3743,
-              "diff": -282,
-              "pct": -7.5
+              "price": 4392,
+              "diff": -931,
+              "pct": -21.2
             },
             "4d": {
-              "price": 3749,
-              "diff": -288,
-              "pct": -7.7
+              "price": 3745,
+              "diff": -284,
+              "pct": -7.6
             },
             "7d": {
               "price": 3745,
@@ -4930,7 +5217,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 561
+        "cheapDays": 564
       },
       "typicalPrice": 6040,
       "cheapestDates": [
@@ -4942,9 +5229,14 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 5934,
-              "diff": -2245,
-              "pct": -37.8
+              "price": 5821,
+              "diff": -2132,
+              "pct": -36.6
+            },
+            "7d": {
+              "price": 5962,
+              "diff": -2273,
+              "pct": -38.1
             }
           }
         },
@@ -4956,9 +5248,14 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 7575,
-              "diff": -3886,
-              "pct": -51.3
+              "price": 7497,
+              "diff": -3808,
+              "pct": -50.8
+            },
+            "7d": {
+              "price": 7484,
+              "diff": -3795,
+              "pct": -50.7
             }
           }
         },
@@ -4970,9 +5267,14 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 5745,
-              "diff": -2056,
+              "price": 5748,
+              "diff": -2059,
               "pct": -35.8
+            },
+            "7d": {
+              "price": 4805,
+              "diff": -1116,
+              "pct": -23.2
             }
           }
         },
@@ -4984,9 +5286,14 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 6513,
-              "diff": -2824,
-              "pct": -43.4
+              "price": 6510,
+              "diff": -2821,
+              "pct": -43.3
+            },
+            "7d": {
+              "price": 6822,
+              "diff": -3133,
+              "pct": -45.9
             }
           }
         },
@@ -4998,8 +5305,13 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 6062,
-              "diff": -2373,
+              "price": 7032,
+              "diff": -3343,
+              "pct": -47.5
+            },
+            "7d": {
+              "price": 6057,
+              "diff": -2368,
               "pct": -39.1
             }
           }
@@ -5012,9 +5324,14 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 6140,
-              "diff": -2451,
-              "pct": -39.9
+              "price": 4459,
+              "diff": -770,
+              "pct": -17.3
+            },
+            "7d": {
+              "price": 6253,
+              "diff": -2564,
+              "pct": -41.0
             }
           }
         },
@@ -5026,9 +5343,14 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 4498,
-              "diff": -809,
+              "price": 4499,
+              "diff": -810,
               "pct": -18.0
+            },
+            "7d": {
+              "price": 4805,
+              "diff": -1116,
+              "pct": -23.2
             }
           }
         },
@@ -5043,6 +5365,11 @@
               "price": 3732,
               "diff": -43,
               "pct": -1.2
+            },
+            "7d": {
+              "price": 3730,
+              "diff": -41,
+              "pct": -1.1
             }
           }
         },
@@ -5054,9 +5381,14 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 4457,
-              "diff": -768,
-              "pct": -17.2
+              "price": 4459,
+              "diff": -770,
+              "pct": -17.3
+            },
+            "7d": {
+              "price": 4764,
+              "diff": -1075,
+              "pct": -22.6
             }
           }
         },
@@ -5068,15 +5400,20 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 5745,
-              "diff": -2056,
+              "price": 5748,
+              "diff": -2059,
               "pct": -35.8
+            },
+            "7d": {
+              "price": 5880,
+              "diff": -2191,
+              "pct": -37.3
             }
           }
         }
       ],
       "totalDestinations": 50,
-      "firstDetected": "2026-07-25T00:02:07.132392",
+      "firstDetected": "2026-07-26T00:24:34.892701",
       "dropAmount": -43,
       "dropPct": -1.2,
       "dropPrice": 3689
@@ -5092,7 +5429,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 464
+        "cheapDays": 468
       },
       "typicalPrice": 6712,
       "cheapestDates": [
@@ -5104,13 +5441,13 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 5863,
-              "diff": -2137,
-              "pct": -36.4
+              "price": 5913,
+              "diff": -2187,
+              "pct": -37.0
             },
             "4d": {
-              "price": 5965,
-              "diff": -2239,
+              "price": 5962,
+              "diff": -2236,
               "pct": -37.5
             },
             "7d": {
@@ -5149,13 +5486,13 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 5869,
-              "diff": -2141,
-              "pct": -36.5
+              "price": 5931,
+              "diff": -2203,
+              "pct": -37.1
             },
             "4d": {
-              "price": 6808,
-              "diff": -3080,
+              "price": 6804,
+              "diff": -3076,
               "pct": -45.2
             },
             "7d": {
@@ -5180,19 +5517,19 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 6583,
-              "diff": -2854,
-              "pct": -43.4
+              "price": 6065,
+              "diff": -2336,
+              "pct": -38.5
             },
             "4d": {
-              "price": 6808,
-              "diff": -3079,
-              "pct": -45.2
+              "price": 6838,
+              "diff": -3109,
+              "pct": -45.5
             },
             "7d": {
-              "price": 7013,
-              "diff": -3284,
-              "pct": -46.8
+              "price": 6862,
+              "diff": -3133,
+              "pct": -45.7
             }
           }
         },
@@ -5223,8 +5560,8 @@
               "pct": -36.8
             },
             "4d": {
-              "price": 5965,
-              "diff": -2227,
+              "price": 5962,
+              "diff": -2224,
               "pct": -37.3
             },
             "7d": {
@@ -5237,8 +5574,8 @@
       ],
       "totalDestinations": 50,
       "firstDetected": "2026-07-18T07:43:57.116662",
-      "dropAmount": -2137,
-      "dropPct": -36.4,
+      "dropAmount": -2187,
+      "dropPct": -37.0,
       "dropPrice": 3726
     },
     {
@@ -5252,7 +5589,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 539
+        "cheapDays": 540
       },
       "typicalPrice": 5584,
       "cheapestDates": [
@@ -5282,7 +5619,19 @@
           "month": 8,
           "year": 2026,
           "price": 4518,
-          "stay": 7
+          "stay": 7,
+          "history": {
+            "1d": {
+              "price": 5333,
+              "diff": -815,
+              "pct": -15.3
+            },
+            "7d": {
+              "price": 5620,
+              "diff": -1102,
+              "pct": -19.6
+            }
+          }
         },
         {
           "day": 11,
@@ -5296,14 +5645,7 @@
           "month": 9,
           "year": 2026,
           "price": 4620,
-          "stay": 3,
-          "history": {
-            "7d": {
-              "price": 5752,
-              "diff": -1132,
-              "pct": -19.7
-            }
-          }
+          "stay": 3
         },
         {
           "day": 9,
@@ -5331,20 +5673,13 @@
           "month": 9,
           "year": 2026,
           "price": 4626,
-          "stay": 14,
-          "history": {
-            "7d": {
-              "price": 5289,
-              "diff": -663,
-              "pct": -12.5
-            }
-          }
+          "stay": 14
         }
       ],
       "totalDestinations": 50,
-      "firstDetected": "2026-07-25T03:56:21.331521",
-      "dropAmount": -1380,
-      "dropPct": -26.1,
+      "firstDetected": "2026-07-26T00:01:35.113527",
+      "dropAmount": -1424,
+      "dropPct": -26.7,
       "dropPrice": 3909
     },
     {
@@ -5358,7 +5693,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 535
+        "cheapDays": 537
       },
       "typicalPrice": 6719,
       "cheapestDates": [
@@ -5432,23 +5767,18 @@
           "price": 4666,
           "stay": 7,
           "history": {
-            "4d": {
-              "price": 6459,
-              "diff": -1793,
-              "pct": -27.8
-            },
             "7d": {
-              "price": 7486,
-              "diff": -2820,
-              "pct": -37.7
+              "price": 7833,
+              "diff": -3167,
+              "pct": -40.4
             }
           }
         }
       ],
       "totalDestinations": 50,
-      "firstDetected": "2026-07-25T03:56:21.331521",
-      "dropAmount": -2545,
-      "dropPct": -39.4,
+      "firstDetected": null,
+      "dropAmount": 0,
+      "dropPct": 0.0,
       "dropPrice": 3914
     },
     {
@@ -5462,7 +5792,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 572
+        "cheapDays": 571
       },
       "typicalPrice": 4881,
       "cheapestDates": [
@@ -5499,28 +5829,14 @@
           "month": 11,
           "year": 2026,
           "price": 4129,
-          "stay": 14,
-          "history": {
-            "7d": {
-              "price": 4406,
-              "diff": -277,
-              "pct": -6.3
-            }
-          }
+          "stay": 14
         },
         {
           "day": 19,
           "month": 11,
           "year": 2026,
           "price": 4130,
-          "stay": 14,
-          "history": {
-            "7d": {
-              "price": 4406,
-              "diff": -276,
-              "pct": -6.3
-            }
-          }
+          "stay": 14
         },
         {
           "day": 5,
@@ -5552,9 +5868,9 @@
         }
       ],
       "totalDestinations": 50,
-      "firstDetected": "2026-07-25T03:56:21.331521",
-      "dropAmount": -280,
-      "dropPct": -6.4,
+      "firstDetected": null,
+      "dropAmount": 0,
+      "dropPct": 0.0,
       "dropPrice": 4126
     },
     {
@@ -5568,9 +5884,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 503
+        "cheapDays": 509
       },
-      "typicalPrice": 4855,
+      "typicalPrice": 4883,
       "cheapestDates": [
         {
           "day": 25,
@@ -5585,14 +5901,14 @@
               "pct": 2.1
             },
             "4d": {
-              "price": 4140,
-              "diff": 83,
-              "pct": 2.0
+              "price": 4136,
+              "diff": 87,
+              "pct": 2.1
             },
             "7d": {
-              "price": 4135,
-              "diff": 88,
-              "pct": 2.1
+              "price": 4251,
+              "diff": -28,
+              "pct": -0.7
             }
           }
         },
@@ -5604,14 +5920,14 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 4138,
-              "diff": 85,
-              "pct": 2.1
+              "price": 4254,
+              "diff": -31,
+              "pct": -0.7
             },
             "4d": {
-              "price": 4140,
-              "diff": 83,
-              "pct": 2.0
+              "price": 4136,
+              "diff": 87,
+              "pct": 2.1
             },
             "7d": {
               "price": 4135,
@@ -5633,9 +5949,9 @@
               "pct": 2.1
             },
             "4d": {
-              "price": 4140,
-              "diff": 83,
-              "pct": 2.0
+              "price": 4136,
+              "diff": 87,
+              "pct": 2.1
             },
             "7d": {
               "price": 4135,
@@ -5657,9 +5973,9 @@
               "pct": 2.1
             },
             "4d": {
-              "price": 4140,
-              "diff": 83,
-              "pct": 2.0
+              "price": 4136,
+              "diff": 87,
+              "pct": 2.1
             },
             "7d": {
               "price": 4135,
@@ -5681,9 +5997,9 @@
               "pct": 2.1
             },
             "4d": {
-              "price": 4140,
-              "diff": 83,
-              "pct": 2.0
+              "price": 4136,
+              "diff": 87,
+              "pct": 2.1
             },
             "7d": {
               "price": 4135,
@@ -5700,14 +6016,14 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 4138,
-              "diff": 85,
-              "pct": 2.1
+              "price": 4436,
+              "diff": -213,
+              "pct": -4.8
             },
             "4d": {
-              "price": 4140,
-              "diff": 83,
-              "pct": 2.0
+              "price": 4136,
+              "diff": 87,
+              "pct": 2.1
             },
             "7d": {
               "price": 4434,
@@ -5729,9 +6045,9 @@
               "pct": 2.1
             },
             "4d": {
-              "price": 4140,
-              "diff": 83,
-              "pct": 2.0
+              "price": 4136,
+              "diff": 87,
+              "pct": 2.1
             },
             "7d": {
               "price": 4135,
@@ -5753,9 +6069,9 @@
               "pct": 2.1
             },
             "4d": {
-              "price": 4140,
-              "diff": 83,
-              "pct": 2.0
+              "price": 4136,
+              "diff": 87,
+              "pct": 2.1
             },
             "7d": {
               "price": 4135,
@@ -5777,9 +6093,9 @@
               "pct": 2.1
             },
             "4d": {
-              "price": 4140,
-              "diff": 83,
-              "pct": 2.0
+              "price": 4136,
+              "diff": 87,
+              "pct": 2.1
             },
             "7d": {
               "price": 4135,
@@ -5801,9 +6117,9 @@
               "pct": 2.1
             },
             "4d": {
-              "price": 4140,
-              "diff": 83,
-              "pct": 2.0
+              "price": 4136,
+              "diff": 87,
+              "pct": 2.1
             },
             "7d": {
               "price": 4135,
@@ -5830,9 +6146,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 189
+        "cheapDays": 196
       },
-      "typicalPrice": 5214,
+      "typicalPrice": 5211,
       "cheapestDates": [
         {
           "day": 19,
@@ -5849,14 +6165,9 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 4656,
-              "diff": -15,
-              "pct": -0.3
-            },
-            "7d": {
-              "price": 4654,
-              "diff": -13,
-              "pct": -0.3
+              "price": 4772,
+              "diff": -131,
+              "pct": -2.7
             }
           }
         },
@@ -5865,14 +6176,7 @@
           "month": 10,
           "year": 2026,
           "price": 4641,
-          "stay": 14,
-          "history": {
-            "4d": {
-              "price": 4660,
-              "diff": -19,
-              "pct": -0.4
-            }
-          }
+          "stay": 14
         },
         {
           "day": 23,
@@ -5889,14 +6193,9 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 4656,
-              "diff": -15,
-              "pct": -0.3
-            },
-            "7d": {
-              "price": 4654,
-              "diff": -13,
-              "pct": -0.3
+              "price": 4772,
+              "diff": -131,
+              "pct": -2.7
             }
           }
         },
@@ -5933,14 +6232,7 @@
           "month": 10,
           "year": 2026,
           "price": 4644,
-          "stay": 14,
-          "history": {
-            "4d": {
-              "price": 4660,
-              "diff": -16,
-              "pct": -0.3
-            }
-          }
+          "stay": 14
         },
         {
           "day": 3,
@@ -5958,9 +6250,9 @@
         }
       ],
       "totalDestinations": 50,
-      "firstDetected": null,
-      "dropAmount": -15,
-      "dropPct": -0.3,
+      "firstDetected": "2026-07-26T00:01:35.113527",
+      "dropAmount": -131,
+      "dropPct": -2.7,
       "dropPrice": 4641
     },
     {
@@ -5974,7 +6266,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 569
+        "cheapDays": 568
       },
       "typicalPrice": 5116,
       "cheapestDates": [
@@ -5991,9 +6283,9 @@
               "pct": -0.4
             },
             "4d": {
-              "price": 4737,
-              "diff": -22,
-              "pct": -0.5
+              "price": 4732,
+              "diff": -17,
+              "pct": -0.4
             },
             "7d": {
               "price": 4731,
@@ -6015,9 +6307,9 @@
               "pct": -0.4
             },
             "4d": {
-              "price": 4737,
-              "diff": -22,
-              "pct": -0.5
+              "price": 4732,
+              "diff": -17,
+              "pct": -0.4
             },
             "7d": {
               "price": 4731,
@@ -6039,9 +6331,9 @@
               "pct": -0.4
             },
             "4d": {
-              "price": 4737,
-              "diff": -22,
-              "pct": -0.5
+              "price": 4732,
+              "diff": -17,
+              "pct": -0.4
             },
             "7d": {
               "price": 4731,
@@ -6063,9 +6355,9 @@
               "pct": -21.4
             },
             "4d": {
-              "price": 5317,
-              "diff": -594,
-              "pct": -11.2
+              "price": 5311,
+              "diff": -588,
+              "pct": -11.1
             },
             "7d": {
               "price": 6005,
@@ -6087,9 +6379,9 @@
               "pct": -11.1
             },
             "4d": {
-              "price": 5317,
-              "diff": -594,
-              "pct": -11.2
+              "price": 5311,
+              "diff": -588,
+              "pct": -11.1
             },
             "7d": {
               "price": 4731,
@@ -6111,9 +6403,9 @@
               "pct": -0.2
             },
             "4d": {
-              "price": 4737,
-              "diff": -14,
-              "pct": -0.3
+              "price": 4732,
+              "diff": -9,
+              "pct": -0.2
             },
             "7d": {
               "price": 4731,
@@ -6135,9 +6427,9 @@
               "pct": -0.2
             },
             "4d": {
-              "price": 4737,
-              "diff": -14,
-              "pct": -0.3
+              "price": 4732,
+              "diff": -9,
+              "pct": -0.2
             },
             "7d": {
               "price": 4731,
@@ -6159,9 +6451,9 @@
               "pct": -0.2
             },
             "4d": {
-              "price": 4737,
-              "diff": -14,
-              "pct": -0.3
+              "price": 4732,
+              "diff": -9,
+              "pct": -0.2
             },
             "7d": {
               "price": 4731,
@@ -6183,9 +6475,9 @@
               "pct": -0.2
             },
             "4d": {
-              "price": 4737,
-              "diff": -14,
-              "pct": -0.3
+              "price": 4732,
+              "diff": -9,
+              "pct": -0.2
             },
             "7d": {
               "price": 4731,
@@ -6207,9 +6499,9 @@
               "pct": -0.2
             },
             "4d": {
-              "price": 4737,
-              "diff": -14,
-              "pct": -0.3
+              "price": 4732,
+              "diff": -9,
+              "pct": -0.2
             },
             "7d": {
               "price": 4731,
@@ -6236,37 +6528,23 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 391
+        "cheapDays": 398
       },
-      "typicalPrice": 7535,
+      "typicalPrice": 7533,
       "cheapestDates": [
         {
           "day": 25,
           "month": 11,
           "year": 2026,
           "price": 4905,
-          "stay": 14,
-          "history": {
-            "7d": {
-              "price": 4905,
-              "diff": 0,
-              "pct": 0.0
-            }
-          }
+          "stay": 14
         },
         {
           "day": 16,
           "month": 12,
           "year": 2026,
           "price": 4908,
-          "stay": 14,
-          "history": {
-            "4d": {
-              "price": 4908,
-              "diff": 0,
-              "pct": 0.0
-            }
-          }
+          "stay": 14
         },
         {
           "day": 22,
@@ -6287,14 +6565,7 @@
           "month": 11,
           "year": 2026,
           "price": 5559,
-          "stay": 7,
-          "history": {
-            "4d": {
-              "price": 5672,
-              "diff": -113,
-              "pct": -2.0
-            }
-          }
+          "stay": 7
         },
         {
           "day": 7,
@@ -6334,8 +6605,8 @@
       ],
       "totalDestinations": 50,
       "firstDetected": null,
-      "dropAmount": -3,
-      "dropPct": -0.1,
+      "dropAmount": 0,
+      "dropPct": 0.0,
       "dropPrice": 4905
     },
     {
@@ -6349,9 +6620,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 513
+        "cheapDays": 516
       },
-      "typicalPrice": 6851,
+      "typicalPrice": 6850,
       "cheapestDates": [
         {
           "day": 17,
@@ -6366,14 +6637,14 @@
               "pct": 5.4
             },
             "4d": {
-              "price": 4872,
-              "diff": 258,
-              "pct": 5.3
+              "price": 4866,
+              "diff": 264,
+              "pct": 5.4
             },
             "7d": {
-              "price": 5433,
-              "diff": -303,
-              "pct": -5.6
+              "price": 5884,
+              "diff": -754,
+              "pct": -12.8
             }
           }
         },
@@ -6389,26 +6660,21 @@
           "month": 12,
           "year": 2026,
           "price": 5311,
-          "stay": 3,
-          "history": {
-            "4d": {
-              "price": 5313,
-              "diff": -2,
-              "pct": -0.0
-            },
-            "7d": {
-              "price": 5311,
-              "diff": 0,
-              "pct": 0.0
-            }
-          }
+          "stay": 3
         },
         {
           "day": 18,
           "month": 10,
           "year": 2026,
           "price": 5312,
-          "stay": 3
+          "stay": 3,
+          "history": {
+            "7d": {
+              "price": 6000,
+              "diff": -688,
+              "pct": -11.5
+            }
+          }
         },
         {
           "day": 27,
@@ -6425,8 +6691,13 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 5331,
-              "diff": -17,
+              "price": 5330,
+              "diff": -16,
+              "pct": -0.3
+            },
+            "4d": {
+              "price": 5329,
+              "diff": -15,
               "pct": -0.3
             },
             "7d": {
@@ -6448,7 +6719,14 @@
           "month": 12,
           "year": 2026,
           "price": 5314,
-          "stay": 7
+          "stay": 7,
+          "history": {
+            "4d": {
+              "price": 5335,
+              "diff": -21,
+              "pct": -0.4
+            }
+          }
         },
         {
           "day": 19,
@@ -6482,7 +6760,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 534
+        "cheapDays": 536
       },
       "typicalPrice": 8411,
       "cheapestDates": [
@@ -6493,15 +6771,15 @@
           "price": 5264,
           "stay": 7,
           "history": {
-            "4d": {
-              "price": 8395,
-              "diff": -3131,
-              "pct": -37.3
+            "1d": {
+              "price": 8385,
+              "diff": -3121,
+              "pct": -37.2
             },
             "7d": {
-              "price": 7647,
-              "diff": -2383,
-              "pct": -31.2
+              "price": 5262,
+              "diff": 2,
+              "pct": 0.0
             }
           }
         },
@@ -6512,10 +6790,10 @@
           "price": 5617,
           "stay": 7,
           "history": {
-            "7d": {
-              "price": 5262,
-              "diff": 355,
-              "pct": 6.7
+            "4d": {
+              "price": 5867,
+              "diff": -250,
+              "pct": -4.3
             }
           }
         },
@@ -6524,7 +6802,14 @@
           "month": 11,
           "year": 2026,
           "price": 5736,
-          "stay": 7
+          "stay": 7,
+          "history": {
+            "7d": {
+              "price": 7184,
+              "diff": -1448,
+              "pct": -20.2
+            }
+          }
         },
         {
           "day": 3,
@@ -6539,9 +6824,9 @@
               "pct": -11.8
             },
             "4d": {
-              "price": 6772,
-              "diff": -690,
-              "pct": -10.2
+              "price": 6892,
+              "diff": -810,
+              "pct": -11.8
             },
             "7d": {
               "price": 6304,
@@ -6584,9 +6869,9 @@
               "pct": -8.6
             },
             "4d": {
-              "price": 6900,
-              "diff": -600,
-              "pct": -8.7
+              "price": 6892,
+              "diff": -592,
+              "pct": -8.6
             },
             "7d": {
               "price": 6304,
@@ -6622,9 +6907,9 @@
               "pct": -0.2
             },
             "4d": {
-              "price": 6378,
-              "diff": -21,
-              "pct": -0.3
+              "price": 6371,
+              "diff": -14,
+              "pct": -0.2
             },
             "7d": {
               "price": 6663,
@@ -6651,9 +6936,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 527
+        "cheapDays": 528
       },
-      "typicalPrice": 7141,
+      "typicalPrice": 7013,
       "cheapestDates": [
         {
           "day": 26,
@@ -6668,9 +6953,9 @@
               "pct": -9.9
             },
             "4d": {
-              "price": 5704,
-              "diff": -310,
-              "pct": -5.4
+              "price": 5987,
+              "diff": -593,
+              "pct": -9.9
             },
             "7d": {
               "price": 5698,
@@ -6692,9 +6977,9 @@
               "pct": 0.0
             },
             "4d": {
-              "price": 5403,
-              "diff": -4,
-              "pct": -0.1
+              "price": 5397,
+              "diff": 2,
+              "pct": 0.0
             },
             "7d": {
               "price": 5397,
@@ -6716,13 +7001,13 @@
               "pct": -0.3
             },
             "4d": {
-              "price": 5472,
-              "diff": -21,
-              "pct": -0.4
+              "price": 5466,
+              "diff": -15,
+              "pct": -0.3
             },
             "7d": {
-              "price": 5767,
-              "diff": -316,
+              "price": 5768,
+              "diff": -317,
               "pct": -5.5
             }
           }
@@ -6740,13 +7025,13 @@
               "pct": -0.3
             },
             "4d": {
-              "price": 5472,
-              "diff": -21,
-              "pct": -0.4
+              "price": 5466,
+              "diff": -15,
+              "pct": -0.3
             },
             "7d": {
-              "price": 5767,
-              "diff": -316,
+              "price": 5768,
+              "diff": -317,
               "pct": -5.5
             }
           }
@@ -6764,13 +7049,13 @@
               "pct": -10.0
             },
             "4d": {
-              "price": 5774,
-              "diff": -323,
-              "pct": -5.6
-            },
-            "7d": {
               "price": 5767,
               "diff": -316,
+              "pct": -5.5
+            },
+            "7d": {
+              "price": 5768,
+              "diff": -317,
               "pct": -5.5
             }
           }
@@ -6783,18 +7068,18 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 5942,
-              "diff": -486,
-              "pct": -8.2
+              "price": 6058,
+              "diff": -602,
+              "pct": -9.9
             },
             "4d": {
-              "price": 5774,
-              "diff": -318,
-              "pct": -5.5
+              "price": 6057,
+              "diff": -601,
+              "pct": -9.9
             },
             "7d": {
-              "price": 5767,
-              "diff": -311,
+              "price": 5768,
+              "diff": -312,
               "pct": -5.4
             }
           }
@@ -6812,9 +7097,9 @@
               "pct": -5.0
             },
             "4d": {
-              "price": 5994,
-              "diff": -305,
-              "pct": -5.1
+              "price": 5987,
+              "diff": -298,
+              "pct": -5.0
             },
             "7d": {
               "price": 6462,
@@ -6831,14 +7116,14 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 6463,
-              "diff": -591,
-              "pct": -9.1
+              "price": 6625,
+              "diff": -753,
+              "pct": -11.4
             },
             "4d": {
-              "price": 6180,
-              "diff": -308,
-              "pct": -5.0
+              "price": 6172,
+              "diff": -300,
+              "pct": -4.9
             },
             "7d": {
               "price": 6173,
@@ -6858,6 +7143,11 @@
               "price": 5398,
               "diff": 522,
               "pct": 9.7
+            },
+            "4d": {
+              "price": 5397,
+              "diff": 523,
+              "pct": 9.7
             }
           }
         },
@@ -6868,15 +7158,10 @@
           "price": 5920,
           "stay": 7,
           "history": {
-            "4d": {
+            "7d": {
               "price": 5940,
               "diff": -20,
               "pct": -0.3
-            },
-            "7d": {
-              "price": 5941,
-              "diff": -21,
-              "pct": -0.4
             }
           }
         }
@@ -6900,7 +7185,7 @@
         "carryOn": false,
         "cheapDays": 557
       },
-      "typicalPrice": 8120,
+      "typicalPrice": 8118,
       "cheapestDates": [
         {
           "day": 18,
@@ -6915,14 +7200,14 @@
               "pct": -11.7
             },
             "4d": {
-              "price": 6660,
-              "diff": -1068,
-              "pct": -16.0
+              "price": 6334,
+              "diff": -742,
+              "pct": -11.7
             },
             "7d": {
-              "price": 7306,
-              "diff": -1714,
-              "pct": -23.5
+              "price": 5596,
+              "diff": -4,
+              "pct": -0.1
             }
           }
         },
@@ -6939,13 +7224,13 @@
               "pct": -2.4
             },
             "4d": {
-              "price": 6348,
-              "diff": -645,
-              "pct": -10.2
+              "price": 5848,
+              "diff": -145,
+              "pct": -2.5
             },
             "7d": {
-              "price": 5710,
-              "diff": -7,
+              "price": 5709,
+              "diff": -6,
               "pct": -0.1
             }
           }
@@ -6963,13 +7248,13 @@
               "pct": -2.4
             },
             "4d": {
-              "price": 6348,
-              "diff": -645,
-              "pct": -10.2
+              "price": 5848,
+              "diff": -145,
+              "pct": -2.5
             },
             "7d": {
-              "price": 5710,
-              "diff": -7,
+              "price": 5709,
+              "diff": -6,
               "pct": -0.1
             }
           }
@@ -6987,9 +7272,28 @@
               "pct": -9.8
             },
             "4d": {
-              "price": 6800,
-              "diff": -1091,
-              "pct": -16.0
+              "price": 6334,
+              "diff": -625,
+              "pct": -9.9
+            }
+          }
+        },
+        {
+          "day": 23,
+          "month": 11,
+          "year": 2026,
+          "price": 6087,
+          "stay": 3,
+          "history": {
+            "1d": {
+              "price": 6331,
+              "diff": -244,
+              "pct": -3.9
+            },
+            "4d": {
+              "price": 5860,
+              "diff": 227,
+              "pct": 3.9
             }
           }
         },
@@ -6998,14 +7302,7 @@
           "month": 12,
           "year": 2026,
           "price": 6169,
-          "stay": 7,
-          "history": {
-            "7d": {
-              "price": 8915,
-              "diff": -2746,
-              "pct": -30.8
-            }
-          }
+          "stay": 7
         },
         {
           "day": 20,
@@ -7021,15 +7318,10 @@
           "price": 6333,
           "stay": 14,
           "history": {
-            "1d": {
-              "price": 7121,
-              "diff": -788,
-              "pct": -11.1
-            },
             "4d": {
-              "price": 8109,
-              "diff": -1776,
-              "pct": -21.9
+              "price": 7620,
+              "diff": -1287,
+              "pct": -16.9
             }
           }
         },
@@ -7048,27 +7340,8 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 6334,
-              "diff": 0,
-              "pct": 0.0
-            },
-            "7d": {
-              "price": 7619,
-              "diff": -1285,
-              "pct": -16.9
-            }
-          }
-        },
-        {
-          "day": 22,
-          "month": 12,
-          "year": 2026,
-          "price": 6334,
-          "stay": 14,
-          "history": {
-            "1d": {
-              "price": 6334,
-              "diff": 0,
+              "price": 6331,
+              "diff": 3,
               "pct": 0.0
             }
           }
@@ -7093,7 +7366,7 @@
         "carryOn": false,
         "cheapDays": 564
       },
-      "typicalPrice": 8034,
+      "typicalPrice": 8030,
       "cheapestDates": [
         {
           "day": 8,
@@ -7108,9 +7381,9 @@
               "pct": -0.3
             },
             "4d": {
-              "price": 5911,
-              "diff": -23,
-              "pct": -0.4
+              "price": 5903,
+              "diff": -15,
+              "pct": -0.3
             },
             "7d": {
               "price": 5905,
@@ -7132,9 +7405,9 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 5911,
-              "diff": -11,
-              "pct": -0.2
+              "price": 5903,
+              "diff": -3,
+              "pct": -0.1
             },
             "7d": {
               "price": 5905,
@@ -7156,9 +7429,9 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 5911,
-              "diff": -11,
-              "pct": -0.2
+              "price": 5903,
+              "diff": -3,
+              "pct": -0.1
             },
             "7d": {
               "price": 5905,
@@ -7180,9 +7453,9 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 5911,
-              "diff": -11,
-              "pct": -0.2
+              "price": 5903,
+              "diff": -3,
+              "pct": -0.1
             },
             "7d": {
               "price": 5905,
@@ -7204,9 +7477,9 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 6502,
-              "diff": -602,
-              "pct": -9.3
+              "price": 6204,
+              "diff": -304,
+              "pct": -4.9
             },
             "7d": {
               "price": 6495,
@@ -7228,9 +7501,9 @@
               "pct": -16.5
             },
             "4d": {
-              "price": 7072,
-              "diff": -1172,
-              "pct": -16.6
+              "price": 7063,
+              "diff": -1163,
+              "pct": -16.5
             },
             "7d": {
               "price": 7065,
@@ -7252,14 +7525,14 @@
               "pct": -9.2
             },
             "4d": {
-              "price": 6502,
-              "diff": -602,
-              "pct": -9.3
+              "price": 6493,
+              "diff": -593,
+              "pct": -9.1
             },
             "7d": {
-              "price": 6206,
-              "diff": -306,
-              "pct": -4.9
+              "price": 6495,
+              "diff": -595,
+              "pct": -9.2
             }
           }
         },
@@ -7276,9 +7549,9 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 5911,
-              "diff": -11,
-              "pct": -0.2
+              "price": 5903,
+              "diff": -3,
+              "pct": -0.1
             },
             "7d": {
               "price": 5905,
@@ -7300,9 +7573,9 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 5911,
-              "diff": -11,
-              "pct": -0.2
+              "price": 5903,
+              "diff": -3,
+              "pct": -0.1
             },
             "7d": {
               "price": 5905,
@@ -7324,9 +7597,9 @@
               "pct": -0.1
             },
             "4d": {
-              "price": 5911,
-              "diff": -11,
-              "pct": -0.2
+              "price": 5903,
+              "diff": -3,
+              "pct": -0.1
             },
             "7d": {
               "price": 5905,
@@ -7353,9 +7626,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 318
+        "cheapDays": 325
       },
-      "typicalPrice": 8904,
+      "typicalPrice": 8903,
       "cheapestDates": [
         {
           "day": 15,
@@ -7368,6 +7641,11 @@
               "price": 6121,
               "diff": -2,
               "pct": -0.0
+            },
+            "4d": {
+              "price": 6119,
+              "diff": 0,
+              "pct": 0.0
             }
           }
         },
@@ -7379,14 +7657,19 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 7893,
-              "diff": -1742,
+              "price": 7892,
+              "diff": -1741,
               "pct": -22.1
             },
+            "4d": {
+              "price": 7790,
+              "diff": -1639,
+              "pct": -21.0
+            },
             "7d": {
-              "price": 8021,
-              "diff": -1870,
-              "pct": -23.3
+              "price": 8716,
+              "diff": -2565,
+              "pct": -29.4
             }
           }
         },
@@ -7408,6 +7691,16 @@
               "price": 7892,
               "diff": -1739,
               "pct": -22.0
+            },
+            "4d": {
+              "price": 7790,
+              "diff": -1637,
+              "pct": -21.0
+            },
+            "7d": {
+              "price": 7790,
+              "diff": -1637,
+              "pct": -21.0
             }
           }
         },
@@ -7422,6 +7715,11 @@
               "price": 6968,
               "diff": -815,
               "pct": -11.7
+            },
+            "4d": {
+              "price": 6966,
+              "diff": -813,
+              "pct": -11.7
             }
           }
         },
@@ -7435,6 +7733,11 @@
             "1d": {
               "price": 6968,
               "diff": -815,
+              "pct": -11.7
+            },
+            "4d": {
+              "price": 6966,
+              "diff": -813,
               "pct": -11.7
             },
             "7d": {
@@ -7456,6 +7759,11 @@
               "diff": -814,
               "pct": -11.7
             },
+            "4d": {
+              "price": 6966,
+              "diff": -812,
+              "pct": -11.7
+            },
             "7d": {
               "price": 6965,
               "diff": -811,
@@ -7474,6 +7782,11 @@
               "price": 6121,
               "diff": 33,
               "pct": 0.5
+            },
+            "4d": {
+              "price": 6119,
+              "diff": 35,
+              "pct": 0.6
             }
           }
         },
@@ -7484,29 +7797,24 @@
           "price": 6280,
           "stay": 7,
           "history": {
-            "7d": {
-              "price": 6280,
-              "diff": 0,
-              "pct": 0.0
+            "1d": {
+              "price": 6283,
+              "diff": -3,
+              "pct": -0.0
             }
           }
         },
         {
-          "day": 8,
-          "month": 9,
+          "day": 13,
+          "month": 10,
           "year": 2026,
-          "price": 6315,
-          "stay": 3,
+          "price": 6282,
+          "stay": 14,
           "history": {
             "1d": {
-              "price": 6491,
-              "diff": -176,
-              "pct": -2.7
-            },
-            "7d": {
-              "price": 6489,
-              "diff": -174,
-              "pct": -2.7
+              "price": 6282,
+              "diff": 0,
+              "pct": 0.0
             }
           }
         }
@@ -7528,9 +7836,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 379
+        "cheapDays": 389
       },
-      "typicalPrice": 8236,
+      "typicalPrice": 8220,
       "cheapestDates": [
         {
           "day": 8,
@@ -7544,9 +7852,14 @@
               "diff": -1355,
               "pct": -18.1
             },
+            "4d": {
+              "price": 7487,
+              "diff": -1353,
+              "pct": -18.1
+            },
             "7d": {
-              "price": 7486,
-              "diff": -1352,
+              "price": 7487,
+              "diff": -1353,
               "pct": -18.1
             }
           }
@@ -7563,9 +7876,14 @@
               "diff": -1340,
               "pct": -17.9
             },
+            "4d": {
+              "price": 7487,
+              "diff": -1338,
+              "pct": -17.9
+            },
             "7d": {
-              "price": 7486,
-              "diff": -1337,
+              "price": 7487,
+              "diff": -1338,
               "pct": -17.9
             }
           }
@@ -7581,6 +7899,11 @@
               "price": 7489,
               "diff": -1337,
               "pct": -17.9
+            },
+            "4d": {
+              "price": 7442,
+              "diff": -1290,
+              "pct": -17.3
             },
             "7d": {
               "price": 7445,
@@ -7601,9 +7924,14 @@
               "diff": -1337,
               "pct": -17.9
             },
+            "4d": {
+              "price": 7487,
+              "diff": -1335,
+              "pct": -17.8
+            },
             "7d": {
-              "price": 7486,
-              "diff": -1334,
+              "price": 7487,
+              "diff": -1335,
               "pct": -17.8
             }
           }
@@ -7620,9 +7948,14 @@
               "diff": -1337,
               "pct": -17.9
             },
+            "4d": {
+              "price": 7487,
+              "diff": -1335,
+              "pct": -17.8
+            },
             "7d": {
-              "price": 7486,
-              "diff": -1334,
+              "price": 7487,
+              "diff": -1335,
               "pct": -17.8
             }
           }
@@ -7635,14 +7968,19 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 7489,
-              "diff": -1337,
-              "pct": -17.9
+              "price": 6968,
+              "diff": -816,
+              "pct": -11.7
+            },
+            "4d": {
+              "price": 7445,
+              "diff": -1293,
+              "pct": -17.4
             },
             "7d": {
-              "price": 6965,
-              "diff": -813,
-              "pct": -11.7
+              "price": 7487,
+              "diff": -1335,
+              "pct": -17.8
             }
           }
         },
@@ -7658,9 +7996,14 @@
               "diff": -1337,
               "pct": -17.9
             },
+            "4d": {
+              "price": 7487,
+              "diff": -1335,
+              "pct": -17.8
+            },
             "7d": {
-              "price": 7486,
-              "diff": -1334,
+              "price": 7487,
+              "diff": -1335,
               "pct": -17.8
             }
           }
@@ -7677,9 +8020,14 @@
               "diff": -816,
               "pct": -11.7
             },
+            "4d": {
+              "price": 6966,
+              "diff": -814,
+              "pct": -11.7
+            },
             "7d": {
-              "price": 6965,
-              "diff": -813,
+              "price": 6966,
+              "diff": -814,
               "pct": -11.7
             }
           }
@@ -7695,6 +8043,11 @@
               "price": 7489,
               "diff": -1337,
               "pct": -17.9
+            },
+            "4d": {
+              "price": 7442,
+              "diff": -1290,
+              "pct": -17.3
             },
             "7d": {
               "price": 7445,
@@ -7715,9 +8068,14 @@
               "diff": -1337,
               "pct": -17.9
             },
+            "4d": {
+              "price": 7487,
+              "diff": -1335,
+              "pct": -17.8
+            },
             "7d": {
-              "price": 7486,
-              "diff": -1334,
+              "price": 7487,
+              "diff": -1335,
               "pct": -17.8
             }
           }
@@ -7757,9 +8115,9 @@
               "pct": -11.7
             },
             "4d": {
-              "price": 6974,
-              "diff": -822,
-              "pct": -11.8
+              "price": 6966,
+              "diff": -814,
+              "pct": -11.7
             },
             "7d": {
               "price": 6965,
@@ -7781,9 +8139,9 @@
               "pct": -11.7
             },
             "4d": {
-              "price": 6974,
-              "diff": -822,
-              "pct": -11.8
+              "price": 6966,
+              "diff": -814,
+              "pct": -11.7
             },
             "7d": {
               "price": 6965,
@@ -7805,9 +8163,9 @@
               "pct": -11.7
             },
             "4d": {
-              "price": 6974,
-              "diff": -822,
-              "pct": -11.8
+              "price": 6966,
+              "diff": -814,
+              "pct": -11.7
             },
             "7d": {
               "price": 6965,
@@ -7829,9 +8187,9 @@
               "pct": -11.7
             },
             "4d": {
-              "price": 6974,
-              "diff": -822,
-              "pct": -11.8
+              "price": 6966,
+              "diff": -814,
+              "pct": -11.7
             },
             "7d": {
               "price": 6965,
@@ -7853,14 +8211,14 @@
               "pct": -13.9
             },
             "4d": {
-              "price": 7148,
-              "diff": -996,
-              "pct": -13.9
+              "price": 7140,
+              "diff": -988,
+              "pct": -13.8
             },
             "7d": {
-              "price": 6965,
-              "diff": -813,
-              "pct": -11.7
+              "price": 7139,
+              "diff": -987,
+              "pct": -13.8
             }
           }
         },
@@ -7877,9 +8235,9 @@
               "pct": -13.9
             },
             "4d": {
-              "price": 7496,
-              "diff": -1344,
-              "pct": -17.9
+              "price": 7140,
+              "diff": -988,
+              "pct": -13.8
             },
             "7d": {
               "price": 6965,
@@ -7901,9 +8259,9 @@
               "pct": -11.7
             },
             "4d": {
-              "price": 6974,
-              "diff": -822,
-              "pct": -11.8
+              "price": 6966,
+              "diff": -814,
+              "pct": -11.7
             },
             "7d": {
               "price": 6965,
@@ -7925,9 +8283,9 @@
               "pct": -11.7
             },
             "4d": {
-              "price": 6974,
-              "diff": -822,
-              "pct": -11.8
+              "price": 6966,
+              "diff": -814,
+              "pct": -11.7
             },
             "7d": {
               "price": 6965,
@@ -7949,9 +8307,9 @@
               "pct": -11.7
             },
             "4d": {
-              "price": 6974,
-              "diff": -822,
-              "pct": -11.8
+              "price": 6966,
+              "diff": -814,
+              "pct": -11.7
             },
             "7d": {
               "price": 6965,
@@ -7973,9 +8331,9 @@
               "pct": -11.7
             },
             "4d": {
-              "price": 6974,
-              "diff": -822,
-              "pct": -11.8
+              "price": 6966,
+              "diff": -814,
+              "pct": -11.7
             },
             "7d": {
               "price": 6965,
@@ -8004,7 +8362,7 @@
         "carryOn": false,
         "cheapDays": 535
       },
-      "typicalPrice": 18474,
+      "typicalPrice": 19938,
       "cheapestDates": [
         {
           "day": 18,
@@ -8094,9 +8452,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 592
+        "cheapDays": 591
       },
-      "typicalPrice": 9575,
+      "typicalPrice": 9568,
       "cheapestDates": [
         {
           "day": 27,
@@ -8111,9 +8469,9 @@
               "pct": -14.4
             },
             "4d": {
-              "price": 7381,
-              "diff": -1072,
-              "pct": -14.5
+              "price": 7373,
+              "diff": -1064,
+              "pct": -14.4
             },
             "7d": {
               "price": 7372,
@@ -8135,9 +8493,9 @@
               "pct": -20.8
             },
             "4d": {
-              "price": 7973,
-              "diff": -1664,
-              "pct": -20.9
+              "price": 7964,
+              "diff": -1655,
+              "pct": -20.8
             },
             "7d": {
               "price": 8298,
@@ -8154,19 +8512,19 @@
           "stay": 3,
           "history": {
             "1d": {
-              "price": 8543,
-              "diff": -2211,
-              "pct": -25.9
+              "price": 8529,
+              "diff": -2197,
+              "pct": -25.8
             },
             "4d": {
-              "price": 8575,
-              "diff": -2243,
-              "pct": -26.2
+              "price": 8555,
+              "diff": -2223,
+              "pct": -26.0
             },
             "7d": {
-              "price": 8028,
-              "diff": -1696,
-              "pct": -21.1
+              "price": 10625,
+              "diff": -4293,
+              "pct": -40.4
             }
           }
         },
@@ -8183,9 +8541,9 @@
               "pct": -29.8
             },
             "4d": {
-              "price": 9760,
-              "diff": -3305,
-              "pct": -33.9
+              "price": 9749,
+              "diff": -3294,
+              "pct": -33.8
             },
             "7d": {
               "price": 9747,
@@ -8207,14 +8565,14 @@
               "pct": -19.2
             },
             "4d": {
-              "price": 8010,
-              "diff": -1551,
-              "pct": -19.4
+              "price": 8001,
+              "diff": -1542,
+              "pct": -19.3
             },
             "7d": {
-              "price": 7999,
-              "diff": -1540,
-              "pct": -19.3
+              "price": 7593,
+              "diff": -1134,
+              "pct": -14.9
             }
           }
         },
@@ -8231,13 +8589,13 @@
               "pct": -16.8
             },
             "4d": {
-              "price": 7799,
-              "diff": -1317,
-              "pct": -16.9
+              "price": 7790,
+              "diff": -1308,
+              "pct": -16.8
             },
             "7d": {
-              "price": 7788,
-              "diff": -1306,
+              "price": 7789,
+              "diff": -1307,
               "pct": -16.8
             }
           }
@@ -8255,9 +8613,9 @@
               "pct": -21.0
             },
             "4d": {
-              "price": 8216,
-              "diff": -1734,
-              "pct": -21.1
+              "price": 8207,
+              "diff": -1725,
+              "pct": -21.0
             },
             "7d": {
               "price": 8205,
@@ -8279,9 +8637,9 @@
               "pct": -18.6
             },
             "4d": {
-              "price": 7973,
-              "diff": -1491,
-              "pct": -18.7
+              "price": 7964,
+              "diff": -1482,
+              "pct": -18.6
             },
             "7d": {
               "price": 8379,
@@ -8303,9 +8661,9 @@
               "pct": -22.6
             },
             "4d": {
-              "price": 8390,
-              "diff": -1908,
-              "pct": -22.7
+              "price": 8380,
+              "diff": -1898,
+              "pct": -22.6
             },
             "7d": {
               "price": 7129,
@@ -8327,9 +8685,9 @@
               "pct": -13.8
             },
             "4d": {
-              "price": 8010,
-              "diff": -1282,
-              "pct": -16.0
+              "price": 8001,
+              "diff": -1273,
+              "pct": -15.9
             },
             "7d": {
               "price": 7999,
@@ -8356,7 +8714,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 415
+        "cheapDays": 412
       },
       "typicalPrice": 8479,
       "cheapestDates": [
@@ -8365,21 +8723,42 @@
           "month": 11,
           "year": 2026,
           "price": 6526,
-          "stay": 7
+          "stay": 7,
+          "history": {
+            "7d": {
+              "price": 6526,
+              "diff": 0,
+              "pct": 0.0
+            }
+          }
         },
         {
           "day": 22,
           "month": 10,
           "year": 2026,
           "price": 6589,
-          "stay": 14
+          "stay": 14,
+          "history": {
+            "7d": {
+              "price": 6933,
+              "diff": -344,
+              "pct": -5.0
+            }
+          }
         },
         {
           "day": 29,
           "month": 10,
           "year": 2026,
           "price": 6589,
-          "stay": 14
+          "stay": 14,
+          "history": {
+            "7d": {
+              "price": 6933,
+              "diff": -344,
+              "pct": -5.0
+            }
+          }
         },
         {
           "day": 19,
@@ -8393,42 +8772,84 @@
           "month": 10,
           "year": 2026,
           "price": 6604,
-          "stay": 7
+          "stay": 7,
+          "history": {
+            "7d": {
+              "price": 6933,
+              "diff": -329,
+              "pct": -4.7
+            }
+          }
         },
         {
           "day": 17,
           "month": 11,
           "year": 2026,
           "price": 6906,
-          "stay": 7
+          "stay": 7,
+          "history": {
+            "7d": {
+              "price": 7488,
+              "diff": -582,
+              "pct": -7.8
+            }
+          }
         },
         {
           "day": 24,
           "month": 11,
           "year": 2026,
           "price": 6906,
-          "stay": 3
+          "stay": 3,
+          "history": {
+            "7d": {
+              "price": 7558,
+              "diff": -652,
+              "pct": -8.6
+            }
+          }
         },
         {
           "day": 25,
           "month": 10,
           "year": 2026,
           "price": 6907,
-          "stay": 14
+          "stay": 14,
+          "history": {
+            "7d": {
+              "price": 6933,
+              "diff": -26,
+              "pct": -0.4
+            }
+          }
         },
         {
           "day": 10,
           "month": 11,
           "year": 2026,
           "price": 6907,
-          "stay": 14
+          "stay": 14,
+          "history": {
+            "7d": {
+              "price": 6933,
+              "diff": -26,
+              "pct": -0.4
+            }
+          }
         },
         {
           "day": 27,
           "month": 10,
           "year": 2026,
           "price": 6907,
-          "stay": 14
+          "stay": 14,
+          "history": {
+            "7d": {
+              "price": 6933,
+              "diff": -26,
+              "pct": -0.4
+            }
+          }
         }
       ],
       "totalDestinations": 50,
@@ -8457,14 +8878,7 @@
           "month": 9,
           "year": 2026,
           "price": 6719,
-          "stay": 14,
-          "history": {
-            "7d": {
-              "price": 6728,
-              "diff": -9,
-              "pct": -0.1
-            }
-          }
+          "stay": 14
         },
         {
           "day": 11,
@@ -8473,10 +8887,10 @@
           "price": 6719,
           "stay": 14,
           "history": {
-            "7d": {
-              "price": 8904,
-              "diff": -2185,
-              "pct": -24.5
+            "4d": {
+              "price": 6734,
+              "diff": -15,
+              "pct": -0.2
             }
           }
         },
@@ -8487,15 +8901,15 @@
           "price": 6719,
           "stay": 3,
           "history": {
-            "1d": {
-              "price": 6728,
-              "diff": -9,
-              "pct": -0.1
+            "4d": {
+              "price": 7418,
+              "diff": -699,
+              "pct": -9.4
             },
             "7d": {
-              "price": 7411,
-              "diff": -692,
-              "pct": -9.3
+              "price": 7110,
+              "diff": -391,
+              "pct": -5.5
             }
           }
         },
@@ -8512,9 +8926,9 @@
               "pct": -16.6
             },
             "4d": {
-              "price": 8266,
-              "diff": -1547,
-              "pct": -18.7
+              "price": 8058,
+              "diff": -1339,
+              "pct": -16.6
             },
             "7d": {
               "price": 8372,
@@ -8536,14 +8950,14 @@
               "pct": -3.6
             },
             "4d": {
-              "price": 8266,
-              "diff": -1547,
-              "pct": -18.7
+              "price": 7271,
+              "diff": -552,
+              "pct": -7.6
             },
             "7d": {
-              "price": 7342,
-              "diff": -623,
-              "pct": -8.5
+              "price": 8002,
+              "diff": -1283,
+              "pct": -16.0
             }
           }
         },
@@ -8555,14 +8969,14 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 7665,
-              "diff": -942,
-              "pct": -12.3
+              "price": 7075,
+              "diff": -352,
+              "pct": -5.0
             },
             "4d": {
-              "price": 9367,
-              "diff": -2644,
-              "pct": -28.2
+              "price": 8128,
+              "diff": -1405,
+              "pct": -17.3
             },
             "7d": {
               "price": 9356,
@@ -8584,9 +8998,9 @@
               "pct": -28.1
             },
             "4d": {
-              "price": 10074,
-              "diff": -3351,
-              "pct": -33.3
+              "price": 9355,
+              "diff": -2632,
+              "pct": -28.1
             },
             "7d": {
               "price": 10062,
@@ -8603,9 +9017,9 @@
           "stay": 14,
           "history": {
             "1d": {
-              "price": 6728,
-              "diff": -3,
-              "pct": -0.0
+              "price": 7109,
+              "diff": -384,
+              "pct": -5.4
             }
           }
         },
@@ -8616,15 +9030,10 @@
           "price": 6726,
           "stay": 7,
           "history": {
-            "1d": {
-              "price": 6727,
-              "diff": -1,
-              "pct": -0.0
-            },
             "4d": {
-              "price": 6729,
-              "diff": -3,
-              "pct": -0.0
+              "price": 9110,
+              "diff": -2384,
+              "pct": -26.2
             }
           }
         },
@@ -8635,18 +9044,18 @@
           "price": 6726,
           "stay": 14,
           "history": {
-            "7d": {
-              "price": 7249,
-              "diff": -523,
-              "pct": -7.2
+            "4d": {
+              "price": 8911,
+              "diff": -2185,
+              "pct": -24.5
             }
           }
         }
       ],
       "totalDestinations": 50,
-      "firstDetected": null,
-      "dropAmount": -8,
-      "dropPct": -0.1,
+      "firstDetected": "2026-07-26T00:01:35.113527",
+      "dropAmount": -252,
+      "dropPct": -3.6,
       "dropPrice": 6719
     },
     {
@@ -8660,9 +9069,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 549
+        "cheapDays": 551
       },
-      "typicalPrice": 10323,
+      "typicalPrice": 10322,
       "cheapestDates": [
         {
           "day": 13,
@@ -8677,9 +9086,9 @@
               "pct": -9.9
             },
             "4d": {
-              "price": 8481,
-              "diff": -846,
-              "pct": -10.0
+              "price": 8471,
+              "diff": -836,
+              "pct": -9.9
             },
             "7d": {
               "price": 8470,
@@ -8701,9 +9110,9 @@
               "pct": -11.4
             },
             "4d": {
-              "price": 8481,
-              "diff": -824,
-              "pct": -9.7
+              "price": 8471,
+              "diff": -814,
+              "pct": -9.6
             },
             "7d": {
               "price": 8470,
@@ -8725,14 +9134,14 @@
               "pct": -14.9
             },
             "4d": {
-              "price": 9002,
-              "diff": -1345,
-              "pct": -14.9
+              "price": 8992,
+              "diff": -1335,
+              "pct": -14.8
             },
             "7d": {
-              "price": 8644,
-              "diff": -987,
-              "pct": -11.4
+              "price": 8991,
+              "diff": -1334,
+              "pct": -14.8
             }
           }
         },
@@ -8749,9 +9158,9 @@
               "pct": -9.6
             },
             "4d": {
-              "price": 8481,
-              "diff": -824,
-              "pct": -9.7
+              "price": 8471,
+              "diff": -814,
+              "pct": -9.6
             },
             "7d": {
               "price": 8470,
@@ -8773,9 +9182,9 @@
               "pct": -9.6
             },
             "4d": {
-              "price": 8481,
-              "diff": -824,
-              "pct": -9.7
+              "price": 8471,
+              "diff": -814,
+              "pct": -9.6
             },
             "7d": {
               "price": 8470,
@@ -8797,9 +9206,9 @@
               "pct": -9.6
             },
             "4d": {
-              "price": 8481,
-              "diff": -824,
-              "pct": -9.7
+              "price": 8471,
+              "diff": -814,
+              "pct": -9.6
             },
             "7d": {
               "price": 8470,
@@ -8821,9 +9230,9 @@
               "pct": -9.6
             },
             "4d": {
-              "price": 8481,
-              "diff": -824,
-              "pct": -9.7
+              "price": 8471,
+              "diff": -814,
+              "pct": -9.6
             },
             "7d": {
               "price": 8470,
@@ -8845,9 +9254,9 @@
               "pct": -9.6
             },
             "4d": {
-              "price": 8481,
-              "diff": -824,
-              "pct": -9.7
+              "price": 8471,
+              "diff": -814,
+              "pct": -9.6
             },
             "7d": {
               "price": 8470,
@@ -8869,9 +9278,9 @@
               "pct": -11.4
             },
             "4d": {
-              "price": 8481,
-              "diff": -824,
-              "pct": -9.7
+              "price": 8471,
+              "diff": -814,
+              "pct": -9.6
             },
             "7d": {
               "price": 8470,
@@ -8893,9 +9302,9 @@
               "pct": -9.6
             },
             "4d": {
-              "price": 8481,
-              "diff": -824,
-              "pct": -9.7
+              "price": 8471,
+              "diff": -814,
+              "pct": -9.6
             },
             "7d": {
               "price": 8470,
@@ -8922,7 +9331,7 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 541
+        "cheapDays": 543
       },
       "typicalPrice": 8664,
       "cheapestDates": [
@@ -8939,9 +9348,9 @@
               "pct": -7.2
             },
             "4d": {
-              "price": 8601,
-              "diff": -626,
-              "pct": -7.3
+              "price": 8593,
+              "diff": -618,
+              "pct": -7.2
             },
             "7d": {
               "price": 8003,
@@ -8963,9 +9372,9 @@
               "pct": -7.2
             },
             "4d": {
-              "price": 8601,
-              "diff": -626,
-              "pct": -7.3
+              "price": 8593,
+              "diff": -618,
+              "pct": -7.2
             },
             "7d": {
               "price": 8003,
@@ -8987,9 +9396,9 @@
               "pct": -7.2
             },
             "4d": {
-              "price": 8601,
-              "diff": -626,
-              "pct": -7.3
+              "price": 8003,
+              "diff": -28,
+              "pct": -0.3
             },
             "7d": {
               "price": 8003,
@@ -9006,14 +9415,14 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 8003,
-              "diff": -26,
+              "price": 8002,
+              "diff": -25,
               "pct": -0.3
             },
             "4d": {
-              "price": 8010,
-              "diff": -33,
-              "pct": -0.4
+              "price": 8003,
+              "diff": -26,
+              "pct": -0.3
             },
             "7d": {
               "price": 8003,
@@ -9035,9 +9444,9 @@
               "pct": -7.0
             },
             "4d": {
-              "price": 8601,
-              "diff": -613,
-              "pct": -7.1
+              "price": 8593,
+              "diff": -605,
+              "pct": -7.0
             },
             "7d": {
               "price": 8593,
@@ -9054,14 +9463,14 @@
           "stay": 7,
           "history": {
             "1d": {
-              "price": 8003,
-              "diff": -6,
+              "price": 8002,
+              "diff": -5,
               "pct": -0.1
             },
             "4d": {
-              "price": 8010,
-              "diff": -13,
-              "pct": -0.2
+              "price": 8003,
+              "diff": -6,
+              "pct": -0.1
             },
             "7d": {
               "price": 8003,
@@ -9078,14 +9487,14 @@
           "stay": 7,
           "history": {
             "1d": {
+              "price": 8002,
+              "diff": 0,
+              "pct": 0.0
+            },
+            "4d": {
               "price": 8003,
               "diff": -1,
               "pct": -0.0
-            },
-            "4d": {
-              "price": 8010,
-              "diff": -8,
-              "pct": -0.1
             },
             "7d": {
               "price": 8003,
@@ -9107,9 +9516,9 @@
               "pct": -5.6
             },
             "4d": {
-              "price": 8010,
-              "diff": 104,
-              "pct": 1.3
+              "price": 8003,
+              "diff": 111,
+              "pct": 1.4
             },
             "7d": {
               "price": 8003,
@@ -9131,9 +9540,9 @@
               "pct": -5.4
             },
             "4d": {
-              "price": 8601,
-              "diff": -474,
-              "pct": -5.5
+              "price": 8593,
+              "diff": -466,
+              "pct": -5.4
             },
             "7d": {
               "price": 8593,
@@ -9155,9 +9564,9 @@
               "pct": -5.3
             },
             "4d": {
-              "price": 8010,
-              "diff": 124,
-              "pct": 1.5
+              "price": 8593,
+              "diff": -459,
+              "pct": -5.3
             },
             "7d": {
               "price": 8003,
@@ -9169,7 +9578,7 @@
       ],
       "totalDestinations": 50,
       "firstDetected": null,
-      "dropAmount": -28,
+      "dropAmount": -27,
       "dropPct": -0.3,
       "dropPrice": 7975
     },
@@ -9184,9 +9593,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 341
+        "cheapDays": 343
       },
-      "typicalPrice": 11476,
+      "typicalPrice": 11156,
       "cheapestDates": [
         {
           "day": 4,
@@ -9207,7 +9616,14 @@
           "month": 9,
           "year": 2026,
           "price": 9446,
-          "stay": 7
+          "stay": 7,
+          "history": {
+            "7d": {
+              "price": 9477,
+              "diff": -31,
+              "pct": -0.3
+            }
+          }
         },
         {
           "day": 17,
@@ -9249,14 +9665,7 @@
           "month": 11,
           "year": 2026,
           "price": 9446,
-          "stay": 7,
-          "history": {
-            "4d": {
-              "price": 9489,
-              "diff": -43,
-              "pct": -0.5
-            }
-          }
+          "stay": 7
         },
         {
           "day": 7,
@@ -9268,8 +9677,8 @@
       ],
       "totalDestinations": 50,
       "firstDetected": null,
-      "dropAmount": -52,
-      "dropPct": -0.5,
+      "dropAmount": 0,
+      "dropPct": 0.0,
       "dropPrice": 9437
     },
     {
@@ -9283,9 +9692,9 @@
       "currency": "HKD",
       "badge": {
         "carryOn": false,
-        "cheapDays": 205
+        "cheapDays": 202
       },
-      "typicalPrice": 30771,
+      "typicalPrice": 30784,
       "cheapestDates": [
         {
           "day": 28,

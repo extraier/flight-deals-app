@@ -2,6 +2,7 @@
 """Fixed FLI Detail Scanner - better error handling"""
 import sys
 import sqlite3
+import subprocess
 import time
 from datetime import datetime
 
@@ -317,7 +318,35 @@ def main():
                 log(f"  {dep_date}→{ret_date}: No details")
 
             time.sleep(2.5)  # Hermes: was 1.5s, raised to ease 429 pressure from Google Flights
-        
+
+        # Hermes 2026-07-26: per-route incremental export — mirrors the
+        # calendar scanner's pattern (see fli_4x_daily.py ~line 217). When
+        # the detail scanner confirms a drop (writes today's price into
+        # historical_prices), the export needs to re-run so the deals page
+        # sees the dropAmount/dropPct/firstDetected stamp within seconds
+        # instead of waiting for the next calendar route scan (up to 50
+        # min gap). Without this, the page stays in "pending" state while
+        # the Telegram bot has already alerted — exactly the BKK race the
+        # user reported.
+        #
+        # Only re-export when this route actually wrote new rows — saves
+        # ~2.6s of export overhead on no-op routes. 50 routes × 2.6s when
+        # all hit = 130s/round, negligible vs the 50-min round duration.
+        if saved_for_route > 0:
+            try:
+                r = subprocess.run(
+                    [sys.executable, '-u', '/data/export_all_dates_hkg_v2.py'],
+                    check=False, timeout=60,
+                )
+                if r.returncode == 0:
+                    log(f"  exported {route} → /data/all_dates.json (incremental, detail-confirmed)")
+                else:
+                    log(f"  export FAILED exit={r.returncode} for {route} — JSON stale, will retry next round")
+            except subprocess.TimeoutExpired:
+                log(f"  export TIMEOUT for {route} — JSON stale, will retry next round")
+            except Exception as e:
+                log(f"  export EXCEPTION for {route}: {e}")
+
         if saved_for_route > 0:
             success += 1
     

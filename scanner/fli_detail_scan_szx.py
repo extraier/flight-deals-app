@@ -10,7 +10,7 @@ direct via the home IP (fast + already in Google's normal pattern).
 To disable the proxy pool temporarily, set environment variable
 PROXY_POOL_ENABLED=0 before launching the container.
 """
-import os, sys, sqlite3, time
+import os, sys, sqlite3, subprocess, time
 from datetime import datetime
 sys.path.insert(0, '/install')
 sys.path.insert(0, '/data')  # Hermes: fli_db.py + proxy_pool.py live next to the scanners
@@ -432,6 +432,26 @@ def main():
                 gc.collect()
                 if before_kb:
                     log(f"  [gc] RSS {before_kb/1024:.0f}MB, forcing collection")
+
+        # Hermes 2026-07-26: per-route incremental export — mirrors the
+        # HKG detail scanner's pattern. Without this, the SZX deals page
+        # stays in "pending" while the Telegram bot has already alerted
+        # — same BKK race as HKG, but for SZX→XXX routes.
+        if saved_for_route > 0:
+            try:
+                r = subprocess.run(
+                    [sys.executable, '-u', '/data/export_all_dates_szx.py'],
+                    check=False, timeout=60,
+                )
+                if r.returncode == 0:
+                    log(f"  exported {route} → /data/all_dates_szx.json (incremental, detail-confirmed)")
+                else:
+                    log(f"  export FAILED exit={r.returncode} for {route} — JSON stale, will retry next round")
+            except subprocess.TimeoutExpired:
+                log(f"  export TIMEOUT for {route} — JSON stale, will retry next round")
+            except Exception as e:
+                log(f"  export EXCEPTION for {route}: {e}")
+
         if saved_for_route > 0:
             success += 1.
 
