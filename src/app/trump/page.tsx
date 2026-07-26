@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import trumpData from '@/data/trump_alerts.json';
-import futuAd from './futu_ad.jpg';
+import { FutuAdPopup } from './futu-popup';
 import { SerenityFeedTab, SerenityPerformanceTab } from './serenity-tabs';
 
 interface Filing {
@@ -339,31 +339,8 @@ export default function TrumpPage() {
         </div>
       </div>
 
-      {/* Futu Ad — shown at top for visibility */}
-      <div className="max-w-3xl mx-auto px-4 pt-4 pb-2">
-        <div style={{
-          background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
-          borderRadius: '12px',
-          padding: '16px',
-          textAlign: 'center',
-          color: '#fff',
-        }}>
-          <img
-            src={futuAd.src}
-            alt="富途牛牛優惠"
-            style={{ borderRadius: '8px', marginBottom: '12px', display: 'block', marginLeft: 'auto', marginRight: 'auto', width: '70%' }}
-          />
-          <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '10px' }}>
-            🎁 Comparetiger 獨家 富途開戶即賺 $1,800 現金券！
-          </div>
-          <div style={{ fontSize: '13px', color: '#ddd', marginBottom: '8px' }}>
-            用兌換碼【<span style={{ color: '#f39c12', fontWeight: 'bold' }}>COMPARE</span>】開戶，享一世免佣 + 高達 HK$1,800 現金券
-          </div>
-          <div style={{ fontSize: '12px', color: '#999' }}>
-            📲 步驟：下載富途牛牛 APP → 活動中心 → 兌換中心 → 輸入【COMPARE】
-          </div>
-        </div>
-      </div>
+      {/* Futu Ad — popup (close to dismiss, dismiss persists in localStorage) */}
+      <FutuAdPopup />
 
       {/* Content */}
       <div className={`max-w-5xl mx-auto px-4 py-6`}>
