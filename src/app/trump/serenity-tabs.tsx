@@ -313,9 +313,17 @@ export function SerenityFeedTab({ isDark }: { isDark: boolean }) {
 
 export function SerenityPerformanceTab({ isDark }: { isDark: boolean }) {
   const [showAll, setShowAll] = useState(false);
-  const withReturn = data.rankings.filter((r) => r.return_pct != null);
-  const withoutReturn = data.rankings.filter((r) => r.return_pct == null);
-  const ranked = [...withReturn].sort((a, b) => (b.return_pct ?? 0) - (a.return_pct ?? 0));
+  // Hermes 2026-07-27: show ALL tickers, even those without mention-day price.
+  // Sort: tickers with return % first (high → low), then those without at the bottom
+  // (sorted by mention_date desc so most recent mentions show up).
+  const ranked = [...data.rankings].sort((a, b) => {
+    const aHas = a.return_pct != null;
+    const bHas = b.return_pct != null;
+    if (aHas && !bHas) return -1;
+    if (!aHas && bHas) return 1;
+    if (aHas && bHas) return (b.return_pct ?? 0) - (a.return_pct ?? 0);
+    return (b.mention_date ?? '').localeCompare(a.mention_date ?? '');
+  });
   const visible = showAll ? ranked : ranked.slice(0, 25);
 
   if (ranked.length === 0) {
@@ -397,24 +405,6 @@ export function SerenityPerformanceTab({ isDark }: { isDark: boolean }) {
         >
           Show {ranked.length - 25} more tickers ↓
         </button>
-      )}
-
-      {withoutReturn.length > 0 && (
-        <details className={`mt-4 text-xs ${textMuted(isDark)}`}>
-          <summary className="cursor-pointer">
-            {withoutReturn.length} tickers awaiting mention-day price
-          </summary>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {withoutReturn.map((r) => (
-              <span
-                key={r.ticker}
-                className={`px-2 py-0.5 rounded border ${borderSubtle(isDark)}`}
-              >
-                ${r.ticker}
-              </span>
-            ))}
-          </div>
-        </details>
       )}
     </div>
   );
