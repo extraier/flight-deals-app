@@ -314,14 +314,8 @@ export function SerenityFeedTab({ isDark }: { isDark: boolean }) {
 export function SerenityPerformanceTab({ isDark }: { isDark: boolean }) {
   const [showAll, setShowAll] = useState(false);
   // Hermes 2026-07-27: show ALL tickers, even those without mention-day price.
-  // Sort: tickers with return % first (high → low), then those without at the bottom
-  // (sorted by mention_date desc so most recent mentions show up).
+  // Sort: latest mention first (mention_date desc).
   const ranked = [...data.rankings].sort((a, b) => {
-    const aHas = a.return_pct != null;
-    const bHas = b.return_pct != null;
-    if (aHas && !bHas) return -1;
-    if (!aHas && bHas) return 1;
-    if (aHas && bHas) return (b.return_pct ?? 0) - (a.return_pct ?? 0);
     return (b.mention_date ?? '').localeCompare(a.mention_date ?? '');
   });
   const visible = showAll ? ranked : ranked.slice(0, 25);
@@ -341,9 +335,9 @@ export function SerenityPerformanceTab({ isDark }: { isDark: boolean }) {
   return (
     <div>
       <div className="bg-gradient-to-r from-cyan-700 to-cyan-600 text-white px-4 py-2 rounded-lg mb-4 font-bold text-sm flex items-center justify-between">
-        <span>📈 Serenity 持股回報排名</span>
+        <span>📈 Serenity 持股列表</span>
         <span className="font-normal opacity-80 text-xs">
-          {ranked.length} tickers · mention-date 起算
+          {ranked.length} tickers · 最新的提咩先
         </span>
       </div>
 
