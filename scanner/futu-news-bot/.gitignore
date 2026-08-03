@@ -1,0 +1,7 @@
+# futu-news-bot — keep runtime artifacts out of git
+__pycache__/
+*.pyc
+*.pyo
+.env
+.env.local
+.last_run.json
