@@ -104,9 +104,30 @@ def _page_css() -> str:
     return """
 <style>
 .ct-news-wrap { max-width: 960px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", Arial, sans-serif; }
-.ct-news-header { background: linear-gradient(135deg, #1a1a2e 0%, #1a88ff 100%); color: white; padding: 12px 20px; border-radius: 12px; margin-bottom: 18px; box-shadow: 0 4px 12px rgba(26,34,46,0.15); }
-.ct-news-header h1 { margin: 0 0 4px; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-.ct-news-header p { margin: 0; font-size: 12px; opacity: 0.92; }
+
+/* —— Collapsible top bar (即時摘要) ————————————————————— */
+.ct-news-topbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.ct-news-topbar > details { flex: 1; min-width: 0; }
+.ct-news-topbar summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: linear-gradient(135deg, #1a1a2e 0%, #1a88ff 100%); color: white; border-radius: 999px; font-size: 12px; font-weight: 500; box-shadow: 0 2px 6px rgba(26,34,46,0.18); user-select: none; transition: filter 0.15s; }
+.ct-news-topbar summary::-webkit-details-marker { display: none; }
+.ct-news-topbar summary:hover { filter: brightness(1.08); }
+.ct-news-topbar summary:focus { outline: 2px solid #1a88ff; outline-offset: 2px; }
+.ct-news-topbar summary .ct-toggle-icon { font-size: 10px; opacity: 0.85; transition: transform 0.2s; display: inline-block; }
+.ct-news-topbar details[open] summary .ct-toggle-icon { transform: rotate(180deg); }
+.ct-news-topbar .ct-topbar-content { padding: 12px 16px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; margin-top: 8px; font-size: 12px; line-height: 1.65; color: #4b5563; }
+
+/* —— Collapsible about section (關於本頁) ——————————————————— */
+.ct-news-about { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+.ct-news-about summary { list-style: none; cursor: pointer; padding: 10px 16px; font-size: 13px; font-weight: 600; color: #1a1a2e; display: flex; align-items: center; justify-content: space-between; user-select: none; }
+.ct-news-about summary::-webkit-details-marker { display: none; }
+.ct-news-about summary:hover { background: #f3f4f6; }
+.ct-news-about summary:focus { outline: 2px solid #1a88ff; outline-offset: -2px; }
+.ct-news-about summary .ct-toggle-icon { font-size: 11px; opacity: 0.6; transition: transform 0.2s; }
+.ct-news-about details[open] summary .ct-toggle-icon { transform: rotate(180deg); }
+.ct-news-about .ct-news-about-body { padding: 0 16px 14px; font-size: 13px; line-height: 1.7; color: #374151; border-top: 1px solid #e5e7eb; padding-top: 12px; margin-top: 0; }
+.ct-news-about .ct-news-about-body p + p { margin-top: 8px; }
+
+/* —— Card grid ————————————————————— */
 .ct-news-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 @media (max-width: 720px) { .ct-news-grid { grid-template-columns: 1fr; } }
 .ct-news-card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 18px; transition: all 0.15s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.04); display: flex; flex-direction: column; }
@@ -122,9 +143,6 @@ def _page_css() -> str:
 .ct-news-foot a { color: #1a88ff; text-decoration: none; }
 .ct-news-foot a:hover { text-decoration: underline; }
 .ct-news-footer { text-align: center; padding: 24px 16px 8px; font-size: 12px; color: #6b7280; border-top: 1px solid #e5e7eb; margin-top: 24px; line-height: 1.6; }
-.ct-news-about { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 18px 22px; margin-bottom: 18px; font-size: 13px; line-height: 1.7; color: #374151; }
-.ct-news-about h2 { font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1a1a2e; }
-.ct-news-about p + p { margin-top: 8px; }
 .ct-news-empty { text-align: center; padding: 40px 20px; color: #6b7280; background: #f9fafb; border-radius: 10px; border: 1px dashed #d1d5db; }
 </style>
 """
@@ -184,24 +202,34 @@ def render_page_html(limit: int = 15) -> str:
             '</div>'
         )
 
-    # Header — Comparetiger navy→blue gradient. No <h1> here because
-    # the WP theme already renders "財經新聞" as the page title (the
-    # rendered HTML <article><h1>). We just add the gradient banner with
-    # source list + auto-update note so the page has visual identity.
+    # Top bar — small pill button that expands to show source list.
+    # Using <details>/<summary> for native HTML collapsibility (no JS needed,
+    # accessible by default, works in all browsers).
     header = (
         '<div class="ct-news-wrap">'
-        '<div class="ct-news-header">'
-        '<p>即時摘要 · 來源：華爾街見聞、財聯社、智通財經、格隆匯、AASTOCKS、金十數據 等'
-        ' · 每小時自動更新</p>'
+        '<div class="ct-news-topbar">'
+        '<details>'
+        '<summary><span>📰 即時摘要</span>'
+        '<span class="ct-toggle-icon">▼</span>'
+        '</summary>'
+        '<div class="ct-topbar-content">'
+        '來源：華爾街見聞、財聯社、智通財經、格隆匯、AASTOCKS、金十數據 等'
+        ' · 每小時自動更新'
+        '</div>'
+        '</details>'
         '</div>'
     )
 
-    # About / SEO block — gives the page real value-add content beyond
-    # the article cards. Helps Google see this as a "topic page" rather
-    # than a pure feed. ~250 chars of original Comparetiger prose.
+    # About section — collapsed by default, expands on click. H2 inside
+    # the <summary> preserves semantic heading structure for SEO crawlers.
     about = (
         '<section class="ct-news-about">'
-        '<h2>關於本頁</h2>'
+        '<details>'
+        '<summary>'
+        '<span>關於本頁</span>'
+        '<span class="ct-toggle-icon">▼</span>'
+        '</summary>'
+        '<div class="ct-news-about-body">'
         '<p>Comparetiger 財經新聞為您整合來自華爾街見聞、財聯社、智通財經、格隆匯、'
         'AASTOCKS、金十數據等主流財經媒體的即時報導,涵蓋港股、A 股、美股、宏觀經濟、'
         '房地產及各類上市公司消息。每篇文章均標明出處,並附原文連結以核實內容。'
@@ -210,6 +238,8 @@ def render_page_html(limit: int = 15) -> str:
         '<p>更新頻率:每小時自動發佈最新摘要,熱門話題亦會在數小時內補發。'
         '讀者如欲關注特定主題,可在「財經」分類下瀏覽,或於每篇文章底部'
         '"原文連結"查看完整報導。</p>'
+        '</div>'
+        '</details>'
         '</section>'
     )
 
