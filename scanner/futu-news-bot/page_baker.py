@@ -104,9 +104,9 @@ def _page_css() -> str:
     return """
 <style>
 .ct-news-wrap { max-width: 960px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", Arial, sans-serif; }
-.ct-news-header { background: linear-gradient(135deg, #1a1a2e 0%, #1a88ff 100%); color: white; padding: 24px 28px; border-radius: 12px; margin-bottom: 18px; box-shadow: 0 4px 12px rgba(26,34,46,0.15); }
+.ct-news-header { background: linear-gradient(135deg, #1a1a2e 0%, #1a88ff 100%); color: white; padding: 12px 20px; border-radius: 12px; margin-bottom: 18px; box-shadow: 0 4px 12px rgba(26,34,46,0.15); }
 .ct-news-header h1 { margin: 0 0 4px; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-.ct-news-header p { margin: 0; font-size: 13px; opacity: 0.9; }
+.ct-news-header p { margin: 0; font-size: 12px; opacity: 0.92; }
 .ct-news-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 @media (max-width: 720px) { .ct-news-grid { grid-template-columns: 1fr; } }
 .ct-news-card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 18px; transition: all 0.15s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.04); display: flex; flex-direction: column; }
@@ -181,11 +181,13 @@ def render_page_html(limit: int = 15) -> str:
             '</div>'
         )
 
-    # Header — Comparetiger navy→blue gradient
+    # Header — Comparetiger navy→blue gradient. No <h1> here because
+    # the WP theme already renders "財經新聞" as the page title (the
+    # rendered HTML <article><h1>). We just add the gradient banner with
+    # source list + auto-update note so the page has visual identity.
     header = (
         '<div class="ct-news-wrap">'
         '<div class="ct-news-header">'
-        '<h1>📰 財經新聞</h1>'
         '<p>即時摘要 · 來源：華爾街見聞、財聯社、智通財經、格隆匯、AASTOCKS、金十數據 等'
         ' · 每小時自動更新</p>'
         '</div>'
