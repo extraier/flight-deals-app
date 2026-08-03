@@ -31,6 +31,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { translateBatch } from './lib/translate.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -135,15 +136,22 @@ async function fetchPosts(prior) {
   const priorById = new Map();
   for (const p of prior?.posts || []) priorById.set(p.id, p);
 
+  // Identify which posts need translation: brand-new IDs (no prior entry)
+  // OR a prior entry that had null/empty text_cn. Skips "[No Title]" stubs.
+  const needsTranslation = [];
+  const skipTranslation = (rawText) =>
+    !rawText || /^[\s\S]*\[No Title\]/.test(rawText || '');
+
   const posts = [];
   // First 15 posts get image enrichment (heavy: extra GET per post)
   for (let i = 0; i < rawItems.length; i++) {
     const raw = rawItems[i];
     const priorEntry = priorById.get(raw.id);
+    const text = raw.text || raw.title || '';
     const post = {
       id: raw.id,
       link: raw.link,
-      text: raw.text || raw.title,
+      text,
       date: formatPubDate(raw.date),
       source: priorEntry?.source || 'truth_social',
       image: priorEntry?.image || null,
@@ -156,7 +164,30 @@ async function fetchPosts(prior) {
       await sleep(150);
     }
     post.has_image = !!post.image;
+    if (!post.text_cn && !skipTranslation(text)) {
+      needsTranslation.push({ idx: posts.length, text });
+    }
     posts.push(post);
+  }
+
+  // Batch-translate any new posts. Cap at 25/round so a single feed refresh
+  // costs at most ~4 round-trips (~600ms) regardless of how many new posts.
+  if (needsTranslation.length) {
+    console.log(`[trump] translating ${needsTranslation.length} new posts…`);
+    const texts = needsTranslation.map((n) => n.text);
+    const zhs = await translateBatch(texts, { batchSize: 25 });
+    let translatedCount = 0;
+    for (let i = 0; i < needsTranslation.length; i++) {
+      const { idx } = needsTranslation[i];
+      const zh = zhs[i];
+      if (zh && zh !== texts[i]) {
+        posts[idx].text_cn = zh;
+        translatedCount++;
+      }
+    }
+    console.log(`[trump] translated ${translatedCount}/${needsTranslation.length} posts`);
+  } else {
+    console.log('[trump] no new posts to translate');
   }
   return posts;
 }
