@@ -122,6 +122,9 @@ def _page_css() -> str:
 .ct-news-foot a { color: #1a88ff; text-decoration: none; }
 .ct-news-foot a:hover { text-decoration: underline; }
 .ct-news-footer { text-align: center; padding: 24px 16px 8px; font-size: 12px; color: #6b7280; border-top: 1px solid #e5e7eb; margin-top: 24px; line-height: 1.6; }
+.ct-news-about { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 18px 22px; margin-bottom: 18px; font-size: 13px; line-height: 1.7; color: #374151; }
+.ct-news-about h2 { font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1a1a2e; }
+.ct-news-about p + p { margin-top: 8px; }
 .ct-news-empty { text-align: center; padding: 40px 20px; color: #6b7280; background: #f9fafb; border-radius: 10px; border: 1px dashed #d1d5db; }
 </style>
 """
@@ -193,6 +196,23 @@ def render_page_html(limit: int = 15) -> str:
         '</div>'
     )
 
+    # About / SEO block — gives the page real value-add content beyond
+    # the article cards. Helps Google see this as a "topic page" rather
+    # than a pure feed. ~250 chars of original Comparetiger prose.
+    about = (
+        '<section class="ct-news-about">'
+        '<h2>關於本頁</h2>'
+        '<p>Comparetiger 財經新聞為您整合來自華爾街見聞、財聯社、智通財經、格隆匯、'
+        'AASTOCKS、金十數據等主流財經媒體的即時報導,涵蓋港股、A 股、美股、宏觀經濟、'
+        '房地產及各類上市公司消息。每篇文章均標明出處,並附原文連結以核實內容。'
+        '本站僅轉發事實摘要,分析與觀點以原文為準。如閣下對個別內容有疑問,'
+        '歡迎透過底部電郵聯絡我們跟進。</p>'
+        '<p>更新頻率:每小時自動發佈最新摘要,熱門話題亦會在數小時內補發。'
+        '讀者如欲關注特定主題,可在「財經」分類下瀏覽,或於每篇文章底部'
+        '"原文連結"查看完整報導。</p>'
+        '</section>'
+    )
+
     # Cards
     cards = "\n".join(render_card(p) for p in posts)
     grid = f'<div class="ct-news-grid">{cards}</div>'
@@ -209,7 +229,7 @@ def render_page_html(limit: int = 15) -> str:
     )
 
     # Full page = css + body
-    return _page_css() + header + grid + footer
+    return _page_css() + header + about + grid + footer
 
 
 if __name__ == "__main__":
