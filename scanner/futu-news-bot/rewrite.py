@@ -270,13 +270,13 @@ def _is_analyst_quote_paragraph(text: str) -> bool:
     return False
 
 
-def _summarize_paragraph(text: str, max_chars: int = 180) -> str:
+def _summarize_paragraph(text: str, max_chars: int = 400) -> str:
     """
     Trim a paragraph to its lead sentence.
 
-    Heuristic for substantial-rewrite (not paraphrase): we keep only the
-    first ~max_chars, snapped to a sentence boundary. This drops trailing
-    analyst quotes / commentary while keeping the facts.
+    Default max_chars is 400 (was 180) — this is the cap for the body
+    rewriter. We keep more of each paragraph's lead so the resulting
+    post reads like a real news roundup, not a 2-sentence stub.
     """
     text = text.strip()
     if len(text) <= max_chars:
@@ -328,14 +328,20 @@ def rewrite(article: Article, body=None) -> Optional[dict]:
             f"閱讀原文 →</a></p>"
         )
     else:
-        # Body-present path: render a compact summary.
+        # Body-present path: render a substantial summary.
         # - Skip analyst-quote paragraphs entirely (per _is_analyst_quote_paragraph)
-        # - Cap total body chars to ~900 to keep posts compact
-        # - Cap per-section paragraphs to 2 (keeps the post from becoming a
-        #   near-verbatim copy)
-        # - For single-section "本文" articles (alert-style), don't emit a heading
-        MAX_TOTAL = 900
-        MAX_PER_SECTION = 2
+        #   — this is the genuine copyright guard. We KEEP the facts (numbers,
+        #   dates, deal terms, named entities) but DROP the analyst's
+        #   original framing ("Wilson指出…", "Bob Lang評論…").
+        # - Cap total body chars to ~4000 (≈ a real news roundup post).
+        #   Articles with bodies larger than this get the lead facts
+        #   preserved and the long-tail detail dropped — better than the
+        #   previous 900-char cap that produced 500-char stub posts.
+        # - Cap per-section paragraphs to 6 (was 2).
+        # - Per-paragraph truncation at 400 chars (was 120).
+        # - For single-section "本文" articles (alert-style), don't emit a heading.
+        MAX_TOTAL = 4000
+        MAX_PER_SECTION = 6
         parts = [f"<p><strong>{title}</strong></p>"]
         total_chars = len(title)
         for sec in body.sections:
@@ -348,7 +354,7 @@ def rewrite(article: Article, body=None) -> Optional[dict]:
             for p in sec.paragraphs:
                 if _is_analyst_quote_paragraph(p):
                     continue
-                summary = _summarize_paragraph(p, max_chars=120)
+                summary = _summarize_paragraph(p, max_chars=400)
                 if summary:
                     kept.append(summary)
                     total_chars += len(summary)
