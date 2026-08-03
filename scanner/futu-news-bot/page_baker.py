@@ -238,8 +238,7 @@ def render_page_html(limit: int = 15) -> str:
         '</div>'
     )
 
-    # No separate about section — it's now in the topbar's right button.
-    about = ""
+    # The about section is now in the topbar's right button.
 
     # Cards
     cards = "\n".join(render_card(p) for p in posts)
@@ -257,7 +256,7 @@ def render_page_html(limit: int = 15) -> str:
     )
 
     # Full page = css + body
-    return _page_css() + header + about + grid + footer
+    return _page_css() + header + grid + footer
 
 
 if __name__ == "__main__":
