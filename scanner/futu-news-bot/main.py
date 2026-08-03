@@ -7,15 +7,23 @@ Chromium), rewrites each one (TC normalization + opinion filter +
 per-section summary), and POSTs a draft to the Comparetiger WordPress
 site.
 
+With `--publish-page`, after publishing drafts, also re-bakes WP page
+10215 (財經新聞) with a static HTML list of the latest 財經-category
+posts. This makes page 10215 a real news index — no iframe, no
+Vercel dependency. Cards link to comparetiger.com/?p=ID, so users
+stay on Comparetiger for the full read (good for ad revenue + page views).
+
 Defaults to "draft" so you can review before publishing. Pass --publish
 to publish immediately (not recommended for first run).
 
 Usage:
-    python3 main.py             # post up to 5 drafts, stop on error
-    python3 main.py --limit 10  # post up to 10 drafts
-    python3 main.py --dry-run   # show what would be posted, post nothing
-    python3 main.py --publish   # publish immediately (skip draft stage)
-    python3 main.py --no-body   # skip browser fetch (sitemap-only mode)
+    python3 main.py                  # post up to 5 drafts, stop on error
+    python3 main.py --limit 10       # post up to 10 drafts
+    python3 main.py --dry-run        # show what would be posted, post nothing
+    python3 main.py --publish        # publish immediately (skip draft stage)
+    python3 main.py --no-body        # skip browser fetch (sitemap-only mode)
+    python3 main.py --publish-page   # also bake page 10215 with static list
+    python3 main.py --page-limit 20  # cards to include in page bake
 """
 from __future__ import annotations
 
@@ -31,6 +39,12 @@ import wp
 # body_fetcher is optional — only import when actually needed so this
 # module can be imported by tools that don't have Playwright installed
 # (e.g. on the Mac development machine).
+
+# Optional: page baker for the static news index on WP page 10215
+try:
+    import page_baker
+except ImportError:
+    page_baker = None  # type: ignore
 
 
 def _extract_post_id(resp: dict) -> int | None:
@@ -78,6 +92,23 @@ def main() -> int:
         "--no-body",
         action="store_true",
         help="Skip browser fetch — sitemap-only (title + link). Faster but thinner.",
+    )
+    parser.add_argument(
+        "--publish-page",
+        action="store_true",
+        help="After posting drafts, bake WP page 10215 with static news list",
+    )
+    parser.add_argument(
+        "--page-limit",
+        type=int,
+        default=15,
+        help="Max cards in page 10215 bake (default 15)",
+    )
+    parser.add_argument(
+        "--page-id",
+        type=int,
+        default=10215,
+        help="WP page ID to bake (default 10215 — 財經新聞)",
     )
     args = parser.parse_args()
 
@@ -183,6 +214,13 @@ def main() -> int:
             print(f"  ✓ HTTP {status} post_id={pid} link={link}", flush=True)
             posted_ids.append((article.url, pid))
             new_seen.add(article.url)
+            # Assign to 財經 category (1023) so the page-baker can find it
+            if pid and (args.publish or args.publish_page):
+                # We published (or will publish via page-baker); tag the category
+                time.sleep(0.3)
+                cat_status, _ = wp.update_post_categories(pid, [1023])
+                if cat_status >= 300:
+                    print(f"  ⚠ category update HTTP {cat_status}", file=sys.stderr, flush=True)
         else:
             print(f"  ✗ HTTP {status}: {str(resp)[:300]}", file=sys.stderr, flush=True)
             # Don't mark as seen — we'll retry next run
@@ -206,6 +244,36 @@ def main() -> int:
         f"\n[done] posted={len(posted_ids)} seen_total={len(new_seen)}",
         flush=True,
     )
+
+    # —— Optional: bake WP page 10215 with static news list ——————————
+    if args.publish_page:
+        if page_baker is None:
+            print(
+                "[warn] --publish-page requested but page_baker module not found "
+                "(same dir as main.py). Skipping page bake.",
+                file=sys.stderr,
+                flush=True,
+            )
+            return 0
+        print(f"\n[page] baking page {args.page_id} with up to {args.page_limit} cards…",
+              flush=True)
+        t0 = time.time()
+        page_html = page_baker.render_page_html(limit=args.page_limit)
+        status, resp = wp.update_page_content(args.page_id, page_html)
+        dt = time.time() - t0
+        if 200 <= status < 300:
+            link = resp.get("link") if isinstance(resp, dict) else None
+            print(
+                f"  ✓ HTTP {status} page baked ({len(page_html)} chars, {dt:.1f}s)"
+                f" link={link}",
+                flush=True,
+            )
+        else:
+            print(
+                f"  ✗ HTTP {status}: {str(resp)[:300]}",
+                file=sys.stderr, flush=True,
+            )
+
     return 0
 
 

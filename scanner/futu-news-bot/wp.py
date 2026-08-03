@@ -22,6 +22,7 @@ import urllib.request
 WP_BASE = os.environ.get("COMPRETIGER_WP_BASE", "https://comparetiger.com")
 WP_USER = os.environ.get("COMPRETIGER_WP_USER", "Comparetiger")
 WP_PASSWORD = os.environ.get("COMPRETIGER_WP_PASSWORD", "")
+WP_FINANCE_CATEGORY_ID = 1023  # 財經
 
 
 def _auth_header() -> str:
@@ -62,16 +63,35 @@ def post_draft(payload: dict) -> tuple[int, dict]:
     return _request("POST", "/wp/v2/posts", payload)
 
 
+def update_post(post_id: int, payload: dict) -> tuple[int, dict]:
+    """Update an existing WP post."""
+    return _request("POST", f"/wp/v2/posts/{post_id}", payload)
+
+
+def update_post_categories(post_id: int, categories: list[int]) -> tuple[int, dict]:
+    """Assign categories to an existing WP post."""
+    return _request("POST", f"/wp/v2/posts/{post_id}", {"categories": categories})
+
+
+def update_page_content(page_id: int, content_html: str) -> tuple[int, dict]:
+    """Replace the content of a WP page (used by page_baker)."""
+    return _request("POST", f"/wp/v2/pages/{page_id}", {"content": content_html})
+
+
+def list_recent_finance_posts(limit: int = 15) -> tuple[int, list[dict]]:
+    """Fetch the latest published posts in the 財經 category (id=1023)."""
+    path = (
+        f"/wp/v2/posts&categories={WP_FINANCE_CATEGORY_ID}"
+        f"&per_page={limit}&status=publish&orderby=date&order=desc"
+    )
+    status, body = _request("GET", path)
+    if status != 200 or not isinstance(body, list):
+        return status, body if isinstance(body, list) else []
+    return status, body
+
+
 def get_post(post_id: int) -> tuple[int, dict]:
     return _request("GET", f"/wp/v2/posts/{post_id}")
-
-
-def list_recent_drafts(limit: int = 5) -> tuple[int, dict]:
-    """List recent posts with status=draft to verify our drafts exist."""
-    return _request(
-        "GET",
-        f"/wp/v2/posts&per_page={limit}&status=draft&orderby=date&order=desc",
-    )
 
 
 def health() -> tuple[int, dict]:
