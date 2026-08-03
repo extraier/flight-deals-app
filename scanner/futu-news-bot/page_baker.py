@@ -104,30 +104,20 @@ def _page_css() -> str:
     return """
 <style>
 .ct-news-wrap { max-width: 960px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", Arial, sans-serif; }
-
-/* —— Collapsible top bar (即時摘要) ————————————————————— */
-.ct-news-topbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-.ct-news-topbar > details { flex: 1; min-width: 0; }
-.ct-news-topbar summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: linear-gradient(135deg, #1a1a2e 0%, #1a88ff 100%); color: white; border-radius: 999px; font-size: 12px; font-weight: 500; box-shadow: 0 2px 6px rgba(26,34,46,0.18); user-select: none; transition: filter 0.15s; }
+.ct-news-topbar { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.ct-news-topbar > details { position: relative; flex: 0 0 auto; min-width: 0; }
+.ct-news-topbar > details:nth-child(2) { margin-left: auto; }
+.ct-news-topbar summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: linear-gradient(135deg, #1a1a2e 0%, #1a88ff 100%); color: white; border-radius: 999px; font-size: 12px; font-weight: 500; box-shadow: 0 2px 6px rgba(26,34,46,0.18); user-select: none; transition: filter 0.15s; white-space: nowrap; }
 .ct-news-topbar summary::-webkit-details-marker { display: none; }
 .ct-news-topbar summary:hover { filter: brightness(1.08); }
 .ct-news-topbar summary:focus { outline: 2px solid #1a88ff; outline-offset: 2px; }
 .ct-news-topbar summary .ct-toggle-icon { font-size: 10px; opacity: 0.85; transition: transform 0.2s; display: inline-block; }
 .ct-news-topbar details[open] summary .ct-toggle-icon { transform: rotate(180deg); }
-.ct-news-topbar .ct-topbar-content { padding: 12px 16px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; margin-top: 8px; font-size: 12px; line-height: 1.65; color: #4b5563; }
-
-/* —— Collapsible about section (關於本頁) ——————————————————— */
-.ct-news-about { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
-.ct-news-about summary { list-style: none; cursor: pointer; padding: 10px 16px; font-size: 13px; font-weight: 600; color: #1a1a2e; display: flex; align-items: center; justify-content: space-between; user-select: none; }
-.ct-news-about summary::-webkit-details-marker { display: none; }
-.ct-news-about summary:hover { background: #f3f4f6; }
-.ct-news-about summary:focus { outline: 2px solid #1a88ff; outline-offset: -2px; }
-.ct-news-about summary .ct-toggle-icon { font-size: 11px; opacity: 0.6; transition: transform 0.2s; }
-.ct-news-about details[open] summary .ct-toggle-icon { transform: rotate(180deg); }
-.ct-news-about .ct-news-about-body { padding: 0 16px 14px; font-size: 13px; line-height: 1.7; color: #374151; border-top: 1px solid #e5e7eb; padding-top: 12px; margin-top: 0; }
-.ct-news-about .ct-news-about-body p + p { margin-top: 8px; }
-
-/* —— Card grid ————————————————————— */
+.ct-news-popover .ct-topbar-content { padding: 12px 16px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; margin-top: 8px; font-size: 12px; line-height: 1.65; color: #4b5563; position: absolute; left: 0; right: auto; top: 100%; min-width: 280px; max-width: 480px; z-index: 2; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.ct-news-popover:last-child .ct-topbar-content { left: auto; right: 0; }
+.ct-news-popover .ct-topbar-content h2 { font-size: 13px; font-weight: 600; margin: 0 0 6px; color: #1a1a2e; }
+.ct-news-popover .ct-topbar-content p + p { margin-top: 8px; }
+@media (max-width: 720px) { .ct-news-popover .ct-topbar-content { left: 0 !important; right: 0 !important; max-width: none; } }
 .ct-news-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 @media (max-width: 720px) { .ct-news-grid { grid-template-columns: 1fr; } }
 .ct-news-card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 18px; transition: all 0.15s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.04); display: flex; flex-direction: column; }
@@ -202,13 +192,24 @@ def render_page_html(limit: int = 15) -> str:
             '</div>'
         )
 
-    # Top bar — small pill button that expands to show source list.
-    # Using <details>/<summary> for native HTML collapsibility (no JS needed,
-    # accessible by default, works in all browsers).
+    # Top bar — two pill buttons on the same row (left = 即時摘要 sources,
+    # right = 關於本頁). Both collapse by default and expand inline below
+    # the row when clicked. Using <details>/<summary> for native HTML
+    # collapsibility (no JS, accessible by default, works in all browsers).
+    #
+    # Both <details> elements are siblings inside the topbar flex row.
+    # Their <summary> is the visible pill button; their body sits in a
+    # popover below the topbar (absolute-positioned) so the cards stay
+    # visible right after this row.
+    #
+    # The "關於本頁" body is split into a heading + two paragraphs so
+    # the SEO crawler still sees the h2 + p structure.
     header = (
         '<div class="ct-news-wrap">'
         '<div class="ct-news-topbar">'
-        '<details>'
+
+        # Left button: 即時摘要 (sources list)
+        '<details class="ct-news-popover">'
         '<summary><span>📰 即時摘要</span>'
         '<span class="ct-toggle-icon">▼</span>'
         '</summary>'
@@ -217,31 +218,28 @@ def render_page_html(limit: int = 15) -> str:
         ' · 每小時自動更新'
         '</div>'
         '</details>'
-        '</div>'
-    )
 
-    # About section — collapsed by default, expands on click. H2 inside
-    # the <summary> preserves semantic heading structure for SEO crawlers.
-    about = (
-        '<section class="ct-news-about">'
-        '<details>'
-        '<summary>'
-        '<span>關於本頁</span>'
+        # Right button: 關於本頁 (about + SEO prose)
+        '<details class="ct-news-popover">'
+        '<summary><span>ℹ️ 關於本頁</span>'
         '<span class="ct-toggle-icon">▼</span>'
         '</summary>'
-        '<div class="ct-news-about-body">'
+        '<div class="ct-topbar-content">'
+        '<h2>關於本頁</h2>'
         '<p>Comparetiger 財經新聞為您整合來自華爾街見聞、財聯社、智通財經、格隆匯、'
         'AASTOCKS、金十數據等主流財經媒體的即時報導,涵蓋港股、A 股、美股、宏觀經濟、'
         '房地產及各類上市公司消息。每篇文章均標明出處,並附原文連結以核實內容。'
-        '本站僅轉發事實摘要,分析與觀點以原文為準。如閣下對個別內容有疑問,'
+        '本站僅轉發事實摘要,分析與觀點以原文為準。</p>'
+        '<p>更新頻率:每小時自動發佈最新摘要。如閣下對個別內容有疑問,'
         '歡迎透過底部電郵聯絡我們跟進。</p>'
-        '<p>更新頻率:每小時自動發佈最新摘要,熱門話題亦會在數小時內補發。'
-        '讀者如欲關注特定主題,可在「財經」分類下瀏覽,或於每篇文章底部'
-        '"原文連結"查看完整報導。</p>'
         '</div>'
         '</details>'
-        '</section>'
+
+        '</div>'
     )
+
+    # No separate about section — it's now in the topbar's right button.
+    about = ""
 
     # Cards
     cards = "\n".join(render_card(p) for p in posts)
