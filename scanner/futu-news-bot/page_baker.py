@@ -251,6 +251,13 @@ def render_page_html(limit: int = 15) -> str:
         '原文觀點及分析版權歸各原發佈機構所有。如有出入，以原文為準。</p>'
         '<p>資料來源：<a href="https://news.futunn.com" target="_blank" rel="noopener">'
         '富途牛牛財經新聞</a></p>'
+        '<p style="font-size:11px;color:#9ca3af;">另設專頁: '
+        '<a href="https://flight-deals-app-seven.vercel.app/trump" target="_blank" rel="noopener" '
+        'style="color:#1a88ff;text-decoration:none;font-weight:500;">🇺🇸 Trump 持股 + Truth Social</a> '
+        '· '
+        '<a href="https://flight-deals-app-seven.vercel.app/worldcup" target="_blank" rel="noopener" '
+        'style="color:#1a88ff;text-decoration:none;font-weight:500;">⚽ 世界盃機票</a>'
+        '</p>'
         '</div>'
         '</div>'  # close ct-news-wrap
     )
