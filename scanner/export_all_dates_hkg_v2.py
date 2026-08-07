@@ -29,6 +29,11 @@ CITY_NAME_CN = {
     'MLE': '馬爾代夫',
     'XMN': '廈門', 'WNZ': '溫州',
     'MCT': '馬斯喀特', 'DMM': '達曼',
+    'BKI': '亞庇', 'CJU': '濟州', 'CNX': '清邁', 'CRK': '克拉克', 'CZX': '長沙',
+    'DAD': '峴港', 'HIJ': '廣島', 'HKT': '布吉', 'HND': '羽田', 'ISG': '石垣',
+    'KMQ': '小松', 'NGB': '寧波', 'NOS': '諾西貝', 'PKX': '北京大興',
+    'PQC': '富國島', 'SDJ': '仙台', 'SYX': '三亞', 'SZB': '吉隆坡',
+    'TAE': '大邱', 'TAK': '高松', 'WUX': '無錫', 'YIW': '義烏',
 }
 
 REGION_CN = {
@@ -56,7 +61,7 @@ COUNTRY_REGION = {
     '澳洲': 'Oceania', '新西蘭': 'Oceania',
     '印度': 'South Asia', '斯里蘭卡': 'South Asia',
     '阿聯酋': 'Middle East', '卡塔爾': 'Middle East', '沙特阿拉伯': 'Middle East',
-    '埃及': 'Africa', '南非': 'Africa',
+    '埃及': 'Africa', '南非': 'Africa', '馬達加斯加': 'Africa',
     '巴西': 'South America', '阿根廷': 'South America',
 }
 
@@ -74,6 +79,12 @@ COUNTRY_CN = {
     'LAX': '美國', 'SFO': '美國', 'ORD': '美國', 'SEA': '美國', 'JFK': '美國', 'YVR': '加拿大',
     'SYD': '澳洲', 'MEL': '澳洲', 'AKL': '新西蘭',
     'JNB': '南非', 'CPT': '南非',
+    'BKI': '馬來西亞', 'CJU': '南韓', 'CNX': '泰國', 'CRK': '菲律賓',
+    'CZX': '中國', 'DAD': '越南', 'HIJ': '日本', 'HKT': '泰國',
+    'HND': '日本', 'ISG': '日本', 'KMQ': '日本', 'NGB': '中國',
+    'NOS': '馬達加斯加', 'PKX': '中國', 'PQC': '越南', 'SDJ': '日本',
+    'SYX': '中國', 'SZB': '馬來西亞', 'TAE': '南韓', 'TAK': '日本',
+    'WUX': '中國', 'YIW': '中國',
 }
 TODAY = datetime.now().strftime('%Y-%m-%d')
 
@@ -87,6 +98,15 @@ TODAY = datetime.now().strftime('%Y-%m-%d')
 # calendar scanner wins.
 DETAIL_MAX_AGE_HOURS = int(os.environ.get('DETAIL_MAX_AGE_HOURS', '24'))
 
+# Hermes 2026-08-07: separate cap for flight_dates fallback. The detail
+# filter only excludes flight_details rows by scan_time; the outer
+# flight_dates query had NO scan_time filter, so when the detail scanner
+# stopped (shadow-ban / outage), it pulled rows from 2026-06-17 etc.
+# Calendar scanner hits each (route, dep_date) every 50 min, so 168h (7d)
+# is a sane upper bound — anything older than that the calendar will have
+# re-confirmed or removed.
+FLIGHT_DATES_MAX_AGE_HOURS = int(os.environ.get('FLIGHT_DATES_MAX_AGE_HOURS', '168'))
+
 conn = sqlite3.connect(DB_PATH, timeout=30)
 conn.execute("PRAGMA busy_timeout = 30000")
 c = conn.cursor()
@@ -96,6 +116,13 @@ c = conn.cursor()
 # local HKT) against now(). Rows older than DETAIL_MAX_AGE_HOURS hours are
 # excluded here, which means the NOT IN subquery below also excludes them,
 # and the matching flight_dates row falls through as a fresh-price fallback.
+#
+# Hermes 2026-08-07: also filter dep_date >= TODAY so past-dated rows
+# don't surface as "cheapest" (the page is for future-trip search). When
+# the detail scanner is healthy, dep_date filter rarely matters because
+# the scanner only writes dep_date >= today. But when shadow-banned /
+# stopped, old detail rows accumulated and the exporter was promoting
+# 2026-06-27 as BKK's cheapest.
 c.execute("""
     SELECT route, dep_date, ret_date, price,
            outbound_airline, outbound_flight, outbound_dep_time, outbound_arr_time,
@@ -104,23 +131,33 @@ c.execute("""
     FROM flight_details
     WHERE departure='HKG'
       AND scan_time >= datetime('now', ?)
+      AND dep_date >= ?
     ORDER BY route, dep_date
-""", (f'-{DETAIL_MAX_AGE_HOURS} hours',))
+""", (f'-{DETAIL_MAX_AGE_HOURS} hours', TODAY))
 detail_rows = c.fetchall()
-print(f"Detail rows (≤{DETAIL_MAX_AGE_HOURS}h old): {len(detail_rows)}")
+print(f"Detail rows (≤{DETAIL_MAX_AGE_HOURS}h old, dep>=today): {len(detail_rows)}")
 
 # ── Fallback: flight_dates with no detail scan ────────────────────────────
+# Hermes 2026-08-07: outer query now has TWO filters that were missing:
+#   1. scan_time >= -FLIGHT_DATES_MAX_AGE_HOURS (was: not filtered → ancient
+#      rows from 2026-06-17 leaked through when detail scanner stopped)
+#   2. dep_date >= TODAY (was: not filtered → past dates surfaced as cheapest)
+# Without (1), the 2026-08-07 shadow-ban outage caused BKK to keep showing
+# a $1,484 row from 2026-07-22 instead of falling back to a recent scan.
 c.execute("""
-    SELECT route, dep_date, ret_date, price
+    SELECT route, dep_date, ret_date, price, scan_time
     FROM flight_dates
     WHERE departure='HKG'
+      AND scan_time >= datetime('now', ?)
+      AND dep_date >= ?
       AND (route, dep_date, ret_date) NOT IN (
           SELECT route, dep_date, ret_date FROM flight_details
           WHERE departure='HKG' AND scan_time >= datetime('now', ?)
       )
     ORDER BY route, dep_date
-""", (f'-{DETAIL_MAX_AGE_HOURS} hours',))
+""", (f'-{FLIGHT_DATES_MAX_AGE_HOURS} hours', TODAY, f'-{DETAIL_MAX_AGE_HOURS} hours'))
 fallback_rows = c.fetchall()
+print(f"Fallback flight_dates rows (≤{FLIGHT_DATES_MAX_AGE_HOURS}h old, dep>=today): {len(fallback_rows)}")
 conn.close()
 
 # ── Historical price map ───────────────────────────────────────────────────
@@ -186,6 +223,7 @@ for r in detail_rows:
     ob_dep, ob_arr = r[6], r[7]
     ret_airline, ret_flight = r[8], r[9]
     ret_dep, ret_arr = r[10], r[11]
+    detail_scan_time = r[12]  # Hermes 2026-08-07: see fallback path
     if route not in dates_map:
         dates_map[route] = {}
     h = hist.get(route, {}).get(dep_date, {})
@@ -203,10 +241,11 @@ for r in detail_rows:
             'return_arr_time': ret_arr,
         },
         'history': h,   # e.g. {'1d': 1300, '4d': 1250}
+        'last_verified': detail_scan_time,  # Hermes 2026-08-07: freshness badge
     }
 
 for r in fallback_rows:
-    route, dep_date, ret_date, price = r
+    route, dep_date, ret_date, price, scan_time = r
     if route not in dates_map:
         dates_map[route] = {}
     h = hist.get(route, {}).get(dep_date, {})
@@ -215,6 +254,7 @@ for r in fallback_rows:
         'ret_date': ret_date,
         'flight': None,
         'history': h,
+        'last_verified': scan_time,  # Hermes 2026-08-07: expose scan_time so the page can show "last seen: Nd ago"
     }
 
 # ── Compute typical price per route ────────────────────────────────────────
@@ -264,6 +304,7 @@ for route, dates in dates_map.items():
             'stay': (datetime.strptime(ret, '%Y-%m-%d') - datetime.strptime(dep_date, '%Y-%m-%d')).days,
             'history': changes,
             'flight': None,
+            'last_verified': d.get('last_verified'),  # Hermes 2026-08-07: freshness badge (ISO string or None)
         }
         if f:
             entry['flight'] = {
@@ -347,15 +388,22 @@ for o in output:
         o['dropPrice'] = 0
         o['pendingScans'] = 0
         continue
-    # Today's destination lowest (matches the deals page + Telegram logic)
-    today_low = min((cd.get('price') or 0) for cd in dates) or 0
-    # Yesterday's destination lowest
-    yest_prices = [
-        (cd.get('history') or {}).get('1d', {}).get('price')
-        for cd in dates
-    ]
-    yest_prices = [p for p in yest_prices if p and p > 0]
-    yest_low = min(yest_prices) if yest_prices else None
+    # Hermes 2026-07-30: use the cheapest date's OWN baseline with 1d -> 4d
+    # -> 7d fallback. Previously this used destination-level `min(all
+    # baselines)` which collapses to 0 when any sibling date's baseline
+    # equals today's price — masking real drops like PKX where the
+    # cheapest date (2026-10-14, $993) had 7d=$1033 (-$40) but another
+    # date's 7d=$993 diluted the destination-level min. Telegram reads
+    # per-date so this fix brings /deals into agreement.
+    today_low = (dates[0].get('price') or 0) if dates else 0
+    yest_low = None
+    yest_period = None
+    for _p in ('1d', '4d', '7d'):
+        _bp = (dates[0].get('history') or {}).get(_p, {}).get('price') if dates else None
+        if _bp and _bp > 0:
+            yest_low = _bp
+            yest_period = _p
+            break
     drop_pct = ((today_low - yest_low) / yest_low * 100) if (yest_low and yest_low > 0 and today_low > 0) else 0
 
     key = f"HKG→{o.get('destination', {}).get('code', '')}"
@@ -377,9 +425,27 @@ for o in output:
 
     # Always stamp destination-level drop numbers on the route so the
     # client can display them without re-deriving single-date comparisons.
-    o['dropAmount'] = int(today_low - yest_low) if (yest_low and yest_low > 0 and today_low > 0) else 0
-    o['dropPct'] = round(drop_pct, 1) if (yest_low and yest_low > 0 and today_low > 0) else 0.0
-    o['dropPrice'] = int(today_low)
+    # Hermes 2026-08-07: only stamp when there is actually a real drop
+    # (today_low < yest_low AND pct <= -1.0). Previously this stamped the
+    # raw difference even when price increased vs yesterday, which produced
+    # mixed-sign entries (e.g. ICN dropAmount=1, dropPct=+0.1) that the
+    # client's "dropPct < 1 absolute" filter didn't catch — they sat in the
+    # JSON as positive drops when really the price had rebounded.
+    if drop_pct <= -1.0 and today_low > 0 and yest_low and yest_low > 0:
+        # Sign convention: dropAmount is negative (price went DOWN by this
+        # amount), dropPct is negative (percent change). The client's
+        # buildDropList handles both legacy (positive dropAmount) and
+        # current (negative dropAmount) conventions by checking both signs.
+        o['dropAmount'] = int(today_low - yest_low)  # negative
+        o['dropPct'] = round(drop_pct, 1)            # negative
+        o['dropPrice'] = int(today_low)              # today's price
+    else:
+        # No active drop — clear all drop fields so the JSON only contains
+        # real drops. This avoids the ICN/FRA-style mixed-sign entries that
+        # pollute the data with "price went up but it's still stamped as a drop".
+        o['dropAmount'] = 0
+        o['dropPct'] = 0
+        o['dropPrice'] = 0
 
     # Hermes 2026-07-09: pendingScans = how many of the top-N cheapest dates
     # still need detail-scan confirmation (no flight info, no history.1d

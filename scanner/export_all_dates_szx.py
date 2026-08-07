@@ -264,9 +264,16 @@ for o in results:
 
     # Always stamp destination-level drop numbers on the route so the
     # client can display them without re-deriving single-date comparisons.
-    o['dropAmount'] = int(today_low - yest_low) if (yest_low and yest_low > 0 and today_low > 0) else 0
-    o['dropPct'] = round(drop_pct, 1) if (yest_low and yest_low > 0 and today_low > 0) else 0.0
-    o['dropPrice'] = int(today_low)
+    # Hermes 2026-08-07: only stamp when there is actually a real drop.
+    # See HKG exporter for full rationale — same bug was present here.
+    if drop_pct <= -1.0 and today_low > 0 and yest_low and yest_low > 0:
+        o['dropAmount'] = int(today_low - yest_low)
+        o['dropPct'] = round(drop_pct, 1)
+        o['dropPrice'] = int(today_low)
+    else:
+        o['dropAmount'] = 0
+        o['dropPct'] = 0
+        o['dropPrice'] = 0
 
 # Garbage-collect stale entries (older than 14 days) — defense in depth
 # even though we now clear the stamp immediately on no-drop.
