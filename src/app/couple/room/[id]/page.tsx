@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef, use, useMemo } from 'react';
+import { use, useEffect, useState, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Heart, LogOut, Copy, Users, Sparkles } from 'lucide-react';
@@ -11,7 +11,10 @@ import { SwipeDeck } from '@/components/couple/SwipeDeck';
 import { MatchModal } from '@/components/couple/MatchModal';
 
 export default function RoomPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id: roomId } = use(params);
+  // Proxy lowercases URL paths (src/proxy.ts) so /couple/room/eoog stays eoog.
+  // Room IDs are stored uppercase in Firestore — uppercase before lookup.
+  const { id: rawRoomId } = use(params);
+  const roomId = rawRoomId.toUpperCase();
   const router = useRouter();
   const [uid, setUid] = useState<string | null>(null);
   const [room, setRoom] = useState<RoomData | null>(null);
