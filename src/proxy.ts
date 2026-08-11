@@ -18,7 +18,7 @@ import { NextRequest, NextResponse } from 'next/server';
  * with `trailingSlash: false`, but we belt-and-suspender here in case
  * the user hits a bookmark with a slash).
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Quick check: only act if there is at least one uppercase letter.
