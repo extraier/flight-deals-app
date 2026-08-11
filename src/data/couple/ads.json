@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "generatedAt": "2026-08-11",
+  "ads": [
+    {
+      "id": "ad-trip-tokyo",
+      "kind": "ad",
+      "sponsor": "Trip.com",
+      "title": "東京酒店 5 折優惠",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Shibuya_Crossing_at_Night.jpg/1280px-Shibuya_Crossing_at_Night.jpg",
+      "body": "Trip.com 限時優惠，今個星期五完結。",
+      "ctaLabel": "查看優惠",
+      "clickUrl": "https://www.trip.com/hotels/",
+      "impressions": 0,
+      "clicks": 0,
+      "budget": 5000,
+      "active": true
+    },
+    {
+      "id": "ad-compare-tiger-hkg",
+      "kind": "ad",
+      "sponsor": "CompareTiger",
+      "title": "HK$1,421 飛吉隆坡",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Kuala_Lumpur_Malaysia_Twin-Towers-at-night-2014.jpg/1280px-Kuala_Lumpur_Malaysia_Twin-Towers-at-night-2014.jpg",
+      "body": "CompareTiger 即時追蹤香港出發最低價機票。",
+      "ctaLabel": "查看機票",
+      "clickUrl": "https://flight-deals-app-three.vercel.app/?dep=HKG",
+      "impressions": 0,
+      "clicks": 0,
+      "budget": 99999,
+      "active": true
+    },
+    {
+      "id": "ad-compare-tiger-szx",
+      "kind": "ad",
+      "sponsor": "CompareTiger",
+      "title": "深圳出發 ¥299 飛東京",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Shibuya_Crossing_at_Night.jpg/1280px-Shibuya_Crossing_at_Night.jpg",
+      "body": "深圳寶安機場出發，最平 ¥299 直飛東京。",
+      "ctaLabel": "查看機票",
+      "clickUrl": "https://flight-deals-app-three.vercel.app/?dep=SZX",
+      "impressions": 0,
+      "clicks": 0,
+      "budget": 99999,
+      "active": true
+    },
+    {
+      "id": "ad-trip-bangkok",
+      "kind": "ad",
+      "sponsor": "Trip.com",
+      "title": "曼谷 4 日 3 夜 $2,388 起",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Grand_Palace_Bangkok_from_Outer_Court.jpg/1280px-Grand_Palace_Bangkok_from_Outer_Court.jpg",
+      "body": "含來回機票 + 3 晚酒店，自由行套票。",
+      "ctaLabel": "立即預訂",
+      "clickUrl": "https://hk.trip.com/packages/ Bangkok",
+      "impressions": 0,
+      "clicks": 0,
+      "budget": 3000,
+      "active": true
+    },
+    {
+      "id": "ad-trip-hotel",
+      "kind": "ad",
+      "sponsor": "Trip.com",
+      "title": "全球酒店低至 3 折",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Taipei_101_at_night.jpg/1280px-Taipei_101_at_night.jpg",
+      "body": "覆蓋全球 200+ 國家，Trip.com 酒店限時優惠。",
+      "ctaLabel": "查看優惠",
+      "clickUrl": "https://hk.trip.com/hotels/",
+      "impressions": 0,
+      "clicks": 0,
+      "budget": 5000,
+      "active": true
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+rules_version = '2';
+
+// firestore.rules for flight-deals-app's Couple Room.
+// Mounted on the savetheday-2377a project (shared with savetheday.io).
+// Couple rooms are scoped to coupleRooms/*, coupleSpots/*, coupleAds/*.
+//
+// Security model:
+// - coupleSpots: public read (anon users view the deck), no client write.
+//   Updates via Firebase service account only (admin script).
+// - coupleAds: public read (anon users see ads in the deck).
+//   Same — only service account writes.
+// - coupleRooms: anon users can create rooms + read by ID + update their own
+//   likes/dislikes. NO deletion. Server-side cleanup of stale rooms deferred.
+//
+// All OTHER collections (savetheday's vendor / customer / event data) are NOT
+// touched by these rules — they remain under whatever ruleset savetheday has.
+//
+// Hermes 2026-08-11.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Couple Room public data ───────────────────────────────────────
+    match /coupleSpots/{spotId} {
+      allow read: if true;
+      allow write: if false; // only via service account
+    }
+
+    match /coupleAds/{adId} {
+      allow read: if true;
+      allow write: if false; // only via service account
+    }
+
+    // Room rules — anon users can create, read, and update their own likes.
+    // They CANNOT rewrite the user1/user2 fields or other users' likes.
+    match /coupleRooms/{roomId} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasAll([
+          'id', 'user1', 'user2', 'user1Likes', 'user1Dislikes',
+          'user2Likes', 'user2Dislikes', 'createdAt', 'deckSeed'
+        ])
+        && request.resource.data.user1 is string
+        && request.resource.data.user2 == null
+        && request.resource.data.user1Likes is list
+        && request.resource.data.user1Dislikes is list
+        && request.resource.data.user2Likes is list
+        && request.resource.data.user2Dislikes is list;
+      allow update: if isInRoom() && (
+          // User is joining (user2 was null, now they're the only change)
+          isJoiningRoom() ||
+          // User is updating their own likes/dislikes array
+          isSwiping()
+        );
+      allow delete: if false;
+    }
+
+    // ─── Helpers ───────────────────────────────────────────────────────
+    function isInRoom() {
+      return request.auth != null && (
+        resource.data.user1 == request.auth.uid ||
+        resource.data.user2 == request.auth.uid
+      );
+    }
+    function isJoiningRoom() {
+      return request.auth != null &&
+        resource.data.user2 == null &&
+        resource.data.user1 != request.auth.uid &&
+        request.resource.data.user2 == request.auth.uid &&
+        // No other fields changed
+        resource.data.diff(request.resource.data).affectedKeys().hasOnly(['user2']);
+    }
+    function isSwiping() {
+      return request.auth != null &&
+        // Only the user's own like/dislike array changed
+        isOwnLikeArrayChanged();
+    }
+    function isOwnLikeArrayChanged() {
+      let keys = resource.data.diff(request.resource.data).affectedKeys();
+      return keys.hasOnly(['user1Likes', 'user1Dislikes', 'user2Likes', 'user2Dislikes']);
+    }
+  }
+}
