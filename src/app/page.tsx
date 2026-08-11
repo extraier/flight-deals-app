@@ -140,9 +140,16 @@ export default function Home() {
 
   // Live data state — fetched from /api/deals which proxies to the NAS.
   // We seed with the static JSON so the first paint isn't empty; then refresh.
+  // Hermes 2026-08-11: default dataSource to 'live' (optimistic) so users
+  // don't see "🟡 顯示靜態備份資料 (NAS 連線中斷)" during the initial 1-2s
+  // before the first fetch resolves. The "static" message should only
+  // appear when a fetch HAS actually failed — not during the gap before
+  // the first fetch even tries. Was: dataSource starts as 'static' so
+  // every page load briefly showed the warning even though everything
+  // was working fine.
   const [liveData, setLiveData] = useState<FlightData>(staticHkg as unknown as FlightData);
   const [dataAge, setDataAge] = useState<number>(0);
-  const [dataSource, setDataSource] = useState<'live' | 'static'>('static');
+  const [dataSource, setDataSource] = useState<'live' | 'static' | 'loading'>('loading');
 
   useEffect(() => {
     let cancelled = false;
@@ -272,7 +279,9 @@ export default function Home() {
           <h1 className="text-4xl font-bold tracking-tight text-foreground">CompareTiger</h1>
           <p className="mt-2 text-lg text-muted-foreground">{DEPARTURE_LABELS[departure].subtitle}</p>
           <p className="mt-1 text-xs text-muted-foreground/70">
-            {dataSource === 'live' ? (
+            {dataSource === 'loading' ? (
+              <>⏳ 載入中…</>
+            ) : dataSource === 'live' ? (
               <>🟢 即時資料 · 更新於 {Math.max(1, Math.round(dataAge / 1000))} 秒前</>
             ) : (
               <>🟡 顯示靜態備份資料（NAS 連線中斷）</>
