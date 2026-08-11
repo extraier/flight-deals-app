@@ -45,12 +45,11 @@ service cloud.firestore {
         && request.resource.data.user1Dislikes is list
         && request.resource.data.user2Likes is list
         && request.resource.data.user2Dislikes is list;
-      allow update: if isInRoom() && (
-          // User is joining (user2 was null, now they're the only change)
+      allow update: if
+          // User is joining (user2 was null, they were NOT in the room yet)
           isJoiningRoom() ||
-          // User is updating their own likes/dislikes array
-          isSwiping()
-        );
+          // User is already in the room, updating their own likes/dislikes
+          (isInRoom() && isSwiping());
       allow delete: if false;
     }
 
