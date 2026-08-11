@@ -1,4 +1,4 @@
-// Edge middleware-style auth helper for /couple/admin.
+// Edge middleware-style auth helper for /match/admin.
 // Checks for a cookie `couple-admin-token` that matches `COUPLE_ADMIN_PASSWORD`.
 // In a hardended build we'd use a server-set cookie; here we use a simple shared
 // secret sent in the Authorization header for the admin API.

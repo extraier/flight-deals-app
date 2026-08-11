@@ -68,7 +68,7 @@ export default function AdminPage() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('/couple/api/admin-auth', {
+      const res = await fetch('/match/api/admin-auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password }),
@@ -103,7 +103,7 @@ export default function AdminPage() {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-950 flex items-center justify-center px-6">
         <div className="w-full max-w-sm bg-white dark:bg-gray-900 rounded-3xl p-8 shadow-2xl">
           <Link
-            href="/couple"
+            href="/match"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
           >
             <ArrowLeft size={16} />
@@ -144,7 +144,7 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 px-6 py-8">
       <div className="mx-auto max-w-4xl">
         <Link
-          href="/couple"
+          href="/match"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
         >
           <ArrowLeft size={16} />

@@ -21,6 +21,14 @@ import { NextRequest, NextResponse } from 'next/server';
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Back-compat: /couple/* moved to /match/* on 2026-08-12. Redirect old
+  // bookmarks so shared room codes (e.g. /couple/room/EOOG) keep working.
+  if (pathname === '/couple' || pathname.startsWith('/couple/')) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/match' + pathname.slice('/couple'.length);
+    return NextResponse.redirect(url, 308);
+  }
+
   // Quick check: only act if there is at least one uppercase letter.
   if (!/[A-Z]/.test(pathname)) {
     return NextResponse.next();

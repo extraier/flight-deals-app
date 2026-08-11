@@ -11,7 +11,7 @@ import { SwipeDeck } from '@/components/couple/SwipeDeck';
 import { MatchModal } from '@/components/couple/MatchModal';
 
 export default function RoomPage({ params }: { params: Promise<{ id: string }> }) {
-  // Proxy lowercases URL paths (src/proxy.ts) so /couple/room/eoog stays eoog.
+  // Proxy lowercases URL paths (src/proxy.ts) so /match/room/eoog stays eoog.
   // Room IDs are stored uppercase in Firestore — uppercase before lookup.
   const { id: rawRoomId } = use(params);
   const roomId = rawRoomId.toUpperCase();
@@ -108,7 +108,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
       <div className="min-h-screen flex items-center justify-center px-6 bg-gradient-to-br from-pink-50 to-rose-100">
         <div className="text-center">
           <p className="text-red-600 font-bold mb-4">{error}</p>
-          <Link href="/couple" className="text-pink-600 underline">
+          <Link href="/match" className="text-pink-600 underline">
             返回配對頁
           </Link>
         </div>
@@ -150,7 +150,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
           <p className="text-sm font-bold text-pink-500 animate-pulse">等待另一半加入...</p>
         </div>
         <Link
-          href="/couple"
+          href="/match"
           className="mt-8 text-gray-400 font-bold text-sm underline"
         >
           離開房間
@@ -166,7 +166,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         <span className="text-white text-xs font-bold">配對成功 · 開始 Swipe</span>
       </div>
       <Link
-        href="/couple"
+        href="/match"
         className="absolute top-4 right-4 z-30 p-2 bg-black/50 text-white rounded-full hover:bg-red-500 transition"
       >
         <LogOut size={16} />

@@ -343,7 +343,7 @@ export default function Home() {
                 🔥 今日劈價
               </Link>
               <Link
-                href="/couple"
+                href="/match"
                 className="inline-flex items-center gap-1.5 rounded-lg border border-pink-500/40 bg-pink-500/10 px-4 py-2 text-sm font-bold text-pink-600 dark:text-pink-400 transition-all hover:bg-pink-500/20 hover:border-pink-500/60 hover:shadow-md hover:shadow-pink-500/20"
               >
                 💕 情侶配對
