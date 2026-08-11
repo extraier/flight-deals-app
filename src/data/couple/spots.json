@@ -14,10 +14,18 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Shibuya_Crossing_at_Night.jpg/1280px-Shibuya_Crossing_at_Night.jpg",
       "imageCredit": "Diliff / Wikimedia Commons",
       "blurb": "全球最繁忙的行人交叉口，每分鐘約 3,000 人通過，感受東京脈搏的最佳位置。",
-      "tags": ["城市", "夜景", "購物", "地標"],
+      "tags": [
+        "城市",
+        "夜景",
+        "購物",
+        "地標"
+      ],
       "priceLevel": 2,
       "dealCode": "HND",
-      "travelMood": ["刺激", "都市"]
+      "travelMood": [
+        "刺激",
+        "都市"
+      ]
     },
     {
       "id": "tokyo-teamlab",
@@ -31,10 +39,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/TeamLab_Borderless_Azal%C3%A9a_2018_%2840322572271%29.jpg/1280px-TeamLab_Borderless_Azal%C3%A9a_2018_%2840322572271%29.jpg",
       "imageCredit": "Alessandro Caproni / Wikimedia Commons",
       "blurb": "沉浸式數碼藝術館，無限延伸的燈光投影，IG 打卡必去。",
-      "tags": ["藝術", "室內", "打卡"],
+      "tags": [
+        "藝術",
+        "室內",
+        "打卡"
+      ],
       "priceLevel": 3,
       "dealCode": "HND",
-      "travelMood": ["藝術", "文青"]
+      "travelMood": [
+        "藝術",
+        "文青"
+      ]
     },
     {
       "id": "osaka-dotonbori",
@@ -48,10 +63,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Dotonbori_at_night_2014.JPG/1280px-Dotonbori_at_night_2014.JPG",
       "imageCredit": "Akiyoshi Kabe / Wikimedia Commons",
       "blurb": "大阪的廚房，巨型招牌霓虹燈，章魚燒、串炸、ラーメン 街頭美食天堂。",
-      "tags": ["美食", "夜景", "購物"],
+      "tags": [
+        "美食",
+        "夜景",
+        "購物"
+      ],
       "priceLevel": 1,
       "dealCode": "KIX",
-      "travelMood": ["美食", "熱鬧"]
+      "travelMood": [
+        "美食",
+        "熱鬧"
+      ]
     },
     {
       "id": "kyoto-fushimi",
@@ -65,10 +87,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Fushimi_Inari-taisha%2C_torii.jpg/1280px-Fushimi_Inari-taisha%2C_torii.jpg",
       "imageCredit": "Kim Kyoung-hoon / Wikimedia Commons",
       "blurb": "千本鳥居綿延山頭，京都最神聖的稻荷神社。",
-      "tags": ["文化", "歷史", "自然"],
+      "tags": [
+        "文化",
+        "歷史",
+        "自然"
+      ],
       "priceLevel": 1,
       "dealCode": "KIX",
-      "travelMood": ["文化", "寧靜"]
+      "travelMood": [
+        "文化",
+        "寧靜"
+      ]
     },
     {
       "id": "seoul-gangnam",
@@ -82,10 +111,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Seoul_skyline_at_night_with_cheonggyecheon_2015.jpg/1280px-Seoul_skyline_at_night_with_cheonggyecheon_2015.jpg",
       "imageCredit": "Rolf Heinrich / Wikimedia Commons",
       "blurb": "購物、K-POP、咖啡廳首選，韓流文化體驗第一站。",
-      "tags": ["購物", "潮流", "美食"],
+      "tags": [
+        "購物",
+        "潮流",
+        "美食"
+      ],
       "priceLevel": 3,
       "dealCode": "ICN",
-      "travelMood": ["刺激", "都市"]
+      "travelMood": [
+        "刺激",
+        "都市"
+      ]
     },
     {
       "id": "seoul-bukchon",
@@ -99,10 +135,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Bukchon_Hanok_Village_3.jpg/1280px-Bukchon_Hanok_Village_3.jpg",
       "imageCredit": "Steve46814 / Wikimedia Commons",
       "blurb": "六百年傳統韓屋聚落，穿越古今的浪漫散步路線。",
-      "tags": ["文化", "歷史", "拍照"],
+      "tags": [
+        "文化",
+        "歷史",
+        "拍照"
+      ],
       "priceLevel": 1,
       "dealCode": "ICN",
-      "travelMood": ["文化", "浪漫"]
+      "travelMood": [
+        "文化",
+        "浪漫"
+      ]
     },
     {
       "id": "bangkok-grand-palace",
@@ -116,10 +159,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Grand_Palace_Bangkok_from_Outer_Court.jpg/1280px-Grand_Palace_Bangkok_from_Outer_Court.jpg",
       "imageCredit": "Basile Morin / Wikimedia Commons",
       "blurb": "泰國最神聖的建築群，玉佛寺金光閃閃。",
-      "tags": ["文化", "歷史", "建築"],
+      "tags": [
+        "文化",
+        "歷史",
+        "建築"
+      ],
       "priceLevel": 1,
       "dealCode": "BKK",
-      "travelMood": ["文化", "壯觀"]
+      "travelMood": [
+        "文化",
+        "壯觀"
+      ]
     },
     {
       "id": "phuket-beach",
@@ -133,10 +183,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Phuket_-_Patong_Beach_-_panoramio.jpg/1280px-Phuket_-_Patong_Beach_-_panoramio.jpg",
       "imageCredit": "ironstone / Wikimedia Commons",
       "blurb": "安達曼海明珠，白沙灘、夕陽、夜生活一站全包。",
-      "tags": ["海灘", "度假", "水上活動"],
+      "tags": [
+        "海灘",
+        "度假",
+        "水上活動"
+      ],
       "priceLevel": 2,
       "dealCode": "HKT",
-      "travelMood": ["度假", "浪漫"]
+      "travelMood": [
+        "度假",
+        "浪漫"
+      ]
     },
     {
       "id": "chiang-mai",
@@ -150,10 +207,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Chiang_Mai_-_Wat_Phra_Singh_temple_view.jpg/1280px-Chiang_Mai_-_Wat_Phra_Singh_temple_view.jpg",
       "imageCredit": "Takeaway / Wikimedia Commons",
       "blurb": "蘭納古都，寺廟林立，週日步行街最有人情味。",
-      "tags": ["文化", "歷史", "夜市"],
+      "tags": [
+        "文化",
+        "歷史",
+        "夜市"
+      ],
       "priceLevel": 1,
       "dealCode": "CNX",
-      "travelMood": ["文化", "慢活"]
+      "travelMood": [
+        "文化",
+        "慢活"
+      ]
     },
     {
       "id": "taipei-101",
@@ -167,10 +231,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Taipei_101_at_night.jpg/1280px-Taipei_101_at_night.jpg",
       "imageCredit": "Wing1990hk / Wikimedia Commons",
       "blurb": "曾是世界最高建築，觀景台看台北盆地的絕佳位置。",
-      "tags": ["地標", "夜景", "購物"],
+      "tags": [
+        "地標",
+        "夜景",
+        "購物"
+      ],
       "priceLevel": 2,
       "dealCode": "TPE",
-      "travelMood": ["都市", "壯觀"]
+      "travelMood": [
+        "都市",
+        "壯觀"
+      ]
     },
     {
       "id": "taipei-jiufen",
@@ -184,10 +255,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Jiufen_skyline_at_night.jpg/1280px-Jiufen_skyline_at_night.jpg",
       "imageCredit": "David Yu / Wikimedia Commons",
       "blurb": "宮崎駿《千與千尋》靈感地，紅燈籠石階巷弄。",
-      "tags": ["文化", "夜景", "美食"],
+      "tags": [
+        "文化",
+        "夜景",
+        "美食"
+      ],
       "priceLevel": 1,
       "dealCode": "TPE",
-      "travelMood": ["懷舊", "浪漫"]
+      "travelMood": [
+        "懷舊",
+        "浪漫"
+      ]
     },
     {
       "id": "singapore-marina-bay",
@@ -201,10 +279,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Marina_Bay_Sands_in_the_evening_-_2012.jpg/1280px-Marina_Bay_Sands_in_the_evening_-_2012.jpg",
       "imageCredit": "Chen Junfeng / Wikimedia Commons",
       "blurb": "全球最貴綜合度假村，57樓無邊泳池看新加坡夜景。",
-      "tags": ["奢華", "夜景", "城市"],
+      "tags": [
+        "奢華",
+        "夜景",
+        "城市"
+      ],
       "priceLevel": 4,
       "dealCode": "SIN",
-      "travelMood": ["奢華", "都市"]
+      "travelMood": [
+        "奢華",
+        "都市"
+      ]
     },
     {
       "id": "singapore-gardens",
@@ -218,10 +303,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Gardens_by_the_Bay_in_the_evening.jpg/1280px-Gardens_by_the_Bay_in_the_evening.jpg",
       "imageCredit": "Calvin Teo / Wikimedia Commons",
       "blurb": "擎天大樹超級樹燈光秀，未來感植物園。",
-      "tags": ["自然", "夜景", "家庭"],
+      "tags": [
+        "自然",
+        "夜景",
+        "家庭"
+      ],
       "priceLevel": 2,
       "dealCode": "SIN",
-      "travelMood": ["自然", "浪漫"]
+      "travelMood": [
+        "自然",
+        "浪漫"
+      ]
     },
     {
       "id": "kualalumpur-petronas",
@@ -235,10 +327,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Petronas_Twin_Towers_at_night_2.jpg/1280px-Petronas_Twin_Towers_at_night_2.jpg",
       "imageCredit": "Alvin js / Wikimedia Commons",
       "blurb": "馬來西亞地標，曾是世界最高雙塔，KLCC 公園散步。",
-      "tags": ["地標", "夜景", "建築"],
+      "tags": [
+        "地標",
+        "夜景",
+        "建築"
+      ],
       "priceLevel": 2,
       "dealCode": "KUL",
-      "travelMood": ["都市", "壯觀"]
+      "travelMood": [
+        "都市",
+        "壯觀"
+      ]
     },
     {
       "id": "bali-uluwatu",
@@ -252,10 +351,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Pura_Luhur_Uluwatu_2010-07-29.jpg/1280px-Pura_Luhur_Uluwatu_2010-07-29.jpg",
       "imageCredit": "Lena S / Wikimedia Commons",
       "blurb": "印度教海神廟，懸崖日落加傳統克差舞。",
-      "tags": ["文化", "海景", "日落"],
+      "tags": [
+        "文化",
+        "海景",
+        "日落"
+      ],
       "priceLevel": 1,
       "dealCode": "DPS",
-      "travelMood": ["浪漫", "文化"]
+      "travelMood": [
+        "浪漫",
+        "文化"
+      ]
     },
     {
       "id": "hanoi-old-quarter",
@@ -269,10 +375,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Hanoi_old_quarter_street_view.jpg/1280px-Hanoi_old_quarter_street_view.jpg",
       "imageCredit": "Pedro Szekely / Wikimedia Commons",
       "blurb": "千年歷史老街區，越南咖啡、phở 街頭美食天堂。",
-      "tags": ["文化", "美食", "歷史"],
+      "tags": [
+        "文化",
+        "美食",
+        "歷史"
+      ],
       "priceLevel": 1,
       "dealCode": "HAN",
-      "travelMood": ["文化", "美食"]
+      "travelMood": [
+        "文化",
+        "美食"
+      ]
     },
     {
       "id": "halong-bay",
@@ -286,10 +399,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Halong_Bay%2C_Vietnam_%28Unsplash%29.jpg/1280px-Halong_Bay%2C_Vietnam_%28Unsplash%29.jpg",
       "imageCredit": "Maciej Cieslak / Wikimedia Commons",
       "blurb": "UNESCO 世界遺產，喀斯特地貌海上桂林，過夜遊船必體驗。",
-      "tags": ["自然", "UNESCO", "船遊"],
+      "tags": [
+        "自然",
+        "UNESCO",
+        "船遊"
+      ],
       "priceLevel": 2,
       "dealCode": "HAN",
-      "travelMood": ["壯觀", "度假"]
+      "travelMood": [
+        "壯觀",
+        "度假"
+      ]
     },
     {
       "id": "cebu-chocolate-hills",
@@ -303,10 +423,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Chocolate_Hills_2015.jpg/1280px-Chocolate_Hills_2015.jpg",
       "imageCredit": "Mike Gonzalez / Wikimedia Commons",
       "blurb": "1,776 個圓錐形山丘，乾季變成巧克力色，地質奇觀。",
-      "tags": ["自然", "地質", "UNESCO"],
+      "tags": [
+        "自然",
+        "地質",
+        "UNESCO"
+      ],
       "priceLevel": 2,
       "dealCode": "CEB",
-      "travelMood": ["壯觀", "自然"]
+      "travelMood": [
+        "壯觀",
+        "自然"
+      ]
     },
     {
       "id": "shanghai-bund",
@@ -320,10 +447,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/The_Bund_at_night_2.jpg/1280px-The_Bund_at_night_2.jpg",
       "imageCredit": "A. Strakey / Wikimedia Commons",
       "blurb": "萬國建築博覽群，浦東天際線夜景無可匹敵。",
-      "tags": ["夜景", "歷史", "建築"],
+      "tags": [
+        "夜景",
+        "歷史",
+        "建築"
+      ],
       "priceLevel": 2,
       "dealCode": "PVG",
-      "travelMood": ["都市", "浪漫"]
+      "travelMood": [
+        "都市",
+        "浪漫"
+      ]
     },
     {
       "id": "beijing-forbidden-city",
@@ -337,10 +471,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Forbidden_City_07.jpg/1280px-Forbidden_City_07.jpg",
       "imageCredit": "Severin Stalder / Wikimedia Commons",
       "blurb": "明清兩代皇宮，UNESCO 世界遺產，600 年歷史。",
-      "tags": ["歷史", "UNESCO", "文化"],
+      "tags": [
+        "歷史",
+        "UNESCO",
+        "文化"
+      ],
       "priceLevel": 2,
       "dealCode": "PEK",
-      "travelMood": ["文化", "歷史"]
+      "travelMood": [
+        "文化",
+        "歷史"
+      ]
     },
     {
       "id": "hongkong-victoria-peak",
@@ -354,9 +495,16 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Hong_Kong_skyline_at_dusk.jpg/1280px-Hong_Kong_skyline_at_dusk.jpg",
       "imageCredit": "Tobias Schneider / Wikimedia Commons",
       "blurb": "世界十大夜景，百年山頂纜車，俯瞰維多利亞港。",
-      "tags": ["夜景", "地標", "纜車"],
+      "tags": [
+        "夜景",
+        "地標",
+        "纜車"
+      ],
       "priceLevel": 2,
-      "travelMood": ["浪漫", "壯觀"]
+      "travelMood": [
+        "浪漫",
+        "壯觀"
+      ]
     },
     {
       "id": "hongkong-disneyland",
@@ -370,9 +518,16 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Hong_Kong_Disneyland_castle.jpg/1280px-Hong_Kong_Disneyland_castle.jpg",
       "imageCredit": "Kingray887 / Wikimedia Commons",
       "blurb": "亞洲第二座迪士尼，姊妹情侶家庭日首選。",
-      "tags": ["主題樂園", "家庭", "打卡"],
+      "tags": [
+        "主題樂園",
+        "家庭",
+        "打卡"
+      ],
       "priceLevel": 3,
-      "travelMood": ["家庭", "刺激"]
+      "travelMood": [
+        "家庭",
+        "刺激"
+      ]
     },
     {
       "id": "macau-ruins",
@@ -386,10 +541,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Ruins_of_St._Paul%27s%2C_Macau_2014.jpg/1280px-Ruins_of_St._Paul%27s%2C_Macau_2014.jpg",
       "imageCredit": "Diliff / Wikimedia Commons",
       "blurb": "澳門歷史城區地標，葡式遺產，鄰近美食街。",
-      "tags": ["歷史", "UNESCO", "美食"],
+      "tags": [
+        "歷史",
+        "UNESCO",
+        "美食"
+      ],
       "priceLevel": 1,
       "dealCode": "MFM",
-      "travelMood": ["文化", "歷史"]
+      "travelMood": [
+        "文化",
+        "歷史"
+      ]
     },
     {
       "id": "tokyo-disneysea",
@@ -403,10 +565,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Tokyo_DisneySea_Mediterranean_Harbor_2014.jpg/1280px-Tokyo_DisneySea_Mediterranean_Harbor_2014.jpg",
       "imageCredit": "Guitarfoto / Wikimedia Commons",
       "blurb": "全球唯一海洋主題迪士尼，成人票券最受歡迎。",
-      "tags": ["主題樂園", "刺激", "家庭"],
+      "tags": [
+        "主題樂園",
+        "刺激",
+        "家庭"
+      ],
       "priceLevel": 4,
       "dealCode": "HND",
-      "travelMood": ["刺激", "家庭"]
+      "travelMood": [
+        "刺激",
+        "家庭"
+      ]
     },
     {
       "id": "kumamoto-castle",
@@ -420,10 +589,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Kumamoto_Castle_20210917.jpg/1280px-Kumamoto_Castle_20210917.jpg",
       "imageCredit": "663highland / Wikimedia Commons",
       "blurb": "日本三大名城，戰國時代加藤清正建造。",
-      "tags": ["歷史", "建築", "文化"],
+      "tags": [
+        "歷史",
+        "建築",
+        "文化"
+      ],
       "priceLevel": 1,
       "dealCode": "KOJ",
-      "travelMood": ["文化", "歷史"]
+      "travelMood": [
+        "文化",
+        "歷史"
+      ]
     },
     {
       "id": "nara-deer",
@@ -437,10 +613,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Deer_at_Nara_Park_2014.jpg/1280px-Deer_at_Nara_Park_2014.jpg",
       "imageCredit": "Kimonas / Wikimedia Commons",
       "blurb": "1,200 隻野生梅花鹿自由走動，東大寺大佛相伴。",
-      "tags": ["自然", "動物", "文化"],
+      "tags": [
+        "自然",
+        "動物",
+        "文化"
+      ],
       "priceLevel": 1,
       "dealCode": "KIX",
-      "travelMood": ["自然", "慢活"]
+      "travelMood": [
+        "自然",
+        "慢活"
+      ]
     },
     {
       "id": "chiang-rai-blue",
@@ -454,10 +637,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Wat_Rong_Khun_-_panoramio.jpg/1280px-Wat_Rong_Khun_-_panoramio.jpg",
       "imageCredit": "Takeaway / Wikimedia Commons",
       "blurb": "泰國藝術家打造的純白寺廟，現代藝術與佛教極致融合。",
-      "tags": ["藝術", "建築", "打卡"],
+      "tags": [
+        "藝術",
+        "建築",
+        "打卡"
+      ],
       "priceLevel": 1,
       "dealCode": "CNX",
-      "travelMood": ["藝術", "文化"]
+      "travelMood": [
+        "藝術",
+        "文化"
+      ]
     },
     {
       "id": "manila-banaue",
@@ -471,10 +661,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Banaue_Philippines_Banaue-Rice-Terraces-02.jpg/1280px-Banaue_Philippines_Banaue-Rice-Terraces-02.jpg",
       "imageCredit": "Mike Gonzalez / Wikimedia Commons",
       "blurb": "2,000 年前 Ifugao 族手工打造的梯田，UNESCO 世界遺產。",
-      "tags": ["自然", "UNESCO", "文化"],
+      "tags": [
+        "自然",
+        "UNESCO",
+        "文化"
+      ],
       "priceLevel": 1,
       "dealCode": "MNL",
-      "travelMood": ["壯觀", "文化"]
+      "travelMood": [
+        "壯觀",
+        "文化"
+      ]
     },
     {
       "id": "fukuoka-hakata",
@@ -488,10 +685,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Canal_City_Hakata_-_2015.jpg/1280px-Canal_City_Hakata_-_2015.jpg",
       "imageCredit": "TANAKA Juuyoh / Wikimedia Commons",
       "blurb": "福岡市中心大型購物娛樂綜合體，屋台文化夜市。",
-      "tags": ["購物", "美食", "夜景"],
+      "tags": [
+        "購物",
+        "美食",
+        "夜景"
+      ],
       "priceLevel": 2,
       "dealCode": "FUK",
-      "travelMood": ["美食", "都市"]
+      "travelMood": [
+        "美食",
+        "都市"
+      ]
     },
     {
       "id": "penang-george-town",
@@ -505,10 +709,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/George_Town_Street_Art_-_Little_Durians.jpg/1280px-George_Town_Street_Art_-_Little_Durians.jpg",
       "imageCredit": "Sengai Podhuvan / Wikimedia Commons",
       "blurb": "立陶宛藝術家創作的街頭壁畫，UNESCO 世界遺產老街。",
-      "tags": ["藝術", "UNESCO", "美食"],
+      "tags": [
+        "藝術",
+        "UNESCO",
+        "美食"
+      ],
       "priceLevel": 1,
       "dealCode": "PEN",
-      "travelMood": ["文化", "美食"]
+      "travelMood": [
+        "文化",
+        "美食"
+      ]
     },
     {
       "id": "sydney-opera",
@@ -522,10 +733,17 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Sydney_Opera_House_Sails.jpg/1280px-Sydney_Opera_House_Sails.jpg",
       "imageCredit": "Diliff / Wikimedia Commons",
       "blurb": "20 世紀最具標誌性建築，UNESCO 世界遺產。",
-      "tags": ["建築", "夜景", "UNESCO"],
+      "tags": [
+        "建築",
+        "夜景",
+        "UNESCO"
+      ],
       "priceLevel": 3,
       "dealCode": "SYD",
-      "travelMood": ["都市", "壯觀"]
+      "travelMood": [
+        "都市",
+        "壯觀"
+      ]
     }
   ]
 }
