@@ -336,18 +336,21 @@ export default function Home() {
                 </div>
                 <div className="text-xs text-muted-foreground">最低價</div>
               </div>
-              <Link
-                href="/deals"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-orange-500/40 bg-orange-500/10 px-4 py-2 text-sm font-bold text-orange-600 dark:text-orange-400 transition-all hover:bg-orange-500/20 hover:border-orange-500/60 hover:shadow-md hover:shadow-orange-500/20"
-              >
-                🔥 今日劈價
-              </Link>
-              <Link
-                href="/match"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-pink-500/40 bg-pink-500/10 px-4 py-2 text-sm font-bold text-pink-600 dark:text-pink-400 transition-all hover:bg-pink-500/20 hover:border-pink-500/60 hover:shadow-md hover:shadow-pink-500/20"
-              >
-                💕 情侶配對
-              </Link>
+              {/* One-row actions: today's deals + travel-companion picker */}
+              <div className="flex flex-row gap-2">
+                <Link
+                  href="/deals"
+                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-orange-500/40 bg-orange-500/10 px-4 py-2 text-sm font-bold text-orange-600 dark:text-orange-400 transition-all hover:bg-orange-500/20 hover:border-orange-500/60 hover:shadow-md hover:shadow-orange-500/20"
+                >
+                  🔥 今日劈價
+                </Link>
+                <Link
+                  href="/match"
+                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-pink-500/40 bg-pink-500/10 px-4 py-2 text-sm font-bold text-pink-600 dark:text-pink-400 transition-all hover:bg-pink-500/20 hover:border-pink-500/60 hover:shadow-md hover:shadow-pink-500/20"
+                >
+                  🗺 一起揀目的地
+                </Link>
+              </div>
             </div>
 
             {/* Filters & Sort */}
