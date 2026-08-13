@@ -10,8 +10,15 @@
  *      This is the new primary on Vercel since the funnel breaks.
  *   3. Last resort: bundled static JSON in src/data/.
  *
- * Cache: 60s in-memory. The 90s page refresh interval plus the CDN's 300s
- * max-age mean we never hammer upstream.
+ * Cache: 20s in-memory with request coalescing — concurrent visitors within
+ * the 20s window share a single upstream fetch. The deals page polls every
+ * 20s, so users always see fresh data without manual cache bypasses.
+ *
+ * Security: F-07 — the public `force=1` cache bypass is REMOVED. It was
+ * abused by the deals page's 20s poll to fire two upstream requests per
+ * tick per visitor (HKG + SZX), multiplying Vercel + upstream traffic by
+ * the number of concurrent visitors. Manual refresh is no longer needed
+ * because the in-memory cache TTL matches the page poll interval.
  */
 
 import { promises as fs } from 'node:fs';
@@ -22,10 +29,7 @@ export const runtime = 'nodejs';
 
 const FUNNEL_BASE = 'https://ugreen-nas.tail20bf1.ts.net';
 const CDN_BASE = 'https://cdn.savetheday.io/deals';
-const CACHE_TTL_MS = 20_000; // 20 seconds — Hermes 2026-07-09 dropped from
-// 60s so the deals page's 20s poll cycle actually sees fresh data each tick.
-// The upstream funnel/CDN has its own ~300s max-age so we never hammer it.
-const UPSTREAM_TIMEOUT_MS = 8_000; // Vercel hobby default is 10s; leave headroom
+const CACHE_TTL_MS = 20_000; // 20 seconds — matches deals page poll interval
 
 type Departure = 'HKG' | 'SZX';
 
@@ -37,6 +41,11 @@ interface CacheEntry {
 }
 
 const cache = new Map<Departure, CacheEntry>();
+
+// Request coalescing: while a fetch is in flight, additional callers
+// receive the same Promise. Prevents thundering-herd upstream loads when
+// the cache expires and N visitors hit /api/deals simultaneously.
+const inflight = new Map<Departure, Promise<CacheEntry>>();
 
 const STATIC_FALLBACK: Record<Departure, string> = {
   HKG: 'all_dates.json',
@@ -50,11 +59,6 @@ async function readStaticFallback(dep: Departure): Promise<unknown> {
   return JSON.parse(raw);
 }
 
-/**
- * Try upstreams in order: funnel first (fastest when reachable), then public
- * CDN. Returns the first successful response. Throws if all upstream fetches
- * failed so the static-fallback path can run.
- */
 async function fetchFromAnyUpstream(
   dep: Departure,
   parentSignal: AbortSignal,
@@ -93,47 +97,58 @@ async function fetchFromAnyUpstream(
       parentSignal.removeEventListener('abort', abortParent);
     }
   }
-  // All upstreams failed — throw the last error so the static fallback runs.
   throw new Error(
     `all upstreams failed for ${dep}: ${errors.map((e) => JSON.stringify(e)).join('; ')}`,
   );
 }
 
-async function getDeals(dep: Departure, force = false): Promise<CacheEntry> {
+const UPSTREAM_TIMEOUT_MS = 8_000;
+
+async function getDeals(dep: Departure): Promise<CacheEntry> {
   const now = Date.now();
   const cached = cache.get(dep);
-  if (!force && cached && now - cached.fetchedAt < CACHE_TTL_MS) {
+  if (cached && now - cached.fetchedAt < CACHE_TTL_MS) {
     return cached;
   }
 
-  const ac = new AbortController();
-  // Outer watchdog: 8s per upstream * 2 upstreams + buffer = 18s, but clamp at 16s
-  const overallTimer = setTimeout(() => ac.abort(), UPSTREAM_TIMEOUT_MS * 2);
-  try {
-    const { body, mtime, source } = await fetchFromAnyUpstream(dep, ac.signal);
-    const entry: CacheEntry = { body, fetchedAt: now, source, upstreamMtime: mtime };
-    cache.set(dep, entry);
-    return entry;
-  } catch (err) {
-    console.warn(`[api/deals] all upstreams failed for ${dep}, falling back to static:`, err);
-    const body = await readStaticFallback(dep);
-    const entry: CacheEntry = {
-      body,
-      fetchedAt: now - (CACHE_TTL_MS / 2), // expire halfway
-      source: 'static-fallback',
-      upstreamMtime: null,
-    };
-    cache.set(dep, entry);
-    return entry;
-  } finally {
-    clearTimeout(overallTimer);
-  }
+  // Coalesce: if a fetch is already in flight for this dep, await it
+  // instead of starting a duplicate upstream call.
+  const existing = inflight.get(dep);
+  if (existing) return existing;
+
+  const promise = (async (): Promise<CacheEntry> => {
+    const ac = new AbortController();
+    const overallTimer = setTimeout(() => ac.abort(), UPSTREAM_TIMEOUT_MS * 2);
+    try {
+      const { body, mtime, source } = await fetchFromAnyUpstream(dep, ac.signal);
+      const entry: CacheEntry = { body, fetchedAt: Date.now(), source, upstreamMtime: mtime };
+      cache.set(dep, entry);
+      return entry;
+    } catch (err) {
+      console.warn(`[api/deals] all upstreams failed for ${dep}, falling back to static:`, err);
+      const body = await readStaticFallback(dep);
+      const entry: CacheEntry = {
+        body,
+        // Mark static fallback as half-expired so we retry upstream sooner
+        fetchedAt: Date.now() - (CACHE_TTL_MS / 2),
+        source: 'static-fallback',
+        upstreamMtime: null,
+      };
+      cache.set(dep, entry);
+      return entry;
+    } finally {
+      clearTimeout(overallTimer);
+      inflight.delete(dep);
+    }
+  })();
+
+  inflight.set(dep, promise);
+  return promise;
 }
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const depParam = (searchParams.get('dep') || 'HKG').toUpperCase() as Departure;
-  const force = searchParams.get('force') === '1';
   const healthOnly = searchParams.get('health') === '1';
 
   if (healthOnly) {
@@ -148,8 +163,10 @@ export async function GET(request: Request) {
           }
         : null;
     }
+    // F-15: do NOT leak the internal Tailscale Funnel hostname in the
+    // public health response. Keep cache state only.
     return Response.json(
-      { ok: true, cache: cacheOut, funnel: FUNNEL_BASE },
+      { ok: true, cache: cacheOut },
       { headers: { 'Cache-Control': 'no-store' } },
     );
   }
@@ -159,7 +176,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const entry = await getDeals(depParam, force);
+    const entry = await getDeals(depParam);
     return Response.json(entry.body, {
       headers: {
         // Short edge cache so bursts of visitors don't all hit Lambda

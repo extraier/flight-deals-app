@@ -439,9 +439,11 @@ export default function DealsPage() {
       setLoading(true);
       setFetchError(null);
       try {
+        // F-07 fix: no force=1 — the server-side 20s in-memory cache matches
+        // the poll interval, so users always see fresh data without a bypass.
         const [hkgRes, szxRes] = await Promise.all([
-          fetch('/api/deals?dep=HKG&force=1', { cache: 'no-store' }),
-          fetch('/api/deals?dep=SZX&force=1', { cache: 'no-store' }),
+          fetch('/api/deals?dep=HKG', { cache: 'no-store' }),
+          fetch('/api/deals?dep=SZX', { cache: 'no-store' }),
         ]);
         if (!hkgRes.ok) throw new Error(`HKG fetch ${hkgRes.status}`);
         if (!szxRes.ok) throw new Error(`SZX fetch ${szxRes.status}`);

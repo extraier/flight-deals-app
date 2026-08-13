@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Lock, BarChart3, Image as ImageIcon, Plus, ToggleLeft, ToggleRight, ExternalLink } from 'lucide-react';
-import { collection, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/client';
 
 type Spot = {
@@ -33,8 +33,31 @@ type Ad = {
   active: boolean;
 };
 
+/**
+ * Server-side admin mutations. The browser never gets to write Firestore
+ * directly for `coupleAds`/`coupleSpots` — the route handler validates the
+ * HMAC-signed session cookie, then writes via the service-account access
+ * token (which bypasses Firestore rules).
+ */
+async function adminMutate(
+  collection: 'coupleAds' | 'coupleSpots',
+  id: string,
+  fields: Record<string, unknown>
+): Promise<void> {
+  const res = await fetch('/match/api/admin-mutate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
+    body: JSON.stringify({ collection, id, fields }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || `HTTP ${res.status}`);
+  }
+}
+
 export default function AdminPage() {
-  const [authed, setAuthed] = useState(false);
+  const [authed, setAuthed] = useState<boolean | null>(null); // null = loading
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -42,12 +65,16 @@ export default function AdminPage() {
   const [ads, setAds] = useState<Ad[]>([]);
   const [tab, setTab] = useState<'spots' | 'ads'>('ads');
 
-  // Check if cookie exists
+  // Verify session on mount by asking the server (cookie is httpOnly so
+  // document.cookie can't see it). F-05 fix: server-side check replaces
+  // the broken client-side cookie scan.
   useEffect(() => {
-    const hasCookie = document.cookie.includes('couple-admin-token=');
-    if (hasCookie) {
-      setAuthed(true);
-    }
+    fetch('/match/api/admin-auth', { credentials: 'same-origin' })
+      .then((res) => {
+        if (res.ok) setAuthed(true);
+        else setAuthed(false);
+      })
+      .catch(() => setAuthed(false));
   }, []);
 
   // Load data when authed
@@ -71,6 +98,7 @@ export default function AdminPage() {
       const res = await fetch('/match/api/admin-auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
         body: JSON.stringify({ password }),
       });
       const data = await res.json();
@@ -87,16 +115,33 @@ export default function AdminPage() {
   };
 
   const toggleAdActive = async (ad: Ad) => {
-    const ref = doc(db, 'coupleAds', ad.id);
-    await updateDoc(ref, { active: !ad.active });
-    setAds((prev) => prev.map((a) => (a.id === ad.id ? { ...a, active: !a.active } : a)));
+    try {
+      await adminMutate('coupleAds', ad.id, { active: !ad.active });
+      setAds((prev) => prev.map((a) => (a.id === ad.id ? { ...a, active: !a.active } : a)));
+    } catch (err: any) {
+      setError('切換失敗: ' + err.message);
+    }
   };
 
   const resetAdCounters = async (ad: Ad) => {
-    const ref = doc(db, 'coupleAds', ad.id);
-    await updateDoc(ref, { impressions: 0, clicks: 0 });
-    setAds((prev) => prev.map((a) => (a.id === ad.id ? { ...a, impressions: 0, clicks: 0 } : a)));
+    try {
+      await adminMutate('coupleAds', ad.id, { impressions: 0, clicks: 0 });
+      setAds((prev) =>
+        prev.map((a) => (a.id === ad.id ? { ...a, impressions: 0, clicks: 0 } : a))
+      );
+    } catch (err: any) {
+      setError('重置失敗: ' + err.message);
+    }
   };
+
+  // Loading state until session check resolves
+  if (authed === null) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+        <div className="text-gray-400 text-sm">驗證中...</div>
+      </div>
+    );
+  }
 
   if (!authed) {
     return (
