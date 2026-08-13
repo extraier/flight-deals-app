@@ -82,10 +82,19 @@ export function buildDeck(
     }
   }
 
-  // If any ads remain, append at the end (never two in a row, so first card still a spot)
-  while (adCursor < availableAds.length) {
-    deck.push({ ...availableAds[adCursor], __kind: 'ad' });
-    adCursor++;
+  // F-12 fix: trailing ads MUST alternate with spots — no two ads back-to-back.
+  // Reuse the last spot as a separator if spots run out (better UX than stacked
+  // ads). The main loop already inserts 1 ad per 5 spots, so this handles the
+  // "leftover ads" case (e.g., 7 spots + 3 ads: 1 ad injected, 2 trailing).
+  if (adCursor < availableAds.length) {
+    const lastSpot = shuffledSpots[shuffledSpots.length - 1];
+    while (adCursor < availableAds.length) {
+      if (lastSpot) {
+        deck.push({ ...lastSpot, __kind: 'spot' });
+      }
+      deck.push({ ...availableAds[adCursor], __kind: 'ad' });
+      adCursor++;
+    }
   }
 
   return deck;
