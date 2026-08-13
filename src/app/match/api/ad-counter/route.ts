@@ -38,7 +38,7 @@ export async function POST(request: Request) {
   } catch (err: any) {
     console.error('ad-counter increment failed:', err);
     return NextResponse.json(
-      { ok: false, error: 'increment failed' },
+      { ok: false, error: 'increment failed', detail: String(err?.message ?? err) },
       { status: 500 }
     );
   }
