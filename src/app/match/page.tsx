@@ -36,8 +36,8 @@ export default function CouplePage() {
 
   const handleJoin = async () => {
     if (!uid) return;
-    if (joinCode.length !== 4) {
-      setError('房間號碼為 4 位');
+    if (joinCode.length !== 8) {
+      setError('房間號碼為 8 位');
       return;
     }
     setLoading(true);
