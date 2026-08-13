@@ -28,9 +28,20 @@ export type RoomData = {
   deckSeed: number;
 };
 
-/** Generate a 4-char room code like foodswipe HK. */
+/**
+ * Generate a room code. 8 chars, base32-ish (excludes I/O/0/1 for readability).
+ * Space: 32^8 ≈ 1.1 trillion — brute-force enumeration is infeasible.
+ * Manus review F-02: 4-char codes (~1.68M) were trivially enumerable.
+ */
 export function generateRoomCode(): string {
-  return Math.random().toString(36).substring(2, 6).toUpperCase();
+  const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // 32 chars, no I/O/0/1
+  const bytes = new Uint8Array(8);
+  crypto.getRandomValues(bytes);
+  let code = '';
+  for (const b of bytes) {
+    code += ALPHABET[b % 32];
+  }
+  return code;
 }
 
 /** Create a new room. Returns the roomId. */

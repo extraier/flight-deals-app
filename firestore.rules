@@ -9,13 +9,17 @@ rules_version = '2';
 //   Updates via Firebase service account only (admin script).
 // - coupleAds: public read (anon users see ads in the deck).
 //   Same — only service account writes.
-// - coupleRooms: anon users can create rooms + read by ID + update their own
-//   likes/dislikes. NO deletion. Server-side cleanup of stale rooms deferred.
+// - coupleRooms: authenticated users only. Read is restricted to the two
+//   participants. Create binds user1 to request.auth.uid. Update binds the
+//   changed fields to the caller's own like/dislike arrays — user1 cannot
+//   mutate user2Likes, and vice versa. A separate leave-room branch lets
+//   either participant stamp endedAt.
 //
 // All OTHER collections (savetheday's vendor / customer / event data) are NOT
 // touched by these rules — they remain under whatever ruleset savetheday has.
 //
-// Hermes 2026-08-11.
+// Hermes 2026-08-11. Updated 2026-08-13: F-01 (cross-user mutation), F-02
+// (auth-required create + participant-only read), F-08 (leaveRoom).
 
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -31,25 +35,35 @@ service cloud.firestore {
       allow write: if false; // only via service account
     }
 
-    // Room rules — anon users can create, read, and update their own likes.
-    // They CANNOT rewrite the user1/user2 fields or other users' likes.
+    // Room rules — authenticated users only. user1/user2 are bound to their
+    // own like/dislike arrays. Reads restricted to the two participants.
     match /coupleRooms/{roomId} {
-      allow read: if true;
-      allow create: if request.resource.data.keys().hasAll([
-          'id', 'user1', 'user2', 'user1Likes', 'user1Dislikes',
-          'user2Likes', 'user2Dislikes', 'createdAt', 'deckSeed'
-        ])
-        && request.resource.data.user1 is string
+      // F-02: only participants can read a room (was: if true).
+      allow read: if isInRoom();
+      // F-02: require auth, bind user1 to request.auth.uid, and validate
+      // shape strictly (use hasOnly — extra fields are rejected).
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly([
+            'id', 'user1', 'user2', 'user1Likes', 'user1Dislikes',
+            'user2Likes', 'user2Dislikes', 'createdAt', 'deckSeed'
+          ])
+        && request.resource.data.id == roomId
+        && request.resource.data.user1 == request.auth.uid
         && request.resource.data.user2 == null
         && request.resource.data.user1Likes is list
         && request.resource.data.user1Dislikes is list
         && request.resource.data.user2Likes is list
-        && request.resource.data.user2Dislikes is list;
+        && request.resource.data.user2Dislikes is list
+        && (request.resource.data.createdAt is number
+            || request.resource.data.createdAt is timestamp);
+      // F-01: per-user array binding. F-08: leave-room stamp.
       allow update: if
           // User is joining (user2 was null, they were NOT in the room yet)
           isJoiningRoom() ||
-          // User is already in the room, updating their own likes/dislikes
-          (isInRoom() && isSwiping());
+          // User is in the room and only changed their own like/dislike arrays
+          (isInRoom() && isSwipingOwn()) ||
+          // F-08: user is leaving the room — only `endedAt` changed
+          (isInRoom() && isLeavingRoom());
       allow delete: if false;
     }
 
@@ -65,17 +79,26 @@ service cloud.firestore {
         resource.data.user2 == null &&
         resource.data.user1 != request.auth.uid &&
         request.resource.data.user2 == request.auth.uid &&
-        // No other fields changed
         resource.data.diff(request.resource.data).affectedKeys().hasOnly(['user2']);
     }
-    function isSwiping() {
-      return request.auth != null &&
-        // Only the user's own like/dislike array changed
-        isOwnLikeArrayChanged();
-    }
-    function isOwnLikeArrayChanged() {
+    // F-01: per-user array binding. The diff must include ONLY the caller's
+    // own like/dislike arrays, never the partner's.
+    function isSwipingOwn() {
       let keys = resource.data.diff(request.resource.data).affectedKeys();
-      return keys.hasOnly(['user1Likes', 'user1Dislikes', 'user2Likes', 'user2Dislikes']);
+      let isUser1 = request.auth.uid == resource.data.user1;
+      let isUser2 = request.auth.uid == resource.data.user2;
+      let user1Own = keys.hasOnly(['user1Likes', 'user1Dislikes']);
+      let user2Own = keys.hasOnly(['user2Likes', 'user2Dislikes']);
+      return (isUser1 && user1Own) || (isUser2 && user2Own);
+    }
+    // F-08: leave-room branch. Only `endedAt` (a number or timestamp) changed.
+    // The client currently writes `Date.now()` (a number); we accept both so
+    // the existing client doesn't break. Migrate to serverTimestamp() later.
+    function isLeavingRoom() {
+      let keys = resource.data.diff(request.resource.data).affectedKeys();
+      let endedAtOk = request.resource.data.endedAt is number
+                   || request.resource.data.endedAt is timestamp;
+      return keys.hasOnly(['endedAt']) && endedAtOk;
     }
   }
 }

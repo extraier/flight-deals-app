@@ -68,12 +68,12 @@ export default function CouplePage() {
             <Heart size={40} className="text-pink-500 fill-current" />
           </div>
           <h1 className="text-3xl font-black text-gray-900 dark:text-white mb-2">
-            情侶 / 好友配對
+            🗺 一起揀目的地
           </h1>
           <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-            兩個人一起 Swipe 旅遊景點 ·
+            兩個人一起 Swipe 想去嘅地方 ·
             <br />
-            兩個都 Like 就會配對成功！
+            兩個都 Like 就會配對成功！情侶、朋友、同事都啱用
           </p>
         </div>
 
@@ -105,13 +105,13 @@ export default function CouplePage() {
               type="text"
               value={joinCode}
               onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-              placeholder="輸入 4 位房間號碼"
-              maxLength={4}
+              placeholder="輸入 8 位房間號碼"
+              maxLength={8}
               className="flex-1 bg-transparent px-4 font-bold text-gray-700 dark:text-gray-200 placeholder-gray-400 tracking-widest outline-none uppercase"
             />
             <button
               onClick={handleJoin}
-              disabled={loading || !uid || joinCode.length !== 4}
+              disabled={loading || !uid || joinCode.length !== 8}
               className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-6 py-3 rounded-xl font-bold transition hover:bg-black dark:hover:bg-gray-100 disabled:opacity-30"
             >
               加入房間
