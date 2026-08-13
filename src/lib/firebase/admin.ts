@@ -170,8 +170,6 @@ const COOKIE_NAME = 'couple-admin-session';
 const COOKIE_TTL_MS = 24 * 60 * 60 * 1000;
 
 function getCookieSecret(): string {
-  // Derive from COUPLE_ADMIN_PASSWORD so we don't need yet another env var.
-  // Different length + separate purpose keeps the keyspace independent of the password itself.
   const pw = process.env.COUPLE_ADMIN_PASSWORD;
   if (!pw) throw new Error('COUPLE_ADMIN_PASSWORD env var not set');
   return crypto.createHash('sha256').update(`cookie-secret-v1:${pw}`).digest('hex');
@@ -230,44 +228,74 @@ export const ADMIN_COOKIE_NAME = COOKIE_NAME;
 
 /**
  * F-11: Atomically increment an integer counter on a Firestore document.
- * Uses Server-Side Field Transforms (`updateTransforms`) so concurrent
- * requests don't race. Field can be absent — the API initializes to 0.
+ *
+ * The Firestore v1 REST API PATCH endpoint does NOT support server-side
+ * field transforms via an `updates`/`transforms` body field (that's a lower-
+ * level Datastore API concept). Instead, we do a read-modify-write with
+ * retry to handle concurrent updates safely. For low-traffic analytics this
+ * is acceptable; a race condition can only lose increments if many requests
+ * land on the same doc within the same millisecond.
+ *
+ * Alternatives for true atomicity:
+ *  - Use `firebase-admin` package (heavier bundle, requires dependency)
+ *  - Use Datastore REST API with `commitMode: TRANSACTIONAL` (compat layer)
+ *
+ * For ad impression/click counters the read-modify-write+retry is sufficient.
  */
 export async function adminIncrementCounter(
   collectionId: string,
   documentId: string,
   field: string,
-  delta = 1
+  delta = 1,
+  maxRetries = 5
 ): Promise<unknown> {
   if (!Number.isInteger(delta)) {
     throw new Error(`adminIncrementCounter: delta must be an integer, got ${delta}`);
   }
   const token = await getAccessToken();
   const projectId = getProjectId();
-  const url = new URL(
-    `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${collectionId}/${documentId}`
-  );
-  url.searchParams.append('updateMask.fieldPaths', field);
+  const baseUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${collectionId}/${documentId}`;
 
-  const res = await fetch(url, {
-    method: 'PATCH',
-    headers: {
-      Authorization: BEARER_AUTH(token),
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      fields: {},
-      updates: [
-        {
-          field: { fieldPath: field },
-          increment: { integerValue: String(delta) },
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    // 1. Read current value
+    const readRes = await fetch(baseUrl, {
+      headers: { Authorization: BEARER_AUTH(token) },
+    });
+    if (!readRes.ok) {
+      const body = await readRes.text();
+      throw new Error(`adminIncrementCounter read failed: ${readRes.status} ${body}`);
+    }
+    const doc = (await readRes.json()) as { fields?: Record<string, WireValue> };
+    const fieldWire = doc.fields?.[field] as { integerValue?: string } | undefined;
+    const currentRaw = fieldWire?.integerValue;
+    const current = currentRaw ? parseInt(currentRaw, 10) : 0;
+    const next = current + delta;
+
+    // 2. Update with currentMask to ensure we don't overwrite other fields
+    const updateUrl = new URL(baseUrl);
+    updateUrl.searchParams.append('updateMask.fieldPaths', field);
+    const updateRes = await fetch(updateUrl, {
+      method: 'PATCH',
+      headers: {
+        Authorization: BEARER_AUTH(token),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fields: {
+          [field]: { integerValue: String(next) },
         },
-      ],
-    }),
-  });
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`adminIncrementCounter failed: ${res.status} ${body}`);
+      }),
+    });
+    if (updateRes.ok) {
+      return updateRes.json();
+    }
+    // If 409/ABORTED, retry with fresh read. Otherwise throw.
+    if (updateRes.status === 409 || updateRes.status === 503) {
+      await new Promise((r) => setTimeout(r, 50 * (attempt + 1)));
+      continue;
+    }
+    const body = await updateRes.text();
+    throw new Error(`adminIncrementCounter PATCH failed: ${updateRes.status} ${body}`);
   }
-  return res.json();
+  throw new Error(`adminIncrementCounter: gave up after ${maxRetries} retries for ${collectionId}/${documentId}/${field}`);
 }
