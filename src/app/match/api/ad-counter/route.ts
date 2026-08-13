@@ -2,9 +2,12 @@
 // POST /match/api/ad-counter  body: { adId: string, field: 'impressions'|'clicks' }
 //
 // Anonymous (no session check) — these are analytics counters, not PII.
-// Server uses the Admin SDK to atomically increment the field so concurrent
-// requests can't lose updates. Rate-limited client-side by the existence of
-// the ad in `seenAdIds` (impressions) and a single tap (clicks).
+// Server uses an Admin-SDK-bypassing read-modify-write with bounded retry
+// to handle concurrent requests safely. For low-traffic analytics this is
+// acceptable; alternatives for true atomicity are noted in admin.ts.
+//
+// Rate-limited client-side by `seenAdIds` (one impression per ad per session)
+// and a single tap (one click).
 
 import { NextResponse } from 'next/server';
 import { adminIncrementCounter } from '@/lib/firebase/admin';
@@ -33,13 +36,10 @@ export async function POST(request: Request) {
   }
 
   try {
-    const result = await adminIncrementCounter('coupleAds', adId, field, 1);
+    await adminIncrementCounter('coupleAds', adId, field, 1);
     return NextResponse.json({ ok: true });
-  } catch (err: any) {
+  } catch (err) {
     console.error('ad-counter increment failed:', err);
-    return NextResponse.json(
-      { ok: false, error: 'increment failed', detail: String(err?.message ?? err) },
-      { status: 500 }
-    );
+    return NextResponse.json({ ok: false, error: 'increment failed' }, { status: 500 });
   }
 }
