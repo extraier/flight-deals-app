@@ -83,14 +83,29 @@ export function buildDeck(
   }
 
   // F-12 fix: trailing ads MUST alternate with spots — no two ads back-to-back.
-  // Reuse the last spot as a separator if spots run out (better UX than stacked
-  // ads). The main loop already inserts 1 ad per 5 spots, so this handles the
-  // "leftover ads" case (e.g., 7 spots + 3 ads: 1 ad injected, 2 trailing).
+  // Reuse spots already injected into the deck as separators, walking
+  // backwards from the end without repeating an id (so the same spot can't
+  // appear three times for `7 spots + 3 ads`: one separator per leftover ad).
+  // If we run out of distinct injected spots, fall back to back-to-back ads
+  // (acceptable UX for very small spot sets).
   if (adCursor < availableAds.length) {
-    const lastSpot = shuffledSpots[shuffledSpots.length - 1];
+    const injectedSpots = deck
+      .filter((c): c is SpotCard & { __kind: 'spot' } => c.__kind === 'spot')
+      .map((s) => s.id);
+    const used = new Set(injectedSpots);
+    const separatorPool: SpotCard[] = [];
+    for (let i = shuffledSpots.length - 1; i >= 0 && separatorPool.length < injectedSpots.length; i--) {
+      const s = shuffledSpots[i];
+      if (!used.has(s.id)) {
+        separatorPool.push(s);
+        used.add(s.id);
+      }
+    }
+    let sepCursor = 0;
     while (adCursor < availableAds.length) {
-      if (lastSpot) {
-        deck.push({ ...lastSpot, __kind: 'spot' });
+      if (separatorPool.length > 0) {
+        deck.push({ ...separatorPool[sepCursor % separatorPool.length], __kind: 'spot' });
+        sepCursor++;
       }
       deck.push({ ...availableAds[adCursor], __kind: 'ad' });
       adCursor++;

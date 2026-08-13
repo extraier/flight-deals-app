@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Heart, LogOut, Copy, Users, Sparkles } from 'lucide-react';
 import { ensureAnonAuth } from '@/lib/firebase/client';
 import { subscribeRoom, swipe, fetchSpots, fetchAds, type RoomData } from '@/lib/couple/room';
-import { buildDeck, filterUnswiped, intersection, type DeckCard, type SpotCard } from '@/lib/couple/cards';
+import { buildDeck, filterUnswiped, intersection, type DeckCard, type SpotCard, type AdCard } from '@/lib/couple/cards';
 import { SwipeDeck } from '@/components/couple/SwipeDeck';
 import { MatchModal } from '@/components/couple/MatchModal';
 import { recordAdMetric } from '@/lib/couple/ads';
@@ -20,7 +20,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   const [uid, setUid] = useState<string | null>(null);
   const [room, setRoom] = useState<RoomData | null>(null);
   const [spots, setSpots] = useState<SpotCard[]>([]);
-  const [ads, setAds] = useState<any[]>([]);
+  const [ads, setAds] = useState<AdCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [matchSpot, setMatchSpot] = useState<SpotCard | null>(null);
@@ -107,9 +107,12 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   const handleAdClick = (card: DeckCard) => {
     // F-11: count the click (SwipeDeck already opened the URL)
     recordAdMetric(card.id, 'clicks');
-    // Auto-record as "viewed" (swipe right)
+    // Auto-record as "viewed" (swipe right). Swipe is fire-and-forget — don't
+    // let an error here abort the click flow.
     if (uid && room) {
-      swipe(roomId, uid, card.id, 'right').catch(() => {});
+      swipe(roomId, uid, card.id, 'right').catch((err) =>
+        console.warn('ad auto-swipe failed:', err),
+      );
     }
   };
 

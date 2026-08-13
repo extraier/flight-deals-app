@@ -13,9 +13,10 @@ import crypto from 'node:crypto';
 const SCOPE = 'https://www.googleapis.com/auth/datastore https://www.googleapis.com/auth/cloud-platform';
 const TOKEN_URL = 'https://oauth2.googleapis.com/token';
 
-// Build the OAuth Authorization header WITHOUT ever inlining the literal
-// "Bearer ${token}" string in source — some editor pipelines redact that
-// substring and corrupt the file. Use 'Be' + 'arer' + ' ${token}' instead.
+// Build the OAuth Authorization header WITHOUT inlining the literal
+// `Bearer ${token}` string in source — Hermes's patch/write_file tools
+// redact that exact substring, silently corrupting the file. See MEMORY.md
+// entry "Bearer-template redaction (2026-08-13)" for the long version.
 const BEARER_AUTH = (token: string): string => `Be` + `arer ${token}`;
 
 // In-memory access-token cache. Tokens are valid for 1 hour; we refresh at 50min.
@@ -35,6 +36,14 @@ function getSaKey(): { client_email: string; private_key: string; project_id: st
   } catch {
     throw new Error('FIREBASE_SA_KEY is set but not valid JSON');
   }
+}
+
+// Parsed SA key cache. `getSaKey()` would otherwise re-parse a multi-KB JSON
+// string on every call — and every Firestore REST request calls it once.
+let cachedSaKey: ReturnType<typeof getSaKey> | null = null;
+function getCachedSaKey() {
+  if (!cachedSaKey) cachedSaKey = getSaKey();
+  return cachedSaKey;
 }
 
 /** Base64url encode a Buffer or string (no padding). */
@@ -89,9 +98,9 @@ export async function getAccessToken(): Promise<string> {
   return data.access_token;
 }
 
-/** Get the project ID (cached). */
+/** Get the project ID from the cached service-account key. */
 export function getProjectId(): string {
-  return getSaKey().project_id;
+  return getCachedSaKey().project_id;
 }
 
 /**
@@ -170,6 +179,9 @@ const COOKIE_NAME = 'couple-admin-session';
 const COOKIE_TTL_MS = 24 * 60 * 60 * 1000;
 
 function getCookieSecret(): string {
+  // Derive from COUPLE_ADMIN_PASSWORD so we don't need yet another env var.
+  // HMAC domain-separation keeps the keyspace independent of the password.
+  // NEVER replace this with the raw password.
   const pw = process.env.COUPLE_ADMIN_PASSWORD;
   if (!pw) throw new Error('COUPLE_ADMIN_PASSWORD env var not set');
   return crypto.createHash('sha256').update(`cookie-secret-v1:${pw}`).digest('hex');
@@ -227,20 +239,12 @@ export function verifyAdminSessionCookie(cookieValue: string | undefined): Admin
 export const ADMIN_COOKIE_NAME = COOKIE_NAME;
 
 /**
- * F-11: Atomically increment an integer counter on a Firestore document.
+ * F-11: Read-modify-write counter increment with bounded retry.
  *
- * The Firestore v1 REST API PATCH endpoint does NOT support server-side
- * field transforms via an `updates`/`transforms` body field (that's a lower-
- * level Datastore API concept). Instead, we do a read-modify-write with
- * retry to handle concurrent updates safely. For low-traffic analytics this
- * is acceptable; a race condition can only lose increments if many requests
- * land on the same doc within the same millisecond.
- *
- * Alternatives for true atomicity:
- *  - Use `firebase-admin` package (heavier bundle, requires dependency)
- *  - Use Datastore REST API with `commitMode: TRANSACTIONAL` (compat layer)
- *
- * For ad impression/click counters the read-modify-write+retry is sufficient.
+ * The Firestore v1 REST PATCH endpoint doesn't support field transforms, so
+ * we GET-then-PATCH. On 409/503 we re-read and retry up to 5 times.
+ * For analytics counters this is acceptable; only loses increments under
+ * extreme concurrent contention on the same doc+field.
  */
 export async function adminIncrementCounter(
   collectionId: string,
@@ -254,11 +258,10 @@ export async function adminIncrementCounter(
   }
   const token = await getAccessToken();
   const projectId = getProjectId();
-  const baseUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${collectionId}/${documentId}`;
+  const docUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${collectionId}/${documentId}`;
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
-    // 1. Read current value
-    const readRes = await fetch(baseUrl, {
+    const readRes = await fetch(docUrl, {
       headers: { Authorization: BEARER_AUTH(token) },
     });
     if (!readRes.ok) {
@@ -267,12 +270,10 @@ export async function adminIncrementCounter(
     }
     const doc = (await readRes.json()) as { fields?: Record<string, WireValue> };
     const fieldWire = doc.fields?.[field] as { integerValue?: string } | undefined;
-    const currentRaw = fieldWire?.integerValue;
-    const current = currentRaw ? parseInt(currentRaw, 10) : 0;
+    const current = fieldWire?.integerValue ? parseInt(fieldWire.integerValue, 10) : 0;
     const next = current + delta;
 
-    // 2. Update with currentMask to ensure we don't overwrite other fields
-    const updateUrl = new URL(baseUrl);
+    const updateUrl = new URL(docUrl);
     updateUrl.searchParams.append('updateMask.fieldPaths', field);
     const updateRes = await fetch(updateUrl, {
       method: 'PATCH',
@@ -281,15 +282,12 @@ export async function adminIncrementCounter(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        fields: {
-          [field]: { integerValue: String(next) },
-        },
+        fields: toFirestoreFields({ [field]: next }),
       }),
     });
     if (updateRes.ok) {
       return updateRes.json();
     }
-    // If 409/ABORTED, retry with fresh read. Otherwise throw.
     if (updateRes.status === 409 || updateRes.status === 503) {
       await new Promise((r) => setTimeout(r, 50 * (attempt + 1)));
       continue;
