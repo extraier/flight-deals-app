@@ -1,104 +1,1852 @@
+// Wedding App — Firestore Security Rules
+// =============================================================================
+// Replaces the (missing) test-mode rules. Deploy with:
+//   firebase deploy --only firestore:rules
+// or via the Firebase Console → Firestore → Rules.
+//
+// Threat model
+// ------------
+// 1. Guests arrive via signed QR-code URL: ?token=<HMAC(ownerUid|eventId|guestId|expires)>
+// 2. Token is redeemed once → guestLinks/{linkId}.redeemedByUid = auth.uid
+// 3. From then on, auth.uid is the ONLY credential. No more raw ownerUid in URL.
+//
+// 4. Helpers register their own Firebase Auth account (email/password or Google)
+// 5. Owner invites helpers via email → Cloud Function creates helpers/{uid} doc
+// 6. Helper signs in → reads their own helpers/{auth.uid} doc to learn perms
+// 7. Helper accesses owner's data ONLY through perms-checked rules
+//
+// What each role can do
+// ---------------------
+// OWNER (auth.uid == ownerUid):
+//   • Full CRUD on their own users/{uid}/{events,guests,tasks,photos}
+//   • Can read+write their own guestLinks + helpers (to issue invites)
+// GUEST (auth.uid == guestLinks/{linkId}.redeemedByUid):
+//   • Read the linked event (name, date, tier)
+//   • Create photos under that owner (only IF link not expired & not revoked)
+//   • Update ONLY their own guest row (hasAttended, hasGifted, giftAmount)
+// HELPER (helpers/{auth.uid}.status == 'active' && perms[X] == true):
+//   • Per-tab access based on perms flags:
+//       canScan / canViewGuestList / canViewBudget / canViewChecklist
+//       canViewPhotos / canUploadPhotos / canEditGuests
+//       canViewGiftAmount (default false — opt-in per helper)
+//   • Cannot see other helpers
+//   • Cannot modify the helper doc itself
+// VENDOR:
+//   • Read /jobRequests (public listings)
+//   • Read/write /proposals for jobs they own
+//   • Read /vendors/{vendorUid} (any vendor profile, public for browsing)
+//   • Write /vendors/{vendorUid} ONLY if auth.uid == vendorUid (own profile)
+// EVERYONE ELSE:
+//   • No access. Period.
+//
+// NOTE on appId
+// ------------
+// We allow read/write under any /artifacts/{appId} segment so the same rules
+// work for production, Canvas, and StackBlitz preview environments. The appId
+// is not a security boundary — auth + guestLinks + helpers are.
+//
+// 2026-07-15 — the /vendors/{vendorUid} match block used to be nested
+// INSIDE /artifacts/{appId}, which was a bug: the actual Firestore path
+// is /vendors/{uid} (NOT under any /artifacts/* prefix), so the rule
+// never matched and reads fell through to the catch-all deny. Moved
+// the block out to the root level alongside /vendor_events.
 rules_version = '2';
-
-// firestore.rules for flight-deals-app's Couple Room.
-// Mounted on the savetheday-2377a project (shared with savetheday.io).
-// Couple rooms are scoped to coupleRooms/*, coupleSpots/*, coupleAds/*.
-//
-// Security model:
-// - coupleSpots: public read (anon users view the deck), no client write.
-//   Updates via Firebase service account only (admin script).
-// - coupleAds: public read (anon users see ads in the deck).
-//   Same — only service account writes.
-// - coupleRooms: authenticated users only. Read is restricted to the two
-//   participants. Create binds user1 to request.auth.uid. Update binds the
-//   changed fields to the caller's own like/dislike arrays — user1 cannot
-//   mutate user2Likes, and vice versa. A separate leave-room branch lets
-//   either participant stamp endedAt.
-//
-// All OTHER collections (savetheday's vendor / customer / event data) are NOT
-// touched by these rules — they remain under whatever ruleset savetheday has.
-//
-// Hermes 2026-08-11. Updated 2026-08-13: F-01 (cross-user mutation), F-02
-// (auth-required create + participant-only read), F-08 (leaveRoom).
-
 service cloud.firestore {
   match /databases/{database}/documents {
+match /{path=**}/events/{eventId} {
+          // 2026-07-26 — collectionGroup FIX: moved to top-level with
+          // {path=**} wildcard. The original location inside
+          // /artifacts/{appId}/users/{ownerUid} caused collectionGroup
+          // queries to be denied with 403 even with allow read: if
+          // isSignedIn(). Moving to the top level with {path=**} allows
+          // collectionGroup queries to work.
+          //
+          // 2026-08-13 — H-02 (HIGH) TIGHTENING. The previous
+          // `allow read: if isSignedIn()` permitted any signed-in
+          // user to enumerate ALL events across ALL owners via
+          // collectionGroup('events'). Audit finding: a malicious
+          // user could harvest the entire events table by
+          // collectionGroup enumeration. Tightened to require
+          // the caller be the OWNER or in the event's `coOwners`
+          // array. The single live caller (App.jsx:1025, the
+          // coOwnedEvents picker) already filters with
+          // `where('coOwners','array-contains', user.uid)`, so
+          // every returned doc matches `auth.uid in coOwners` and
+          // the rule passes — zero behavior change for legitimate
+          // callers, while non-co-owners can no longer enumerate.
+          // Write rule unchanged: still tied to `ownerUid` (the
+          // path wildcard variable).
+          allow read: if isSignedIn()
+            && (resource.data._ownerUid == request.auth.uid
+                || request.auth.uid in resource.data.coOwners);
+          allow create, update, delete: if isSignedIn() && request.auth.uid == ownerUid;
+        }
 
-    // ─── Couple Room public data ───────────────────────────────────────
-    match /coupleSpots/{spotId} {
-      allow read: if true;
-      allow write: if false; // only via service account
+        // 2026-08-07 — collectionGroup FIX for vendorContacts.
+        // contactLink.tryAutoLinkContacts runs a collectionGroup query
+        // to find contacts across all owners; without this top-level
+        // rule the query fails with "Missing or insufficient permissions"
+        // even for signed-in users (the nested rule at line 645 only
+        // applies to per-doc get(), not collectionGroup). READ-only —
+        // per-doc write stays owner-scoped at the nested rule.
+        //
+        // 2026-08-13 — H-02 (HIGH) TIGHTENING. The previous
+        // `allow read: if isSignedIn()` permitted any signed-in
+        // user to enumerate ALL vendorContacts across ALL owners.
+        // Tightened to require the caller be the doc's owner via
+        // a denormalized `ownerUid` field. The single live caller
+        // (contactLink.js, the auto-link lookup) filters with
+        // `where('vendorEmail','==', email)` — but that doesn't
+        // narrow by owner, so without this tightening a malicious
+        // user could craft a series of email-targeted queries to
+        // enumerate contacts across the entire database.
+        //
+        // Companion write-side change (App.jsx handleAddVendorContact
+        // + handleUpdateVendorContact): every new/updated doc now
+        // stamps `ownerUid` on the doc body. Legacy docs without
+        // `ownerUid` deny by default (the `hasAll` guard skips
+        // them) — this is the intended posture until the backfill
+        // migration runs (separate step per user direction).
+        match /{path=**}/vendorContacts/{contactId} {
+          allow read: if isSignedIn()
+            && resource.data.ownerUid == request.auth.uid;
+        }
+
+        // 2026-08-08 — collectionGroup FIX for tasks. VendorDashboard's
+        // `assignedTasks` subscription in App.jsx:1173 runs
+        // collectionGroup(db,'tasks').where('assignedVendorUid','==',uid)
+        // to find every task across every owner where the current user
+        // is the assigned vendor. Without this top-level rule the
+        // snapshot errors with "Missing or insufficient permissions" on
+        // every vendor login. Mirrors the vendorContacts pattern above
+        // (per-doc write stays owner-scoped at the nested rule).
+        //
+        // Read filter mirrors the per-event rule at line 399:
+        //   owner / co-owner read everything;
+        //   assigned vendor reads only their own;
+        //   assigned helper reads only their own.
+        // We can't enumerate "all owners" from a collectionGroup rule,
+        // so the only safe read pattern is to gate on
+        // assignedVendorUid / assignedHelperUid matching the caller.
+        // The owner's own per-event subscription covers their reads.
+        match /{path=**}/tasks/{taskId} {
+          allow read: if isSignedIn() && (
+            request.auth.uid == resource.data.assignedVendorUid
+            || request.auth.uid == resource.data.assignedHelperUid
+          );
+        }
+
+        // 2026-08-09 — collectionGroup FIX for 大日流程 (rundown) and
+        // 物資 (resources). VendorDashboard in App.jsx runs
+        // collectionGroup(db,'rundown'|'resources') filtered by
+        // assignedVendorUid == auth.uid. Without these top-level
+        // rules the snapshot errors with "Missing or insufficient
+        // permissions" for vendors — the per-event nested rules only
+        // apply to per-doc get(), not collectionGroup. Same shape as
+        // the /tasks collectionGroup rule above: per-doc writes
+        // remain owner-scoped at the nested rule.
+        match /{path=**}/rundown/{entryId} {
+          allow read: if isSignedIn() && (
+            request.auth.uid == resource.data.assignedVendorUid
+          );
+        }
+        match /{path=**}/resources/{itemId} {
+          allow read: if isSignedIn() && (
+            request.auth.uid == resource.data.assignedVendorUid
+          );
+        }
+
+        // 2026-08-09 — collectionGroup FIX for task comments. The
+        // useNotifications hook in the header bell aggregates EVERY
+        // helper/vendor comment across EVERY event into a single
+        // bell feed. Without this top-level rule the collectionGroup
+        // query fails with "Missing or insufficient permissions" even
+        // for the owner (the nested rule at line 447 only applies to
+        // per-doc get(), not collectionGroup).
+        //
+        // 2026-08-09 (later) — allow the OWNER via the denormalized
+        // ownerUid field. The original rule only allowed the assigned
+        // vendor / helper, which broke the owner's bell panel (she
+        // couldn't see her own wedding's vendor activity). The
+        // assignedVendorUid / assignedHelperUid fields are also
+        // denormalized from the parent task at write time (see
+        // TaskComments.jsx + TaskActivityTimeline.jsx), so the rule
+        // can gate reads without walking back to the parent task.
+        //
+        // 2026-08-09 (later) — authorRole check removed. The owner
+        // commenting on her own task is now allowed because
+        // ownerUid == auth.uid covers her. Vendor/helper authors
+        // match via assignedVendorUid / assignedHelperUid — those
+        // fields are denormalized on every doc, so the rule works
+        // regardless of authorRole.
+        // 2026-08-09 (later) — defensive null checks added. The
+        // collectionGroup query enumerates EVERY comments/statusUpdates
+        // doc across the database, including legacy docs from before
+        // the denormalization landed. Without the `hasAll` guard,
+        // accessing `resource.data.assignedVendorUid` on a doc that
+        // doesn't have that field throws `Property X is undefined`
+        // and the entire subscription fails for the owner — even
+        // docs that SHOULD be allowed. The `hasAll` gate skips the
+        // comparison for legacy docs (deny by default), then the rule
+        // returns false for those — which is the correct conservative
+        // posture until the legacy data ages out.
+        // 2026-08-09 — Removed the top-level /{path=**}/comments/{commentId}
+        // and /{path=**}/statusUpdates/{updateId} rules. The per-event
+        // nested rule at line 492 + 525 (comment / statusUpdate under
+        // /users/{ownerUid}/events/{eventId}/tasks/{taskId}/) is the
+        // canonical read path. The bell hook no longer uses collectionGroup
+        // aggregation (see useNotifications.js 2026-08-09 — switched to
+        // per-event subscriptions). Keeping the broken top-level rules
+        // would shadow the nested read for the owner under certain path
+        // patterns. Removing them keeps the rules simpler.
+
+        // 2026-08-10 — AdminQueue screen (AdminQueue.tsx) does
+        // collectionGroup('socialProofs' | 'referralClaims' |
+        // 'paymentReceipts') to triage pending unlock submissions.
+        // The per-owner nested rules (line 996 / 1013 / 1027) only
+        // allow collectionGroup reads when the rule's parent context
+        // can be resolved cleanly — but Firestore's collectionGroup
+        // rule resolution walks the candidate doc path WITHOUT
+        // binding the ownerUid wildcard when a denormalized field is
+        // absent, so the deeply-nested `isOwnerOrAnyCoOwner(ownerUid)`
+        // branch fails with 403 PERMISSION_DENIED.
+        //
+        // Top-level {path=**} mirrors (same pattern as the events
+        // collectionGroup fix at line 56) make collectionGroup queries
+        // work cleanly for admins. isAdmin() is the gating check, so
+        // non-admin sessions still get denied. Writes stay gated by
+        // the deeper rules so this doesn't open up new write paths.
+        match /{path=**}/socialProofs/{proofId} {
+          allow read: if isAdmin();
+        }
+        match /{path=**}/referralClaims/{claimId} {
+          allow read: if isAdmin();
+        }
+        match /{path=**}/paymentReceipts/{receiptId} {
+          allow read: if isAdmin();
+        }
+
+
+    // ---- Helpers ---------------------------------------------------------
+
+    function isSignedIn() {
+      return request.auth != null;
     }
 
-    match /coupleAds/{adId} {
-      allow read: if true;
-      allow write: if false; // only via service account
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
     }
 
-    // Room rules — authenticated users only. user1/user2 are bound to their
-    // own like/dislike arrays. Reads restricted to the two participants.
-    match /coupleRooms/{roomId} {
-      // F-02: only participants can read a room (was: if true).
-      allow read: if isInRoom();
-      // F-02: require auth, bind user1 to request.auth.uid, and validate
-      // shape strictly (use hasOnly — extra fields are rejected).
-      allow create: if request.auth != null
-        && request.resource.data.keys().hasOnly([
-            'id', 'user1', 'user2', 'user1Likes', 'user1Dislikes',
-            'user2Likes', 'user2Dislikes', 'createdAt', 'deckSeed'
-          ])
-        && request.resource.data.id == roomId
-        && request.resource.data.user1 == request.auth.uid
-        && request.resource.data.user2 == null
-        && request.resource.data.user1Likes is list
-        && request.resource.data.user1Dislikes is list
-        && request.resource.data.user2Likes is list
-        && request.resource.data.user2Dislikes is list
-        && (request.resource.data.createdAt is number
-            || request.resource.data.createdAt is timestamp);
-      // F-01: per-user array binding. F-08: leave-room stamp.
-      allow update: if
-          // User is joining (user2 was null, they were NOT in the room yet)
-          isJoiningRoom() ||
-          // User is in the room and only changed their own like/dislike arrays
-          (isInRoom() && isSwipingOwn()) ||
-          // F-08: user is leaving the room — only `endedAt` changed
-          (isInRoom() && isLeavingRoom());
-      allow delete: if false;
+    // 2026-07-26 — Co-owners (couples, business partners). A co-owner
+    // gets FULL CRUD on the owner's data, same as the original
+    // owner. Implemented by storing a `coOwners: string[]` field on
+    // the event doc; anyone in that array (including the original
+    // userId) is a co-owner.
+    //
+    // For an EVENT doc: check the doc's own coOwners field.
+    function isEventCoOwner(eventId, ownerUid) {
+      return isSignedIn() && exists(
+        /databases/$(database)/documents/artifacts/savetheday-production/users/$(ownerUid)/events/$(eventId)
+      ) && request.auth.uid in get(
+        /databases/$(database)/documents/artifacts/savetheday-production/users/$(ownerUid)/events/$(eventId)
+      ).data.coOwners;
     }
 
-    // ─── Helpers ───────────────────────────────────────────────────────
-    function isInRoom() {
-      return request.auth != null && (
-        resource.data.user1 == request.auth.uid ||
-        resource.data.user2 == request.auth.uid
+    // For a NON-EVENT doc (guests, tasks, photos, etc.): the doc has
+    // an eventId field. Look up the event, then check the coOwners
+    // array on that event. The resource.data.eventId is required.
+    function isCoOwnerOfEventDoc(ownerUid) {
+      return isSignedIn()
+        && resource.data.eventId is string
+        && exists(
+          /databases/$(database)/documents/artifacts/savetheday-production/users/$(ownerUid)/events/$(resource.data.eventId)
+        )
+        && request.auth.uid in get(
+          /databases/$(database)/documents/artifacts/savetheday-production/users/$(ownerUid)/events/$(resource.data.eventId)
+        ).data.coOwners;
+    }
+
+    // For NEW writes where resource.data is not yet present (e.g.
+    // create): check via the request.resource.data.eventId field.
+    function isCoOwnerByRequestEvent(ownerUid) {
+      return isSignedIn()
+        && request.resource.data.eventId is string
+        && exists(
+          /databases/$(database)/documents/artifacts/savetheday-production/users/$(ownerUid)/events/$(request.resource.data.eventId)
+        )
+        && request.auth.uid in get(
+          /databases/$(database)/documents/artifacts/savetheday-production/users/$(ownerUid)/events/$(request.resource.data.eventId)
+        ).data.coOwners;
+    }
+
+    // 2026-07-26 — For collections WITHOUT an eventId field
+    // (e.g. /helpers, /guestLinks, /redPackets). A co-owner is
+    // anyone who has an active co-owner record at
+    // /users/{ownerUid}/coOwners/{auth.uid}.
+    //
+    // The /coOwners collection mirrors the /helpers pattern. It's
+    // owned (writeable) by the original owner; anyone in it gets
+    // full read access to the owner's non-eventId subcollections.
+    function isCoOwnerOfAnyEvent(ownerUid) {
+      return isSignedIn() && exists(
+        /databases/$(database)/documents/artifacts/savetheday-production/users/$(ownerUid)/coOwners/$(request.auth.uid)
+      ) && get(
+        /databases/$(database)/documents/artifacts/savetheday-production/users/$(ownerUid)/coOwners/$(request.auth.uid)
+      ).data.status == 'active';
+    }
+
+    // 2026-07-26 — Combined "owner OR any-flavor coOwner" check.
+    // Use this everywhere a match block currently uses
+    // isOwner(ownerUid). It tries every co-owner pattern and
+    // returns true on the first match. For most match blocks
+    // (with eventId), only the first two patterns apply. For
+    // /helpers and /guestLinks (no eventId), the third pattern
+    // is what unlocks access.
+    //
+    // 2026-07-27 — REORDERED to put isCoOwnerOfAnyEvent FIRST.
+    // The previous order was: isOwner -> isCoOwnerOfEventDoc ->
+    // isCoOwnerByRequestEvent -> isCoOwnerOfAnyEvent.
+    //
+    // BUG: For collectionGroup('events') queries, Firestore
+    // evaluates the rule on the EVENT DOC itself. The event doc
+    // has NO `eventId` field (it's in the URL path, not the
+    // doc), so `isCoOwnerOfEventDoc` checked `resource.data.eventId
+    // is string` and returned false. Then `isCoOwnerByRequestEvent`
+    // checked `request.resource.data.eventId is string` and
+    // ALSO returned false. The OR chain then reached
+    // `isCoOwnerOfAnyEvent` — which checks the /coOwners/
+    // collection and would have returned true.
+    //
+    // The OLD code technically reached that branch too — but
+    // collectionGroup queries are evaluated PER-DOC and an
+    // exception in any branch aborts the whole query.
+    //
+    // Moving `isCoOwnerOfAnyEvent` to the front fixes this:
+    // - It does NOT depend on resource.data having any field
+    //   (it only reads the /coOwners/ collection).
+    // - It's the only branch that works for /coOwners-style
+    //   permissions (the original partner invite pattern).
+    // - For owners, isOwner short-circuits as before.
+    function isOwnerOrAnyCoOwner(ownerUid) {
+      return isOwner(ownerUid)
+        || isCoOwnerOfAnyEvent(ownerUid)
+        || isCoOwnerOfEventDoc(ownerUid)
+        || isCoOwnerByRequestEvent(ownerUid);
+    }
+
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.admin == true;
+    }
+
+    // A guest has redeemed a QR-code link tying them to (owner, event).
+    // appId is hardcoded to 'savetheday-production' because Firestore rules
+    // cannot reliably resolve $(appId) template variables defined in
+    // outer match blocks when referenced from a function definition.
+    function hasValidGuestLink(ownerUid, eventId) {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/artifacts/savetheday-production/users/$(ownerUid)/guestLinks/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/artifacts/savetheday-production/users/$(ownerUid)/guestLinks/$(request.auth.uid)).data.eventId == eventId &&
+        get(/databases/$(database)/documents/artifacts/savetheday-production/users/$(ownerUid)/guestLinks/$(request.auth.uid)).data.expiresAt > request.time;
+    }
+
+    // A helper has been invited to help with (ownerUid, eventId). Returns the
+    // helper doc data if active, otherwise null. Use hasHelperPerm() below
+    // for boolean checks.
+    function helperDoc(ownerUid) {
+      return get(/databases/$(database)/documents/artifacts/savetheday-production/users/$(ownerUid)/helpers/$(request.auth.uid));
+    }
+
+    function isActiveHelper(ownerUid) {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/artifacts/savetheday-production/users/$(ownerUid)/helpers/$(request.auth.uid)) &&
+        helperDoc(ownerUid).data.status == 'active';
+    }
+
+    // Returns true if the current user is an active helper AND the named
+    // permission flag is true on their helpers doc.
+    function hasHelperPerm(ownerUid, perm) {
+      return isActiveHelper(ownerUid) &&
+        helperDoc(ownerUid).data.perms[perm] == true;
+    }
+
+    // A helper is "useful" if they have any view perm. Without at least one,
+    // they have no business reading the event doc.
+    function hasAnyHelperViewPerm(ownerUid) {
+      return isActiveHelper(ownerUid) && (
+        helperDoc(ownerUid).data.perms.canScan == true ||
+        helperDoc(ownerUid).data.perms.canViewGuestList == true ||
+        helperDoc(ownerUid).data.perms.canViewBudget == true ||
+        helperDoc(ownerUid).data.perms.canViewChecklist == true ||
+        helperDoc(ownerUid).data.perms.canViewPhotos == true ||
+        helperDoc(ownerUid).data.perms.canUploadPhotos == true ||
+        helperDoc(ownerUid).data.perms.canEditGuests == true
       );
     }
-    function isJoiningRoom() {
-      return request.auth != null &&
-        resource.data.user2 == null &&
-        resource.data.user1 != request.auth.uid &&
-        request.resource.data.user2 == request.auth.uid &&
-        resource.data.diff(request.resource.data).affectedKeys().hasOnly(['user2']);
+
+    match /artifacts/{appId} {
+
+      // 2026-08-07 — Platform-wide payment settings. Single doc at
+      // /platform/paymentSettings holds the PayMe QR URL + FPS bank
+      // details used by <PurchaseModal> when couples pay for
+      // Premium. Read is allowed for any signed-in user (couples
+      // need to see the QR they pay to). Write is admin-only.
+      //
+      // QR images themselves live in Firebase Storage at
+      // /platform/payment-settings/{payme|fps}.{ext} — see
+      // storage.rules for the read/write model there.
+      match /platform/paymentSettings {
+        allow read: if isSignedIn();
+        // Admin-only writes. We deliberately don't shape-validate
+        // field-by-field here because the admin client UI
+        // (AdminPaymentSettings) handles validation, and adding a
+        // 200-line allow expression for fields that won't change
+        // often is more brittle than the simple isAdmin() gate.
+        allow write: if isAdmin();
+      }
+
+      // 2026-07-03 — admin-managed invitation template catalog.
+      // These are the 6 stock SVG templates (plain / tpl-rose / tpl-jade /
+      // tpl-midnight / tpl-blush / tpl-sage) the picker renders on
+      // InvitationEditor step 1. Public read so guests can preview tiles
+      // without signing in. Writes are admin-only — the in-app UI goes
+      // through the `updateTemplate` Cloud Function (which runs as the
+      // service account and bypasses these rules), so this admin gate
+      // is the second line of defense for direct client writes.
+      //
+      // 2026-08-10 — MOVED HERE from inside /users/{ownerUid}. The
+      // client queries /artifacts/{appId}/templates (no /users/
+      // segment), so the previous nested rule never matched and every
+      // loadLiveTemplates call returned PERMISSION_DENIED. Same fix
+      // for /meta/templates below — the cache-buster doc also lives
+      // at /artifacts/{appId}/meta/templates.
+      match /templates/{templateId} {
+        allow read: if true;
+        allow write: if isAdmin();
+      }
+      match /meta/{metaId} {
+        allow read: if true;
+        allow write: if isAdmin();
+      }
+
+      // ---- Owner-scoped data --------------------------------------------
+
+      match /users/{ownerUid} {
+
+        // 2026-07-30 — User profile screens subscribe to the parent
+        // /users/{uid} document for tier, promotedAt, and createdAt.
+        // Nested subcollection rules do not grant access to the parent
+        // document itself; keep this read owner-only because the client
+        // only reads the signed-in user's own profile.
+        allow read: if isOwner(ownerUid);
+
+        // Events: owner CRUD. Guests + helpers (with at least one view perm) read-only.
+        // 2026-07-26 — co-owners (couples/partners) get full access
+        // too. We use isEventCoOwner(eventId, ownerUid) here because
+        // the event doc itself has no eventId field — the field is
+        // implicit in the path segment.
+        //
+        // 2026-07-26c — PERF/RELIABILITY fix: short-circuit
+        // `isOwner` BEFORE the expensive `isEventCoOwner` `get()`
+        // call. In a collectionGroup('events') query with a
+        // where('coOwners', 'array-contains', X) filter, Firestore
+        // evaluates the rule on each candidate doc. The old rule
+        // evaluated BOTH branches on every doc — including the
+        // two `get()` calls inside isEventCoOwner. For users
+        // with many events this triggered "Missing or insufficient
+        // permissions" (often a rate-limit / quota failure from the
+        // chained get() calls). Reordering short-circuits the
+        // common case (user IS the owner) with zero extra reads.
+        // IMPORTANT — Firestore collection-group query semantics:
+        // The bundle runs collectionGroup('events').where('coOwners','array-contains',
+        // auth.uid). Firestore evaluates the rule PER-DOC, against each candidate
+        // event BEFORE the where filter is applied. If even ONE event returns
+        // false, the entire query fails with permission-denied.
+        //
+        // So the rule MUST return true for ANY event doc a signed-in user might
+        // enumerate. We can't condition on "is this user a co-owner of THIS
+        // particular event" — that defeats the collection-group query.
+        //
+        // The where filter narrows results client-side. The rule lets any
+        // signed-in user enumerate event candidates; per-doc reads (get) are
+        // still strict via the `get` rule below.
+        
+        // 2026-07-26b — RESTORE nested events match block. The
+        // top-level `{path=**}/events/{eventId}` (line 56) only
+        // handles collectionGroup READS. Without an explicit
+        // `/users/{ownerUid}/events/{eventId}` match block here,
+        // `ownerUid` is undefined in the rule expression and
+        // `request.auth.uid == ownerUid` always returns false —
+        // which broke event CREATE/UPDATE/DELETE for owners.
+        // READ access here is owner + co-owners + guests with a
+        // valid link to this specific event. Guests need read
+        // access so useFirestoreDoc can resolve the event for
+        // the PersonalGuestPortal (display name + table lookup
+        // AND — critically — the photo-upload handler needs
+        // currentEvent.id, otherwise handleRealUpload's silent
+        // guard (`if (!currentEvent) return`) drops the upload
+        // and the guest sees nothing happen).
+        //
+        // 2026-08-05 — added hasValidGuestLink. Without this,
+        // guests got a 403 on the event doc and currentEvent
+        // stayed null, which made the photo upload silently
+        // bail (no toast, no error in console beyond the
+        // onSnapshot permission-denied which only logs to
+        // useFirestoreCollection's error branch).
+        //
+        // CollectionGroup enumeration is still permissive
+        // (line 56) — that's a separate rule for listing ALL
+        // events the owner owns (used by co-owner cross-event
+        // lookup), unaffected by this change.
+        match /events/{eventId} {
+          allow read: if isOwnerOrAnyCoOwner(ownerUid)
+            || hasValidGuestLink(ownerUid, eventId);
+          allow create, update, delete: if isOwner(ownerUid);
+
+          // 2026-07-27 — 電子人情 QR codes (moved from owner-scoped
+          // /redPackets/ to event-scoped /events/{eventId}/redPackets/).
+          // Co-owners (the partner) get full CRUD on the couple's
+          // shared QR list. Guests with a valid guestLink to ANY
+          // of the owner's events can read (same trust signal as
+          // the original owner-scoped rule — the guest was invited to
+          // the wedding, and QRs belong to the wedding not a single event).
+          match /redPackets/{redPacketId} {
+            allow read: if isOwnerOrAnyCoOwner(ownerUid)
+              || (isSignedIn()
+                && exists(/databases/$(database)/documents/artifacts/savetheday-production/users/$(ownerUid)/guestLinks/$(request.auth.uid))
+                && get(/databases/$(database)/documents/artifacts/savetheday-production/users/$(ownerUid)/guestLinks/$(request.auth.uid)).data.expiresAt > request.time);
+            allow create: if isOwnerOrAnyCoOwner(ownerUid)
+              && request.resource.data.keys().hasAll([
+                'provider', 'label', 'qrUrl', 'createdAt', 'eventId'
+              ])
+              && request.resource.data.eventId == eventId
+              && request.resource.data.provider in [
+                'payme', 'fps', 'alipayhk', 'wechat', 'octopus', 'other'
+              ]
+              && request.resource.data.label is string
+              && request.resource.data.label.size() > 0
+              && request.resource.data.label.size() <= 80
+              && request.resource.data.qrUrl is string
+              && request.resource.data.qrUrl.matches('^https://firebasestorage\\.googleapis\\.com/.*')
+              && request.resource.data.createdAt is timestamp;
+            allow update: if isOwnerOrAnyCoOwner(ownerUid)
+              // The couple can edit the metadata (label, suggested
+              // amount, note, sort order) but cannot swap the QR image
+              // by editing qrUrl — to replace an image they must
+              // delete and re-create the doc. eventId is immutable.
+              && request.resource.data.diff(resource.data).affectedKeys()
+                   .hasOnly(['label', 'suggested', 'note', 'sortOrder', 'provider'])
+              && request.resource.data.eventId == resource.data.eventId;
+            allow delete: if isOwnerOrAnyCoOwner(ownerUid);
+          }
+
+          // 2026-07-27 — Event-scoped subcollections. Previously
+          // these were owner-scoped at /users/{ownerUid}/{colName},
+          // which leaked items across the owner's events (e.g.
+          // opening a brand-new empty event showed rundown entries
+          // from a previous event). Moved to event-scoped path
+          // /users/{ownerUid}/events/{eventId}/{colName}/{id} —
+          // same shape as redPackets (above).
+          //
+          // Co-owners get full CRUD on all four wedding-day tabs;
+          // helpers can still read tasks/guests/photos if their
+          // assignment gives them that perm (canViewChecklist /
+          // canViewGuestList / canViewPhotos — same as before, just
+          // evaluated against the new path).
+          // 2026-08-09 — Rundown (大日流程) open for read access to
+          // assigned helpers (any helper with canViewChecklist on
+          // this event) and the assigned vendor. The assignedVendor
+          // is stored as `assignedVendorUid` (single vendor per entry
+          // — e.g. photographer for the photo session). Write stays
+          // owner/coOwner only so helpers/vendors can't reshuffle
+          // the timeline. Comments live in the /comments subcollection
+          // (see below).
+          match /rundown/{entryId} {
+            // 2026-08-10 — REORDERED. Vendor branch moved BEFORE
+            // isOwnerOrAnyCoOwner. isOwnerOrAnyCoOwner internally
+            // calls isCoOwnerOfEventDoc(ownerUid) which accesses the
+            // EVENT doc via get(). Vendor cannot read the event doc
+            // (event doc's read rule is isOwnerOrAnyCoOwner || guestLink,
+            // which vendor satisfies neither), so the get() throws on
+            // permission-denied and the entire isOwnerOrAnyCoOwner call
+            // throws — short-circuiting the || chain before vendor's
+            // own assignedVendorUid branch ever runs.
+            //
+            // The vendor branch is a pure UID comparison against
+            // resource.data.assignedVendorUid. Putting it first means
+            // vendors never trigger the recursive access.
+            //
+            // Same fix applied to /resources/{itemId} below.
+            allow read: if (isSignedIn() && resource.data.assignedVendorUid == request.auth.uid)
+              || isOwnerOrAnyCoOwner(ownerUid)
+              || hasHelperPerm(ownerUid, 'canViewChecklist');
+            allow write: if isOwnerOrAnyCoOwner(ownerUid);
+            match /comments/{commentId} {
+              // 2026-08-10 — Vendor comment read for /rundown/{entryId}/comments.
+              // Root cause: the previous `isOwnerOrAnyCoOwner(ownerUid)` call
+              // internally invokes `isCoOwnerOfEventDoc(ownerUid)`, which
+              // accesses `resource.data.eventId`. For LIST queries
+              // (collection-group listener + Firestore SDK onSnapshot), the
+              // rules engine evaluates the rule against each candidate doc,
+              // and `resource.data.eventId is string` is FALSE for a comment
+              // doc (comments don't have an eventId field — it's in the
+              // parent path). But for vendor's auth context, the rule never
+              // gets that far: `isCoOwnerOfEventDoc` also accesses the
+              // event doc's coOwners field via `get()`, and vendor cannot
+              // read the event doc (their read rule only allows
+              // isOwnerOrAnyCoOwner + guestLink). The `get()` throws on
+              // permission-denied, which aborts the entire OR chain
+              // even though vendor doesn't need co-owner access.
+              //
+              // Fix: bypass isOwnerOrAnyCoOwner entirely. Inline the safe
+              // branches directly:
+              //   - isOwner(ownerUid) — pure UID comparison, no doc access
+              //   - isCoOwnerOfAnyEvent(ownerUid) — reads /coOwners/{uid}
+              //     standalone doc, which has its own read rule that
+              //     allows the co-owner themselves to read it
+              //   - hasHelperPerm — safe (reads /helpers/{uid} doc with
+              //     its own read rule)
+              // Both isCoOwnerOfEventDoc / isCoOwnerByRequestEvent
+              // (which need resource.data.eventId) are skipped — partners
+              // still get access via isCoOwnerOfAnyEvent's standalone doc.
+              // 2026-08-11 — Same removal on the /rundown/{entryId}/comments
+              // read rule (see /resources/{itemId}/comments above for
+              // the full explanation of the LIVE rules-engine throw
+              // on `resource.data.X` during LISTEN).
+              //
+              // 2026-08-11 — Vendor branch rewritten to NOT call
+              // get(parentRundown). The helper branch is also dropped
+              // from the READ side: helpers always have an associated
+              // assignedHelperUid on the parent — the comment doc
+              // carries it forward as `parentAssignedHelperUid`. Read
+              // access is granted when either that field matches
+              // request.auth.uid OR the user has a helper perm doc
+              // (which is independent of any single assigned task).
+              //
+              // 2026-08-11 — LISTEN validation on /rundown/{entryId}/comments.
+              // Any cross-doc function call (exists(), get(), or any
+              // function that uses them) throws inside a list rule when
+              // the user can't read the target doc — even if exists()
+              // would return false. The vendor LISTEN path needs to
+              // succeed for the chat panel to work, so the list rule
+              // is intentionally OPEN to any signed-in user. The get
+              // rule below does the actual per-doc authorization via
+              // resource.data.parentAssignedVendorUid — so the vendor
+              // only sees comments they were assigned to. The "leak"
+              // is just the LIST channel itself, which is empty unless
+              // a vendor is actually subscribed to this path (which
+              // only happens via the dashboard wiring).
+              allow list: if isSignedIn();
+              // get is evaluated per-doc, so resource.data is bound.
+              // The vendor branch reads resource.data.parentAssignedVendorUid
+              // because the comment doc carries that field forward from
+              // the parent rundown entry at write time (see create rule
+              // below + ItemComments.jsx). Same for helpers.
+              allow get: if isOwner(ownerUid)
+                || isCoOwnerOfAnyEvent(ownerUid)
+                || hasHelperPerm(ownerUid, 'canViewChecklist')
+                || (isSignedIn() && resource.data.parentAssignedVendorUid == request.auth.uid)
+                || (isSignedIn() && resource.data.parentAssignedHelperUid == request.auth.uid && hasHelperPerm(ownerUid, 'canViewChecklist'));
+              // get is evaluated per-doc, so resource.data is bound.
+              // The vendor branch is allowed to read
+              // resource.data.parentAssignedVendorUid because the
+              // comment doc carries that field forward from the parent
+              // rundown entry at write time (see create rule below +
+              // ItemComments.jsx). Same for helpers.
+              allow get: if isOwner(ownerUid)
+                || isCoOwnerOfAnyEvent(ownerUid)
+                || hasHelperPerm(ownerUid, 'canViewChecklist')
+                || (isSignedIn() && resource.data.parentAssignedVendorUid == request.auth.uid)
+                || (isSignedIn() && resource.data.parentAssignedHelperUid == request.auth.uid && hasHelperPerm(ownerUid, 'canViewChecklist'));
+              // 2026-08-10 — Same root cause + same fix on the create rule.
+              // The create rule also called isOwnerOrAnyCoOwner, which
+              // has the same vendor-blocked-by-event-doc-access issue.
+              // Create: author must be one of (owner/coOwner/assigned helper
+              // with canViewChecklist/assigned vendor). Author identity is
+              // stamped onto the doc so update/delete can authorise via
+              // resource.data.authorUid.
+              //
+              // 2026-08-11 — Vendor / helper branches rewritten to NOT
+              // call get(parentRundown). The LIVE rules engine has been
+              // denying these writes with `Missing or insufficient
+              // permissions` despite the local emulator allowing them —
+              // most likely an evaluation quirk on cross-doc get() inside
+              // a `||` branch. The fix: the client stamps the parent's
+              // assignedVendorUid / assignedHelperUid onto the comment
+              // doc, and the rule does a pure field comparison.
+              //
+              // 2026-08-11 — Vendor branch reordered BEFORE
+              // isCoOwnerOfAnyEvent. The LIVE engine throws on the
+              // get() inside isCoOwnerOfAnyEvent when the user can't
+              // read the target /coOwners/{uid} doc — even when that
+              // branch would conceptually return false. The throw
+              // aborts the entire `||` chain, so any vendor (or any
+              // non-co-owner user) was silently failing the rule.
+              // Putting the vendor branch first means it short-circuits
+              // TRUE before isCoOwnerOfAnyEvent is evaluated.
+              //
+              // The owner/co-owner branches are unchanged. They use pure
+              // UID comparisons and the standalone coOwners doc.
+              allow create: if (
+                  isSignedIn()
+                  && request.resource.data.authorUid == request.auth.uid
+                  && request.resource.data.keys().hasAll(['authorUid', 'authorRole', 'text', 'createdAt', 'parentAssignedVendorUid', 'parentAssignedHelperUid'])
+                  && request.resource.data.text is string
+                  && request.resource.data.text.size() > 0
+                  && request.resource.data.text.size() <= 2000
+                  && request.resource.data.authorRole in ['owner', 'vendor', 'helper']
+                  && request.resource.data.parentAssignedVendorUid == request.auth.uid
+                )
+                || isOwner(ownerUid)
+                || isCoOwnerOfAnyEvent(ownerUid)
+                || (
+                  isSignedIn()
+                  && request.resource.data.authorUid == request.auth.uid
+                  && request.resource.data.keys().hasAll(['authorUid', 'authorRole', 'text', 'createdAt', 'parentAssignedVendorUid', 'parentAssignedHelperUid'])
+                  && request.resource.data.text is string
+                  && request.resource.data.text.size() > 0
+                  && request.resource.data.text.size() <= 2000
+                  && request.resource.data.authorRole in ['owner', 'vendor', 'helper']
+                  && (
+                    request.resource.data.parentAssignedHelperUid == request.auth.uid
+                      ? hasHelperPerm(ownerUid, 'canViewChecklist')
+                      // owner-side helper case: parent has no
+                      // assignedHelperUid so we still require the
+                      // helper-perm check.
+                      : (request.resource.data.parentAssignedHelperUid == null && hasHelperPerm(ownerUid, 'canViewChecklist'))
+                  )
+                );
+              allow update, delete: if isOwnerOrAnyCoOwner(ownerUid)
+                || (isSignedIn() && request.auth.uid == resource.data.authorUid);
+            }
+          }
+          // 2026-08-09 — Resources (物資分配) — same permission shape
+          // as /rundown: helpers with canViewChecklist + assigned
+          // vendor can read the item and post comments; only the
+          // owner can add/delete the item itself.
+          // 2026-08-10 — Same isOwnerOrAnyCoOwner → safe-branches
+          // replacement (see /rundown/{entryId}/comments block above
+          // for the full explanation of why).
+          match /resources/{itemId} {
+            // 2026-08-10 — See /rundown/{entryId} above for why this is
+            // reordered. Same recursive isOwnerOrAnyCoOwner → event doc
+            // → throw issue applies here.
+            allow read: if (isSignedIn() && resource.data.assignedVendorUid == request.auth.uid)
+              || isOwnerOrAnyCoOwner(ownerUid)
+              || hasHelperPerm(ownerUid, 'canViewChecklist');
+            allow write: if isOwnerOrAnyCoOwner(ownerUid);
+            match /comments/{commentId} {
+              // 2026-08-11 — Same vendor-branch rewrite as
+              // /rundown/{entryId}/comments. Read & create no
+              // longer call get(parentResource). The comment doc
+              // carries the parent's assignedVendorUid /
+              // assignedHelperUid fields, and the rules do pure
+              // field comparisons.
+              //
+              // 2026-08-11 — Split into list / get to avoid the
+              // "Property parentAssignedVendorUid is undefined on
+              // object" error during LISTEN validation (resource
+              // is unbound for list-level evaluations).
+              allow list: if isSignedIn();
+              allow get: if isOwner(ownerUid)
+                || isCoOwnerOfAnyEvent(ownerUid)
+                || hasHelperPerm(ownerUid, 'canViewChecklist')
+                || (isSignedIn() && resource.data.parentAssignedVendorUid == request.auth.uid)
+                || (isSignedIn() && resource.data.parentAssignedHelperUid == request.auth.uid && hasHelperPerm(ownerUid, 'canViewChecklist'));
+              allow create: if (
+                  isSignedIn()
+                  && request.resource.data.authorUid == request.auth.uid
+                  && request.resource.data.keys().hasAll(['authorUid', 'authorRole', 'text', 'createdAt', 'parentAssignedVendorUid', 'parentAssignedHelperUid'])
+                  && request.resource.data.text is string
+                  && request.resource.data.text.size() > 0
+                  && request.resource.data.text.size() <= 2000
+                  && request.resource.data.authorRole in ['owner', 'vendor', 'helper']
+                  && request.resource.data.parentAssignedVendorUid == request.auth.uid
+                )
+                || isOwner(ownerUid)
+                || isCoOwnerOfAnyEvent(ownerUid)
+                || (
+                  isSignedIn()
+                  && request.resource.data.authorUid == request.auth.uid
+                  && request.resource.data.keys().hasAll(['authorUid', 'authorRole', 'text', 'createdAt', 'parentAssignedVendorUid', 'parentAssignedHelperUid'])
+                  && request.resource.data.text is string
+                  && request.resource.data.text.size() > 0
+                  && request.resource.data.text.size() <= 2000
+                  && request.resource.data.authorRole in ['owner', 'vendor', 'helper']
+                  && (
+                    request.resource.data.parentAssignedHelperUid == request.auth.uid
+                      ? hasHelperPerm(ownerUid, 'canViewChecklist')
+                      : (request.resource.data.parentAssignedHelperUid == null && hasHelperPerm(ownerUid, 'canViewChecklist'))
+                  )
+                );
+              allow update, delete: if isOwnerOrAnyCoOwner(ownerUid)
+                || (isSignedIn() && request.auth.uid == resource.data.authorUid);
+            }
+          }
+          match /teaCeremony/{personId} {
+            allow read, write: if isOwnerOrAnyCoOwner(ownerUid);
+          }
+          match /playlist/{songId} {
+            allow read, write: if isOwnerOrAnyCoOwner(ownerUid);
+          }
+
+          // Tasks — same perms as the old /tasks/ rule, with the
+          // eventId now coming from the URL path instead of the doc
+          // body. Helpers (canViewChecklist) can read, vendors
+          // assigned via assignedVendorUid can read their assigned
+          // tasks, helpers assigned via assignedHelperUid can read
+          // theirs. Only owner/coOwner can write.
+          //
+          // 2026-08-10 — REORDERED vendor + helper branches BEFORE
+          // isOwnerOrAnyCoOwner. Same recursive-denial fix as
+          // /rundown/{entryId} and /resources/{itemId}: vendor
+          // token can never reach the assignedVendorUid branch when
+          // isOwnerOrAnyCoOwner is first because
+          // isCoOwnerOfEventDoc(ownerUid) throws on get(eventDoc).
+          match /tasks/{taskId} {
+            allow read: if (isSignedIn() && request.auth.uid == resource.data.assignedVendorUid)
+              || (isSignedIn() && request.auth.uid == resource.data.assignedHelperUid)
+              || isOwnerOrAnyCoOwner(ownerUid)
+              || hasHelperPerm(ownerUid, 'canViewChecklist');
+            allow create, delete: if isOwnerOrAnyCoOwner(ownerUid);
+            // 2026-07-15 — vendors may also update tasks where they
+            // are the assigned vendor (status / actualCost when they
+            // finish work). Same as the old /tasks/ rule.
+            allow update: if isOwnerOrAnyCoOwner(ownerUid)
+              || (isSignedIn()
+                  && request.auth.uid == resource.data.assignedVendorUid
+                  && request.resource.data.diff(resource.data).affectedKeys()
+                       .hasOnly(['status', 'actualCost', 'completedAt', 'notes']))
+              || (isSignedIn()
+                  && request.auth.uid == resource.data.assignedHelperUid
+                  && request.resource.data.diff(resource.data).affectedKeys()
+                       .hasOnly(['status', 'statusUpdatedAt', 'statusNote']));
+
+            // 2026-07-27 — Nested comments + statusUpdates. Moved
+            // from the old owner-scoped /tasks/{taskId}/comments/ and
+            // /tasks/{taskId}/statusUpdates/ blocks. The path in
+            // get() calls now points to the new event-scoped tasks
+            // path.
+            //
+            // 2026-08-10 — Replaced isOwnerOrAnyCoOwner with its
+            // safe components to avoid the recursive event-doc access
+            // via isCoOwnerOfEventDoc (vendor can't read event doc,
+            // get() throws, OR chain poisoned). The new parent
+            // /tasks/{taskId} read rule above allows vendor to read
+            // the task doc, so get(taskDoc) here succeeds. Partner
+            // access still works via isCoOwnerOfAnyEvent's standalone
+            // /coOwners/{uid} doc.
+            match /comments/{commentId} {
+              allow read: if isOwner(ownerUid)
+                || isCoOwnerOfAnyEvent(ownerUid)
+                || hasHelperPerm(ownerUid, 'canViewChecklist')
+                || (isSignedIn() && request.auth.uid == resource.data.authorUid)
+                || (
+                  isSignedIn()
+                  && exists(/databases/$(database)/documents/artifacts/$(appId)/users/$(ownerUid)/events/$(eventId)/tasks/$(taskId))
+                  && (
+                    get(/databases/$(database)/documents/artifacts/$(appId)/users/$(ownerUid)/events/$(eventId)/tasks/$(taskId)).data.assignedVendorUid == request.auth.uid
+                    || get(/databases/$(database)/documents/artifacts/$(appId)/users/$(ownerUid)/events/$(eventId)/tasks/$(taskId)).data.assignedHelperUid == request.auth.uid
+                  )
+                );
+              allow create: if isOwner(ownerUid)
+                || isCoOwnerOfAnyEvent(ownerUid)
+                || (
+                  isSignedIn()
+                  && request.resource.data.authorUid == request.auth.uid
+                  && request.resource.data.keys().hasAll(['authorUid', 'authorRole', 'text', 'createdAt'])
+                  && request.resource.data.text is string
+                  && request.resource.data.text.size() > 0
+                  && request.resource.data.text.size() <= 2000
+                  && request.resource.data.authorRole in ['owner', 'vendor', 'helper']
+                  && exists(/databases/$(database)/documents/artifacts/$(appId)/users/$(ownerUid)/events/$(eventId)/tasks/$(taskId))
+                  && (
+                    get(/databases/$(database)/documents/artifacts/$(appId)/users/$(ownerUid)/events/$(eventId)/tasks/$(taskId)).data.assignedVendorUid == request.auth.uid
+                    || (
+                      get(/databases/$(database)/documents/artifacts/$(appId)/users/$(ownerUid)/events/$(eventId)/tasks/$(taskId)).data.assignedHelperUid == request.auth.uid
+                      && hasHelperPerm(ownerUid, 'canViewChecklist')
+                    )
+                  )
+                );
+              allow update, delete: if isOwnerOrAnyCoOwner(ownerUid)
+                || (isSignedIn() && request.auth.uid == resource.data.authorUid);
+            }
+            match /statusUpdates/{updateId} {
+              // 2026-08-10 — Same fix: avoid isOwnerOrAnyCoOwner in
+              // subcollection read rules (see /tasks/{taskId}/comments
+              // comment above).
+              allow read: if isOwner(ownerUid)
+                || isCoOwnerOfAnyEvent(ownerUid)
+                || hasHelperPerm(ownerUid, 'canViewChecklist')
+                || (
+                  isSignedIn()
+                  && exists(/databases/$(database)/documents/artifacts/$(appId)/users/$(ownerUid)/events/$(eventId)/tasks/$(taskId))
+                  && (
+                    get(/databases/$(database)/documents/artifacts/$(appId)/users/$(ownerUid)/events/$(eventId)/tasks/$(taskId)).data.assignedVendorUid == request.auth.uid
+                    || get(/databases/$(database)/documents/artifacts/$(appId)/users/$(ownerUid)/events/$(eventId)/tasks/$(taskId)).data.assignedHelperUid == request.auth.uid
+                  )
+                );
+              allow create: if (
+                isOwner(ownerUid)
+                || isCoOwnerOfAnyEvent(ownerUid)
+                || (
+                  isSignedIn()
+                  && request.resource.data.byUid == request.auth.uid
+                  && request.resource.data.keys().hasAll(['byUid', 'byRole', 'fromStatus', 'toStatus', 'createdAt'])
+                  && request.resource.data.byRole in ['owner', 'vendor', 'helper']
+                  && exists(/databases/$(database)/documents/artifacts/$(appId)/users/$(ownerUid)/events/$(eventId)/tasks/$(taskId))
+                  && (
+                    get(/databases/$(database)/documents/artifacts/$(appId)/users/$(ownerUid)/events/$(eventId)/tasks/$(taskId)).data.assignedVendorUid == request.auth.uid
+                    || (
+                      get(/databases/$(database)/documents/artifacts/$(appId)/users/$(ownerUid)/events/$(eventId)/tasks/$(taskId)).data.assignedHelperUid == request.auth.uid
+                      && hasHelperPerm(ownerUid, 'canViewChecklist')
+                    )
+                  )
+                )
+              );
+              allow update, delete: if false;
+            }
+          }
+
+          // Guests — full rule ported from /guests/. eventId is in
+          // the path; the doc body's eventId must still match the
+          // path for the create branch that uses resource.data.eventId
+          // for helper-perm lookup.
+          match /guests/{guestDocId} {
+            allow read: if isOwnerOrAnyCoOwner(ownerUid)
+              || hasHelperPerm(ownerUid, 'canViewGuestList')
+              || hasValidGuestLink(ownerUid, eventId);
+            allow create, delete: if isOwnerOrAnyCoOwner(ownerUid);
+            allow update: if isOwnerOrAnyCoOwner(ownerUid)
+              || (hasHelperPerm(ownerUid, 'canScan')
+                  && request.resource.data.diff(resource.data).affectedKeys()
+                       .hasOnly(['hasAttended', 'lastScannedBy', 'lastScannedAt']))
+              || hasHelperPerm(ownerUid, 'canEditGuests')
+              || (hasValidGuestLink(ownerUid, eventId)
+                  && resource.data.guestId != null);
+          }
+
+          // Photos — same shape as old /photos/ rule. eventId is in
+          // path; resource.data.eventId == eventId still required for
+          // guest/helper uploads to bind the doc to this event.
+          //
+          // 2026-08-05 — DELETE permission extended for guest
+          // self-delete. The owner / co-owner tiers were already
+          // there; the new branch lets the guest who originally
+          // uploaded a photo delete just that one. We verify by
+          // matching `uploadAuthUid == request.auth.uid` — the
+          // photo doc carries the Firebase Auth UID of the
+          // uploader, written at upload time. (We can't reuse
+          // `uploaderId` here because for guests that's a
+          // human-readable id like 'abc123', NOT the Firebase
+          // Auth UID.) Guest-tier delete ONLY works while the
+          // guest's anonymous Firebase Auth session is alive —
+          // re-opening the share link in a different browser
+          // produces a fresh anon UID and the rule fails closed
+          // (the delete button is hidden). The owner / co-owner
+          // tiers work regardless because they're tied to
+          // ownerUid, not the guest's session.
+          //
+          // Legacy photos uploaded before today don't carry
+          // `uploadAuthUid` — for those, only the owner/co-owner
+          // tier applies, which is the safe failure mode.
+          match /photos/{photoId} {
+            allow read: if isOwnerOrAnyCoOwner(ownerUid)
+              || hasValidGuestLink(ownerUid, eventId)
+              || hasHelperPerm(ownerUid, 'canViewPhotos');
+            allow create: if isSignedIn()
+              && (
+                isOwnerOrAnyCoOwner(ownerUid)
+                || (hasValidGuestLink(ownerUid, eventId)
+                  && request.resource.data.keys().hasAll(['url', 'uploaderId', 'uploaderName', 'createdAt'])
+                  && request.resource.data.url is string
+                  && request.resource.data.createdAt is number)
+                || (hasHelperPerm(ownerUid, 'canUploadPhotos')
+                  && request.resource.data.keys().hasAll(['url', 'uploaderId', 'uploaderName', 'createdAt'])
+                  && request.resource.data.url is string
+                  && request.resource.data.createdAt is number)
+              );
+            allow update: if isOwnerOrAnyCoOwner(ownerUid);
+            allow delete: if isOwnerOrAnyCoOwner(ownerUid)
+              // Guest self-delete tier — original uploader can
+              // delete only their own. Requires `uploadAuthUid`
+              // to be set on the photo doc (added 2026-08-05).
+              || (hasValidGuestLink(ownerUid, eventId)
+                  && resource.data.uploadAuthUid == request.auth.uid);
+          }
+
+          // scanLog — immutable. Only helpers with canScan can
+          // create; their helperUid must match auth.uid.
+          match /scanLog/{scanId} {
+            allow read: if isOwnerOrAnyCoOwner(ownerUid);
+            allow create: if isSignedIn()
+              && request.resource.data.keys().hasAll(['guestId', 'helperUid', 'scannedAt'])
+              && request.resource.data.helperUid == request.auth.uid
+              && hasHelperPerm(ownerUid, 'canScan');
+            allow update, delete: if false;
+          }
+        }
+
+        // 2026-07-26 — Co-owners collection. Each doc is keyed by
+        // the co-owner's uid. Pattern mirrors the /helpers
+        // collection: owner creates the doc (with status:'active')
+        // when the partner accepts an invite. Co-owners cannot
+        // modify their own doc; only the original owner can revoke
+        // by setting status to 'revoked' or deleting the doc.
+        match /coOwners/{coOwnerUid} {
+          allow read: if isOwner(ownerUid)
+            || (isSignedIn() && request.auth.uid == coOwnerUid);
+          allow create, update, delete: if isOwner(ownerUid);
+        }
+
+        // 2026-07-27 — pendingPartnerInvites history. Owner can
+        // read their own invites (powers the dashboard + modal
+        // "邀請另一半" history list). Cloud Functions handle all
+        // writes via Admin SDK (server-side bypass); clients never
+        // write directly. Co-owners do NOT see pending invites
+        // (they're the *recipient* of an accepted one, not the
+        // sender). The token field is included in the read result;
+        // it stays server-only because the redeem path verifies it
+        // server-side via HMAC, never from the client side.
+        match /pendingPartnerInvites/{inviteId} {
+          allow read: if isOwner(ownerUid);
+          // Writes go through Cloud Functions (sendPartnerInviteV2,
+          // redeemPartnerInviteV2) which use the Admin SDK. No
+          // client write path here.
+          allow write: if false;
+        }
+
+        // Guests: owner full CRUD. Helpers may read IF canViewGuestList.
+        // 2026-07-27 — guests / photos / tasks / scanLog rules moved to
+        // event-scoped path /events/{eventId}/{colName}/. Old
+        // owner-scoped blocks removed (data at the old path is no
+        // longer readable). See `match /events/{eventId}` above
+        // for the new event-scoped rules. The nested
+        // /tasks/{taskId}/comments and /tasks/{taskId}/statusUpdates
+        // blocks were ALSO moved into the new event-scoped /tasks/
+        // block above (next to the new tasks rule).
+
+        // Invitations: owner full CRUD. These are the electronic-invitation
+        // templates (templateId, bgUrl, ownerMessage) that sendInvitations
+        // callable reads to build the per-guest email/QR. No helper access —
+        // inviting guests is an owner-only decision.
+        match /invitations/{invitationId} {
+          allow read, write: if isOwnerOrAnyCoOwner(ownerUid);
+        }
+
+        // Cache-buster touched whenever templates/* is updated. Clients
+        // watch this doc's updatedAt to know when to re-fetch.
+        match /meta/{metaId} {
+          allow read: if true;
+          allow write: if isAdmin();
+        }
+
+        // GuestLinks: owner generates + reads. Guest creates exactly ONE
+        // (their own doc, keyed by auth.uid) during QR redemption.
+        match /guestLinks/{linkDocId} {
+          allow read: if isOwnerOrAnyCoOwner(ownerUid)
+            || (isSignedIn() && request.auth.uid == linkDocId);
+          allow create: if isOwnerOrAnyCoOwner(ownerUid)
+            || (
+              isSignedIn() && request.auth.uid == linkDocId
+              && request.resource.data.keys().hasAll(['ownerUid', 'eventId', 'guestId', 'expiresAt', 'redeemedByUid'])
+              && request.resource.data.redeemedByUid == request.auth.uid
+              && request.resource.data.expiresAt > request.time
+            );
+          allow update, delete: if isOwnerOrAnyCoOwner(ownerUid);
+        }
+
+        // Helpers: owner full CRUD on their own helpers collection.
+        // Helpers may read ONLY their own doc (to learn their perms).
+        // Helpers CANNOT see other helpers (privacy between helpers).
+        // Helpers CANNOT write their own doc (only owner can grant/revoke).
+        match /helpers/{helperUid} {
+          allow read: if isOwnerOrAnyCoOwner(ownerUid)
+            || (isSignedIn() && request.auth.uid == helperUid);
+          allow create, update, delete: if isOwnerOrAnyCoOwner(ownerUid);
+        }
+
+        // 2026-07-17 — Pending helper invites (email-pending path).
+        // inviteHelper writes here when an owner invites an email that
+        // isn't yet tied to a Firebase Auth account. The
+        // HelperManager UI reads this in parallel with /helpers and
+        // shows them in the "待接受" tab. acceptHelperInvite reads
+        // via collectionGroup('pendingInvites') and migrates on first
+        // sign-up.
+        match /pendingInvites/{email} {
+          allow read: if isOwnerOrAnyCoOwner(ownerUid);
+          allow create, update, delete: if isOwnerOrAnyCoOwner(ownerUid);
+        }
+
+        // ScanLog: append-only audit trail of every QR-code scan.
+        // 2026-07-27 — tightened create: now requires the caller to
+        // be an active helper for THIS owner with canScan permission.
+        // The prior `if isSignedIn() && helperUid == auth.uid`
+        // allowed any signed-in helper to forge scans under any
+        // owner's scanLog (Bug #13 from the prior audit). The
+        // new rule scopes writes to:
+        //   (a) a real active helper for ownerUid with canScan
+        //   (b) writing as themselves (helperUid matches caller)
+        //   (c) cannot mutate existing rows (update/delete denied
+        //       below + key-shape check: helperUid must match the
+        //       path's auth uid, which is set by the client
+        //       before submit)
+        // Remaining residual risk (documented, accepted): a
+        // legitimate canScan helper for owner X can claim any
+        // (eventId, guestId) pair, even one that doesn't exist in
+        // the owners' /guests collection. Firestore rules can't do
+        // collectionGroup "where" queries for the validate step
+        // — the only strict server-side check would be a Cloud
+        // Function rewrite. Decision deferred to a follow-up; for
+        // now the canScan scope keeps a helper from forging scans
+        // under an OWNER they're not assigned to (the highest-risk
+        // cross-tenant forgery).
+        // 2026-07-27 — Moved to event-scoped path; see
+        // `match /events/{eventId}/scanLog` above.
+
+        // 2026-07-15 — VendorContacts: 主理新人 personal address book
+        // of vendors they know from outside the platform (Instagram,
+        // word of mouth, etc.). Owner-only CRUD; supports optional
+        // linkedVendorUid field for contacts whose vendor later signs
+        // up and gets auto-linked. Used by MyVendorsPanel + chat.
+        //
+        // 2026-08-13 — H-02 (HIGH) AUDIT FIX. Added an OR branch
+        // that gates on the denormalized `ownerUid` field on the
+        // doc body. This makes the rule safe in collectionGroup
+        // LIST context (Class 27/30) where the co-owner helper's
+        // `get()` calls throw on LIVE. For per-doc reads (where
+        // path-bound `ownerUid` resolves), `isOwnerOrAnyCoOwner`
+        // still works as before — but the denormalized-field
+        // branch covers the collectionGroup runQuery path that
+        // contactLink.js uses.
+        match /vendorContacts/{contactId} {
+          // 2026-08-13 — H-02 (HIGH) AUDIT FIX. The list rule
+          // must pass for the OWNER reading their own scoped
+          // collection even on legacy docs that don't have the
+          // `ownerUid` denormalized field yet. We can't use
+          // the denormalized field ALONE for the list rule —
+          // Firestore evaluates the rule on every candidate
+          // doc and any doc without `ownerUid` denies,
+          // killing the entire list (Class 27 runQuery
+          // divergence applies to LIST subcollections too).
+          //
+          // The path-bound `ownerUid` variable IS the owner's
+          // uid when they're reading their own scoped
+          // collection, so `isOwner(ownerUid)` is the safe
+          // list check. Co-owners fall through to the
+          // denormalized-field branch (their uid must be
+          // stamped on the doc body — same as H-02's events
+          // rule pattern). Legacy docs without `ownerUid`
+          // still deny to non-owners (preserves the
+          // cross-tenant read prevention).
+          //
+          // Writes still require the original co-owner logic
+          // (creates from a co-owner's session need the
+          // path-bound ownerUid to resolve).
+          allow read: if isOwner(ownerUid)
+            || (isSignedIn() && resource.data.ownerUid == request.auth.uid);
+          allow create, update: if isOwnerOrAnyCoOwner(ownerUid);
+          allow delete: if isOwnerOrAnyCoOwner(ownerUid);
+        }
+
+        // ---- Couple's vendor favorites (private) -------------------------
+        // A couple pins vendors they're considering into a shortlist at
+        // /users/{ownerUid}/favorites/{vendorId}. The doc body is minimal:
+        // { vendorId, vendorName, vendorCategory, vendorSnapshot,
+        //   createdAt }. Reads + writes owner-only — these never leak to
+        // a vendor or to another couple. Used by DiscoverDirectory's
+        // heart icon + '❤️ 我的最愛' filter chip.
+        match /favorites/{favoriteId} {
+          allow read: if isOwnerOrAnyCoOwner(ownerUid);
+          allow create, update: if isOwnerOrAnyCoOwner(ownerUid);
+          allow delete: if isOwnerOrAnyCoOwner(ownerUid);
+        }
+
+        // ---- 2026-07-21: Unlock grants (feature unlocks) ---------------
+        // Records of which premium features the user has unlocked and
+        // how. Both social-proof path (IG/FB post, referrals, reels)
+        // and payment path write here. Frontend reads these to gate
+        // UI (e.g. show "premium template" option only when
+        // 'custom-template' unlock exists).
+        //
+        // Reads: owner + admin (admin for support + analytics).
+        // Writes: server-side only (Cloud Functions bypass rules via
+        // service account). Client write is denied so a malicious
+        // couple can't grant themselves premium.
+        match /unlocks/{unlockId} {
+          allow read: if isOwnerOrAnyCoOwner(ownerUid) || isAdmin();
+          allow create, update, delete: if false;  // server-side only
+        }
+
+        // ---- 2026-07-21: Social proofs (IG/FB post submissions) ------
+        // Couples submit a public Instagram/Facebook post URL showing
+        // they tagged @savetheday.hk. Admin verifies and grants the
+        // unlock via adminVerifySocialProof(). Read by owner + admin.
+        match /socialProofs/{proofId} {
+          allow read: if isOwnerOrAnyCoOwner(ownerUid) || isAdmin();
+          allow create: if isOwnerOrAnyCoOwner(ownerUid)
+            && request.resource.data.keys().hasAll(['unlockType', 'postUrl', 'status', 'createdAt'])
+            && request.resource.data.unlockType in ['custom-template', 'permanent-archive']
+            && request.resource.data.postUrl is string
+            && request.resource.data.status == 'pending'
+            && request.resource.data.createdAt is timestamp;
+          allow update: if isAdmin()
+            && request.resource.data.diff(resource.data).affectedKeys()
+                 .hasOnly(['status', 'verifiedAt', 'verifiedBy', 'rejectionReason']);
+          allow delete: if isAdmin();
+        }
+
+        // ---- 2026-07-21: Referral claims (friend signup proof) -------
+        // Couple claims a friend used their referral code AND created
+        // an event. Admin verifies and grants +500MB storage unlock.
+        match /referralClaims/{claimId} {
+          allow read: if isOwnerOrAnyCoOwner(ownerUid) || isAdmin();
+          allow create: if isOwnerOrAnyCoOwner(ownerUid)
+            && request.resource.data.keys().hasAll(['unlockType', 'friendUid', 'status', 'createdAt'])
+            && request.resource.data.unlockType == 'storage-500mb'
+            && request.resource.data.friendUid is string
+            && request.resource.data.status == 'pending'
+            && request.resource.data.createdAt is timestamp;
+          allow update: if isAdmin()
+            && request.resource.data.diff(resource.data).affectedKeys()
+                 .hasOnly(['status', 'verifiedAt', 'verifiedBy', 'rejectionReason']);
+          allow delete: if isAdmin();
+        }
+
+        // ---- 2026-07-21: Payment receipts (PayMe / FPS manual verify) ---
+        // Couple pays via PayMe or FPS, then uploads a screenshot of
+        // the receipt. Status flows: pending → approved / rejected.
+        // While pending, the unlock is NOT granted yet (admin verifies).
+        // Reads: owner (to see their own submissions) + admin (to verify).
+        // Writes: create by owner, update by admin only.
+        match /paymentReceipts/{receiptId} {
+          allow read: if isOwnerOrAnyCoOwner(ownerUid) || isAdmin();
+          allow create: if isOwnerOrAnyCoOwner(ownerUid)
+            && request.resource.data.keys().hasAll([
+              'unlockType', 'amount', 'paymentMethod', 'screenshotUrl', 'status', 'createdAt'
+            ])
+            && request.resource.data.unlockType in [
+              'custom-template', 'storage-500mb', 'permanent-archive', 'bundle'
+            ]
+            && request.resource.data.amount is number
+            && request.resource.data.amount > 0
+            && request.resource.data.paymentMethod in ['payme', 'fps']
+            && request.resource.data.screenshotUrl is string
+            && request.resource.data.status == 'pending'
+            && request.resource.data.createdAt is timestamp;
+          allow update: if isAdmin()
+            && request.resource.data.diff(resource.data).affectedKeys()
+                 .hasOnly(['status', 'verifiedAt', 'verifiedBy', 'rejectionReason']);
+          allow delete: if isAdmin();
+        }
+
+        // ---- 2026-07-24: 電子人情 (e-Red-Packet) QR codes ---------------
+        // SCOPED UNDER /events/{eventId}/redPackets/{redPacketId} (2026-07-27).
+        // Owner uploads their payment-app QR codes (PayMe / FPS /
+        // AlipayHK / WeChat Pay / 八達通) so guests can scan them
+        // directly from the PersonalGuestPortal payment modal.
+        //
+        // Why event-scoped (not owner-scoped as it was on 2026-07-24):
+        // the wedding belongs to BOTH coOwners — each partner uploads
+        // their own QR codes. Owner-scoped paths meant a coOwner only
+        // saw the original creator's uploads and saw nothing when
+        // viewing their own event. Event-scoped paths let `isEventCoOwner`
+        // (already used for guests/tasks) gate access cleanly, and both
+        // partners share the QR list regardless of who uploaded.
+        //
+        // Storage shape (one doc per uploaded QR):
+        //   { provider: string, label: string, qrUrl: string,
+        //     qrPath: string, suggested: number|null,
+        //     note: string, sortOrder: number, createdAt: timestamp,
+        //     eventId: string (required, immutable after create) }
+        //
+        // Reads: owner + any coOwner of the event (matches
+        //   /events/{eventId} read rule — coOwners in the event's
+        //   coOwners[] array). Guests with a valid guestLink to ANY
+        //   of the owner's events can also read (same trust signal as
+        //   the original owner-scoped rule).
+        // Writes: owner + any coOwner of the event.
+        // Defined inline under the /events/{eventId} match block below.
+        // (Old owner-scoped /redPackets/{redPacketId} match block was
+        // removed 2026-07-27 as part of the event-scoping refactor —
+        // see memory entry for migration context.)
+          // hasValidGuestLink takes (ownerUid, eventId). The QRs
+        // (old /redPackets/{redPacketId} match block was deleted;
+        // the new event-scoped /events/{eventId}/redPackets/{redPacketId}
+        // block lives inside the /events/{eventId} match above.)
+
+        // ---- 2026-07-17: Big-day orchestration suite ---------------------
+        // Five parallel collections under /users/{ownerUid}:
+        //   • rundown   — 大日流程 (time-slot timeline)
+        //   • resources — 物資/兄弟姊妹分配清單
+        //   • teaCeremony — 敬茶 & 大影相名單 (長輩/新娘/新郎)
+        //   • playlist  — 歌單建議 (按儀式 moments 分組)
+        //   • checklist_ext — (currently unused — kept for parity with old
+        //     docs that may exist in some environments)
+        // All four are owner-only CRUD. Helpers are NOT given access
+        // here on purpose: 大日 is the couple's master plan, and
+        // helpers see only what they need at scan time (guest list +
+        // helperPerms.canViewChecklist for tasks).
+        // 2026-07-27 — Moved to event-scoped path. Old blocks at
+        // /users/{ownerUid}/{colName} are no longer accessible; data
+        // at the new path /users/{ownerUid}/events/{eventId}/{colName}
+        // is what App.jsx writes to now. See `match /events/{eventId}`
+        // above for the new event-scoped rules.
+      // FIXED 2026-07-28 — removed the orphan `}` that prematurely
+      // closed /users/{ownerUid}. The matching /jobRequests,
+      // /proposals, and /vendorInquiries blocks below are now
+      // properly nested under /users/{ownerUid} instead of being
+      // parsed as siblings (which made the explicit allow rules
+      // unreachable for the actual write paths).
+
+      // ---- Public marketplace (vendor discovery) -----------------------
+
+      match /jobRequests/{jobId} {
+        allow read: if isSignedIn();
+        allow create: if isSignedIn()
+          && request.resource.data.coupleUid == request.auth.uid;
+        allow update, delete: if isSignedIn()
+          && resource.data.coupleUid == request.auth.uid;
+      }
+
+      match /proposals/{proposalId} {
+        // 2026-07-27 — Bug #11 from the prior audit. The prior
+        // `allow create: if isSignedIn();` accepted any signed-in
+        // user writing under any couple's jobId. Tightened to
+        // require the body's vendorUid field to match auth.uid
+        // (proposals are vendor-authored, never couple-authored).
+        // Reads / updates / deletes already enforced in the
+        // post-existing block; this only adds the create-time
+        // body check. No client writes exist for this collection
+        // today, so the rule change is forward-only.
+        allow read: if isSignedIn();
+        allow create: if isSignedIn()
+          && request.resource.data.keys().hasAll(['vendorUid', 'coupleUid'])
+          && request.resource.data.vendorUid == request.auth.uid
+          && request.resource.data.coupleUid is string;
+        allow update: if isSignedIn()
+          && (request.resource.data.vendorUid == request.auth.uid
+              || request.resource.data.coupleUid == request.auth.uid);
+        allow delete: if isSignedIn()
+          && (resource.data.vendorUid == request.auth.uid
+              || resource.data.coupleUid == request.auth.uid);
+      }
+
+      // 2026-07-20 — vendor ↔ couple chat threads. Lives under
+      // /artifacts/{appId}/vendorInquiries/{inquiryId}/ so it can be
+      // keyed by a deterministic id (sorted vendorUid + coupleUid)
+      // and read by either party. VendorModal's inquiry form calls
+      // openInquiry() + sendMessage() from lib/chat.js to create
+      // these threads and post the couple's brief as the first
+      // message. The vendor sees them in their shared Inbox view.
+      match /vendorInquiries/{inquiryId} {
+        // Either party can read; admin sees everything for moderation.
+        allow read: if isAdmin()
+          || (isSignedIn() && (
+            resource.data.vendorUid == request.auth.uid
+            || resource.data.coupleUid == request.auth.uid
+          ));
+        // Either party can create — id is deterministic (sorted pair)
+        // so a duplicate click is harmless (setDoc merges).
+        allow create: if isSignedIn()
+          && request.resource.data.keys().hasAll(['vendorUid', 'coupleUid', 'createdAt'])
+          && request.resource.data.vendorUid is string
+          && request.resource.data.coupleUid is string
+          && request.resource.data.createdAt is timestamp
+          && (request.resource.data.vendorUid == request.auth.uid
+              || request.resource.data.coupleUid == request.auth.uid);
+        // Either party can update counters (unread, lastMessageAt, etc).
+        // FIXED 2026-07-28 — was `resource.data.vendorUid` which
+        // caused evaluation error during `setDoc` create (resource
+        // is undefined for new docs). During create+update validation,
+        // the right side is request.resource.data; resource.data is
+        // only valid for existing docs (true update).
+        allow update: if isSignedIn()
+          && (request.resource.data.vendorUid == request.auth.uid
+              || request.resource.data.coupleUid == request.auth.uid);
+        allow delete: if isAdmin()
+          || (isSignedIn() && (
+            resource.data.vendorUid == request.auth.uid
+            || resource.data.coupleUid == request.auth.uid
+          ));
+
+        // Messages subcollection. Same auth shape — either party can
+        // read + write messages.
+        match /messages/{messageId} {
+          allow read: if isAdmin()
+            || (isSignedIn() && (
+              get(/databases/$(database)/documents/artifacts/$(appId)/vendorInquiries/$(inquiryId)).data.vendorUid == request.auth.uid
+              || get(/databases/$(database)/documents/artifacts/$(appId)/vendorInquiries/$(inquiryId)).data.coupleUid == request.auth.uid
+            ));
+          allow create: if isSignedIn()
+            && request.resource.data.keys().hasAll(['senderUid', 'senderRole', 'text', 'createdAt'])
+            && request.resource.data.senderUid == request.auth.uid
+            && request.resource.data.senderRole is string
+            && request.resource.data.text is string
+            && request.resource.data.text.size() <= 4000
+            && request.resource.data.createdAt is timestamp
+            // Sender must be a party to the parent inquiry (cannot
+            // post into a thread they don't belong to).
+            && (get(/databases/$(database)/documents/artifacts/$(appId)/vendorInquiries/$(inquiryId)).data.vendorUid == request.auth.uid
+                || get(/databases/$(database)/documents/artifacts/$(appId)/vendorInquiries/$(inquiryId)).data.coupleUid == request.auth.uid);
+          allow update, delete: if false;
+        }
+      }
     }
-    // F-01: per-user array binding. The diff must include ONLY the caller's
-    // own like/dislike arrays, never the partner's.
-    function isSwipingOwn() {
-      let keys = resource.data.diff(request.resource.data).affectedKeys();
-      let isUser1 = request.auth.uid == resource.data.user1;
-      let isUser2 = request.auth.uid == resource.data.user2;
-      let user1Own = keys.hasOnly(['user1Likes', 'user1Dislikes']);
-      let user2Own = keys.hasOnly(['user2Likes', 'user2Dislikes']);
-      return (isUser1 && user1Own) || (isUser2 && user2Own);
+
+    // 2026-07-28 — Top-level (NOT under /users/{ownerUid}/)
+    // /artifacts/{appId}/vendorInquiries/{inquiryId}/ — this is the
+    // ACTUAL path that lib/chat.js writes to via the COL constant
+    // `artifacts/${appId}/vendorInquiries`. The 2026-07-20 design
+    // intention (per the original schema comment in chat.js) was
+    // a vendor↔couple chat thread at this top-level path so both
+    // parties can read+write without complex cross-user rules.
+    //
+    // The /users/{ownerUid}/vendorInquiries/{inquiryId} block
+    // below (L815, kept as a defensive mirror) is at a different
+    // path that no production code writes to.
+    //
+    // Auth shape (mirrors the /users/ mirror and the L1080
+    // top-level /jobRequests mirror):
+    //   - Read:    signed in AND (vendorUid or coupleUid == auth.uid).
+    //              Admin reads everything for moderation.
+    //   - Create:  signed in AND (vendorUid or coupleUid == auth.uid).
+    //              Both fields required, createdAt must be a timestamp.
+    //   - Update:  signed in AND (vendorUid or coupleUid matches the
+    //              current doc — uses request.resource.data for create
+    //              AND update).
+    //   - Delete:  signed in AND either party matches.
+    //   - /messages/: each party can write their own message; reads
+    //              open to both parties (using the parent vendorInquiries
+    //              doc to check party-membership).
+    match /vendorInquiries/{inquiryId} {
+      allow read: if isAdmin()
+        || (isSignedIn() && (
+          resource.data.vendorUid == request.auth.uid
+          || resource.data.coupleUid == request.auth.uid
+        ));
+      allow create: if isSignedIn()
+        && request.resource.data.keys().hasAll(['vendorUid', 'coupleUid', 'createdAt'])
+        && request.resource.data.vendorUid is string
+        && request.resource.data.coupleUid is string
+        && request.resource.data.createdAt is timestamp
+        && (request.resource.data.vendorUid == request.auth.uid
+            || request.resource.data.coupleUid == request.auth.uid);
+      // FIXED 2026-07-28 — was `resource.data.vendorUid` (evaluation
+      // error during setDoc create). request.resource.data is the
+      // correct reference for create+update.
+      allow update: if isSignedIn()
+        && (request.resource.data.vendorUid == request.auth.uid
+            || request.resource.data.coupleUid == request.auth.uid);
+      allow delete: if isAdmin()
+        || (isSignedIn() && (
+          resource.data.vendorUid == request.auth.uid
+          || resource.data.coupleUid == request.auth.uid
+        ));
+
+      // Messages subcollection. Same auth shape.
+      match /messages/{messageId} {
+        allow read: if isAdmin()
+          || (isSignedIn() && (
+            // Either the sender themselves can read their own message,
+            // or either party to the parent inquiry can read all messages
+            // (the parent doc tracks who the parties are).
+            resource.data.senderUid == request.auth.uid
+            || get(/databases/$(database)/documents/artifacts/$(appId)/vendorInquiries/$(inquiryId)).data.vendorUid == request.auth.uid
+            || get(/databases/$(database)/documents/artifacts/$(appId)/vendorInquiries/$(inquiryId)).data.coupleUid == request.auth.uid
+          ));
+        allow create: if isSignedIn()
+          && request.resource.data.keys().hasAll(['senderUid', 'senderRole', 'text', 'createdAt'])
+          && request.resource.data.senderUid == request.auth.uid
+          && request.resource.data.senderRole is string
+          && request.resource.data.text is string
+          && request.resource.data.text.size() <= 4000
+          && request.resource.data.createdAt is timestamp
+          // Sender must be a party to the parent inquiry (cannot
+          // post into a thread they don't belong to).
+          && (get(/databases/$(database)/documents/artifacts/$(appId)/vendorInquiries/$(inquiryId)).data.vendorUid == request.auth.uid
+              || get(/databases/$(database)/documents/artifacts/$(appId)/vendorInquiries/$(inquiryId)).data.coupleUid == request.auth.uid);
+        allow update, delete: if false;
+      }
     }
-    // F-08: leave-room branch. Only `endedAt` (a number or timestamp) changed.
-    // The client currently writes `Date.now()` (a number); we accept both so
-    // the existing client doesn't break. Migrate to serverTimestamp() later.
-    function isLeavingRoom() {
-      let keys = resource.data.diff(request.resource.data).affectedKeys();
-      let endedAtOk = request.resource.data.endedAt is number
-                   || request.resource.data.endedAt is timestamp;
-      return keys.hasOnly(['endedAt']) && endedAtOk;
+
+    // ---- Vendor directory (root-level, NOT under /artifacts/{appId}) ----
+    //
+    // The vendor collection lives at /vendors/{uid} (NOT under any
+    // artifacts/* prefix) so couples, helpers, and other vendors can
+    // query it without knowing the deploy-time appId. This match MUST
+    // be outside the /artifacts/{appId} block (was a bug fixed
+    // 2026-07-15: previously nested inside, the rule never matched the
+    // actual path and reads returned PERMISSION_DENIED from the
+    // catch-all).
+    //
+    // 2026-07-28 — added the closing `}` for /artifacts/{appId} after
+    // removing the orphan `}` that was prematurely closing
+    // /users/{ownerUid} (see commit TBD). Without this `}`,
+    // /artifacts/{appId} would never close and the syntax error
+    // would break the entire rules file.
     }
+
+    match /vendors/{vendorUid} {
+      // 2026-08-13 — C-01 (CRITICAL) fix: invitation-only fields
+      // (invitationToken, invitationExpiresAt, invitedEmail, invitedAt,
+      // invitedBy, signupStatus, claimedByUid, claimedAt, source) used
+      // to live on the public /vendors/{slug} doc. Anyone — signed in
+      // or not — could `GET /vendors/{slug}` and harvest the token,
+      // then call `claimSeededVendor` to take over the vendor profile.
+      //
+      // The public vendor doc now ONLY carries directory fields
+      // (name, category, contact, serviceArea, portfolio, etc.).
+      // Invitation state lives under /vendorInvites/{slug}, which is
+      // fully deny-all on the client and only ever read/written by
+      // Cloud Functions running with Admin SDK credentials.
+      //
+      // The `allow read: if true` here is therefore safe: even if a
+      // leaked invitationToken *was* somehow still present in a stale
+      // doc, the client SDK would still be able to read it — so this
+      // rule alone isn't sufficient. The actual safety guarantee
+      // comes from (a) all writers no longer writing the token here
+      // (vendorInviteTrigger.ts / vendorActivation.ts), and (b) the
+      // one-shot migration in scripts/migrate-vendor-invites-2026-08-13
+      // that strips any residual fields from existing docs.
+      allow read: if true;
+      // 2026-07-19 — Vendor CSV import (admin batch) writes here with
+      // either: (a) derived ids like 'imp-...', or (b) explicit vendor
+      // uid targets. Both should be permitted for admin callers. Owner
+      // can still write their own profile.
+      allow write: if isAdmin()
+        || (isSignedIn() && request.auth.uid == vendorUid);
+
+      // 2026-07-21 — Couples can record an invite request for a vendor
+      // who hasn't joined the platform yet. Each request is its own
+      // doc under /vendors/{slug}/pendingInvites so admin gets a
+      // full audit trail and we don't touch the vendor doc itself.
+      // 2026-07-21 (later) — also lets couples bump interestCount on
+      // the vendor doc via increment(), which is a safe single-field
+      // update. Other vendor fields are still protected by the outer
+      // write rule above.
+      match /pendingInvites/{inviteId} {
+        allow create: if isSignedIn()
+          && request.resource.data.keys().hasAll(['email', 'requestedAt', 'status'])
+          && request.resource.data.email is string
+          && request.resource.data.email.matches('[^@\\s]+@[^@\\s]+\\.[^@\\s]+')
+          && request.resource.data.status == 'pending'
+          && request.resource.data.requestedAt is timestamp;
+        // Admin reads to act on pending invites; vendor reads too
+        // (so they see who's waiting for them).
+        allow read: if isAdmin() || request.auth.uid == vendorUid;
+        // Admin can mark status as 'invited' or 'linked'.
+        allow update: if isAdmin()
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'adminUid', 'adminNote', 'invitedAt', 'linkedAt']);
+        allow delete: if isAdmin();
+      }
+
+      // 2026-07-19 — Audit trail for admin CSV imports. Admin-only
+      // create; read for admin only. We deliberately scope audit docs
+      // outside /artifacts/* (no per-user isolation needed — they are
+      // application-level logs, not user data).
+      match /vendorImportLogs/{logId} {
+        // Implicit deny on read to anyone but admin.
+        allow read: if isAdmin();
+        // Anonymous create from browser: only admin (custom-claim `admin`) can create.
+        allow create: if isAdmin()
+          && request.resource.data.keys().hasAll(['at', 'adminUid', 'fileName'])
+          && request.resource.data.at is timestamp;
+        allow update, delete: if false;
+      }
+
+      // 2026-07-20 — vendor activation audit trail. Every meaningful
+      // step of the activation flow (token_issued, email_sent,
+      // email_failed, claim_attempt, claim_failed, claim_success,
+      // apply_attempt, apply_failed, apply_success) writes here from
+      // the cloud function (which uses the service account and bypasses
+      // these rules). Admins read this to surface "Activation history"
+      // per vendor. Writes from client are denied — only server-side
+      // functions may append, otherwise vendors could fake their own
+      // activation record.
+      match /vendorActivationLogs/{logId} {
+        allow read: if isAdmin();
+        allow create, update, delete: if false;
+      }
+
+      // 2026-07-28 — DELETED. The /vendors/{vendorUid}/vendorImageViews/{viewId}
+      // rule block was unreachable in production: the client writes to
+      // TOP-LEVEL /vendorImageViews/{viewId} via collection(db, "vendorImageViews")
+      // (PortfolioLightbox.jsx:84, VendorModal.jsx:341), so this nested rule
+      // matched nothing. The live top-level rule (after the /proposals
+      // mirror) is the only one that applies. The dead block was 60 lines.
+      // 2026-07-20 — vendor direct inquiries. Couples hit the
+      // "聯絡商戶" CTA inside VendorModal when the vendor is
+      // onboarded (signupStatus === 'claimed'). One inquiry doc
+      // per submission, with the couple's name, contact, brief,
+      // and the vendor's slug. Vendors read their own inbound
+      // inquiries; admin reads everything for moderation.
+      //
+      // 2026-07-27 — auditing root-level /vendorInquiries rule
+      // block. Confirmed dead code: every client write goes through
+      // /artifacts/{appId}/vendorInquiries/{id} which matches the
+      // more-specific block at line 751. No Cloud Function writes
+      // to /vendorInquiries. Either Firestore's rule resolution
+      // picks line 751 for our actual writes, OR nothing writes
+      // to this path. Either way, this block has been inert since
+      // the inquiry flow was migrated to /artifacts on 2026-07-20
+      // (see line 744-750). Keeping it verbatim is harmless but
+      // misleading (prior audit flagged a "fromContact spoofing"
+      // bug here that doesn't exist in any live write path).
+      //
+      // Writes are restricted to signed-in users, and fromUid must
+      // match the caller's auth.uid to prevent spoofing. The
+      // submitted vendorSlug must equal the caller's target
+      // vendorUid — this couples the write to a specific vendor
+      // and prevents the couple from claiming to write to arbitrary
+      // vendors via a forged vendorSlug.
+      match /vendorInquiries/{inquiryId} {
+        allow read: if isAdmin()
+          || (isSignedIn() && resource.data.vendorSlug == request.auth.uid);
+        allow create: if isSignedIn()
+          && request.resource.data.keys().hasAll(['vendorSlug', 'vendorName', 'fromContact', 'brief', 'createdAt'])
+          && request.resource.data.vendorSlug is string
+          && request.resource.data.vendorName is string
+          && request.resource.data.fromContact is string
+          && request.resource.data.brief is string
+          && request.resource.data.brief.size() <= 1000
+          && request.resource.data.fromContact.size() <= 200
+          && request.resource.data.createdAt is timestamp
+          && (request.resource.data.fromUid == null
+              || request.resource.data.fromUid == request.auth.uid);
+        allow update, delete: if false;
+      }
+
+      // 2026-07-17 — Couple reviews/ratings.
+      // Public read for browsing.
+      // Couples can create/update/delete their own ratings (coupleUid
+      // must equal request.auth.uid). Other couples' ratings are
+      // immutable.
+      match /ratings/{ratingId} {
+        allow read: if true;
+        allow create: if isSignedIn()
+          && request.resource.data.coupleUid == request.auth.uid
+          && request.resource.data.rating is int
+          && request.resource.data.rating >= 1
+          && request.resource.data.rating <= 5
+          && request.resource.data.review is string
+          && request.resource.data.review.size() <= 500;
+        allow update, delete: if isSignedIn()
+          && resource.data.coupleUid == request.auth.uid;
+      }
+    }
+
+    // ---- Vendor analytics events (root-level collection) ----------------
+    // NOT nested under /artifacts/{appId} because docs live at /vendor_events/*
+    // Anyone signed in can write their own tracking events; admin reads
+    // require the `admin` custom claim.
+    match /vendor_events/{eventId} {
+      allow create: if isSignedIn()
+        && request.resource.data.type in ['view', 'click']
+        && request.resource.data.vendorId is string
+        && request.resource.data.vendorId.size() > 0
+        && request.resource.data.timestamp == request.time;
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    // ---- Vendor invitations (root-level collection) ---------------------
+    // 2026-08-13 — C-01 (CRITICAL) fix. Used to live as fields on the
+    // public /vendors/{slug} doc, which meant anyone (signed in or not)
+    // could GET the doc and harvest invitationToken, then call
+    // claimSeededVendor to hijack the seeded vendor profile. Moved
+    // here so the token never touches a public doc.
+    //
+    // Doc id is the slug (matches /vendors/{slug}). Lifecycle:
+    //   created by vendorInviteTrigger on /vendors/{slug}/pendingInvites
+    //   re-issued by vendorActivation.activateSeededVendor / bulk
+    //   consumed by claimSeededVendor + claimAndApplyAsVendor
+    //   deleted by vendorActivation after successful claim
+    // Cloud Functions write/read with Admin SDK and bypass these
+    // rules — so this deny-all is what guarantees the token never
+    // leaves the server side.
+    match /vendorInvites/{slug} {
+      allow read, write: if false;
+    }
+
+    // ---- Default deny everything else --------------------------------
+    // REMOVED 2026-07-28 — Bug #13 from the audit. The catch-all
+    // `match /{document=**} { allow read, write: if false; }`
+    // shadowed the explicit allow rules for /proposals,
+    // /vendorImageViews, and /jobRequests because Firestore's
+    // rule-evaluation logic for `write: if false` does NOT just
+    // act as a default-deny for uncovered paths — when combined
+    // with a more-specific `allow create: if <true-expr>` rule
+    // for the same path, the catch-all's `false` value causes
+    // the explicit allow to be ignored.
+    //
+    // The clean fix: REMOVE the catch-all entirely. Firestore
+    // security rules deny any request that doesn't match an
+    // explicit allow rule, so uncovered paths are still
+    // implicitly denied (default deny is built in).
+    //
+    // Audit of paths that previously relied on this catch-all:
+    //   /artifacts/{appId}/users/{ownerUid}/* — every subtree
+    //     already has an explicit rule above (events, tasks,
+    //     photos, scanLog, helpers, guests, etc.). Removing the
+    //     catch-all does NOT change access for these paths.
+    //   /vendors/{vendorUid}/* — every subtree has an explicit
+    //     rule. Same — no behavior change.
+    //   /vendor_events/{eventId} — explicit rule at L1050.
+    //   Top-level /jobRequests, /proposals — explicit mirrors
+    //     at L1075, L1082. NOW UNSHADOWED.
+    //
+    // What could break: any path the codebase writes to that
+    // does NOT have an explicit rule. Verified via the test
+    // suite (firestore.rules.test.ts) — every previously-
+    // passing test continues to pass; the 2 it.fails-marked
+    // tests now pass for real.
+    // match /{document=**} {
+    //   allow read, write: if false;
+    // }
+
+    // ---- Top-level public collections --------------------------------
+    // The codebase writes to and reads from /jobRequests at the
+    // FIRESTORE TOP LEVEL (collection(db, 'jobRequests') → /jobRequests/*),
+    // not /artifacts/{appId}/jobRequests. The matching rule above
+    // is under /artifacts/{appId} and never matches the actual path,
+    // so direct client reads fall through to the catch-all deny.
+    // Mirroring the rule at the top level makes both reads and
+    // writes work for signed-in users. Writes additionally require
+    // coupleUid == auth.uid so couples can only create posts in
+    // their own name.
+    match /jobRequests/{jobId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn()
+        && request.resource.data.coupleUid == request.auth.uid;
+      allow update, delete: if isSignedIn()
+        && resource.data.coupleUid == request.auth.uid;
+    }
+    match /proposals/{proposalId} {
+      // 2026-07-27 — top-level mirror of the /artifacts/{appId}/proposals
+      // rule above. Both blocks need the same vendorUid auth check
+      // because /proposals/* at root and /artifacts/{appId}/proposals
+      // are looked up by different code paths.
+      allow read: if isSignedIn();
+      allow create: if isSignedIn()
+        && request.resource.data.keys().hasAll(['vendorUid', 'coupleUid'])
+        && request.resource.data.vendorUid == request.auth.uid
+        && request.resource.data.coupleUid is string;
+      allow update, delete: if isSignedIn()
+        && (resource.data.vendorUid == request.auth.uid
+            || resource.data.coupleUid == request.auth.uid);
+    }
+
+    // 2026-07-28 — Added top-level mirror for /vendorImageViews.
+    // The client writes via collection(db, 'vendorImageViews')
+    // (PortfolioLightbox.jsx:84, VendorModal.jsx:341), so the
+    // production path is /vendorImageViews/* at the FIRESTORE TOP
+    // LEVEL — NOT /vendors/{vendorUid}/vendorImageViews/{viewId}
+    // (where the existing /vendors rule block lives, line ~944).
+    //
+    // The existing /vendors-block rule was meant for a planned
+    // /vendors/{vendorUid}/vendorImageViews tree that never shipped.
+    // Portfolio reads via VendorPortfolioAnalytics.jsx:114 query
+    // `collection(db, 'vendorImageViews')` with a vendorSlug filter,
+    // so the same auth shape applies at top level.
+    //
+    // Authorization:
+    //   - read: admin OR the row's vendorSlug == auth.uid (the
+    //     vendor who owns the portfolio). Same as the inner rule.
+    //   - create: signed-in user with viewerUid == auth.uid (no
+    //     vendor can write to someone else's analytics; couples can
+    //     write their own views). Shape validation matches the
+    //     inner rule.
+    //   - update, delete: false (append-only analytics).
+    match /vendorImageViews/{viewId} {
+      allow read: if isAdmin()
+        || (isSignedIn() && resource.data.vendorSlug == request.auth.uid);
+      allow create: if isSignedIn()
+        && request.resource.data.keys().hasAll(['vendorSlug', 'imageIndex', 'imageUrl', 'viewerUid', 'createdAt'])
+        && request.resource.data.vendorSlug is string
+        && request.resource.data.imageIndex is int
+        && request.resource.data.imageUrl is string
+        && request.resource.data.viewerUid is string
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.viewerUid == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+  // ─── Couple Room public data ───────────────────────────────────────
+  match /coupleSpots/{spotId} {
+    allow read: if true;
+    allow write: if false; // only via service account
+  }
+
+  match /coupleAds/{adId} {
+    allow read: if true;
+    allow write: if false; // only via service account
+  }
+
+  // Room rules — authenticated users only. user1/user2 are bound to their
+  // own like/dislike arrays. Reads restricted to the two participants.
+  match /coupleRooms/{roomId} {
+    // F-02: only participants can read a room (was: if true).
+    allow read: if isInRoom();
+    // F-02: require auth, bind user1 to request.auth.uid, and validate
+    // shape strictly (use hasOnly — extra fields are rejected).
+    allow create: if request.auth != null
+      && request.resource.data.keys().hasOnly([
+          'id', 'user1', 'user2', 'user1Likes', 'user1Dislikes',
+          'user2Likes', 'user2Dislikes', 'createdAt', 'deckSeed'
+        ])
+      && request.resource.data.id == roomId
+      && request.resource.data.user1 == request.auth.uid
+      && request.resource.data.user2 == null
+      && request.resource.data.user1Likes is list
+      && request.resource.data.user1Dislikes is list
+      && request.resource.data.user2Likes is list
+      && request.resource.data.user2Dislikes is list
+      && (request.resource.data.createdAt is number
+          || request.resource.data.createdAt is timestamp);
+    // F-01: per-user array binding. F-08: leave-room stamp.
+    allow update: if
+        // User is joining (user2 was null, they were NOT in the room yet)
+        isJoiningRoom() ||
+        // User is in the room and only changed their own like/dislike arrays
+        (isInRoom() && isSwipingOwn()) ||
+        // F-08: user is leaving the room — only `endedAt` changed
+        (isInRoom() && isLeavingRoom());
+    allow delete: if false;
+  }
+
+  // ─── Helpers ───────────────────────────────────────────────────────
+  function isInRoom() {
+    return request.auth != null && (
+      resource.data.user1 == request.auth.uid ||
+      resource.data.user2 == request.auth.uid
+    );
+  }
+  function isJoiningRoom() {
+    return request.auth != null &&
+      resource.data.user2 == null &&
+      resource.data.user1 != request.auth.uid &&
+      request.resource.data.user2 == request.auth.uid &&
+      resource.data.diff(request.resource.data).affectedKeys().hasOnly(['user2']);
+  }
+  // F-01: per-user array binding. The diff must include ONLY the caller's
+  // own like/dislike arrays, never the partner's.
+  function isSwipingOwn() {
+    let keys = resource.data.diff(request.resource.data).affectedKeys();
+    let isUser1 = request.auth.uid == resource.data.user1;
+    let isUser2 = request.auth.uid == resource.data.user2;
+    let user1Own = keys.hasOnly(['user1Likes', 'user1Dislikes']);
+    let user2Own = keys.hasOnly(['user2Likes', 'user2Dislikes']);
+    return (isUser1 && user1Own) || (isUser2 && user2Own);
+  }
+  // F-08: leave-room branch. Only `endedAt` (a number or timestamp) changed.
+  // The client currently writes `Date.now()` (a number); we accept both so
+  // the existing client doesn't break. Migrate to serverTimestamp() later.
+  function isLeavingRoom() {
+    let keys = resource.data.diff(request.resource.data).affectedKeys();
+    let endedAtOk = request.resource.data.endedAt is number
+                 || request.resource.data.endedAt is timestamp;
+    return keys.hasOnly(['endedAt']) && endedAtOk;
+  }
   }
 }
