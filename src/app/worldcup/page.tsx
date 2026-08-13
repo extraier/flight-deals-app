@@ -90,6 +90,18 @@ export default function WorldCupPage() {
   // sweet spot — odds typically have a 4h-ish narrative arc over a day.
   const [window, setWindow] = useState<Window>('4h');
   const [sortBy, setSortBy] = useState<'time' | 'change'>('time');
+  // `nowMs` is impure (Date.now()) — call once on mount and refresh every 60s
+  // so row visibility doesn't flicker as state changes re-render the page.
+  // Pre-mount default (0) renders ALL rows; the useEffect ticks once on mount
+  // and from then on the filter is stable. The pre-mount frame is invisible
+  // to users — it's the first paint.
+  const [nowMs, setNowMs] = useState<number>(0);
+  useEffect(() => {
+    const tick = () => setNowMs(Date.now());
+    tick();
+    const id = setInterval(tick, 60_000);
+    return () => clearInterval(id);
+  }, []);
 
   const bg = isDark ? 'dark bg-[#0f1117]' : 'bg-white';
   const text = isDark ? 'text-zinc-100' : 'text-zinc-900';
@@ -111,14 +123,14 @@ export default function WorldCupPage() {
 
   // Hide matches that kicked off more than 3h ago — keeps closing odds visible
   // for recently-started games while clearing out yesterday's results.
-  // We compute "now" on the client so this stays accurate across deploys.
-  const nowMs = Date.now();
+  // `nowMs` is computed once on mount (see useEffect above) and refreshed
+  // every 60s, so this filter is stable across re-renders.
   const HIDE_AFTER_MS = 3 * 60 * 60 * 1000; // 3 hours post-kickoff
   const visibleRows = rows.filter((m) => {
     if (!m.gameTime) return true; // no time → show
     const t = Date.parse(m.gameTime.replace(' ', 'T') + '+08:00'); // HKT
     if (isNaN(t)) return true;
-    return nowMs - t < HIDE_AFTER_MS;
+    return nowMs === 0 || nowMs - t < HIDE_AFTER_MS;
   });
 
   const activeBtn = 'bg-sky-600 text-white shadow-sm';

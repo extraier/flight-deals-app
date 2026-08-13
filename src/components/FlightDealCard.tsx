@@ -6,58 +6,11 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { X, AlertTriangle } from 'lucide-react';
+import type { CheapDate, FlightDeal } from '@/types/flight';
 
-interface FlightInfo {
-  airline: string;
-  flight_no: string;
-  dep_time: string;
-  arr_time?: string;
-  return_airline?: string;
-  return_dep_time?: string;
-  return_arr_time?: string;
-  return_flight?: string;
-  ret_date?: string;
-}
-
-// Hermes: matches export_all_dates_*.py — history.1d is the price recorded
-// yesterday; if it differs from the current price the calendar cell is stale.
-interface HistoryPoint {
-  price: number;
-  diff: number;
-  pct: number;
-}
-
-interface DateInfo {
-  day: number;
-  month: number;
-  year: number;
-  price: number;
-  stay: number | null;
-  flight?: FlightInfo;
-  history?: Record<string, HistoryPoint>;
-}
-
-interface Deal {
-  route: string;
-  destination: { name: string; code: string; region: string };
-  price: number;
-  currency: string;
-  badge?: { carryOn?: boolean; duration?: number; cheapDays?: number };
-  typicalPrice: number;
-  cheapestDates: DateInfo[];
-  totalDestinations: number;
-  moreMonths?: number;
-}
-
-interface FlightDealCardProps {
-  deal: Deal;
-  onMoreMonths?: () => void;
-  departure?: 'HKG' | 'SZX';
-}
-
-export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: FlightDealCardProps) {
+export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal: FlightDeal; onMoreMonths?: () => void; departure?: 'HKG' | 'SZX' }) {
   const { destination, price, badge, cheapestDates, moreMonths, typicalPrice } = deal;
-  const [selectedDate, setSelectedDate] = useState<DateInfo | null>(null);
+  const [selectedDate, setSelectedDate] = useState<CheapDate | null>(null);
 
   const cheapestPrice = price;
   const greenDates = cheapestDates.filter(d => d.price === cheapestPrice);

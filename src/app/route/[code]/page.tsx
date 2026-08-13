@@ -3,6 +3,7 @@ import allDatesHkg from '@/data/all_dates.json';
 import allDatesSzx from '@/data/all_dates_szx.json';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import type { FlightDeal } from '@/types/flight';
 
 interface PageProps {
   params: Promise<{ code: string }>;
@@ -14,7 +15,7 @@ interface PageProps {
 // (same upstream chain as the deals page — Tailscale Funnel → CDN → static
 // fallback). The static JSON is kept as the last-resort fallback so the
 // page still renders something if every upstream fails.
-async function fetchDealsLive(dep: 'HKG' | 'SZX'): Promise<any[] | null> {
+async function fetchDealsLive(dep: 'HKG' | 'SZX'): Promise<FlightDeal[] | null> {
   const base = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : process.env.NEXT_PUBLIC_BASE_URL || '';
@@ -25,7 +26,11 @@ async function fetchDealsLive(dep: 'HKG' | 'SZX'): Promise<any[] | null> {
     const res = await fetch(url, { next: { revalidate: 60 } });
     if (!res.ok) return null;
     const json = await res.json();
-    return (json.results || []) as any[];
+    const results = (json.results || []) as FlightDeal[];
+    // Drop rows that violate the FlightDeal contract (`price` required).
+    // /api/deals occasionally emits partial rows when the scanner export is
+    // mid-flight; those would crash FlightDealCard's `.price.toLocaleString()`.
+    return results.filter(d => typeof d.price === 'number' && !!d.destination?.code);
   } catch {
     return null;
   }
@@ -43,15 +48,16 @@ export default async function RoutePage({ params, searchParams }: PageProps) {
   const normalizedCode = (code || '').toUpperCase();
 
   // Hermes 2026-07-01: try live data first, fall back to bundled JSON.
-  let deals: any[] = [];
+  let deals: FlightDeal[] = [];
   const live = await fetchDealsLive(departure);
   if (live && live.length > 0) {
     deals = live;
   } else {
     const allData = departure === 'HKG' ? allDatesHkg : allDatesSzx;
-    deals = (allData.results || []) as any[];
+    const results = (allData.results || []) as FlightDeal[];
+    deals = results.filter(d => typeof d.price === 'number' && !!d.destination?.code);
   }
-  const deal = deals.find((d: any) => d.destination.code === normalizedCode);
+  const deal = deals.find(d => d.destination.code === normalizedCode);
 
   return (
     <div className="min-h-screen bg-background py-12">
