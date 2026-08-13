@@ -9,6 +9,7 @@ import { subscribeRoom, swipe, fetchSpots, fetchAds, type RoomData } from '@/lib
 import { buildDeck, filterUnswiped, intersection, type DeckCard, type SpotCard } from '@/lib/couple/cards';
 import { SwipeDeck } from '@/components/couple/SwipeDeck';
 import { MatchModal } from '@/components/couple/MatchModal';
+import { recordAdMetric } from '@/lib/couple/ads';
 
 export default function RoomPage({ params }: { params: Promise<{ id: string }> }) {
   // Proxy lowercases URL paths (src/proxy.ts) so /match/room/eoog stays eoog.
@@ -24,6 +25,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   const [error, setError] = useState('');
   const [matchSpot, setMatchSpot] = useState<SpotCard | null>(null);
   const [seenAdIds, setSeenAdIds] = useState<Set<string>>(new Set());
+  const impressionedAdIdsRef = useRef<Set<string>>(new Set());
   const matchCountRef = useRef(0);
 
   // Bootstrap: auth + fetch spots/ads
@@ -77,6 +79,16 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
     return filterUnswiped(fullDeck, myLikes, myDislikes);
   }, [room, spots, ads, uid, seenAdIds]);
 
+  // F-11: Fire ONE impression when an ad becomes the top card. Session-scoped
+  // dedupe via impressionedAdIdsRef — survives re-renders without re-counting.
+  useEffect(() => {
+    const top = deck[0];
+    if (!top || top.__kind !== 'ad') return;
+    if (impressionedAdIdsRef.current.has(top.id)) return;
+    impressionedAdIdsRef.current.add(top.id);
+    recordAdMetric(top.id, 'impressions');
+  }, [deck]);
+
   const handleSwipe = async (direction: 'left' | 'right', card: DeckCard) => {
     if (!uid || !room) return;
 
@@ -93,6 +105,8 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   };
 
   const handleAdClick = (card: DeckCard) => {
+    // F-11: count the click (SwipeDeck already opened the URL)
+    recordAdMetric(card.id, 'clicks');
     // Auto-record as "viewed" (swipe right)
     if (uid && room) {
       swipe(roomId, uid, card.id, 'right').catch(() => {});
