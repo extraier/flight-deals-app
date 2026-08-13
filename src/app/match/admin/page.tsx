@@ -56,6 +56,15 @@ async function adminMutate(
   }
 }
 
+function StatCard({ label, value }: { label: string; value: number | string }) {
+  return (
+    <div className="bg-white dark:bg-gray-900 rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-gray-800">
+      <div className="text-xs text-gray-500 mb-1">{label}</div>
+      <div className="text-2xl font-black text-gray-900 dark:text-white">{value}</div>
+    </div>
+  );
+}
+
 export default function AdminPage() {
   const [authed, setAuthed] = useState<boolean | null>(null); // null = loading
   const [password, setPassword] = useState('');
@@ -218,9 +227,32 @@ export default function AdminPage() {
         </div>
 
         {tab === 'ads' && (
-          <div className="space-y-3">
-            {ads.length === 0 && <p className="text-gray-500 text-sm">無廣告</p>}
-            {ads.map((ad) => (
+          <div className="space-y-4">
+            {/* Aggregate stats row — north-star metrics at a glance. */}
+            {ads.length > 0 && (() => {
+              const totalImpressions = ads.reduce((s, a) => s + (a.impressions || 0), 0);
+              const totalClicks = ads.reduce((s, a) => s + (a.clicks || 0), 0);
+              const activeAds = ads.filter((a) => a.active).length;
+              const overallCtr = totalImpressions > 0 ? (totalClicks / totalImpressions) * 100 : 0;
+              return (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <StatCard label="總曝光" value={totalImpressions} />
+                  <StatCard label="總點擊" value={totalClicks} />
+                  <StatCard label="整體 CTR" value={`${overallCtr.toFixed(2)}%`} />
+                  <StatCard label="活躍廣告" value={`${activeAds} / ${ads.length}`} />
+                </div>
+              );
+            })()}
+            {/* Sort by CTR (active ads first, then descending CTR). Ads with
+                zero impressions sort last so newly-added ads don't dominate. */}
+            {[...ads]
+              .sort((a, b) => {
+                if (a.active !== b.active) return a.active ? -1 : 1;
+                const aCtr = a.impressions ? a.clicks / a.impressions : -1;
+                const bCtr = b.impressions ? b.clicks / b.impressions : -1;
+                return bCtr - aCtr;
+              })
+              .map((ad) => (
               <div
                 key={ad.id}
                 className="bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-sm border border-gray-200 dark:border-gray-800"
