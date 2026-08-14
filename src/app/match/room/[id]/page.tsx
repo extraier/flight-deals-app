@@ -263,9 +263,10 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" />
         <span className="text-white text-xs font-bold">配對成功 · 開始 Swipe</span>
       </div>
-      {/* Hermes 2026-08-14 (screenshot 7): theme toggle next to the exit
-          button. right-14 (56px) clears the 40px-wide exit button (right-2 +
-          p-2 + w-4 icon ≈ 40px). */}
+      {/* Hermes 2026-08-14 (screenshot 8): top-right buttons layout:
+            right-2 = exit, right-14 = theme toggle, right-26 = wishlist
+            (in reverse DOM order so they stack from right to left). */}
+      <RoomWishlistLink />
       <RoomThemeToggle />
       <Link
         href="/match"
@@ -303,6 +304,29 @@ function spotMatchCount(room: RoomData, side: 'user1' | 'user2'): number {
   const myLikes = side === 'user1' ? room.user1Likes : room.user2Likes;
   const partnerLikes = side === 'user1' ? room.user2Likes : room.user1Likes;
   return intersection(myLikes, partnerLikes).length;
+}
+
+// Hermes 2026-08-14 (screenshot 8): inline wishlist button for the room
+// page. The room doesn't use MatchNav (it has absolute status pill + exit
+// + theme toggle), so users couldn't access their wishlist without
+// swiping-liking and exiting the room first. This gives them a quick
+// escape hatch — clicking the heart jumps to /match/wishlist which shows
+// everything they've liked in any room.
+function RoomWishlistLink() {
+  return (
+    <Link
+      href="/match/wishlist"
+      aria-label="查看心願清單"
+      // Hermes 2026-08-14: right-[7rem] = 112px (between right-14 at 56px
+      // and the left edge of the status pill). Each top-right button is
+      // ~36px wide (p-2 + 16px icon + p-2), so we step by ~44px to give
+      // breathing room: right-2 (8px) = exit, right-14 (56px) = theme,
+      // right-[7rem] (112px) = wishlist.
+      className="absolute top-2 right-[7rem] z-30 p-2 bg-black/50 text-white rounded-full hover:bg-pink-500 transition"
+    >
+      <Heart size={16} />
+    </Link>
+  );
 }
 
 // Hermes 2026-08-14 (screenshot 7): inline theme toggle for the room page.
