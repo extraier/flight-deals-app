@@ -62,11 +62,23 @@ export function SpotCard({
   const dy = dragOffset?.y ?? 0;
   const rotate = dx * 0.05;
 
+  // Hermes 2026-08-14: shared frame styles. The image + overlay layers live
+  // inside a rounded container with overflow-hidden so the photo respects
+  // the card's rounded corners regardless of viewport size.
+  // The outer div uses aspect-ratio so the frame stays proportional across
+  // iPhone SE (320x568) → iPhone Pro Max (430x932) without stretching.
+  const frameShell =
+    'absolute w-[92%] rounded-3xl bg-gray-900 shadow-2xl overflow-hidden select-none touch-none';
+  const imageLayer = 'w-full h-full bg-cover bg-center';
+
   if (isAd) {
     const ad = card as any;
     return (
       <div
-        className="absolute w-[92%] h-[95%] rounded-3xl bg-gray-900 shadow-2xl overflow-hidden border-2 border-blue-500/50 select-none touch-none"
+        // Hermes 2026-08-14: aspect-ratio 3/4 keeps the frame proportional
+        // across viewports; h-[95%] kept as max-height fallback for very
+        // short viewports (landscape phones, small windows).
+        className={`${frameShell} aspect-[3/4] max-h-[95%] border-2 border-blue-500/50`}
         style={{
           transform: `translate(${dx}px, ${dy}px) rotate(${rotate}deg)`,
           transition: isDragging ? 'none' : 'transform 0.3s ease-out',
@@ -78,7 +90,9 @@ export function SpotCard({
         onPointerLeave={onDragEnd}
       >
         <div
-          className="w-full h-full bg-cover bg-center absolute inset-0"
+          // Hermes 2026-08-14: changed from `absolute inset-0` to plain
+          // block-level fill so the image can't escape the rounded clip.
+          className={imageLayer}
           style={{ backgroundImage: `url(${ad.image})` }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-blue-950/95 via-blue-900/50 to-transparent" />
@@ -120,7 +134,9 @@ export function SpotCard({
 
   return (
     <div
-      className="absolute w-[92%] h-[95%] rounded-3xl bg-gray-900 shadow-2xl overflow-hidden border-2 border-pink-500/50 select-none touch-none"
+      // Hermes 2026-08-14: aspect-ratio 3/4 keeps the frame proportional
+      // across viewports; h-[95%] kept as max-height fallback.
+      className={`${frameShell} aspect-[3/4] max-h-[95%] border-2 border-pink-500/50`}
       style={{
         transform: `translate(${dx}px, ${dy}px) rotate(${rotate}deg)`,
         transition: isDragging ? 'none' : 'transform 0.3s ease-out',
@@ -132,7 +148,10 @@ export function SpotCard({
       onPointerLeave={onDragEnd}
     >
       <div
-        className="w-full h-full bg-cover bg-center absolute inset-0"
+        // Hermes 2026-08-14: plain block-level fill so the photo respects
+        // the rounded corners. `object-cover` via bg-cover centers and crops
+        // the photo without distorting aspect ratio.
+        className={imageLayer}
         style={{ backgroundImage: `url(${spot.image})` }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-pink-950/95 via-black/30 to-transparent" />
