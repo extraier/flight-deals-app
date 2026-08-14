@@ -54,6 +54,13 @@ export default function AdminPage() {
   const [ads, setAds] = useState<Ad[]>([]);
   const [tab, setTab] = useState<'spots' | 'ads'>('ads');
 
+  // Hermes 2026-08-14 (Phase 3.4): search/filter for the spot list now that
+  // there are 646 spots. Filters by name/city/country/region, plus a
+  // "no image" pill that surfaces the spots needing image backfill.
+  const [spotQuery, setSpotQuery] = useState('');
+  const [regionFilter, setRegionFilter] = useState<string>('all');
+  const [missingImageOnly, setMissingImageOnly] = useState(false);
+
   // Edit modal state — exactly one modal open at a time
   const [editingSpot, setEditingSpot] = useState<SpotRow | null>(null);
   const [spotIsNew, setSpotIsNew] = useState(false);
@@ -403,33 +410,107 @@ export default function AdminPage() {
               <Plus size={16} /> 新增景點
             </button>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {spots.map((spot) => (
+            {/* Phase 3.4: search + filter bar — 646 spots need this */}
+            <div className="space-y-2">
+              <input
+                type="search"
+                placeholder="🔍 搜尋景點 / 城市 / 國家..."
+                value={spotQuery}
+                onChange={(e) => setSpotQuery(e.target.value)}
+                className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm outline-none focus:border-pink-400"
+              />
+              <div className="flex flex-wrap gap-1.5">
+                {['all', '歐洲', '美洲', '東亞', '東南亞', '中東', '非洲', '南亞', '大洋洲', '中亞', '北亞', '香港']
+                  .map((r) => (
+                    <button
+                      key={r}
+                      type="button"
+                      onClick={() => setRegionFilter(r)}
+                      className={`px-3 py-1 rounded-full text-xs font-bold transition ${
+                        regionFilter === r
+                          ? 'bg-pink-500 text-white'
+                          : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200'
+                      }`}
+                    >
+                      {r === 'all' ? '全部' : r}
+                    </button>
+                  ))}
                 <button
-                  key={spot.id}
                   type="button"
-                  onClick={() => openEditSpot(spot)}
-                  className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-800 text-left hover:shadow-md hover:border-pink-300 transition group"
+                  onClick={() => setMissingImageOnly(!missingImageOnly)}
+                  className={`px-3 py-1 rounded-full text-xs font-bold transition ${
+                    missingImageOnly
+                      ? 'bg-orange-500 text-white'
+                      : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200'
+                  }`}
                 >
-                  <div className="relative">
-                    <div
-                      className="w-full h-32 bg-cover bg-center group-hover:scale-105 transition-transform duration-300"
-                      style={{ backgroundImage: `url(${spot.image})` }}
-                    />
-                    <div className="absolute top-2 right-2 bg-black/60 text-white p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Pencil size={12} />
-                    </div>
-                  </div>
-                  <div className="p-3">
-                    <h3 className="font-bold text-sm text-gray-900 dark:text-white truncate">{spot.name}</h3>
-                    <p className="text-xs text-gray-500 mt-1">{spot.city} · {spot.country}</p>
-                    <span className="text-[10px] uppercase font-bold text-pink-600 mt-1 inline-block">
-                      {spot.region || '—'}
-                    </span>
-                  </div>
+                  {missingImageOnly ? '✓ 缺圖' : '⚠️ 缺圖'}
                 </button>
-              ))}
+              </div>
             </div>
+
+            {(() => {
+              const q = spotQuery.toLowerCase().trim();
+              const filtered = spots.filter((s) => {
+                if (regionFilter !== 'all' && s.region !== regionFilter) return false;
+                if (missingImageOnly && s.image) return false;
+                if (!q) return true;
+                return (
+                  (s.name || '').toLowerCase().includes(q) ||
+                  (s.nameEn || '').toLowerCase().includes(q) ||
+                  (s.city || '').toLowerCase().includes(q) ||
+                  (s.cityEn || '').toLowerCase().includes(q) ||
+                  (s.country || '').toLowerCase().includes(q)
+                );
+              });
+              const missingCount = spots.filter((s) => !s.image).length;
+              return (
+                <>
+                  <div className="text-xs text-gray-500 px-1">
+                    顯示 {filtered.length} / {spots.length} 個景點
+                    {missingImageOnly && ` · ${missingCount} 個缺圖`}
+                  </div>
+                  {filtered.length === 0 ? (
+                    <div className="text-center text-gray-400 py-12 text-sm">
+                      {spots.length === 0 ? '尚未載入景點' : '沒有符合篩選的景點'}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {filtered.map((spot) => (
+                        <button
+                          key={spot.id}
+                          type="button"
+                          onClick={() => openEditSpot(spot)}
+                          className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-800 text-left hover:shadow-md hover:border-pink-300 transition group"
+                        >
+                          <div className="relative">
+                            <div
+                              className="w-full h-32 bg-cover bg-center group-hover:scale-105 transition-transform duration-300"
+                              style={{ backgroundImage: spot.image ? `url(${spot.image})` : 'none' }}
+                            />
+                            {!spot.image && (
+                              <div className="absolute inset-0 flex items-center justify-center bg-gray-200 dark:bg-gray-800 text-gray-400 text-xs font-bold">
+                                缺圖
+                              </div>
+                            )}
+                            <div className="absolute top-2 right-2 bg-black/60 text-white p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Pencil size={12} />
+                            </div>
+                          </div>
+                          <div className="p-3">
+                            <h3 className="font-bold text-sm text-gray-900 dark:text-white truncate">{spot.name}</h3>
+                            <p className="text-xs text-gray-500 mt-1">{spot.city} · {spot.country}</p>
+                            <span className="text-[10px] uppercase font-bold text-pink-600 mt-1 inline-block">
+                              {spot.region || '—'}
+                            </span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </div>
         )}
 
