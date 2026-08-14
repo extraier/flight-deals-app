@@ -248,13 +248,15 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 via-pink-950/30 to-gray-900">
-      <div className="absolute top-4 left-4 z-30 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-gray-700 flex items-center">
+      {/* Hermes 2026-08-14: status pill + exit button moved to top-2 so the
+          card's top border (currently cut off behind them) is fully visible. */}
+      <div className="absolute top-2 left-2 z-30 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-gray-700 flex items-center">
         <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" />
         <span className="text-white text-xs font-bold">配對成功 · 開始 Swipe</span>
       </div>
       <Link
         href="/match"
-        className="absolute top-4 right-4 z-30 p-2 bg-black/50 text-white rounded-full hover:bg-red-500 transition"
+        className="absolute top-2 right-2 z-30 p-2 bg-black/50 text-white rounded-full hover:bg-red-500 transition"
       >
         <LogOut size={16} />
       </Link>

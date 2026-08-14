@@ -80,10 +80,10 @@ export function SpotCard({
     const ad = card as any;
     return (
       <div
-        // Hermes 2026-08-14: explicit h-[70vh] + max-h-[640px] gives the
+        // Hermes 2026-08-14: explicit h-[60vh] + max-h-[600px] gives the
         // card a defined box (no zero-height collapse). w-full inherits
         // from the parent's w-[88%] wrapper.
-        className={`${frameShell} h-[70vh] max-h-[640px] border-blue-500`}
+        className={`${frameShell} h-[60vh] max-h-[600px] border-blue-500`}
         style={{
           transform: `translate(${dx}px, ${dy}px) rotate(${rotate}deg)`,
           transition: isDragging ? 'none' : 'transform 0.3s ease-out',
@@ -139,11 +139,11 @@ export function SpotCard({
 
   return (
     <div
-      // Hermes 2026-08-14: explicit h-[70vh] (capped at 640px) gives the
+      // Hermes 2026-08-14: explicit h-[60vh] (capped at 600px) gives the
       // card a defined box. The parent wrapper (SwipeDeck) provides the
       // centered positioning via flexbox. Drag/rotation is applied via
       // the inline transform.
-      className={`${frameShell} h-[70vh] max-h-[640px]`}
+      className={`${frameShell} h-[60vh] max-h-[600px]`}
       style={{
         transform: `translate(${dx}px, ${dy}px) rotate(${rotate}deg)`,
         transition: isDragging ? 'none' : 'transform 0.3s ease-out',

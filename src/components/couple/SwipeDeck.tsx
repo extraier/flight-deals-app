@@ -96,10 +96,12 @@ export function SwipeDeck({
     <div className="flex-1 flex flex-col">
       <div
         // Hermes 2026-08-14: flex-1 + flex + justify/align center so the
-        // card is centered both ways. The next-card preview is absolute,
-        // sitting behind the active card. Both cards inherit their width
-        // from the w-[88%] wrapper below.
-        className="flex-1 relative w-full flex flex-col justify-center items-center py-2"
+        // card is centered both ways. pt-12 clears the absolute-positioned
+        // status pill + exit button at the top so the card's top border
+        // isn't cut off. The next-card preview is absolute, sitting behind
+        // the active card. Both cards inherit their width from the w-[88%]
+        // wrapper below.
+        className="flex-1 relative w-full flex flex-col justify-center items-center py-3 pt-12"
         onClick={handleCardTap}
       >
         {nextCard && (
@@ -110,7 +112,7 @@ export function SwipeDeck({
             className="absolute top-1/2 left-1/2 w-[88%] max-w-sm"
             style={{ transform: 'translate(-50%, -50%) scale(0.95) translateY(15px)', opacity: 0.6, zIndex: 1, pointerEvents: 'none' }}
           >
-            <div className="w-full h-[70vh] max-h-[640px] rounded-3xl bg-gray-800 shadow-sm overflow-hidden border-4 border-pink-500/50">
+            <div className="w-full h-[60vh] max-h-[600px] rounded-3xl bg-gray-800 shadow-sm overflow-hidden border-4 border-pink-500/50">
               <div
                 className="w-full h-full bg-cover bg-center"
                 style={{
