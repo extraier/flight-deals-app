@@ -78,6 +78,19 @@ export function SpotCard({
 
   if (isAd) {
     const ad = card as any;
+    // Hermes 2026-08-14 (screenshot 5): same image fix as the spot card —
+    // encodeURI + CSS-quote-wrap the URL, fall back to a gradient if empty.
+    const safeAdUrl = (() => {
+      const url = ad.image;
+      if (!url || typeof url !== 'string') return '';
+      try {
+        return encodeURI(url);
+      } catch {
+        return url;
+      }
+    })();
+    const hasAdImage = safeAdUrl.length > 0;
+
     return (
       <div
         // Hermes 2026-08-14: explicit h-[60vh] + max-h-[600px] gives the
@@ -94,12 +107,17 @@ export function SpotCard({
         onPointerUp={onDragEnd}
         onPointerLeave={onDragEnd}
       >
-        <div
-          // Hermes 2026-08-14: changed from `absolute inset-0` to plain
-          // block-level fill so the image can't escape the rounded clip.
-          className={imageLayer}
-          style={{ backgroundImage: `url(${ad.image})` }}
-        />
+        {hasAdImage && (
+          <div
+            className={imageLayer}
+            style={{ backgroundImage: `url("${safeAdUrl}")` }}
+          />
+        )}
+        {!hasAdImage && (
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-700 via-indigo-700 to-purple-800">
+            <Rocket size={48} className="text-white/80" />
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-blue-950/95 via-blue-900/50 to-transparent" />
         <div className="absolute top-4 left-4 right-4 flex flex-wrap gap-2 z-10">
           <span className="px-3 py-1.5 bg-blue-500/90 backdrop-blur-md rounded-full text-white text-xs font-bold shadow-lg">
@@ -137,6 +155,26 @@ export function SpotCard({
   const regionColor = REGION_COLORS[spot.region] || 'bg-slate-500/30 text-slate-100 border-slate-300/40';
   const priceColor = PRICE_COLOR[spot.priceLevel] || PRICE_COLOR[2];
 
+  // Hermes 2026-08-14 (screenshot 5): card had no visible image — the
+  // backgroundImage: url(${spot.image}) style is fragile:
+  //   1. If spot.image is undefined/null/empty, the style is "url()" and CSS
+  //      silently does nothing → just shows the gray bg + gradient.
+  //   2. If the URL contains parens, commas, or unescaped quotes, CSS breaks.
+  //   3. If the image 404s, we want a graceful fallback (still readable).
+  //
+  // Fix: encodeURI the URL, wrap in CSS quotes, AND add an emoji fallback
+  // so empty/broken images still show *something* thematic.
+  const safeImageUrl = (() => {
+    const url = (spot as any).image;
+    if (!url || typeof url !== 'string') return '';
+    try {
+      return encodeURI(url);
+    } catch {
+      return url;
+    }
+  })();
+  const hasImage = safeImageUrl.length > 0;
+
   return (
     <div
       // Hermes 2026-08-14: explicit h-[60vh] (capped at 600px) gives the
@@ -154,13 +192,32 @@ export function SpotCard({
       onPointerUp={onDragEnd}
       onPointerLeave={onDragEnd}
     >
-      <div
-        // Hermes 2026-08-14: plain block-level fill so the photo respects
-        // the rounded corners. bg-cover centers and crops the photo
-        // without distorting aspect ratio.
-        className={imageLayer}
-        style={{ backgroundImage: `url(${spot.image})` }}
-      />
+      {hasImage && (
+        <div
+          // Hermes 2026-08-14 (screenshot 5): background-image with a quote-
+          // wrapped, encodeURI'd URL so parens / spaces / non-ASCII chars
+          // don't break the CSS parser. bg-cover + bg-center crops without
+          // distorting aspect ratio. The container already has overflow-
+          // hidden + rounded-3xl so the photo respects the rounded frame.
+          className={imageLayer}
+          style={{
+            backgroundImage: `url("${safeImageUrl}")`,
+          }}
+        />
+      )}
+      {!hasImage && (
+        // Hermes 2026-08-14 (screenshot 5): empty image fallback. A subtle
+        // gradient with the city emoji keeps the card readable instead of
+        // rendering as a blank dark rectangle.
+        <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-pink-700 via-purple-700 to-indigo-800">
+          <span className="text-7xl mb-2" aria-hidden>
+            {(spot as any).cityEmoji || '🌍'}
+          </span>
+          <span className="text-white/80 text-xs font-medium px-3 text-center">
+            {(spot as any).city || spot.title || '目的地'}
+          </span>
+        </div>
+      )}
       <div className="absolute inset-0 bg-gradient-to-t from-pink-950/95 via-black/30 to-transparent" />
 
       <div className="absolute top-4 left-4 right-4 flex flex-wrap gap-2 z-10">
