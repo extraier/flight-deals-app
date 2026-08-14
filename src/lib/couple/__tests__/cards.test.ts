@@ -113,3 +113,63 @@ test('buildDeck: respects active=false filter', () => {
     assert.ok(id === 'a0' || id === 'a1', `inactive ad ${id} was injected`);
   }
 });
+
+
+// Build a realistic 200-spot session (the SESSION_SPOT_CAP from room.ts)
+const spots200 = Array.from({ length: 200 }, (_, i) => ({
+  id: `spot-${i}`,
+  __kind: 'spot' as const,
+  name: `Spot ${i}`,
+  nameEn: `Spot ${i}`,
+  city: `City ${i % 50}`,
+  cityEn: `City ${i % 50}`,
+  country: 'Country',
+  countryCode: 'XX',
+  region: 'Test',
+  blurb: '',
+  image: '',
+  imageCredit: '',
+  priceLevel: 2,
+  dealCode: 'XXX',
+  tags: [],
+  travelMood: [],
+  active: true,
+}));
+const ads200 = Array.from({ length: 20 }, (_, i) => ({
+  id: `ad-${i}`,
+  __kind: 'ad' as const,
+  sponsor: 's',
+  title: `Ad ${i}`,
+  body: '',
+  image: '',
+  clickUrl: '',
+  durationSec: 0,
+  active: true,
+}));
+
+test('buildDeck: realistic 200-spot session has 18 ads (200/11=18) with no back-to-back', () => {
+  const deck = buildDeck(spots200, ads200, 999);
+  const ads = deck.filter((c) => c.__kind === 'ad');
+  // Should have floor(200/11) = 18 ads
+  assert.equal(ads.length, 18, `Expected 18 ads, got ${ads.length}`);
+  // Verify no two adjacent
+  for (let i = 1; i < deck.length; i++) {
+    if (deck[i].__kind === 'ad' && deck[i - 1].__kind === 'ad') {
+      assert.fail(`Back-to-back ads at index ${i - 1},${i}`);
+    }
+  }
+  // Verify min gap of MIN_GAP_BETWEEN_ADS=10 deck-slots between ads.
+  // With anchors at slot positions, "gap of 10 slots" = "9 spots between
+  // ads" (since the slot itself is an ad). Implementation invariant:
+  //   anchors_k = round((k+1) * (L+1) / (N+1)) - 1
+  // which guarantees ≥ MIN_GAP_BETWEEN_ADS-1 spots between consecutive ads.
+  const adIndices = deck.map((c, i) => (c.__kind === 'ad' ? i : -1)).filter((i) => i >= 0);
+  for (let i = 1; i < adIndices.length; i++) {
+    const slotGap = adIndices[i] - adIndices[i - 1];
+    const spotsBetween = slotGap - 1;
+    assert.ok(
+      slotGap >= 10,
+      `Slot gap between ads ${i - 1} and ${i} is ${slotGap} (${spotsBetween} spots between), want >= 10`
+    );
+  }
+});
