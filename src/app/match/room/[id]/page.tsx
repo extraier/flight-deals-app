@@ -263,17 +263,21 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" />
         <span className="text-white text-xs font-bold">配對成功 · 開始 Swipe</span>
       </div>
-      {/* Hermes 2026-08-14 (screenshot 8): top-right buttons layout:
-            right-2 = exit, right-14 = theme toggle, right-26 = wishlist
-            (in reverse DOM order so they stack from right to left). */}
-      <RoomWishlistLink />
-      <RoomThemeToggle />
-      <Link
-        href="/match"
-        className="absolute top-2 right-2 z-30 p-2 bg-black/50 text-white rounded-full hover:bg-red-500 transition"
-      >
-        <LogOut size={16} />
-      </Link>
+      {/* Hermes 2026-08-14 (screenshot 8): top-right buttons grouped in a
+          flex row at top-2 right-2 so they stack correctly without
+          overlapping the status pill. gap-2 keeps 8px between buttons.
+          Order in DOM = order from left to right: wishlist, theme, exit. */}
+      <div className="absolute top-2 right-2 z-30 flex items-center gap-2">
+        <RoomWishlistLink />
+        <RoomThemeToggle />
+        <Link
+          href="/match"
+          aria-label="離開房間"
+          className="p-2 bg-black/50 text-white rounded-full hover:bg-red-500 transition"
+        >
+          <LogOut size={16} />
+        </Link>
+      </div>
 
       <SwipeDeck
         cards={deck}
@@ -312,17 +316,15 @@ function spotMatchCount(room: RoomData, side: 'user1' | 'user2'): number {
 // swiping-liking and exiting the room first. This gives them a quick
 // escape hatch — clicking the heart jumps to /match/wishlist which shows
 // everything they've liked in any room.
+//
+// NOTE: positioning (top/right) is handled by the parent's flex container,
+// so this component just renders the button itself.
 function RoomWishlistLink() {
   return (
     <Link
       href="/match/wishlist"
       aria-label="查看心願清單"
-      // Hermes 2026-08-14: right-[7rem] = 112px (between right-14 at 56px
-      // and the left edge of the status pill). Each top-right button is
-      // ~36px wide (p-2 + 16px icon + p-2), so we step by ~44px to give
-      // breathing room: right-2 (8px) = exit, right-14 (56px) = theme,
-      // right-[7rem] (112px) = wishlist.
-      className="absolute top-2 right-[7rem] z-30 p-2 bg-black/50 text-white rounded-full hover:bg-pink-500 transition"
+      className="p-2 bg-black/50 text-white rounded-full hover:bg-pink-500 transition"
     >
       <Heart size={16} />
     </Link>
@@ -344,7 +346,7 @@ function RoomThemeToggle() {
       type="button"
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
       aria-label={theme === 'dark' ? '切換到淺色主題' : '切換到深色主題'}
-      className="absolute top-2 right-14 z-30 p-2 bg-black/50 text-white rounded-full hover:bg-pink-500 transition"
+      className="p-2 bg-black/50 text-white rounded-full hover:bg-pink-500 transition"
     >
       {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
     </button>
