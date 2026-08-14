@@ -1,0 +1,1175 @@
+{
+  "cities": [
+    {
+      "cityEn": "Tokyo",
+      "cityZh": "東京",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "HND",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Senso-ji Temple", "nameZh": "淺草寺", "imageHint": "Sensō-ji" },
+        { "nameEn": "Shinjuku Gyoen", "nameZh": "新宿御苑", "imageHint": "Shinjuku Gyoen" },
+        { "nameEn": "Tsukiji Outer Market", "nameZh": "築地場外市場", "imageHint": "Tsukiji" }
+      ]
+    },
+    {
+      "cityEn": "Hakone",
+      "cityZh": "箱根",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "HND",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Hakone Shrine", "nameZh": "箱根神社", "imageHint": "Hakone Shrine" },
+        { "nameEn": "Owakudani", "nameZh": "大涌谷", "imageHint": "Owakudani" },
+        { "nameEn": "Lake Ashi", "nameZh": "蘆之湖", "imageHint": "Lake Ashi" }
+      ]
+    },
+    {
+      "cityEn": "Kamakura",
+      "cityZh": "鎌倉",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "HND",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Great Buddha of Kamakura", "nameZh": "鎌倉大佛", "imageHint": "Great Buddha of Kamakura" },
+        { "nameEn": "Tsurugaoka Hachimangu", "nameZh": "鶴岡八幡宮", "imageHint": "Tsurugaoka Hachimangū" }
+      ]
+    },
+    {
+      "cityEn": "Nikko",
+      "cityZh": "日光",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "HND",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Toshogu Shrine", "nameZh": "東照宮", "imageHint": "Nikkō Tōshō-gū" },
+        { "nameEn": "Kegon Falls", "nameZh": "華嚴瀑布", "imageHint": "Kegon Falls" }
+      ]
+    },
+    {
+      "cityEn": "Osaka",
+      "cityZh": "大阪",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "KIX",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Osaka Castle", "nameZh": "大阪城", "imageHint": "Osaka Castle" },
+        { "nameEn": "Dotonbori", "nameZh": "道頓堀", "imageHint": "Dotonbori" },
+        { "nameEn": "Universal Studios Japan", "nameZh": "日本環球影城", "imageHint": "Universal Studios Japan" }
+      ]
+    },
+    {
+      "cityEn": "Nara",
+      "cityZh": "奈良",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "KIX",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Todai-ji Temple", "nameZh": "東大寺", "imageHint": "Tōdai-ji" },
+        { "nameEn": "Horyu-ji Temple", "nameZh": "法隆寺", "imageHint": "Hōryū-ji" },
+        { "nameEn": "Nara Park", "nameZh": "奈良公園", "imageHint": "Nara Park" }
+      ]
+    },
+    {
+      "cityEn": "Kyoto",
+      "cityZh": "京都",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "KIX",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Kinkaku-ji", "nameZh": "金閣寺", "imageHint": "Kinkaku-ji" },
+        { "nameEn": "Arashiyama Bamboo Grove", "nameZh": "嵐山竹林", "imageHint": "Arashiyama Bamboo Grove" },
+        { "nameEn": "Kiyomizu-dera", "nameZh": "清水寺", "imageHint": "Kiyomizu-dera" }
+      ]
+    },
+    {
+      "cityEn": "Hiroshima",
+      "cityZh": "廣島",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "HIJ",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Hiroshima Peace Memorial", "nameZh": "廣島和平紀念公園", "imageHint": "Hiroshima Peace Memorial" },
+        { "nameEn": "Atomic Bomb Dome", "nameZh": "原爆圓頂館", "imageHint": "Atomic Bomb Dome" }
+      ]
+    },
+    {
+      "cityEn": "Miyajima",
+      "cityZh": "宮島",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "HIJ",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Itsukushima Shrine", "nameZh": "嚴島神社", "imageHint": "Itsukushima Shrine" },
+        { "nameEn": "Mount Misen", "nameZh": "彌山", "imageHint": "Mount Misen" }
+      ]
+    },
+    {
+      "cityEn": "Himeji",
+      "cityZh": "姫路",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "KIX",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Himeji Castle", "nameZh": "姫路城", "imageHint": "Himeji Castle" },
+        { "nameEn": "Koko-en Garden", "nameZh": "好古園", "imageHint": "Koko-en" }
+      ]
+    },
+    {
+      "cityEn": "Kobe",
+      "cityZh": "神戶",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "KIX",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Kobe Port Tower", "nameZh": "神戶港塔", "imageHint": "Kobe Port Tower" },
+        { "nameEn": "Arima Onsen", "nameZh": "有馬溫泉", "imageHint": "Arima Onsen" },
+        { "nameEn": "Kobe Beef", "nameZh": "神戶牛", "imageHint": "Kobe beef" }
+      ]
+    },
+    {
+      "cityEn": "Sapporo",
+      "cityZh": "札幌",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "CTS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Odori Park", "nameZh": "大通公園", "imageHint": "Odori Park" },
+        { "nameEn": "Sapporo Snow Festival", "nameZh": "札幌雪祭", "imageHint": "Sapporo Snow Festival" },
+        { "nameEn": "Susukino", "nameZh": "薄野", "imageHint": "Susukino" }
+      ]
+    },
+    {
+      "cityEn": "Niseko",
+      "cityZh": "二世古",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "CTS",
+      "defaultPriceLevel": 4,
+      "landmarks": [
+        { "nameEn": "Niseko United Ski Resort", "nameZh": "二世古聯盟滑雪場", "imageHint": "Niseko United" },
+        { "nameEn": "Mount Yotei", "nameZh": "羊蹄山", "imageHint": "Mount Yotei" }
+      ]
+    },
+    {
+      "cityEn": "Hakodate",
+      "cityZh": "函館",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "HKD",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Hakodate Night View", "nameZh": "函館山夜景", "imageHint": "Mount Hakodate" },
+        { "nameEn": "Goryokaku Park", "nameZh": "五稜郭公園", "imageHint": "Goryōkaku" }
+      ]
+    },
+    {
+      "cityEn": "Otaru",
+      "cityZh": "小樽",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "CTS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Otaru Canal", "nameZh": "小樽運河", "imageHint": "Otaru Canal" },
+        { "nameEn": "Sakaimachi Street", "nameZh": "堺町通商店街", "imageHint": "Otaru Sakaimachi Street" }
+      ]
+    },
+    {
+      "cityEn": "Kanazawa",
+      "cityZh": "金澤",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "KIX",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Kenroku-en Garden", "nameZh": "兼六園", "imageHint": "Kenroku-en" },
+        { "nameEn": "Higashi Chaya District", "nameZh": "東茶屋街", "imageHint": "Higashi Chaya District" }
+      ]
+    },
+    {
+      "cityEn": "Shirakawa-go",
+      "cityZh": "白川鄉",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "NGO",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Shirakawa-go Historic Village", "nameZh": "白川鄉合掌造", "imageHint": "Historic Villages of Shirakawa-gō" }
+      ]
+    },
+    {
+      "cityEn": "Takayama",
+      "cityZh": "高山",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "NGO",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Sanmachi Suji", "nameZh": "三町筋老街", "imageHint": "Sanmachi Suji" },
+        { "nameEn": "Takayama Morning Market", "nameZh": "高山朝市", "imageHint": "Takayama Morning Market" }
+      ]
+    },
+    {
+      "cityEn": "Matsumoto",
+      "cityZh": "松本",
+      "countryEn": "Japan",
+      "countryZh": "日本",
+      "countryCode": "JP",
+      "regionZh": "東亞",
+      "dealCode": "HND",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Matsumoto Castle", "nameZh": "松本城", "imageHint": "Matsumoto Castle" },
+        { "nameEn": "Kamikochi", "nameZh": "上高地", "imageHint": "Kamikōchi" }
+      ]
+    },
+    {
+      "cityEn": "Seoul",
+      "cityZh": "首爾",
+      "countryEn": "South Korea",
+      "countryZh": "韓國",
+      "countryCode": "KR",
+      "regionZh": "東亞",
+      "dealCode": "ICN",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Gyeongbokgung Palace", "nameZh": "景福宮", "imageHint": "Gyeongbokgung" },
+        { "nameEn": "N Seoul Tower", "nameZh": "南山首爾塔", "imageHint": "N Seoul Tower" },
+        { "nameEn": "Bukchon Hanok Village", "nameZh": "北村韓屋村", "imageHint": "Bukchon Hanok Village" }
+      ]
+    },
+    {
+      "cityEn": "Busan",
+      "cityZh": "釜山",
+      "countryEn": "South Korea",
+      "countryZh": "韓國",
+      "countryCode": "KR",
+      "regionZh": "東亞",
+      "dealCode": "PUS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Haeundae Beach", "nameZh": "海雲台海水浴場", "imageHint": "Haeundae Beach" },
+        { "nameEn": "Gamcheon Culture Village", "nameZh": "甘川洞文化村", "imageHint": "Gamcheon Culture Village" },
+        { "nameEn": "Jagalchi Market", "nameZh": "札嘎其市場", "imageHint": "Jagalchi Market" }
+      ]
+    },
+    {
+      "cityEn": "Jeju",
+      "cityZh": "濟州",
+      "countryEn": "South Korea",
+      "countryZh": "韓國",
+      "countryCode": "KR",
+      "regionZh": "東亞",
+      "dealCode": "CJU",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Hallasan Mountain", "nameZh": "漢拏山", "imageHint": "Hallasan" },
+        { "nameEn": "Seongsan Ilchulbong", "nameZh": "城山日出峰", "imageHint": "Seongsan Ilchulbong" },
+        { "nameEn": "Manjanggul Cave", "nameZh": "萬丈窟", "imageHint": "Manjanggul" }
+      ]
+    },
+    {
+      "cityEn": "Gyeongju",
+      "cityZh": "慶州",
+      "countryEn": "South Korea",
+      "countryZh": "韓國",
+      "countryCode": "KR",
+      "regionZh": "東亞",
+      "dealCode": "PUS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Bulguksa Temple", "nameZh": "佛國寺", "imageHint": "Bulguksa" },
+        { "nameEn": "Seokguram Grotto", "nameZh": "石窟庵", "imageHint": "Seokguram" }
+      ]
+    },
+    {
+      "cityEn": "Sokcho",
+      "cityZh": "束草",
+      "countryEn": "South Korea",
+      "countryZh": "韓國",
+      "countryCode": "KR",
+      "regionZh": "東亞",
+      "dealCode": "YNY",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Seoraksan National Park", "nameZh": "雪嶽山國立公園", "imageHint": "Seoraksan" },
+        { "nameEn": "Sokcho Beach", "nameZh": "束草海水浴場", "imageHint": "Sokcho Beach" }
+      ]
+    },
+    {
+      "cityEn": "Taipei",
+      "cityZh": "台北",
+      "countryEn": "Taiwan",
+      "countryZh": "台灣",
+      "countryCode": "TW",
+      "regionZh": "東亞",
+      "dealCode": "TPE",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Taipei 101", "nameZh": "台北101", "imageHint": "Taipei 101" },
+        { "nameEn": "National Palace Museum", "nameZh": "國立故宮博物院", "imageHint": "National Palace Museum" },
+        { "nameEn": "Chiang Kai-shek Memorial Hall", "nameZh": "中正紀念堂", "imageHint": "Chiang Kai-shek Memorial Hall" }
+      ]
+    },
+    {
+      "cityEn": "Yangmingshan",
+      "cityZh": "陽明山",
+      "countryEn": "Taiwan",
+      "countryZh": "台灣",
+      "countryCode": "TW",
+      "regionZh": "東亞",
+      "dealCode": "TPE",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Yangmingshan National Park", "nameZh": "陽明山國家公園", "imageHint": "Yangmingshan National Park" },
+        { "nameEn": "Xiaoyoukeng", "nameZh": "小油坑", "imageHint": "Xiaoyoukeng" }
+      ]
+    },
+    {
+      "cityEn": "Taichung",
+      "cityZh": "台中",
+      "countryEn": "Taiwan",
+      "countryZh": "台灣",
+      "countryCode": "TW",
+      "regionZh": "東亞",
+      "dealCode": "TPE",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "National Taichung Theater", "nameZh": "台中國家歌劇院", "imageHint": "National Taichung Theater" },
+        { "nameEn": "Fengjia Night Market", "nameZh": "逢甲夜市", "imageHint": "Fengjia Night Market" },
+        { "nameEn": "Rainbow Village", "nameZh": "彩虹眷村", "imageHint": "Rainbow Village" }
+      ]
+    },
+    {
+      "cityEn": "Tainan",
+      "cityZh": "台南",
+      "countryEn": "Taiwan",
+      "countryZh": "台灣",
+      "countryCode": "TW",
+      "regionZh": "東亞",
+      "dealCode": "TPE",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Chihkan Tower", "nameZh": "赤崁樓", "imageHint": "Chihkan Tower" },
+        { "nameEn": "Anping Old Fort", "nameZh": "安平古堡", "imageHint": "Anping Fort" }
+      ]
+    },
+    {
+      "cityEn": "Kaohsiung",
+      "cityZh": "高雄",
+      "countryEn": "Taiwan",
+      "countryZh": "台灣",
+      "countryCode": "TW",
+      "regionZh": "東亞",
+      "dealCode": "KHH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Lotus Pond", "nameZh": "蓮池潭", "imageHint": "Lotus Pond, Kaohsiung" },
+        { "nameEn": "Pier-2 Art Center", "nameZh": "駁二藝術特區", "imageHint": "Pier-2 Art Center" }
+      ]
+    },
+    {
+      "cityEn": "Taroko",
+      "cityZh": "太魯閣",
+      "countryEn": "Taiwan",
+      "countryZh": "台灣",
+      "countryCode": "TW",
+      "regionZh": "東亞",
+      "dealCode": "TPE",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Taroko Gorge", "nameZh": "太魯閣峽谷", "imageHint": "Taroko Gorge" },
+        { "nameEn": "Shakadang Trail", "nameZh": "砂卡礑步道", "imageHint": "Shakadang Trail" }
+      ]
+    },
+    {
+      "cityEn": "Sun Moon Lake",
+      "cityZh": "日月潭",
+      "countryEn": "Taiwan",
+      "countryZh": "台灣",
+      "countryCode": "TW",
+      "regionZh": "東亞",
+      "dealCode": "TPE",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Sun Moon Lake", "nameZh": "日月潭", "imageHint": "Sun Moon Lake" },
+        { "nameEn": "Xiangshan Visitor Center", "nameZh": "向山遊客中心", "imageHint": "Xiangshan Visitor Center" }
+      ]
+    },
+    {
+      "cityEn": "Alishan",
+      "cityZh": "阿里山",
+      "countryEn": "Taiwan",
+      "countryZh": "台灣",
+      "countryCode": "TW",
+      "regionZh": "東亞",
+      "dealCode": "TPE",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Alishan National Scenic Area", "nameZh": "阿里山國家風景區", "imageHint": "Alishan National Scenic Area" },
+        { "nameEn": "Alishan Forest Railway", "nameZh": "阿里山森林鐵路", "imageHint": "Alishan Forest Railway" }
+      ]
+    },
+    {
+      "cityEn": "Kenting",
+      "cityZh": "墾丁",
+      "countryEn": "Taiwan",
+      "countryZh": "台灣",
+      "countryCode": "TW",
+      "regionZh": "東亞",
+      "dealCode": "KHH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Kenting National Park", "nameZh": "墾丁國家公園", "imageHint": "Kenting National Park" },
+        { "nameEn": "Eluanbi Lighthouse", "nameZh": "鵝鑾鼻燈塔", "imageHint": "Eluanbi Lighthouse" }
+      ]
+    },
+    {
+      "cityEn": "Penghu",
+      "cityZh": "澎湖",
+      "countryEn": "Taiwan",
+      "countryZh": "台灣",
+      "countryCode": "TW",
+      "regionZh": "東亞",
+      "dealCode": "MZG",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Penghu Archipelago", "nameZh": "澎湖群島", "imageHint": "Penghu" },
+        { "nameEn": "Qimei Twin Hearts Stone Weir", "nameZh": "七美雙心石滬", "imageHint": "Twin Hearts Stone Weir" }
+      ]
+    },
+    {
+      "cityEn": "Beijing",
+      "cityZh": "北京",
+      "countryEn": "China",
+      "countryZh": "中國",
+      "countryCode": "CN",
+      "regionZh": "東亞",
+      "dealCode": "PEK",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Great Wall of China (Mutianyu)", "nameZh": "萬里長城(慕田峪)", "imageHint": "Great Wall of China" },
+        { "nameEn": "Forbidden City", "nameZh": "故宮博物院", "imageHint": "Forbidden City" },
+        { "nameEn": "Temple of Heaven", "nameZh": "天壇", "imageHint": "Temple of Heaven" }
+      ]
+    },
+    {
+      "cityEn": "Shanghai",
+      "cityZh": "上海",
+      "countryEn": "China",
+      "countryZh": "中國",
+      "countryCode": "CN",
+      "regionZh": "東亞",
+      "dealCode": "PVG",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "The Bund", "nameZh": "外灘", "imageHint": "The Bund" },
+        { "nameEn": "Yu Garden", "nameZh": "豫園", "imageHint": "Yu Garden" },
+        { "nameEn": "Oriental Pearl Tower", "nameZh": "東方明珠塔", "imageHint": "Oriental Pearl Tower" }
+      ]
+    },
+    {
+      "cityEn": "Xi'an",
+      "cityZh": "西安",
+      "countryEn": "China",
+      "countryZh": "中國",
+      "countryCode": "CN",
+      "regionZh": "東亞",
+      "dealCode": "XIY",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Terracotta Army", "nameZh": "秦始皇兵馬俑", "imageHint": "Terracotta Army" },
+        { "nameEn": "Ancient City Wall", "nameZh": "西安古城牆", "imageHint": "Xi'an City Wall" }
+      ]
+    },
+    {
+      "cityEn": "Chengdu",
+      "cityZh": "成都",
+      "countryEn": "China",
+      "countryZh": "中國",
+      "countryCode": "CN",
+      "regionZh": "東亞",
+      "dealCode": "CTU",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Chengdu Research Base of Giant Panda Breeding", "nameZh": "成都大熊貓繁育研究基地", "imageHint": "Chengdu Research Base of Giant Panda Breeding" },
+        { "nameEn": "Jinli Ancient Street", "nameZh": "錦里古街", "imageHint": "Jinli" },
+        { "nameEn": "Wuhou Shrine", "nameZh": "武侯祠", "imageHint": "Wuhou Shrine" }
+      ]
+    },
+    {
+      "cityEn": "Guilin",
+      "cityZh": "桂林",
+      "countryEn": "China",
+      "countryZh": "中國",
+      "countryCode": "CN",
+      "regionZh": "東亞",
+      "dealCode": "KWL",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Li River", "nameZh": "灕江", "imageHint": "Li River" },
+        { "nameEn": "Elephant Trunk Hill", "nameZh": "象鼻山", "imageHint": "Elephant Trunk Hill" }
+      ]
+    },
+    {
+      "cityEn": "Zhangjiajie",
+      "cityZh": "張家界",
+      "countryEn": "China",
+      "countryZh": "中國",
+      "countryCode": "CN",
+      "regionZh": "東亞",
+      "dealCode": "DYG",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Zhangjiajie National Forest Park", "nameZh": "張家界國家森林公園", "imageHint": "Zhangjiajie National Forest Park" },
+        { "nameEn": "Tianmen Mountain", "nameZh": "天門山", "imageHint": "Tianmen Mountain" }
+      ]
+    },
+    {
+      "cityEn": "Hangzhou",
+      "cityZh": "杭州",
+      "countryEn": "China",
+      "countryZh": "中國",
+      "countryCode": "CN",
+      "regionZh": "東亞",
+      "dealCode": "HGH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "West Lake", "nameZh": "西湖", "imageHint": "West Lake" },
+        { "nameEn": "Lingyin Temple", "nameZh": "靈隱寺", "imageHint": "Lingyin Temple" }
+      ]
+    },
+    {
+      "cityEn": "Suzhou",
+      "cityZh": "蘇州",
+      "countryEn": "China",
+      "countryZh": "中國",
+      "countryCode": "CN",
+      "regionZh": "東亞",
+      "dealCode": "PVG",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Humble Administrator's Garden", "nameZh": "拙政園", "imageHint": "Humble Administrator's Garden" },
+        { "nameEn": "Pingjiang Road", "nameZh": "平江路", "imageHint": "Pingjiang Road" }
+      ]
+    },
+    {
+      "cityEn": "Lijiang",
+      "cityZh": "麗江",
+      "countryEn": "China",
+      "countryZh": "中國",
+      "countryCode": "CN",
+      "regionZh": "東亞",
+      "dealCode": "LJG",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Lijiang Old Town", "nameZh": "麗江古城", "imageHint": "Old Town of Lijiang" },
+        { "nameEn": "Jade Dragon Snow Mountain", "nameZh": "玉龍雪山", "imageHint": "Jade Dragon Snow Mountain" }
+      ]
+    },
+    {
+      "cityEn": "Huangshan",
+      "cityZh": "黃山",
+      "countryEn": "China",
+      "countryZh": "中國",
+      "countryCode": "CN",
+      "regionZh": "東亞",
+      "dealCode": "HGH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Huangshan Mountain", "nameZh": "黃山", "imageHint": "Huangshan" },
+        { "nameEn": "Hongcun Ancient Village", "nameZh": "宏村古村", "imageHint": "Hongcun" }
+      ]
+    },
+    {
+      "cityEn": "Hong Kong",
+      "cityZh": "香港",
+      "countryEn": "Hong Kong",
+      "countryZh": "香港",
+      "countryCode": "HK",
+      "regionZh": "香港",
+      "dealCode": "HKG",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Victoria Peak", "nameZh": "太平山頂", "imageHint": "Victoria Peak" },
+        { "nameEn": "Tsim Sha Tsui", "nameZh": "尖沙咀", "imageHint": "Tsim Sha Tsui" },
+        { "nameEn": "Stanley Market", "nameZh": "赤柱市集", "imageHint": "Stanley Market" }
+      ]
+    },
+    {
+      "cityEn": "Macau",
+      "cityZh": "澳門",
+      "countryEn": "Macau",
+      "countryZh": "澳門",
+      "countryCode": "MO",
+      "regionZh": "東亞",
+      "dealCode": "MFM",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Senado Square", "nameZh": "議事亭前地", "imageHint": "Senado Square" },
+        { "nameEn": "Ruins of St. Paul's", "nameZh": "大三巴牌坊", "imageHint": "Ruins of St. Paul's" },
+        { "nameEn": "A-Ma Temple", "nameZh": "媽閣廟", "imageHint": "A-Ma Temple" }
+      ]
+    },
+    {
+      "cityEn": "Krabi",
+      "cityZh": "甲米",
+      "countryEn": "Thailand",
+      "countryZh": "泰國",
+      "countryCode": "TH",
+      "regionZh": "東南亞",
+      "dealCode": "KBV",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Railay Beach", "nameZh": "萊利海灘", "imageHint": "Railay Beach" },
+        { "nameEn": "Phi Phi Islands", "nameZh": "皮皮島", "imageHint": "Phi Phi Islands" }
+      ]
+    },
+    {
+      "cityEn": "Koh Samui",
+      "cityZh": "蘇梅島",
+      "countryEn": "Thailand",
+      "countryZh": "泰國",
+      "countryCode": "TH",
+      "regionZh": "東南亞",
+      "dealCode": "USM",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Chaweng Beach", "nameZh": "查汶海灘", "imageHint": "Chaweng Beach" },
+        { "nameEn": "Big Buddha Temple", "nameZh": "大佛寺", "imageHint": "Big Buddha (Koh Samui)" }
+      ]
+    },
+    {
+      "cityEn": "Koh Phangan",
+      "cityZh": "帕岸島",
+      "countryEn": "Thailand",
+      "countryZh": "泰國",
+      "countryCode": "TH",
+      "regionZh": "東南亞",
+      "dealCode": "USM",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Haad Rin Beach", "nameZh": "哈林海灘", "imageHint": "Haad Rin" },
+        { "nameEn": "Than Sadet National Park", "nameZh": "旦沙德國家公園", "imageHint": "Than Sadet National Park" }
+      ]
+    },
+    {
+      "cityEn": "Pai",
+      "cityZh": "拜縣",
+      "countryEn": "Thailand",
+      "countryZh": "泰國",
+      "countryCode": "TH",
+      "regionZh": "東南亞",
+      "dealCode": "CNX",
+      "defaultPriceLevel": 1,
+      "landmarks": [
+        { "nameEn": "Pai Canyon", "nameZh": "拜縣峽谷", "imageHint": "Pai Canyon" },
+        { "nameEn": "Tha Pai Hot Springs", "nameZh": "塔拜溫泉", "imageHint": "Tha Pai Hot Springs" }
+      ]
+    },
+    {
+      "cityEn": "Sukhothai",
+      "cityZh": "素可泰",
+      "countryEn": "Thailand",
+      "countryZh": "泰國",
+      "countryCode": "TH",
+      "regionZh": "東南亞",
+      "dealCode": "THS",
+      "defaultPriceLevel": 1,
+      "landmarks": [
+        { "nameEn": "Sukhothai Historical Park", "nameZh": "素可泰歷史公園", "imageHint": "Sukhothai Historical Park" },
+        { "nameEn": "Wat Mahathat", "nameZh": "瑪哈泰寺", "imageHint": "Wat Mahathat, Sukhothai" }
+      ]
+    },
+    {
+      "cityEn": "Ayutthaya",
+      "cityZh": "大城",
+      "countryEn": "Thailand",
+      "countryZh": "泰國",
+      "countryCode": "TH",
+      "regionZh": "東南亞",
+      "dealCode": "BKK",
+      "defaultPriceLevel": 1,
+      "landmarks": [
+        { "nameEn": "Ayutthaya Historical Park", "nameZh": "大城歷史公園", "imageHint": "Ayutthaya Historical Park" },
+        { "nameEn": "Wat Phra Si Sanphet", "nameZh": "帕希桑碧寺", "imageHint": "Wat Phra Si Sanphet" }
+      ]
+    },
+    {
+      "cityEn": "Vientiane",
+      "cityZh": "萬象",
+      "countryEn": "Laos",
+      "countryZh": "老撾",
+      "countryCode": "LA",
+      "regionZh": "東南亞",
+      "dealCode": "VTE",
+      "defaultPriceLevel": 1,
+      "landmarks": [
+        { "nameEn": "Pha That Luang", "nameZh": "塔鑾寺", "imageHint": "Pha That Luang" },
+        { "nameEn": "Patuxai", "nameZh": "凱旋門", "imageHint": "Patuxai" }
+      ]
+    },
+    {
+      "cityEn": "Luang Prabang",
+      "cityZh": "龍坡邦",
+      "countryEn": "Laos",
+      "countryZh": "老撾",
+      "countryCode": "LA",
+      "regionZh": "東南亞",
+      "dealCode": "LPQ",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Mount Phousi", "nameZh": "普西山", "imageHint": "Mount Phousi" },
+        { "nameEn": "Wat Xieng Thong", "nameZh": "香通寺", "imageHint": "Wat Xieng Thong" },
+        { "nameEn": "Kuang Si Falls", "nameZh": "光西瀑布", "imageHint": "Kuang Si Falls" }
+      ]
+    },
+    {
+      "cityEn": "Phnom Penh",
+      "cityZh": "金邊",
+      "countryEn": "Cambodia",
+      "countryZh": "柬埔寨",
+      "countryCode": "KH",
+      "regionZh": "東南亞",
+      "dealCode": "PNH",
+      "defaultPriceLevel": 1,
+      "landmarks": [
+        { "nameEn": "Royal Palace of Phnom Penh", "nameZh": "金邊王宮", "imageHint": "Royal Palace, Phnom Penh" },
+        { "nameEn": "Tuol Sleng Genocide Museum", "nameZh": "吐斯廉屠殺博物館", "imageHint": "Tuol Sleng Genocide Museum" }
+      ]
+    },
+    {
+      "cityEn": "Siem Reap",
+      "cityZh": "暹粒",
+      "countryEn": "Cambodia",
+      "countryZh": "柬埔寨",
+      "countryCode": "KH",
+      "regionZh": "東南亞",
+      "dealCode": "REP",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Angkor Wat", "nameZh": "吳哥窟", "imageHint": "Angkor Wat" },
+        { "nameEn": "Bayon Temple", "nameZh": "巴戎寺", "imageHint": "Bayon" },
+        { "nameEn": "Ta Prohm", "nameZh": "塔布蘢寺", "imageHint": "Ta Prohm" }
+      ]
+    },
+    {
+      "cityEn": "Hanoi",
+      "cityZh": "河內",
+      "countryEn": "Vietnam",
+      "countryZh": "越南",
+      "countryCode": "VN",
+      "regionZh": "東南亞",
+      "dealCode": "HAN",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Hoan Kiem Lake", "nameZh": "還劍湖", "imageHint": "Hoan Kiem Lake" },
+        { "nameEn": "Temple of Literature", "nameZh": "文廟", "imageHint": "Temple of Literature, Hanoi" },
+        { "nameEn": "Old Quarter Hanoi", "nameZh": "河內舊城區", "imageHint": "Hanoi Old Quarter" }
+      ]
+    },
+    {
+      "cityEn": "Ho Chi Minh City",
+      "cityZh": "胡志明市",
+      "countryEn": "Vietnam",
+      "countryZh": "越南",
+      "countryCode": "VN",
+      "regionZh": "東南亞",
+      "dealCode": "SGN",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Notre-Dame Cathedral Basilica of Saigon", "nameZh": "西貢聖母聖殿", "imageHint": "Notre-Dame Cathedral Basilica of Saigon" },
+        { "nameEn": "War Remnants Museum", "nameZh": "戰爭遺跡博物館", "imageHint": "War Remnants Museum" }
+      ]
+    },
+    {
+      "cityEn": "Phu Quoc",
+      "cityZh": "富國島",
+      "countryEn": "Vietnam",
+      "countryZh": "越南",
+      "countryCode": "VN",
+      "regionZh": "東南亞",
+      "dealCode": "PQC",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Phu Quoc Island", "nameZh": "富國島", "imageHint": "Phú Quốc" },
+        { "nameEn": "VinWonders Phu Quoc", "nameZh": "富國島奇幻樂園", "imageHint": "VinWonders Phú Quốc" }
+      ]
+    },
+    {
+      "cityEn": "Nha Trang",
+      "cityZh": "芽莊",
+      "countryEn": "Vietnam",
+      "countryZh": "越南",
+      "countryCode": "VN",
+      "regionZh": "東南亞",
+      "dealCode": "CXR",
+      "defaultPriceLevel": 1,
+      "landmarks": [
+        { "nameEn": "Nha Trang Beach", "nameZh": "芽莊海灘", "imageHint": "Nha Trang Beach" },
+        { "nameEn": "Po Nagar Cham Towers", "nameZh": "婆那加佔婆塔", "imageHint": "Po Nagar" }
+      ]
+    },
+    {
+      "cityEn": "Da Nang",
+      "cityZh": "峴港",
+      "countryEn": "Vietnam",
+      "countryZh": "越南",
+      "countryCode": "VN",
+      "regionZh": "東南亞",
+      "dealCode": "DAD",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Hoi An Ancient Town", "nameZh": "會安古鎮", "imageHint": "Hội An" },
+        { "nameEn": "Ba Na Hills", "nameZh": "巴拿山", "imageHint": "Bà Nà Hills" },
+        { "nameEn": "Dragon Bridge", "nameZh": "龍橋", "imageHint": "Dragon Bridge, Da Nang" }
+      ]
+    },
+    {
+      "cityEn": "Boracay",
+      "cityZh": "長灘島",
+      "countryEn": "Philippines",
+      "countryZh": "菲律賓",
+      "countryCode": "PH",
+      "regionZh": "東南亞",
+      "dealCode": "KLO",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "White Beach", "nameZh": "白沙灘", "imageHint": "White Beach, Boracay" },
+        { "nameEn": "Puka Shell Beach", "nameZh": "普卡海灘", "imageHint": "Puka Shell Beach" }
+      ]
+    },
+    {
+      "cityEn": "Bangkok",
+      "cityZh": "曼谷",
+      "countryEn": "Thailand",
+      "countryZh": "泰國",
+      "countryCode": "TH",
+      "regionZh": "東南亞",
+      "dealCode": "BKK",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Grand Palace", "nameZh": "大皇宮", "imageHint": "Grand Palace, Bangkok" },
+        { "nameEn": "Wat Arun", "nameZh": "鄭王廟", "imageHint": "Wat Arun" }
+      ]
+    },
+    {
+      "cityEn": "Chiang Mai",
+      "cityZh": "清邁",
+      "countryEn": "Thailand",
+      "countryZh": "泰國",
+      "countryCode": "TH",
+      "regionZh": "東南亞",
+      "dealCode": "CNX",
+      "defaultPriceLevel": 1,
+      "landmarks": [
+        { "nameEn": "Wat Phra Singh", "nameZh": "帕辛寺", "imageHint": "Wat Phra Singh" },
+        { "nameEn": "Doi Suthep", "nameZh": "素帖山", "imageHint": "Doi Suthep" }
+      ]
+    },
+    {
+      "cityEn": "Singapore",
+      "cityZh": "新加坡",
+      "countryEn": "Singapore",
+      "countryZh": "新加坡",
+      "countryCode": "SG",
+      "regionZh": "東南亞",
+      "dealCode": "SIN",
+      "defaultPriceLevel": 4,
+      "landmarks": [
+        { "nameEn": "Gardens by the Bay", "nameZh": "濱海灣花園", "imageHint": "Gardens by the Bay" },
+        { "nameEn": "Marina Bay Sands", "nameZh": "濱海灣金沙", "imageHint": "Marina Bay Sands" },
+        { "nameEn": "Sentosa Island", "nameZh": "聖淘沙島", "imageHint": "Sentosa" }
+      ]
+    },
+    {
+      "cityEn": "Kuala Lumpur",
+      "cityZh": "吉隆坡",
+      "countryEn": "Malaysia",
+      "countryZh": "馬來西亞",
+      "countryCode": "MY",
+      "regionZh": "東南亞",
+      "dealCode": "KUL",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Petronas Twin Towers", "nameZh": "雙子塔", "imageHint": "Petronas Towers" },
+        { "nameEn": "Batu Caves", "nameZh": "黑風洞", "imageHint": "Batu Caves" }
+      ]
+    },
+    {
+      "cityEn": "Melbourne",
+      "cityZh": "墨爾本",
+      "countryEn": "Australia",
+      "countryZh": "澳洲",
+      "countryCode": "AU",
+      "regionZh": "大洋洲",
+      "dealCode": "MEL",
+      "defaultPriceLevel": 4,
+      "landmarks": [
+        { "nameEn": "Federation Square", "nameZh": "聯邦廣場", "imageHint": "Federation Square" },
+        { "nameEn": "Royal Botanic Gardens Melbourne", "nameZh": "墨爾本皇家植物園", "imageHint": "Royal Botanic Gardens Melbourne" },
+        { "nameEn": "Great Ocean Road (Twelve Apostles)", "nameZh": "大洋路十二門徒", "imageHint": "Twelve Apostles" }
+      ]
+    },
+    {
+      "cityEn": "Brisbane",
+      "cityZh": "布里斯班",
+      "countryEn": "Australia",
+      "countryZh": "澳洲",
+      "countryCode": "AU",
+      "regionZh": "大洋洲",
+      "dealCode": "BNE",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "South Bank Parklands", "nameZh": "南岸公園", "imageHint": "South Bank Parklands" },
+        { "nameEn": "Lone Pine Koala Sanctuary", "nameZh": "龍柏考拉保護區", "imageHint": "Lone Pine Koala Sanctuary" }
+      ]
+    },
+    {
+      "cityEn": "Gold Coast",
+      "cityZh": "黃金海岸",
+      "countryEn": "Australia",
+      "countryZh": "澳洲",
+      "countryCode": "AU",
+      "regionZh": "大洋洲",
+      "dealCode": "OOL",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Surfers Paradise Beach", "nameZh": "衝浪者天堂", "imageHint": "Surfers Paradise, Queensland" },
+        { "nameEn": "Warner Bros. Movie World", "nameZh": "華納兄弟電影世界", "imageHint": "Warner Bros. Movie World" }
+      ]
+    },
+    {
+      "cityEn": "Cairns",
+      "cityZh": "凱恩斯",
+      "countryEn": "Australia",
+      "countryZh": "澳洲",
+      "countryCode": "AU",
+      "regionZh": "大洋洲",
+      "dealCode": "CNS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Great Barrier Reef", "nameZh": "大堡礁", "imageHint": "Great Barrier Reef" },
+        { "nameEn": "Daintree Rainforest", "nameZh": "丹翠雨林", "imageHint": "Daintree Rainforest" }
+      ]
+    },
+    {
+      "cityEn": "Adelaide",
+      "cityZh": "阿德萊德",
+      "countryEn": "Australia",
+      "countryZh": "澳洲",
+      "countryCode": "AU",
+      "regionZh": "大洋洲",
+      "dealCode": "ADL",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Adelaide Oval", "nameZh": "阿德萊德橢圓球場", "imageHint": "Adelaide Oval" },
+        { "nameEn": "Barossa Valley", "nameZh": "芭蘿莎谷", "imageHint": "Barossa Valley" }
+      ]
+    },
+    {
+      "cityEn": "Hobart",
+      "cityZh": "荷伯特",
+      "countryEn": "Australia",
+      "countryZh": "澳洲",
+      "countryCode": "AU",
+      "regionZh": "大洋洲",
+      "dealCode": "HBA",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "MONA (Museum of Old and New Art)", "nameZh": "古今藝術博物館", "imageHint": "MONA, Hobart" },
+        { "nameEn": "Mount Wellington", "nameZh": "威靈頓山", "imageHint": "Mount Wellington, Tasmania" }
+      ]
+    },
+    {
+      "cityEn": "Perth",
+      "cityZh": "珀斯",
+      "countryEn": "Australia",
+      "countryZh": "澳洲",
+      "countryCode": "AU",
+      "regionZh": "大洋洲",
+      "dealCode": "PER",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Kings Park", "nameZh": "國王公園", "imageHint": "Kings Park, Western Australia" },
+        { "nameEn": "Cottesloe Beach", "nameZh": "科特索海灘", "imageHint": "Cottesloe Beach" }
+      ]
+    },
+    {
+      "cityEn": "Queenstown",
+      "cityZh": "皇后鎮",
+      "countryEn": "New Zealand",
+      "countryZh": "紐西蘭",
+      "countryCode": "NZ",
+      "regionZh": "大洋洲",
+      "dealCode": "ZQN",
+      "defaultPriceLevel": 4,
+      "landmarks": [
+        { "nameEn": "Lake Wakatipu", "nameZh": "瓦卡蒂普湖", "imageHint": "Lake Wakatipu" },
+        { "nameEn": "Skyline Queenstown", "nameZh": "皇后鎮天際纜車", "imageHint": "Skyline Queenstown" }
+      ]
+    },
+    {
+      "cityEn": "Auckland",
+      "cityZh": "奧克蘭",
+      "countryEn": "New Zealand",
+      "countryZh": "紐西蘭",
+      "countryCode": "NZ",
+      "regionZh": "大洋洲",
+      "dealCode": "AKL",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Sky Tower", "nameZh": "天空塔", "imageHint": "Sky Tower, Auckland" },
+        { "nameEn": "Waiheke Island", "nameZh": "懷赫科島", "imageHint": "Waiheke Island" }
+      ]
+    },
+    {
+      "cityEn": "Rotorua",
+      "cityZh": "羅托路亞",
+      "countryEn": "New Zealand",
+      "countryZh": "紐西蘭",
+      "countryCode": "NZ",
+      "regionZh": "大洋洲",
+      "dealCode": "ROT",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Wai-O-Tapu Thermal Wonderland", "nameZh": "懷奧塔普地熱仙境", "imageHint": "Wai-O-Tapu" },
+        { "nameEn": "Te Puia", "nameZh": "蒂普亞", "imageHint": "Te Puia" }
+      ]
+    },
+    {
+      "cityEn": "Wellington",
+      "cityZh": "威靈頓",
+      "countryEn": "New Zealand",
+      "countryZh": "紐西蘭",
+      "countryCode": "NZ",
+      "regionZh": "大洋洲",
+      "dealCode": "WLG",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Te Papa Tongarewa", "nameZh": "蒂帕帕國家博物館", "imageHint": "Museum of New Zealand Te Papa Tongarewa" },
+        { "nameEn": "Mount Victoria", "nameZh": "維多利亞山", "imageHint": "Mount Victoria, Wellington" }
+      ]
+    },
+    {
+      "cityEn": "Christchurch",
+      "cityZh": "基督城",
+      "countryEn": "New Zealand",
+      "countryZh": "紐西蘭",
+      "countryCode": "NZ",
+      "regionZh": "大洋洲",
+      "dealCode": "CHC",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Christchurch Botanic Gardens", "nameZh": "基督城植物園", "imageHint": "Christchurch Botanic Gardens" },
+        { "nameEn": "Lake Tekapo", "nameZh": "蒂卡波湖", "imageHint": "Lake Tekapo" }
+      ]
+    },
+    {
+      "cityEn": "Sydney",
+      "cityZh": "悉尼",
+      "countryEn": "Australia",
+      "countryZh": "澳洲",
+      "countryCode": "AU",
+      "regionZh": "大洋洲",
+      "dealCode": "SYD",
+      "defaultPriceLevel": 4,
+      "landmarks": [
+        { "nameEn": "Sydney Opera House", "nameZh": "悉尼歌劇院", "imageHint": "Sydney Opera House" },
+        { "nameEn": "Bondi Beach", "nameZh": "邦迪海灘", "imageHint": "Bondi Beach" },
+        { "nameEn": "Blue Mountains", "nameZh": "藍山", "imageHint": "Blue Mountains, New South Wales" }
+      ]
+    },
+    {
+      "cityEn": "Fiji (Nadi)",
+      "cityZh": "斐濟(楠迪)",
+      "countryEn": "Fiji",
+      "countryZh": "斐濟",
+      "countryCode": "FJ",
+      "regionZh": "大洋洲",
+      "dealCode": "NAN",
+      "defaultPriceLevel": 4,
+      "landmarks": [
+        { "nameEn": "Mamanuca Islands", "nameZh": "瑪瑪努卡群島", "imageHint": "Mamanuca Islands" },
+        { "nameEn": "Denarau Island", "nameZh": "丹娜努島", "imageHint": "Denarau Island" }
+      ]
+    },
+    {
+      "cityEn": "Bora Bora",
+      "cityZh": "波拉波拉島",
+      "countryEn": "French Polynesia",
+      "countryZh": "法屬波利尼西亞",
+      "countryCode": "PF",
+      "regionZh": "大洋洲",
+      "dealCode": "BOB",
+      "defaultPriceLevel": 4,
+      "landmarks": [
+        { "nameEn": "Bora Bora", "nameZh": "波拉波拉島", "imageHint": "Bora Bora" },
+        { "nameEn": "Mount Otemanu", "nameZh": "奧特馬努山", "imageHint": "Mount Otemanu" }
+      ]
+    },
+    {
+      "cityEn": "Tahiti",
+      "cityZh": "塔希提",
+      "countryEn": "French Polynesia",
+      "countryZh": "法屬波利尼西亞",
+      "countryCode": "PF",
+      "regionZh": "大洋洲",
+      "dealCode": "PPT",
+      "defaultPriceLevel": 4,
+      "landmarks": [
+        { "nameEn": "Tahiti", "nameZh": "塔希提島", "imageHint": "Tahiti" },
+        { "nameEn": "Museum of Tahiti and the Islands", "nameZh": "塔希提及群島博物館", "imageHint": "Museum of Tahiti and the Islands" }
+      ]
+    }
+  ]
+}

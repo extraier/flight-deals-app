@@ -1,0 +1,873 @@
+{
+  "cities": [
+    {
+      "cityEn": "New York",
+      "cityZh": "紐約",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "JFK",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Statue of Liberty", "nameZh": "自由神像", "imageHint": "Statue of Liberty" },
+        { "nameEn": "Times Square", "nameZh": "時代廣場", "imageHint": "Times Square" },
+        { "nameEn": "Central Park", "nameZh": "中央公園", "imageHint": "Central Park" }
+      ]
+    },
+    {
+      "cityEn": "Boston",
+      "cityZh": "波士頓",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "BOS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Freedom Trail", "nameZh": "自由之路", "imageHint": "Freedom Trail" },
+        { "nameEn": "Fenway Park", "nameZh": "芬威球場", "imageHint": "Fenway Park" },
+        { "nameEn": "Harvard University", "nameZh": "哈佛大學", "imageHint": "Harvard University" }
+      ]
+    },
+    {
+      "cityEn": "Philadelphia",
+      "cityZh": "費城",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "PHL",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Liberty Bell", "nameZh": "自由鐘", "imageHint": "Liberty Bell" },
+        { "nameEn": "Independence Hall", "nameZh": "獨立廳", "imageHint": "Independence Hall" }
+      ]
+    },
+    {
+      "cityEn": "Washington DC",
+      "cityZh": "華盛頓",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "IAD",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Lincoln Memorial", "nameZh": "林肯紀念堂", "imageHint": "Lincoln Memorial" },
+        { "nameEn": "Washington Monument", "nameZh": "華盛頓紀念碑", "imageHint": "Washington Monument" },
+        { "nameEn": "United States Capitol", "nameZh": "美國國會大廈", "imageHint": "United States Capitol" }
+      ]
+    },
+    {
+      "cityEn": "Chicago",
+      "cityZh": "芝加哥",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "ORD",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Willis Tower", "nameZh": "威利斯大廈", "imageHint": "Willis Tower" },
+        { "nameEn": "Millennium Park", "nameZh": "千禧公園", "imageHint": "Millennium Park" },
+        { "nameEn": "Navy Pier", "nameZh": "海軍碼頭", "imageHint": "Navy Pier" }
+      ]
+    },
+    {
+      "cityEn": "San Francisco",
+      "cityZh": "三藩市",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "SFO",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Golden Gate Bridge", "nameZh": "金門大橋", "imageHint": "Golden Gate Bridge" },
+        { "nameEn": "Alcatraz Island", "nameZh": "惡魔島", "imageHint": "Alcatraz Island" },
+        { "nameEn": "Cable Car", "nameZh": "纜車", "imageHint": "San Francisco cable car" }
+      ]
+    },
+    {
+      "cityEn": "Los Angeles",
+      "cityZh": "洛杉磯",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "LAX",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Hollywood Sign", "nameZh": "荷里活標誌", "imageHint": "Hollywood Sign" },
+        { "nameEn": "Griffith Observatory", "nameZh": "格菲斯天文台", "imageHint": "Griffith Observatory" },
+        { "nameEn": "Santa Monica Pier", "nameZh": "聖莫尼卡碼頭", "imageHint": "Santa Monica Pier" }
+      ]
+    },
+    {
+      "cityEn": "San Diego",
+      "cityZh": "聖地牙哥",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "SAN",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "San Diego Zoo", "nameZh": "聖地牙哥動物園", "imageHint": "San Diego Zoo" },
+        { "nameEn": "Balboa Park", "nameZh": "巴爾博亞公園", "imageHint": "Balboa Park" },
+        { "nameEn": "USS Midway Museum", "nameZh": "中途島號航空母艦博物館", "imageHint": "USS Midway" }
+      ]
+    },
+    {
+      "cityEn": "Seattle",
+      "cityZh": "西雅圖",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "SEA",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Space Needle", "nameZh": "太空針塔", "imageHint": "Space Needle" },
+        { "nameEn": "Pike Place Market", "nameZh": "派克市場", "imageHint": "Pike Place Market" },
+        { "nameEn": "Mount Rainier", "nameZh": "雷尼爾山", "imageHint": "Mount Rainier" }
+      ]
+    },
+    {
+      "cityEn": "Portland",
+      "cityZh": "波特蘭",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "PDX",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Powell's City of Books", "nameZh": "鮑威爾書店", "imageHint": "Powell's Books" },
+        { "nameEn": "International Rose Test Garden", "nameZh": "國際玫瑰試驗花園", "imageHint": "International Rose Test Garden" }
+      ]
+    },
+    {
+      "cityEn": "Miami",
+      "cityZh": "邁阿密",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "MIA",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "South Beach", "nameZh": "南海灘", "imageHint": "South Beach, Miami Beach" },
+        { "nameEn": "Everglades National Park", "nameZh": "大沼澤國家公園", "imageHint": "Everglades National Park" },
+        { "nameEn": "Art Deco Historic District", "nameZh": "裝飾藝術歷史區", "imageHint": "Miami Beach Architectural District" }
+      ]
+    },
+    {
+      "cityEn": "Orlando",
+      "cityZh": "奧蘭多",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "MCO",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Walt Disney World", "nameZh": "華特迪士尼世界", "imageHint": "Walt Disney World" },
+        { "nameEn": "Kennedy Space Center", "nameZh": "甘迺迪太空中心", "imageHint": "Kennedy Space Center" }
+      ]
+    },
+    {
+      "cityEn": "New Orleans",
+      "cityZh": "紐奧良",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "MSY",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "French Quarter", "nameZh": "法國區", "imageHint": "French Quarter" },
+        { "nameEn": "Jackson Square", "nameZh": "傑克遜廣場", "imageHint": "Jackson Square" },
+        { "nameEn": "Mardi Gras", "nameZh": "狂歡節", "imageHint": "Mardi Gras" }
+      ]
+    },
+    {
+      "cityEn": "Las Vegas",
+      "cityZh": "拉斯維加斯",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "LAS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Las Vegas Strip", "nameZh": "拉斯維加斯大道", "imageHint": "Las Vegas Strip" },
+        { "nameEn": "Hoover Dam", "nameZh": "胡佛水壩", "imageHint": "Hoover Dam" },
+        { "nameEn": "Fremont Street", "nameZh": "弗蒙街", "imageHint": "Fremont Street" }
+      ]
+    },
+    {
+      "cityEn": "Austin",
+      "cityZh": "奧斯汀",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "AUS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Texas State Capitol", "nameZh": "德州議會大廈", "imageHint": "Texas State Capitol" },
+        { "nameEn": "South by Southwest", "nameZh": "西南偏南音樂節", "imageHint": "South by Southwest" }
+      ]
+    },
+    {
+      "cityEn": "Nashville",
+      "cityZh": "納什維爾",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "BNA",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Grand Ole Opry", "nameZh": "大奧普里", "imageHint": "Grand Ole Opry" },
+        { "nameEn": "Country Music Hall of Fame", "nameZh": "鄉村音樂名人堂", "imageHint": "Country Music Hall of Fame" }
+      ]
+    },
+    {
+      "cityEn": "Savannah",
+      "cityZh": "薩凡納",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "SAV",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Forsyth Park", "nameZh": "福賽斯公園", "imageHint": "Forsyth Park" },
+        { "nameEn": "Bonaventure Cemetery", "nameZh": "博納旺蒂爾公墓", "imageHint": "Bonaventure Cemetery" }
+      ]
+    },
+    {
+      "cityEn": "Charleston",
+      "cityZh": "查爾斯頓",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "CHS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Charleston Historic District", "nameZh": "查爾斯頓歷史區", "imageHint": "Charleston Historic District" },
+        { "nameEn": "Fort Sumter", "nameZh": "薩姆特堡", "imageHint": "Fort Sumter" }
+      ]
+    },
+    {
+      "cityEn": "Memphis",
+      "cityZh": "孟菲斯",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "MEM",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Graceland", "nameZh": "雅園", "imageHint": "Graceland" },
+        { "nameEn": "Beale Street", "nameZh": "比爾街", "imageHint": "Beale Street" }
+      ]
+    },
+    {
+      "cityEn": "Honolulu",
+      "cityZh": "檀香山",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "HNL",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Waikiki Beach", "nameZh": "威基基海灘", "imageHint": "Waikiki Beach" },
+        { "nameEn": "Diamond Head", "nameZh": "鑽石山", "imageHint": "Diamond Head" },
+        { "nameEn": "Pearl Harbor", "nameZh": "珍珠港", "imageHint": "Pearl Harbor" }
+      ]
+    },
+    {
+      "cityEn": "Lahaina",
+      "cityZh": "拉海納",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "OGG",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Haleakala National Park", "nameZh": "哈雷阿卡拉國家公園", "imageHint": "Haleakala National Park" },
+        { "nameEn": "Road to Hana", "nameZh": "哈納公路", "imageHint": "Road to Hana" }
+      ]
+    },
+    {
+      "cityEn": "Cody",
+      "cityZh": "科迪",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "COD",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Yellowstone National Park", "nameZh": "黃石國家公園", "imageHint": "Yellowstone National Park" },
+        { "nameEn": "Old Faithful", "nameZh": "老忠實噴泉", "imageHint": "Old Faithful" },
+        { "nameEn": "Grand Prismatic Spring", "nameZh": "大稜鏡溫泉", "imageHint": "Grand Prismatic Spring" }
+      ]
+    },
+    {
+      "cityEn": "Mariposa",
+      "cityZh": "馬里波薩",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "FAT",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Yosemite National Park", "nameZh": "優勝美地國家公園", "imageHint": "Yosemite National Park" },
+        { "nameEn": "El Capitan", "nameZh": "酋長岩", "imageHint": "El Capitan" },
+        { "nameEn": "Half Dome", "nameZh": "半圓頂", "imageHint": "Half Dome" }
+      ]
+    },
+    {
+      "cityEn": "Flagstaff",
+      "cityZh": "弗拉格斯塔夫",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "FLG",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Grand Canyon", "nameZh": "大峽谷", "imageHint": "Grand Canyon" },
+        { "nameEn": "Horseshoe Bend", "nameZh": "馬蹄灣", "imageHint": "Horseshoe Bend" }
+      ]
+    },
+    {
+      "cityEn": "Niagara Falls (NY side)",
+      "cityZh": "尼亞加拉瀑布",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "BUF",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Niagara Falls", "nameZh": "尼亞加拉大瀑布", "imageHint": "Niagara Falls" }
+      ]
+    },
+    {
+      "cityEn": "Atlanta",
+      "cityZh": "亞特蘭大",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "ATL",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Georgia Aquarium", "nameZh": "喬治亞水族館", "imageHint": "Georgia Aquarium" },
+        { "nameEn": "Martin Luther King Jr. National Historical Park", "nameZh": "馬丁路德金恩國家歷史公園", "imageHint": "Martin Luther King Jr. National Historical Park" }
+      ]
+    },
+    {
+      "cityEn": "Denver",
+      "cityZh": "丹佛",
+      "countryEn": "United States",
+      "countryZh": "美國",
+      "countryCode": "US",
+      "regionZh": "美洲",
+      "dealCode": "DEN",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Rocky Mountain National Park", "nameZh": "洛磯山國家公園", "imageHint": "Rocky Mountain National Park" },
+        { "nameEn": "Red Rocks Amphitheatre", "nameZh": "紅石露天劇場", "imageHint": "Red Rocks Amphitheatre" }
+      ]
+    },
+    {
+      "cityEn": "Toronto",
+      "cityZh": "多倫多",
+      "countryEn": "Canada",
+      "countryZh": "加拿大",
+      "countryCode": "CA",
+      "regionZh": "美洲",
+      "dealCode": "YYZ",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "CN Tower", "nameZh": "加拿大國家電視塔", "imageHint": "CN Tower" },
+        { "nameEn": "Niagara Falls", "nameZh": "尼亞加拉大瀑布", "imageHint": "Niagara Falls" },
+        { "nameEn": "Royal Ontario Museum", "nameZh": "皇家安大略博物館", "imageHint": "Royal Ontario Museum" }
+      ]
+    },
+    {
+      "cityEn": "Montreal",
+      "cityZh": "滿地可",
+      "countryEn": "Canada",
+      "countryZh": "加拿大",
+      "countryCode": "CA",
+      "regionZh": "美洲",
+      "dealCode": "YUL",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Notre-Dame Basilica of Montreal", "nameZh": "滿地可聖母聖殿", "imageHint": "Notre-Dame Basilica" },
+        { "nameEn": "Old Montreal", "nameZh": "滿地可舊城", "imageHint": "Old Montreal" },
+        { "nameEn": "Mount Royal", "nameZh": "皇家山", "imageHint": "Mount Royal" }
+      ]
+    },
+    {
+      "cityEn": "Quebec City",
+      "cityZh": "魁北克城",
+      "countryEn": "Canada",
+      "countryZh": "加拿大",
+      "countryCode": "CA",
+      "regionZh": "美洲",
+      "dealCode": "YQB",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Château Frontenac", "nameZh": "芳堤娜城堡", "imageHint": "Château Frontenac" },
+        { "nameEn": "Old Quebec", "nameZh": "魁北克舊城", "imageHint": "Old Quebec" }
+      ]
+    },
+    {
+      "cityEn": "Vancouver",
+      "cityZh": "溫哥華",
+      "countryEn": "Canada",
+      "countryZh": "加拿大",
+      "countryCode": "CA",
+      "regionZh": "美洲",
+      "dealCode": "YVR",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Stanley Park", "nameZh": "史丹利公園", "imageHint": "Stanley Park" },
+        { "nameEn": "Capilano Suspension Bridge", "nameZh": "卡皮拉諾吊橋", "imageHint": "Capilano Suspension Bridge" },
+        { "nameEn": "Granville Island", "nameZh": "格蘭維爾島", "imageHint": "Granville Island" }
+      ]
+    },
+    {
+      "cityEn": "Banff",
+      "cityZh": "班夫",
+      "countryEn": "Canada",
+      "countryZh": "加拿大",
+      "countryCode": "CA",
+      "regionZh": "美洲",
+      "dealCode": "YYC",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Banff National Park", "nameZh": "班夫國家公園", "imageHint": "Banff National Park" },
+        { "nameEn": "Lake Louise", "nameZh": "路易斯湖", "imageHint": "Lake Louise" },
+        { "nameEn": "Moraine Lake", "nameZh": "夢蓮湖", "imageHint": "Moraine Lake" }
+      ]
+    },
+    {
+      "cityEn": "Jasper",
+      "cityZh": "傑士伯",
+      "countryEn": "Canada",
+      "countryZh": "加拿大",
+      "countryCode": "CA",
+      "regionZh": "美洲",
+      "dealCode": "YJP",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Jasper National Park", "nameZh": "傑士伯國家公園", "imageHint": "Jasper National Park" },
+        { "nameEn": "Athabasca Falls", "nameZh": "阿薩巴斯卡瀑布", "imageHint": "Athabasca Falls" }
+      ]
+    },
+    {
+      "cityEn": "Victoria",
+      "cityZh": "維多利亞",
+      "countryEn": "Canada",
+      "countryZh": "加拿大",
+      "countryCode": "CA",
+      "regionZh": "美洲",
+      "dealCode": "YYJ",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Butchart Gardens", "nameZh": "布查花園", "imageHint": "Butchart Gardens" },
+        { "nameEn": "British Columbia Parliament Buildings", "nameZh": "卑詩省議會大廈", "imageHint": "British Columbia Parliament Buildings" }
+      ]
+    },
+    {
+      "cityEn": "Whistler",
+      "cityZh": "惠斯勒",
+      "countryEn": "Canada",
+      "countryZh": "加拿大",
+      "countryCode": "CA",
+      "regionZh": "美洲",
+      "dealCode": "YWS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Whistler Blackcomb", "nameZh": "惠斯勒黑梳山", "imageHint": "Whistler Blackcomb" }
+      ]
+    },
+    {
+      "cityEn": "Niagara-on-the-Lake",
+      "cityZh": "湖濱尼亞加拉",
+      "countryEn": "Canada",
+      "countryZh": "加拿大",
+      "countryCode": "CA",
+      "regionZh": "美洲",
+      "dealCode": "YCM",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Niagara Falls", "nameZh": "尼亞加拉大瀑布", "imageHint": "Niagara Falls" },
+        { "nameEn": "Niagara-on-the-Lake Historic District", "nameZh": "湖濱尼亞加拉歷史區", "imageHint": "Niagara-on-the-Lake" }
+      ]
+    },
+    {
+      "cityEn": "Ottawa",
+      "cityZh": "渥太華",
+      "countryEn": "Canada",
+      "countryZh": "加拿大",
+      "countryCode": "CA",
+      "regionZh": "美洲",
+      "dealCode": "YOW",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Parliament Hill", "nameZh": "國會山莊", "imageHint": "Parliament Hill" },
+        { "nameEn": "Rideau Canal", "nameZh": "麗都運河", "imageHint": "Rideau Canal" }
+      ]
+    },
+    {
+      "cityEn": "Mexico City",
+      "cityZh": "墨西哥城",
+      "countryEn": "Mexico",
+      "countryZh": "墨西哥",
+      "countryCode": "MX",
+      "regionZh": "美洲",
+      "dealCode": "MEX",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Teotihuacan", "nameZh": "特奧蒂瓦坎", "imageHint": "Teotihuacan" },
+        { "nameEn": "Frida Kahlo Museum", "nameZh": "芙烈達·卡蘿博物館", "imageHint": "Frida Kahlo Museum" },
+        { "nameEn": "Zocalo", "nameZh": "索卡洛廣場", "imageHint": "Zocalo" }
+      ]
+    },
+    {
+      "cityEn": "Cancun",
+      "cityZh": "坎昆",
+      "countryEn": "Mexico",
+      "countryZh": "墨西哥",
+      "countryCode": "MX",
+      "regionZh": "美洲",
+      "dealCode": "CUN",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Chichen Itza", "nameZh": "奇琴伊薩", "imageHint": "Chichen Itza" },
+        { "nameEn": "Cancun Underwater Museum", "nameZh": "坎昆海底博物館", "imageHint": "Cancun Underwater Museum" },
+        { "nameEn": "Isla Mujeres", "nameZh": "女人島", "imageHint": "Isla Mujeres" }
+      ]
+    },
+    {
+      "cityEn": "Tulum",
+      "cityZh": "圖盧姆",
+      "countryEn": "Mexico",
+      "countryZh": "墨西哥",
+      "countryCode": "MX",
+      "regionZh": "美洲",
+      "dealCode": "CUN",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Tulum Ruins", "nameZh": "圖盧姆遺址", "imageHint": "Tulum" }
+      ]
+    },
+    {
+      "cityEn": "Valladolid",
+      "cityZh": "巴利亞多利德",
+      "countryEn": "Mexico",
+      "countryZh": "墨西哥",
+      "countryCode": "MX",
+      "regionZh": "美洲",
+      "dealCode": "MID",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Chichen Itza", "nameZh": "奇琴伊薩", "imageHint": "Chichen Itza" }
+      ]
+    },
+    {
+      "cityEn": "Oaxaca",
+      "cityZh": "瓦哈卡",
+      "countryEn": "Mexico",
+      "countryZh": "墨西哥",
+      "countryCode": "MX",
+      "regionZh": "美洲",
+      "dealCode": "OAX",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Monte Alban", "nameZh": "阿爾班山", "imageHint": "Monte Alban" },
+        { "nameEn": "Hierve el Agua", "nameZh": "希韋爾埃爾阿瓜", "imageHint": "Hierve el Agua" }
+      ]
+    },
+    {
+      "cityEn": "Puerto Vallarta",
+      "cityZh": "巴亞爾塔港",
+      "countryEn": "Mexico",
+      "countryZh": "墨西哥",
+      "countryCode": "MX",
+      "regionZh": "美洲",
+      "dealCode": "PVR",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Malecón", "nameZh": "馬雷孔海濱步道", "imageHint": "Malecón, Puerto Vallarta" },
+        { "nameEn": "Banderas Bay", "nameZh": "班德拉斯灣", "imageHint": "Bahia de Banderas" }
+      ]
+    },
+    {
+      "cityEn": "Guadalajara",
+      "cityZh": "瓜達拉哈拉",
+      "countryEn": "Mexico",
+      "countryZh": "墨西哥",
+      "countryCode": "MX",
+      "regionZh": "美洲",
+      "dealCode": "GDL",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Hospicio Cabañas", "nameZh": "卡巴尼亞斯之家", "imageHint": "Hospicio Cabañas" },
+        { "nameEn": "Guadalajara Cathedral", "nameZh": "瓜達拉哈拉主教座堂", "imageHint": "Guadalajara Cathedral" }
+      ]
+    },
+    {
+      "cityEn": "Monterrey",
+      "cityZh": "蒙特雷",
+      "countryEn": "Mexico",
+      "countryZh": "墨西哥",
+      "countryCode": "MX",
+      "regionZh": "美洲",
+      "dealCode": "MTY",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Cerro de la Silla", "nameZh": "馬鞍山", "imageHint": "Cerro de la Silla" },
+        { "nameEn": "Fundidora Park", "nameZh": "豐迪多拉公園", "imageHint": "Parque Fundidora" }
+      ]
+    },
+    {
+      "cityEn": "Havana",
+      "cityZh": "夏灣拿",
+      "countryEn": "Cuba",
+      "countryZh": "古巴",
+      "countryCode": "CU",
+      "regionZh": "美洲",
+      "dealCode": "HAV",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Old Havana", "nameZh": "夏灣拿舊城", "imageHint": "Old Havana" },
+        { "nameEn": "Malecón", "nameZh": "馬雷孔", "imageHint": "Malecón, Havana" }
+      ]
+    },
+    {
+      "cityEn": "San Juan",
+      "cityZh": "聖胡安",
+      "countryEn": "Puerto Rico",
+      "countryZh": "波多黎各",
+      "countryCode": "PR",
+      "regionZh": "美洲",
+      "dealCode": "SJU",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Old San Juan", "nameZh": "聖胡安舊城", "imageHint": "Old San Juan" },
+        { "nameEn": "Castillo San Felipe del Morro", "nameZh": "聖費利佩海角堡", "imageHint": "Castillo San Felipe del Morro" }
+      ]
+    },
+    {
+      "cityEn": "Buenos Aires",
+      "cityZh": "布宜諾斯艾利斯",
+      "countryEn": "Argentina",
+      "countryZh": "阿根廷",
+      "countryCode": "AR",
+      "regionZh": "美洲",
+      "dealCode": "EZE",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Recoleta Cemetery", "nameZh": "雷科萊塔公墓", "imageHint": "Recoleta Cemetery" },
+        { "nameEn": "La Boca", "nameZh": "博卡區", "imageHint": "La Boca, Buenos Aires" },
+        { "nameEn": "Teatro Colón", "nameZh": "哥倫布劇院", "imageHint": "Teatro Colón" }
+      ]
+    },
+    {
+      "cityEn": "Rio de Janeiro",
+      "cityZh": "里約熱內盧",
+      "countryEn": "Brazil",
+      "countryZh": "巴西",
+      "countryCode": "BR",
+      "regionZh": "美洲",
+      "dealCode": "GIG",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Christ the Redeemer", "nameZh": "救主耶穌像", "imageHint": "Christ the Redeemer" },
+        { "nameEn": "Sugarloaf Mountain", "nameZh": "糖麵包山", "imageHint": "Sugarloaf Mountain" },
+        { "nameEn": "Copacabana Beach", "nameZh": "科帕卡巴納海灘", "imageHint": "Copacabana Beach" }
+      ]
+    },
+    {
+      "cityEn": "Sao Paulo",
+      "cityZh": "聖保羅",
+      "countryEn": "Brazil",
+      "countryZh": "巴西",
+      "countryCode": "BR",
+      "regionZh": "美洲",
+      "dealCode": "GRU",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Ibirapuera Park", "nameZh": "伊比拉普埃拉公園", "imageHint": "Ibirapuera Park" },
+        { "nameEn": "Sao Paulo Cathedral", "nameZh": "聖保羅主教座堂", "imageHint": "Sao Paulo Cathedral" }
+      ]
+    },
+    {
+      "cityEn": "Salvador",
+      "cityZh": "薩爾瓦多",
+      "countryEn": "Brazil",
+      "countryZh": "巴西",
+      "countryCode": "BR",
+      "regionZh": "美洲",
+      "dealCode": "SSA",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Pelourinho", "nameZh": "佩洛里尼奧", "imageHint": "Pelourinho" }
+      ]
+    },
+    {
+      "cityEn": "Lima",
+      "cityZh": "利馬",
+      "countryEn": "Peru",
+      "countryZh": "秘魯",
+      "countryCode": "PE",
+      "regionZh": "美洲",
+      "dealCode": "LIM",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Machu Picchu", "nameZh": "馬丘比丘", "imageHint": "Machu Picchu" },
+        { "nameEn": "Plaza Mayor", "nameZh": "大廣場", "imageHint": "Plaza Mayor, Lima" }
+      ]
+    },
+    {
+      "cityEn": "Cusco",
+      "cityZh": "庫斯科",
+      "countryEn": "Peru",
+      "countryZh": "秘魯",
+      "countryCode": "PE",
+      "regionZh": "美洲",
+      "dealCode": "CUZ",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Machu Picchu", "nameZh": "馬丘比丘", "imageHint": "Machu Picchu" },
+        { "nameEn": "Plaza de Armas", "nameZh": "武器廣場", "imageHint": "Plaza de Armas, Cusco" },
+        { "nameEn": "Sacred Valley", "nameZh": "聖谷", "imageHint": "Sacred Valley" }
+      ]
+    },
+    {
+      "cityEn": "Santiago",
+      "cityZh": "聖地牙哥",
+      "countryEn": "Chile",
+      "countryZh": "智利",
+      "countryCode": "CL",
+      "regionZh": "美洲",
+      "dealCode": "SCL",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Cerro San Cristóbal", "nameZh": "聖克里斯托瓦爾山", "imageHint": "Cerro San Cristóbal" },
+        { "nameEn": "Plaza de Armas", "nameZh": "武器廣場", "imageHint": "Plaza de Armas, Santiago" }
+      ]
+    },
+    {
+      "cityEn": "Valparaiso",
+      "cityZh": "瓦爾帕萊索",
+      "countryEn": "Chile",
+      "countryZh": "智利",
+      "countryCode": "CL",
+      "regionZh": "美洲",
+      "dealCode": "VAP",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Valparaiso Street Art", "nameZh": "瓦爾帕萊索街頭藝術", "imageHint": "Valparaiso" }
+      ]
+    },
+    {
+      "cityEn": "El Calafate",
+      "cityZh": "埃爾卡拉法特",
+      "countryEn": "Argentina",
+      "countryZh": "阿根廷",
+      "countryCode": "AR",
+      "regionZh": "美洲",
+      "dealCode": "FTE",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Perito Moreno Glacier", "nameZh": "莫雷諾冰川", "imageHint": "Perito Moreno Glacier" }
+      ]
+    },
+    {
+      "cityEn": "Cartagena",
+      "cityZh": "卡塔赫納",
+      "countryEn": "Colombia",
+      "countryZh": "哥倫比亞",
+      "countryCode": "CO",
+      "regionZh": "美洲",
+      "dealCode": "CTG",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Cartagena Walled City", "nameZh": "卡塔赫納古城", "imageHint": "Cartagena, Colombia" },
+        { "nameEn": "Castillo San Felipe de Barajas", "nameZh": "聖費利佩德巴拉哈斯城堡", "imageHint": "Castillo San Felipe de Barajas" }
+      ]
+    },
+    {
+      "cityEn": "Medellin",
+      "cityZh": "麥德林",
+      "countryEn": "Colombia",
+      "countryZh": "哥倫比亞",
+      "countryCode": "CO",
+      "regionZh": "美洲",
+      "dealCode": "MDE",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Plaza Botero", "nameZh": "波特羅廣場", "imageHint": "Plaza Botero" },
+        { "nameEn": "Comuna 13", "nameZh": "第十三區", "imageHint": "Comuna 13" }
+      ]
+    },
+    {
+      "cityEn": "Bogota",
+      "cityZh": "波哥大",
+      "countryEn": "Colombia",
+      "countryZh": "哥倫比亞",
+      "countryCode": "CO",
+      "regionZh": "美洲",
+      "dealCode": "BOG",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        { "nameEn": "Monserrate", "nameZh": "蒙塞拉特山", "imageHint": "Monserrate" },
+        { "nameEn": "Gold Museum", "nameZh": "黃金博物館", "imageHint": "Gold Museum, Bogota" }
+      ]
+    },
+    {
+      "cityEn": "Hanga Roa",
+      "cityZh": "漢加羅阿",
+      "countryEn": "Chile",
+      "countryZh": "智利",
+      "countryCode": "CL",
+      "regionZh": "美洲",
+      "dealCode": "IPC",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Easter Island Moai", "nameZh": "復活節島摩艾石像", "imageHint": "Moai" }
+      ]
+    },
+    {
+      "cityEn": "Puerto Ayora",
+      "cityZh": "阿約拉港",
+      "countryEn": "Ecuador",
+      "countryZh": "厄瓜多爾",
+      "countryCode": "EC",
+      "regionZh": "美洲",
+      "dealCode": "GPS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        { "nameEn": "Galápagos Islands", "nameZh": "加拉帕戈斯群島", "imageHint": "Galapagos Islands" },
+        { "nameEn": "Charles Darwin Research Station", "nameZh": "達爾文研究站", "imageHint": "Charles Darwin Research Station" }
+      ]
+    }
+  ]
+}
