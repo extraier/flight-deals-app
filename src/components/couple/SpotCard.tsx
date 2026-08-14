@@ -62,30 +62,28 @@ export function SpotCard({
   const dy = dragOffset?.y ?? 0;
   const rotate = dx * 0.05;
 
-  // Hermes 2026-08-14: shared frame styles. The image + overlay layers live
-  // inside a rounded container with overflow-hidden so the photo respects
-  // the card's rounded corners regardless of viewport size.
+  // Hermes 2026-08-14: shared frame styles. The card has explicit width +
+  // height so it doesn't collapse. Centering is done by the WRAPPER div
+  // (in SwipeDeck), not by this card — the card's only job is to fill its
+  // wrapper. The wrapper uses flexbox justify-center items-center to
+  // center us, then we add drag/rotation via the inline transform.
   //
-  // Layout strategy (revised after user screenshot 2):
-  //   - Frame uses a 4:5 aspect ratio (Instagram portrait) which is the
-  //     dominant mobile photo aspect — gives the card a "photo" feel,
-  //     not a "fullscreen" feel.
-  //   - max-h + max-w cap the card so it doesn't dominate tall portrait
-  //     phones (where aspect-[3/4] at 92% width became nearly full-height).
-  //   - 4px solid pink border (no opacity) + soft drop-shadow so the card
-  //     looks like a proper "framed photo."
-  //   - Photo is centered inside the frame with bg-cover; doesn't stretch.
+  // Layout strategy (after user screenshot 3):
+  //   - Card has explicit h-[70vh] max-h-[640px] (defined box — no collapse)
+  //   - w-[88%] max-w-sm (fits narrow phones, caps on landscape)
+  //   - 4px solid pink border (visible "framed photo" look)
   const frameShell =
-    'absolute w-[88%] max-w-sm rounded-3xl bg-gray-900 shadow-2xl overflow-hidden border-4 border-pink-500 select-none touch-none';
+    'relative w-full max-w-sm rounded-3xl bg-gray-900 shadow-2xl overflow-hidden border-4 border-pink-500 select-none touch-none';
   const imageLayer = 'w-full h-full bg-cover bg-center';
 
   if (isAd) {
     const ad = card as any;
     return (
       <div
-        // Hermes 2026-08-14: max-h-[70vh] caps the card on tall viewports
-        // so it doesn't dominate. max-w-sm caps it on landscape viewports.
-        className={`${frameShell} max-h-[70vh] border-blue-500`}
+        // Hermes 2026-08-14: explicit h-[70vh] + max-h-[640px] gives the
+        // card a defined box (no zero-height collapse). w-full inherits
+        // from the parent's w-[88%] wrapper.
+        className={`${frameShell} h-[70vh] max-h-[640px] border-blue-500`}
         style={{
           transform: `translate(${dx}px, ${dy}px) rotate(${rotate}deg)`,
           transition: isDragging ? 'none' : 'transform 0.3s ease-out',
@@ -141,10 +139,11 @@ export function SpotCard({
 
   return (
     <div
-      // Hermes 2026-08-14: max-h-[70vh] caps the card on tall viewports
-      // so it doesn't dominate the screen. The frame is the visible pink
-      // border-4 — this is what gives the card a "framed photo" look.
-      className={`${frameShell} max-h-[70vh]`}
+      // Hermes 2026-08-14: explicit h-[70vh] (capped at 640px) gives the
+      // card a defined box. The parent wrapper (SwipeDeck) provides the
+      // centered positioning via flexbox. Drag/rotation is applied via
+      // the inline transform.
+      className={`${frameShell} h-[70vh] max-h-[640px]`}
       style={{
         transform: `translate(${dx}px, ${dy}px) rotate(${rotate}deg)`,
         transition: isDragging ? 'none' : 'transform 0.3s ease-out',

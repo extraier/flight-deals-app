@@ -95,36 +95,47 @@ export function SwipeDeck({
   return (
     <div className="flex-1 flex flex-col">
       <div
-        className="flex-1 relative w-full flex justify-center items-center py-2"
+        // Hermes 2026-08-14: flex-1 + flex + justify/align center so the
+        // card is centered both ways. The next-card preview is absolute,
+        // sitting behind the active card. Both cards inherit their width
+        // from the w-[88%] wrapper below.
+        className="flex-1 relative w-full flex flex-col justify-center items-center py-2"
         onClick={handleCardTap}
       >
         {nextCard && (
-          // Hermes 2026-08-14: matched max-h-[70vh] + max-w-sm to the active
-          // card so the preview peeks correctly. border-4 to match the frame.
+          // Hermes 2026-08-14: next-card preview uses the same wrapper
+          // (w-[88%] max-w-sm) as the active card so the dimensions match.
+          // absolute positioned so it sits behind the active card.
           <div
-            className="absolute w-[88%] max-w-sm rounded-3xl bg-gray-800 shadow-2xl overflow-hidden border-4 border-pink-500/50 select-none touch-none max-h-[70vh]"
-            style={{ transform: 'scale(0.95) translateY(15px)', opacity: 0.6, zIndex: 1 }}
+            className="absolute top-1/2 left-1/2 w-[88%] max-w-sm"
+            style={{ transform: 'translate(-50%, -50%) scale(0.95) translateY(15px)', opacity: 0.6, zIndex: 1, pointerEvents: 'none' }}
           >
-            <div
-              className="w-full h-full bg-cover bg-center"
-              style={{
-                backgroundImage: `url(${(nextCard as any).image})`,
-              }}
-            />
+            <div className="w-full h-[70vh] max-h-[640px] rounded-3xl bg-gray-800 shadow-sm overflow-hidden border-4 border-pink-500/50">
+              <div
+                className="w-full h-full bg-cover bg-center"
+                style={{
+                  backgroundImage: `url(${(nextCard as any).image})`,
+                }}
+              />
+            </div>
           </div>
         )}
 
-        <SpotCard
-          card={topCard}
-          dragOffset={dragOffset}
-          isDragging={isDragging}
-          onDragStart={handleDragStart}
-          onDragMove={handleDragMove}
-          onDragEnd={handleDragEnd}
-          zIndex={10}
-          onToggleWishlist={onToggleWishlist}
-          savedToWishlist={topCardSavedToWishlist}
-        />
+        {/* Hermes 2026-08-14: w-[88%] max-w-sm wrapper around SpotCard.
+            SpotCard itself is relative w-full — it inherits width from here. */}
+        <div className="w-[88%] max-w-sm">
+          <SpotCard
+            card={topCard}
+            dragOffset={dragOffset}
+            isDragging={isDragging}
+            onDragStart={handleDragStart}
+            onDragMove={handleDragMove}
+            onDragEnd={handleDragEnd}
+            zIndex={10}
+            onToggleWishlist={onToggleWishlist}
+            savedToWishlist={topCardSavedToWishlist}
+          />
+        </div>
       </div>
 
       <div className="shrink-0 w-full flex justify-center space-x-12 px-6 pb-6 pt-2">
