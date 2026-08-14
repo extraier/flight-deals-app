@@ -185,6 +185,7 @@ async function main() {
   let hits = 0;
   let misses = 0;
   let processed = 0;
+  let cacheFlushCounter = 0;
 
   for (const city of cities) {
     for (const lm of city.landmarks) {
@@ -205,6 +206,15 @@ async function main() {
         process.stdout.write(
           `\r  ${processed}/${totalLandmarks} (${hits}✓ ${misses}✗) ${elapsed}s elapsed, ETA ${eta}s — last: ${lm.nameEn}`
         );
+      }
+      // Hermes 2026-08-14: persist cache every 50 landmarks so a SIGTERM
+      // doesn't lose everything. (The previous version only saved on
+      // completion, which cost us ~350 cached lookups when the process
+      // got killed mid-run.)
+      cacheFlushCounter++;
+      if (cacheFlushCounter >= 50) {
+        saveCache(cache);
+        cacheFlushCounter = 0;
       }
       // Throttle between every request — Wikipedia ToS
       await sleep(THROTTLE_MS);

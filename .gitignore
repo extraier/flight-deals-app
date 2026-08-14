@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Hermes 2026-08-14: transient seed artifacts
+# .wikimedia-cache.json is the runtime cache for seed-spots-wikimedia.mjs
+# (avoid committing ~100 KB of HTTP responses)
+/scripts/.wikimedia-cache.json
