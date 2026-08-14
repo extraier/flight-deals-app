@@ -54,8 +54,6 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   }, []);
 
   // Phase 2.6: track the signed-in user separately from the anon uid.
-  // `uid` is the couple-room identity (anon or permanent — both work for rooms).
-  // `authUser` is the optional permanent-account context used for wishlist.
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => setAuthUser(u));
     return unsub;
@@ -115,8 +113,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
     return filterUnswiped(fullDeck, myLikes, myDislikes);
   }, [room, spots, ads, uid, seenAdIds]);
 
-  // F-11: Fire ONE impression when an ad becomes the top card. Session-scoped
-  // dedupe via impressionedAdIdsRef — survives re-renders without re-counting.
+  // F-11: Fire ONE impression when an ad becomes the top card.
   useEffect(() => {
     const top = deck[0];
     if (!top || top.__kind !== 'ad') return;
@@ -128,13 +125,10 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   const handleSwipe = async (direction: 'left' | 'right', card: DeckCard) => {
     if (!uid || !room) return;
 
-    // Track seen ads in session
     if (card.__kind === 'ad') {
       setSeenAdIds((prev) => new Set([...prev, card.id]));
     }
 
-    // Phase 2.6: auto-save liked spots to the signed-in user's wishlist.
-    // Fire-and-forget — analytics-style. Don't block the swipe UX.
     if (
       direction === 'right' &&
       card.__kind === 'spot' &&
@@ -154,10 +148,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   };
 
   const handleAdClick = (card: DeckCard) => {
-    // F-11: count the click (SwipeDeck already opened the URL)
     recordAdMetric(card.id, 'clicks');
-    // Auto-record as "viewed" (swipe right). Swipe is fire-and-forget — don't
-    // let an error here abort the click flow.
     if (uid && room) {
       swipe(roomId, uid, card.id, 'right').catch((err) =>
         console.warn('ad auto-swipe failed:', err),
@@ -165,9 +156,6 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
     }
   };
 
-  // Phase 2.6: toggle wishlist entry from the heart button on the card.
-  // Anonymous users get a passive prompt via the wishlist page; this handler
-  // is only invoked when onToggleWishlist is wired to a signed-in user.
   const handleToggleWishlist = async (card: DeckCard) => {
     if (!authUser || authUser.isAnonymous || card.__kind !== 'spot') return;
     if (isInWishlist(wishlistEntries, card.id)) {
@@ -181,7 +169,6 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
     }
   };
 
-  // Whether the top card is currently in the user's wishlist.
   const topCardSavedToWishlist =
     deck[0]?.__kind === 'spot' && isInWishlist(wishlistEntries, deck[0].id);
 
@@ -237,8 +224,6 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         </div>
         <Link
           href="/match"
-          // Hermes 2026-08-14: text-gray-400 was invisible on pink-50.
-          // Bumped to text-gray-600 (still subtle but readable).
           className="mt-8 text-gray-600 hover:text-gray-900 font-bold text-sm underline"
         >
           離開房間
@@ -248,27 +233,19 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   }
 
   return (
-    // Hermes 2026-08-14 (screenshot 6): use 100svh (small viewport height) on
-    // iOS Safari. 100vh INCLUDES Safari's dynamic bottom toolbar (URL bar +
-    // back/forward/refresh/menu), which used to push the X/heart action
-    // buttons behind the toolbar. 100svh is the visible area when the
-    // toolbar is shown — so the card + buttons always fit.
     <div
       className="flex flex-col bg-gradient-to-br from-gray-900 via-pink-950/30 to-gray-900 relative"
       style={{ minHeight: '100svh' }}
     >
-      {/* Hermes 2026-08-14: status pill + exit button at top-2 so the
-          card's top border is fully visible. */}
       <div className="absolute top-2 left-2 z-30 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-gray-700 flex items-center">
         <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" />
         <span className="text-white text-xs font-bold">配對成功 · 開始 Swipe</span>
       </div>
-      {/* Hermes 2026-08-14 (screenshot 8): top-right buttons grouped in a
-          flex row at top-2 right-2 so they stack correctly without
-          overlapping the status pill. gap-2 keeps 8px between buttons.
-          Order in DOM = order from left to right: wishlist, theme, exit. */}
+      {/* Hermes 2026-08-14 (screenshot 9): top-right buttons (wishlist, theme, exit).
+          The wishlist link saves roomId to sessionStorage so MatchNav's back
+          button on the wishlist page renders "返回情侶房間" + href=/match/room/{id}. */}
       <div className="absolute top-2 right-2 z-30 flex items-center gap-2">
-        <RoomWishlistLink />
+        <RoomWishlistLink roomId={roomId} />
         <RoomThemeToggle />
         <Link
           href="/match"
@@ -295,8 +272,6 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
           match={matchSpot}
           onClose={() => setMatchSpot(null)}
           onNext={() => setMatchSpot(null)}
-          // Hermes 2026-08-14: pass roomId so the 查看機票 back button
-          // returns to THIS room instead of the airport selector.
           roomId={roomId}
         />
       )}
@@ -310,20 +285,27 @@ function spotMatchCount(room: RoomData, side: 'user1' | 'user2'): number {
   return intersection(myLikes, partnerLikes).length;
 }
 
-// Hermes 2026-08-14 (screenshot 8): inline wishlist button for the room
-// page. The room doesn't use MatchNav (it has absolute status pill + exit
-// + theme toggle), so users couldn't access their wishlist without
-// swiping-liking and exiting the room first. This gives them a quick
-// escape hatch — clicking the heart jumps to /match/wishlist which shows
-// everything they've liked in any room.
-//
-// NOTE: positioning (top/right) is handled by the parent's flex container,
-// so this component just renders the button itself.
-function RoomWishlistLink() {
+// Hermes 2026-08-14 (screenshot 9): inline wishlist link for the room page.
+// Saves the current room ID to sessionStorage on click so MatchNav (the
+// wishlist page's nav) can render a "back to room" button instead of the
+// generic "返回機票格價". The sessionStorage key is intentionally scoped
+// to this single use case so other nav refreshes don't pick it up.
+function RoomWishlistLink({ roomId }: { roomId: string }) {
   return (
     <Link
       href="/match/wishlist"
       aria-label="查看心願清單"
+      onClick={() => {
+        try {
+          sessionStorage.setItem(
+            'matchWishlistBack',
+            JSON.stringify({ href: `/match/room/${roomId}`, label: '返回情侶房間' })
+          );
+        } catch {
+          // sessionStorage might be disabled (privacy mode etc.) — fall
+          // back to /match which is the MatchNav default.
+        }
+      }}
       className="p-2 bg-black/50 text-white rounded-full hover:bg-pink-500 transition"
     >
       <Heart size={16} />
@@ -331,11 +313,6 @@ function RoomWishlistLink() {
   );
 }
 
-// Hermes 2026-08-14 (screenshot 7): inline theme toggle for the room page.
-// The global ThemeToggle is hidden on /match/* (it was overlapping the exit
-// button at top-2 right-2), but the room page doesn't use MatchNav — it has
-// its own absolute buttons. So we render our own Sun/Moon toggle at
-// top-2 right-14, just to the LEFT of the exit button (which is at right-2).
 function RoomThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);

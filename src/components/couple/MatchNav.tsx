@@ -21,22 +21,66 @@ import { ArrowLeft, Heart, Users, Sun, Moon } from 'lucide-react';
  *   2. Back button text should say "返回機票格價" (return to flight deals)
  *   3. /match pages should follow flight.comparetiger.com color theme
  *
- * For (3): the layout.tsx already wraps everything in ThemeProvider +
- * ThemeToggle, so the theme is global. We just consume the same theme here
- * via useTheme() and render a second toggle in the nav row for discoverability.
+ * Hermes 2026-08-14 (screenshot 9): When the user opens the wishlist from
+ * inside a match room, the back button should say "返回情侶房間" and link
+ * to /match/room/{id} — not the generic "返回機票格價" landing page. The
+ * room page writes a sessionStorage entry (matchWishlistBack) on click;
+ * we read it here and clear it after the user clicks back, so a hard
+ * refresh of the wishlist page doesn't leave a stale back link.
  */
 export function MatchNav() {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  // Dynamic back-link: if the user opened the wishlist from inside a room,
+  // the back button should return to that room. Otherwise default to "/"
+  // (the flight deals page).
+  const [backLink, setBackLink] = useState<{ href: string; label: string }>({
+    href: '/',
+    label: '返回機票格價',
+  });
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Hermes 2026-08-14 (screenshot 9): only honor the sessionStorage back
+  // link on the wishlist page. On /match/account or /match/admin the user
+  // got there via direct navigation, so falling back to "/" is correct.
+  useEffect(() => {
+    if (!pathname?.startsWith('/match/wishlist')) {
+      // Not on wishlist — clear any stale entry so it doesn't leak.
+      try {
+        sessionStorage.removeItem('matchWishlistBack');
+      } catch {}
+      return;
+    }
+    try {
+      const raw = sessionStorage.getItem('matchWishlistBack');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed?.href && parsed?.label) {
+          setBackLink(parsed);
+          return;
+        }
+      }
+    } catch {}
+    // Fallback: flight deals home page.
+    setBackLink({ href: '/', label: '返回機票格價' });
+  }, [pathname]);
+
   const isMatch = pathname === '/match';
   const isWishlist = pathname.startsWith('/match/wishlist');
   const isAccount = pathname.startsWith('/match/account');
+
+  // Hermes 2026-08-14 (screenshot 9): when the back button is clicked from
+  // the wishlist, clear the sessionStorage so a subsequent visit to the
+  // match page doesn't try to return to a stale room.
+  const handleBackClick = () => {
+    try {
+      sessionStorage.removeItem('matchWishlistBack');
+    } catch {}
+  };
 
   // Pill style for nav buttons — active vs inactive
   const pillBase = 'inline-flex items-center gap-1.5 text-sm px-3 py-2 rounded-xl shadow-sm border font-bold transition';
@@ -47,14 +91,13 @@ export function MatchNav() {
     <div className="flex items-center justify-between mb-6 gap-2">
       <div className="flex items-center gap-2 shrink-0">
         <Link
-          href="/"
-          // Hermes 2026-08-14 (screenshot 5): back button text changed from
-          // '返回主頁' to '返回機票格價' per user request. flight.comparetiger.com
-          // is the flight deals page; users came from there to enter /match.
+          href={backLink.href}
+          onClick={handleBackClick}
           className="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition"
+          aria-label={backLink.label}
         >
           <ArrowLeft size={16} />
-          返回機票格價
+          {backLink.label}
         </Link>
 
         {/* Hermes 2026-08-14 (screenshot 5): theme toggle in the same row as
