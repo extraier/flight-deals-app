@@ -21,9 +21,9 @@ const PROJECT_ROOT = path.resolve(__dirname, '..');
 const OUT = path.join(PROJECT_ROOT, 'scripts/seed-spots-cities.json');
 
 function loadPart(p) {
-  const path = path.join(PROJECT_ROOT, 'scripts/seed-spots-part' + p + '.json');
-  if (!existsSync(path)) return [];
-  const data = JSON.parse(readFileSync(path, 'utf8'));
+  const partPath = path.join(PROJECT_ROOT, 'scripts/seed-spots-part' + p + '.json');
+  if (!existsSync(partPath)) return [];
+  const data = JSON.parse(readFileSync(partPath, 'utf8'));
   return data.cities || [];
 }
 

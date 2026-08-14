@@ -1,0 +1,3408 @@
+{
+  "cities": [
+    {
+      "cityEn": "Paris",
+      "cityZh": "巴黎",
+      "countryEn": "France",
+      "countryZh": "法國",
+      "countryCode": "FR",
+      "regionZh": "歐洲",
+      "dealCode": "CDG",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Eiffel Tower",
+          "nameZh": "艾菲爾鐵塔",
+          "imageHint": "Eiffel Tower"
+        },
+        {
+          "nameEn": "Louvre Museum",
+          "nameZh": "羅浮宮",
+          "imageHint": "Louvre Museum"
+        },
+        {
+          "nameEn": "Notre-Dame de Paris",
+          "nameZh": "巴黎聖母院",
+          "imageHint": "Notre-Dame de Paris"
+        }
+      ]
+    },
+    {
+      "cityEn": "Nice",
+      "cityZh": "尼斯",
+      "countryEn": "France",
+      "countryZh": "法國",
+      "countryCode": "FR",
+      "regionZh": "歐洲",
+      "dealCode": "NCE",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Promenade des Anglais",
+          "nameZh": "英國人散步大道",
+          "imageHint": "Promenade des Anglais"
+        },
+        {
+          "nameEn": "Castle Hill of Nice",
+          "nameZh": "尼斯城堡山",
+          "imageHint": "Castle Hill of Nice"
+        }
+      ]
+    },
+    {
+      "cityEn": "Marseille",
+      "cityZh": "馬賽",
+      "countryEn": "France",
+      "countryZh": "法國",
+      "countryCode": "FR",
+      "regionZh": "歐洲",
+      "dealCode": "MRS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Basilica of Notre-Dame de la Garde",
+          "nameZh": "聖母守護院",
+          "imageHint": "Basilica of Notre-Dame de la Garde"
+        },
+        {
+          "nameEn": "Old Port of Marseille",
+          "nameZh": "馬賽舊港",
+          "imageHint": "Old Port of Marseille"
+        },
+        {
+          "nameEn": "Calanques National Park",
+          "nameZh": "卡朗格國家公園",
+          "imageHint": "Calanques National Park"
+        }
+      ]
+    },
+    {
+      "cityEn": "Monaco",
+      "cityZh": "摩納哥",
+      "countryEn": "Monaco",
+      "countryZh": "摩納哥",
+      "countryCode": "MC",
+      "regionZh": "歐洲",
+      "dealCode": "NCE",
+      "defaultPriceLevel": 4,
+      "landmarks": [
+        {
+          "nameEn": "Monte Carlo Casino",
+          "nameZh": "蒙地卡羅賭場",
+          "imageHint": "Monte Carlo Casino"
+        },
+        {
+          "nameEn": "Prince's Palace of Monaco",
+          "nameZh": "摩納哥親王宮",
+          "imageHint": "Prince's Palace of Monaco"
+        }
+      ]
+    },
+    {
+      "cityEn": "London",
+      "cityZh": "倫敦",
+      "countryEn": "United Kingdom",
+      "countryZh": "英國",
+      "countryCode": "GB",
+      "regionZh": "歐洲",
+      "dealCode": "LHR",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Big Ben",
+          "nameZh": "大笨鐘",
+          "imageHint": "Big Ben"
+        },
+        {
+          "nameEn": "Tower of London",
+          "nameZh": "倫敦塔",
+          "imageHint": "Tower of London"
+        },
+        {
+          "nameEn": "British Museum",
+          "nameZh": "大英博物館",
+          "imageHint": "British Museum"
+        },
+        {
+          "nameEn": "London Eye",
+          "nameZh": "倫敦眼",
+          "imageHint": "London Eye"
+        }
+      ]
+    },
+    {
+      "cityEn": "Edinburgh",
+      "cityZh": "愛丁堡",
+      "countryEn": "United Kingdom",
+      "countryZh": "英國",
+      "countryCode": "GB",
+      "regionZh": "歐洲",
+      "dealCode": "EDI",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Edinburgh Castle",
+          "nameZh": "愛丁堡城堡",
+          "imageHint": "Edinburgh Castle"
+        },
+        {
+          "nameEn": "Royal Mile",
+          "nameZh": "皇家一英里",
+          "imageHint": "Royal Mile"
+        },
+        {
+          "nameEn": "Arthur's Seat",
+          "nameZh": "亞瑟王座",
+          "imageHint": "Arthur's Seat"
+        }
+      ]
+    },
+    {
+      "cityEn": "Manchester",
+      "cityZh": "曼徹斯特",
+      "countryEn": "United Kingdom",
+      "countryZh": "英國",
+      "countryCode": "GB",
+      "regionZh": "歐洲",
+      "dealCode": "MAN",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Old Trafford",
+          "nameZh": "奧脫福球場",
+          "imageHint": "Old Trafford"
+        },
+        {
+          "nameEn": "Manchester Cathedral",
+          "nameZh": "曼徹斯特座堂",
+          "imageHint": "Manchester Cathedral"
+        }
+      ]
+    },
+    {
+      "cityEn": "Liverpool",
+      "cityZh": "利物浦",
+      "countryEn": "United Kingdom",
+      "countryZh": "英國",
+      "countryCode": "GB",
+      "regionZh": "歐洲",
+      "dealCode": "LPL",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Royal Albert Dock Liverpool",
+          "nameZh": "利物浦皇家阿爾伯特碼頭",
+          "imageHint": "Royal Albert Dock Liverpool"
+        },
+        {
+          "nameEn": "The Beatles Story",
+          "nameZh": "披頭士故事館",
+          "imageHint": "The Beatles Story"
+        }
+      ]
+    },
+    {
+      "cityEn": "Bath",
+      "cityZh": "巴斯",
+      "countryEn": "United Kingdom",
+      "countryZh": "英國",
+      "countryCode": "GB",
+      "regionZh": "歐洲",
+      "dealCode": "BRS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Roman Baths",
+          "nameZh": "羅馬浴場",
+          "imageHint": "Roman Baths"
+        },
+        {
+          "nameEn": "Royal Crescent",
+          "nameZh": "皇家新月樓",
+          "imageHint": "Royal Crescent"
+        }
+      ]
+    },
+    {
+      "cityEn": "Oxford",
+      "cityZh": "牛津",
+      "countryEn": "United Kingdom",
+      "countryZh": "英國",
+      "countryCode": "GB",
+      "regionZh": "歐洲",
+      "dealCode": "LHR",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "University of Oxford",
+          "nameZh": "牛津大學",
+          "imageHint": "University of Oxford"
+        },
+        {
+          "nameEn": "Bodleian Library",
+          "nameZh": "博德利圖書館",
+          "imageHint": "Bodleian Library"
+        }
+      ]
+    },
+    {
+      "cityEn": "Cambridge",
+      "cityZh": "劍橋",
+      "countryEn": "United Kingdom",
+      "countryZh": "英國",
+      "countryCode": "GB",
+      "regionZh": "歐洲",
+      "dealCode": "LHR",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "University of Cambridge",
+          "nameZh": "劍橋大學",
+          "imageHint": "University of Cambridge"
+        },
+        {
+          "nameEn": "King's College Chapel",
+          "nameZh": "國王學院禮拜堂",
+          "imageHint": "King's College Chapel"
+        }
+      ]
+    },
+    {
+      "cityEn": "Stonehenge",
+      "cityZh": "巨石陣",
+      "countryEn": "United Kingdom",
+      "countryZh": "英國",
+      "countryCode": "GB",
+      "regionZh": "歐洲",
+      "dealCode": "SOU",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Stonehenge",
+          "nameZh": "巨石陣",
+          "imageHint": "Stonehenge"
+        },
+        {
+          "nameEn": "Bath Roman Baths",
+          "nameZh": "巴斯羅馬浴場",
+          "imageHint": "Roman Baths"
+        }
+      ]
+    },
+    {
+      "cityEn": "Dublin",
+      "cityZh": "都柏林",
+      "countryEn": "Ireland",
+      "countryZh": "愛爾蘭",
+      "countryCode": "IE",
+      "regionZh": "歐洲",
+      "dealCode": "DUB",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Trinity College Dublin",
+          "nameZh": "都柏林聖三一學院",
+          "imageHint": "Trinity College Dublin"
+        },
+        {
+          "nameEn": "Guinness Storehouse",
+          "nameZh": "健力士啤酒展館",
+          "imageHint": "Guinness Storehouse"
+        },
+        {
+          "nameEn": "Dublin Castle",
+          "nameZh": "都柏林城堡",
+          "imageHint": "Dublin Castle"
+        }
+      ]
+    },
+    {
+      "cityEn": "Belfast",
+      "cityZh": "貝爾法斯特",
+      "countryEn": "United Kingdom",
+      "countryZh": "英國",
+      "countryCode": "GB",
+      "regionZh": "歐洲",
+      "dealCode": "BFS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Titanic Belfast",
+          "nameZh": "鐵達尼號貝爾法斯特",
+          "imageHint": "Titanic Belfast"
+        },
+        {
+          "nameEn": "Giant's Causeway",
+          "nameZh": "巨人之路",
+          "imageHint": "Giant's Causeway"
+        }
+      ]
+    },
+    {
+      "cityEn": "Brussels",
+      "cityZh": "布魯塞爾",
+      "countryEn": "Belgium",
+      "countryZh": "比利時",
+      "countryCode": "BE",
+      "regionZh": "歐洲",
+      "dealCode": "BRU",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Grand Place",
+          "nameZh": "大廣場",
+          "imageHint": "Grand Place"
+        },
+        {
+          "nameEn": "Manneken Pis",
+          "nameZh": "尿尿小童",
+          "imageHint": "Manneken Pis"
+        },
+        {
+          "nameEn": "Atomium",
+          "nameZh": "原子球塔",
+          "imageHint": "Atomium"
+        }
+      ]
+    },
+    {
+      "cityEn": "Bruges",
+      "cityZh": "布魯日",
+      "countryEn": "Belgium",
+      "countryZh": "比利時",
+      "countryCode": "BE",
+      "regionZh": "歐洲",
+      "dealCode": "BRU",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Belfry of Bruges",
+          "nameZh": "布魯日鐘樓",
+          "imageHint": "Belfry of Bruges"
+        },
+        {
+          "nameEn": "Burg Square",
+          "nameZh": "城堡廣場",
+          "imageHint": "Burg Square"
+        }
+      ]
+    },
+    {
+      "cityEn": "Antwerp",
+      "cityZh": "安特衛普",
+      "countryEn": "Belgium",
+      "countryZh": "比利時",
+      "countryCode": "BE",
+      "regionZh": "歐洲",
+      "dealCode": "ANR",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Cathedral of Our Lady",
+          "nameZh": "聖母主教座堂",
+          "imageHint": "Cathedral of Our Lady, Antwerp"
+        },
+        {
+          "nameEn": "Antwerp Central Station",
+          "nameZh": "安特衛普中央車站",
+          "imageHint": "Antwerp Central Station"
+        }
+      ]
+    },
+    {
+      "cityEn": "Amsterdam",
+      "cityZh": "阿姆斯特丹",
+      "countryEn": "Netherlands",
+      "countryZh": "荷蘭",
+      "countryCode": "NL",
+      "regionZh": "歐洲",
+      "dealCode": "AMS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Anne Frank House",
+          "nameZh": "安妮之家",
+          "imageHint": "Anne Frank House"
+        },
+        {
+          "nameEn": "Rijksmuseum",
+          "nameZh": "荷蘭國家博物館",
+          "imageHint": "Rijksmuseum"
+        },
+        {
+          "nameEn": "Van Gogh Museum",
+          "nameZh": "梵高博物館",
+          "imageHint": "Van Gogh Museum"
+        }
+      ]
+    },
+    {
+      "cityEn": "Rotterdam",
+      "cityZh": "鹿特丹",
+      "countryEn": "Netherlands",
+      "countryZh": "荷蘭",
+      "countryCode": "NL",
+      "regionZh": "歐洲",
+      "dealCode": "RTM",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Cube Houses",
+          "nameZh": "方塊屋",
+          "imageHint": "Cube Houses"
+        },
+        {
+          "nameEn": "Erasmusbrug",
+          "nameZh": "伊拉斯謨大橋",
+          "imageHint": "Erasmusbrug"
+        }
+      ]
+    },
+    {
+      "cityEn": "The Hague",
+      "cityZh": "海牙",
+      "countryEn": "Netherlands",
+      "countryZh": "荷蘭",
+      "countryCode": "NL",
+      "regionZh": "歐洲",
+      "dealCode": "RTM",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Binnenhof",
+          "nameZh": "內庭",
+          "imageHint": "Binnenhof"
+        },
+        {
+          "nameEn": "Mauritshuis",
+          "nameZh": "莫瑞泰斯皇家美術館",
+          "imageHint": "Mauritshuis"
+        }
+      ]
+    },
+    {
+      "cityEn": "Luxembourg",
+      "cityZh": "盧森堡",
+      "countryEn": "Luxembourg",
+      "countryZh": "盧森堡",
+      "countryCode": "LU",
+      "regionZh": "歐洲",
+      "dealCode": "LUX",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Bock Casemates",
+          "nameZh": "博克地道",
+          "imageHint": "Bock Casemates"
+        },
+        {
+          "nameEn": "Grand Ducal Palace",
+          "nameZh": "大公宮殿",
+          "imageHint": "Grand Ducal Palace"
+        }
+      ]
+    },
+    {
+      "cityEn": "Geneva",
+      "cityZh": "日內瓦",
+      "countryEn": "Switzerland",
+      "countryZh": "瑞士",
+      "countryCode": "CH",
+      "regionZh": "歐洲",
+      "dealCode": "GVA",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Jet d'Eau",
+          "nameZh": "日內瓦大噴泉",
+          "imageHint": "Jet d'Eau"
+        },
+        {
+          "nameEn": "Palace of Nations",
+          "nameZh": "萬國宮",
+          "imageHint": "Palace of Nations"
+        }
+      ]
+    },
+    {
+      "cityEn": "Zurich",
+      "cityZh": "蘇黎世",
+      "countryEn": "Switzerland",
+      "countryZh": "瑞士",
+      "countryCode": "CH",
+      "regionZh": "歐洲",
+      "dealCode": "ZRH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Lake Zurich",
+          "nameZh": "蘇黎世湖",
+          "imageHint": "Lake Zurich"
+        },
+        {
+          "nameEn": "Grossmünster",
+          "nameZh": "大教堂",
+          "imageHint": "Grossmünster"
+        }
+      ]
+    },
+    {
+      "cityEn": "Bern",
+      "cityZh": "伯恩",
+      "countryEn": "Switzerland",
+      "countryZh": "瑞士",
+      "countryCode": "CH",
+      "regionZh": "歐洲",
+      "dealCode": "BRN",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Zytglogge",
+          "nameZh": "鐘樓",
+          "imageHint": "Zytglogge"
+        },
+        {
+          "nameEn": "Bear Pit",
+          "nameZh": "熊坑",
+          "imageHint": "Bear Pit, Bern"
+        }
+      ]
+    },
+    {
+      "cityEn": "Lucerne",
+      "cityZh": "琉森",
+      "countryEn": "Switzerland",
+      "countryZh": "瑞士",
+      "countryCode": "CH",
+      "regionZh": "歐洲",
+      "dealCode": "ZRH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Chapel Bridge",
+          "nameZh": "卡貝爾橋",
+          "imageHint": "Chapel Bridge"
+        },
+        {
+          "nameEn": "Lion Monument",
+          "nameZh": "垂死獅子像",
+          "imageHint": "Lion Monument"
+        }
+      ]
+    },
+    {
+      "cityEn": "Interlaken",
+      "cityZh": "因特拉肯",
+      "countryEn": "Switzerland",
+      "countryZh": "瑞士",
+      "countryCode": "CH",
+      "regionZh": "歐洲",
+      "dealCode": "ZRH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Jungfraujoch",
+          "nameZh": "少女峰",
+          "imageHint": "Jungfraujoch"
+        },
+        {
+          "nameEn": "Lake Thun",
+          "nameZh": "圖恩湖",
+          "imageHint": "Lake Thun"
+        }
+      ]
+    },
+    {
+      "cityEn": "Zermatt",
+      "cityZh": "策馬特",
+      "countryEn": "Switzerland",
+      "countryZh": "瑞士",
+      "countryCode": "CH",
+      "regionZh": "歐洲",
+      "dealCode": "ZRH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Matterhorn",
+          "nameZh": "馬特宏峰",
+          "imageHint": "Matterhorn"
+        },
+        {
+          "nameEn": "Gornergrat",
+          "nameZh": "戈爾納格拉特",
+          "imageHint": "Gornergrat"
+        }
+      ]
+    },
+    {
+      "cityEn": "Liechtenstein",
+      "cityZh": "列支敦士登",
+      "countryEn": "Liechtenstein",
+      "countryZh": "列支敦士登",
+      "countryCode": "LI",
+      "regionZh": "歐洲",
+      "dealCode": "ZRH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Vaduz Castle",
+          "nameZh": "瓦杜茲城堡",
+          "imageHint": "Vaduz Castle"
+        },
+        {
+          "nameEn": "Vaduz Cathedral",
+          "nameZh": "瓦杜茲主教座堂",
+          "imageHint": "Vaduz Cathedral"
+        }
+      ]
+    },
+    {
+      "cityEn": "Berlin",
+      "cityZh": "柏林",
+      "countryEn": "Germany",
+      "countryZh": "德國",
+      "countryCode": "DE",
+      "regionZh": "歐洲",
+      "dealCode": "BER",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Brandenburg Gate",
+          "nameZh": "布蘭登堡門",
+          "imageHint": "Brandenburg Gate"
+        },
+        {
+          "nameEn": "Berlin Wall Memorial",
+          "nameZh": "柏林圍牆紀念館",
+          "imageHint": "Berlin Wall Memorial"
+        },
+        {
+          "nameEn": "Museum Island",
+          "nameZh": "博物館島",
+          "imageHint": "Museum Island"
+        }
+      ]
+    },
+    {
+      "cityEn": "Munich",
+      "cityZh": "慕尼黑",
+      "countryEn": "Germany",
+      "countryZh": "德國",
+      "countryCode": "DE",
+      "regionZh": "歐洲",
+      "dealCode": "MUC",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Marienplatz",
+          "nameZh": "瑪利亞廣場",
+          "imageHint": "Marienplatz"
+        },
+        {
+          "nameEn": "Neuschwanstein Castle",
+          "nameZh": "新天鵝堡",
+          "imageHint": "Neuschwanstein Castle"
+        },
+        {
+          "nameEn": "English Garden",
+          "nameZh": "英國花園",
+          "imageHint": "Englischer Garten, Munich"
+        }
+      ]
+    },
+    {
+      "cityEn": "Hamburg",
+      "cityZh": "漢堡",
+      "countryEn": "Germany",
+      "countryZh": "德國",
+      "countryCode": "DE",
+      "regionZh": "歐洲",
+      "dealCode": "HAM",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Speicherstadt",
+          "nameZh": "倉庫城",
+          "imageHint": "Speicherstadt"
+        },
+        {
+          "nameEn": "Elbphilharmonie",
+          "nameZh": "易北愛樂廳",
+          "imageHint": "Elbphilharmonie"
+        }
+      ]
+    },
+    {
+      "cityEn": "Frankfurt",
+      "cityZh": "法蘭克福",
+      "countryEn": "Germany",
+      "countryZh": "德國",
+      "countryCode": "DE",
+      "regionZh": "歐洲",
+      "dealCode": "FRA",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Römer",
+          "nameZh": "羅馬人廣場",
+          "imageHint": "Römer"
+        },
+        {
+          "nameEn": "Frankfurt Cathedral",
+          "nameZh": "法蘭克福主教座堂",
+          "imageHint": "Frankfurt Cathedral"
+        }
+      ]
+    },
+    {
+      "cityEn": "Cologne",
+      "cityZh": "科隆",
+      "countryEn": "Germany",
+      "countryZh": "德國",
+      "countryCode": "DE",
+      "regionZh": "歐洲",
+      "dealCode": "CGN",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Cologne Cathedral",
+          "nameZh": "科隆大教堂",
+          "imageHint": "Cologne Cathedral"
+        },
+        {
+          "nameEn": "Hohenzollern Bridge",
+          "nameZh": "霍亨索倫橋",
+          "imageHint": "Hohenzollern Bridge"
+        }
+      ]
+    },
+    {
+      "cityEn": "Dresden",
+      "cityZh": "德累斯頓",
+      "countryEn": "Germany",
+      "countryZh": "德國",
+      "countryCode": "DE",
+      "regionZh": "歐洲",
+      "dealCode": "DRS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Frauenkirche",
+          "nameZh": "聖母教堂",
+          "imageHint": "Frauenkirche, Dresden"
+        },
+        {
+          "nameEn": "Zwinger",
+          "nameZh": "茨溫格宮",
+          "imageHint": "Zwinger"
+        }
+      ]
+    },
+    {
+      "cityEn": "Nuremberg",
+      "cityZh": "紐倫堡",
+      "countryEn": "Germany",
+      "countryZh": "德國",
+      "countryCode": "DE",
+      "regionZh": "歐洲",
+      "dealCode": "NUE",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Nuremberg Castle",
+          "nameZh": "紐倫堡城堡",
+          "imageHint": "Nuremberg Castle"
+        },
+        {
+          "nameEn": "Hauptmarkt",
+          "nameZh": "中央市場",
+          "imageHint": "Hauptmarkt"
+        }
+      ]
+    },
+    {
+      "cityEn": "Heidelberg",
+      "cityZh": "海德堡",
+      "countryEn": "Germany",
+      "countryZh": "德國",
+      "countryCode": "DE",
+      "regionZh": "歐洲",
+      "dealCode": "FRA",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Heidelberg Castle",
+          "nameZh": "海德堡城堡",
+          "imageHint": "Heidelberg Castle"
+        },
+        {
+          "nameEn": "Old Bridge",
+          "nameZh": "老橋",
+          "imageHint": "Old Bridge, Heidelberg"
+        }
+      ]
+    },
+    {
+      "cityEn": "Vienna",
+      "cityZh": "維也納",
+      "countryEn": "Austria",
+      "countryZh": "奧地利",
+      "countryCode": "AT",
+      "regionZh": "歐洲",
+      "dealCode": "VIE",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Schönbrunn Palace",
+          "nameZh": "美泉宮",
+          "imageHint": "Schönbrunn Palace"
+        },
+        {
+          "nameEn": "St. Stephen's Cathedral",
+          "nameZh": "聖斯德望主教座堂",
+          "imageHint": "St. Stephen's Cathedral, Vienna"
+        },
+        {
+          "nameEn": "Belvedere Palace",
+          "nameZh": "美景宮",
+          "imageHint": "Belvedere Palace"
+        }
+      ]
+    },
+    {
+      "cityEn": "Salzburg",
+      "cityZh": "薩爾斯堡",
+      "countryEn": "Austria",
+      "countryZh": "奧地利",
+      "countryCode": "AT",
+      "regionZh": "歐洲",
+      "dealCode": "SZG",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Hohensalzburg Fortress",
+          "nameZh": "薩爾斯堡要塞",
+          "imageHint": "Hohensalzburg Fortress"
+        },
+        {
+          "nameEn": "Mirabell Palace",
+          "nameZh": "米拉貝爾宮",
+          "imageHint": "Mirabell Palace"
+        }
+      ]
+    },
+    {
+      "cityEn": "Innsbruck",
+      "cityZh": "茵斯布魯克",
+      "countryEn": "Austria",
+      "countryZh": "奧地利",
+      "countryCode": "AT",
+      "regionZh": "歐洲",
+      "dealCode": "INN",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Golden Roof",
+          "nameZh": "金頂屋",
+          "imageHint": "Golden Roof"
+        },
+        {
+          "nameEn": "Swarovski Crystal Worlds",
+          "nameZh": "施華洛世奇水晶世界",
+          "imageHint": "Swarovski Crystal Worlds"
+        }
+      ]
+    },
+    {
+      "cityEn": "Hallstatt",
+      "cityZh": "哈爾施塔特",
+      "countryEn": "Austria",
+      "countryZh": "奧地利",
+      "countryCode": "AT",
+      "regionZh": "歐洲",
+      "dealCode": "SZG",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Hallstatt Lake",
+          "nameZh": "哈爾施塔特湖",
+          "imageHint": "Hallstätter See"
+        },
+        {
+          "nameEn": "Hallstatt Skywalk",
+          "nameZh": "哈爾施塔特天空步道",
+          "imageHint": "Hallstatt Skywalk"
+        }
+      ]
+    },
+    {
+      "cityEn": "Prague",
+      "cityZh": "布拉格",
+      "countryEn": "Czechia",
+      "countryZh": "捷克",
+      "countryCode": "CZ",
+      "regionZh": "歐洲",
+      "dealCode": "PRG",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Prague Castle",
+          "nameZh": "布拉格城堡",
+          "imageHint": "Prague Castle"
+        },
+        {
+          "nameEn": "Charles Bridge",
+          "nameZh": "查理大橋",
+          "imageHint": "Charles Bridge"
+        },
+        {
+          "nameEn": "Old Town Square",
+          "nameZh": "舊城廣場",
+          "imageHint": "Old Town Square, Prague"
+        }
+      ]
+    },
+    {
+      "cityEn": "Český Krumlov",
+      "cityZh": "克魯姆洛夫",
+      "countryEn": "Czechia",
+      "countryZh": "捷克",
+      "countryCode": "CZ",
+      "regionZh": "歐洲",
+      "dealCode": "PRG",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Český Krumlov Castle",
+          "nameZh": "克魯姆洛夫城堡",
+          "imageHint": "Český Krumlov Castle"
+        },
+        {
+          "nameEn": "Vltava River",
+          "nameZh": "伏爾塔瓦河",
+          "imageHint": "Vltava River in Český Krumlov"
+        }
+      ]
+    },
+    {
+      "cityEn": "Budapest",
+      "cityZh": "布達佩斯",
+      "countryEn": "Hungary",
+      "countryZh": "匈牙利",
+      "countryCode": "HU",
+      "regionZh": "歐洲",
+      "dealCode": "BUD",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Hungarian Parliament Building",
+          "nameZh": "匈牙利國會大廈",
+          "imageHint": "Hungarian Parliament Building"
+        },
+        {
+          "nameEn": "Buda Castle",
+          "nameZh": "布達城堡",
+          "imageHint": "Buda Castle"
+        },
+        {
+          "nameEn": "Széchenyi Thermal Bath",
+          "nameZh": "塞切尼溫泉浴場",
+          "imageHint": "Széchenyi Thermal Bath"
+        }
+      ]
+    },
+    {
+      "cityEn": "Krakow",
+      "cityZh": "克拉科夫",
+      "countryEn": "Poland",
+      "countryZh": "波蘭",
+      "countryCode": "PL",
+      "regionZh": "歐洲",
+      "dealCode": "KRK",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Wawel Castle",
+          "nameZh": "瓦維爾城堡",
+          "imageHint": "Wawel Castle"
+        },
+        {
+          "nameEn": "Main Market Square",
+          "nameZh": "中央集市廣場",
+          "imageHint": "Kraków Main Square"
+        },
+        {
+          "nameEn": "Auschwitz concentration camp",
+          "nameZh": "奧斯威辛集中營",
+          "imageHint": "Auschwitz concentration camp"
+        }
+      ]
+    },
+    {
+      "cityEn": "Warsaw",
+      "cityZh": "華沙",
+      "countryEn": "Poland",
+      "countryZh": "波蘭",
+      "countryCode": "PL",
+      "regionZh": "歐洲",
+      "dealCode": "WAW",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Royal Castle",
+          "nameZh": "皇家城堡",
+          "imageHint": "Royal Castle, Warsaw"
+        },
+        {
+          "nameEn": "Palace of Culture and Science",
+          "nameZh": "文化與科學宮",
+          "imageHint": "Palace of Culture and Science"
+        }
+      ]
+    },
+    {
+      "cityEn": "Copenhagen",
+      "cityZh": "哥本哈根",
+      "countryEn": "Denmark",
+      "countryZh": "丹麥",
+      "countryCode": "DK",
+      "regionZh": "歐洲",
+      "dealCode": "CPH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Nyhavn",
+          "nameZh": "新港",
+          "imageHint": "Nyhavn"
+        },
+        {
+          "nameEn": "The Little Mermaid",
+          "nameZh": "小美人魚像",
+          "imageHint": "The Little Mermaid"
+        },
+        {
+          "nameEn": "Tivoli Gardens",
+          "nameZh": "蒂沃利花園",
+          "imageHint": "Tivoli Gardens"
+        }
+      ]
+    },
+    {
+      "cityEn": "Stockholm",
+      "cityZh": "斯德哥爾摩",
+      "countryEn": "Sweden",
+      "countryZh": "瑞典",
+      "countryCode": "SE",
+      "regionZh": "歐洲",
+      "dealCode": "ARN",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Vasa Museum",
+          "nameZh": "瓦薩沉船博物館",
+          "imageHint": "Vasa Museum"
+        },
+        {
+          "nameEn": "Gamla Stan",
+          "nameZh": "老城",
+          "imageHint": "Gamla Stan"
+        },
+        {
+          "nameEn": "Royal Palace",
+          "nameZh": "瑞典皇宮",
+          "imageHint": "Royal Palace, Stockholm"
+        }
+      ]
+    },
+    {
+      "cityEn": "Oslo",
+      "cityZh": "奧斯陸",
+      "countryEn": "Norway",
+      "countryZh": "挪威",
+      "countryCode": "NO",
+      "regionZh": "歐洲",
+      "dealCode": "OSL",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Vigeland Sculpture Park",
+          "nameZh": "維格蘭雕塑公園",
+          "imageHint": "Vigeland Sculpture Park"
+        },
+        {
+          "nameEn": "Oslo Opera House",
+          "nameZh": "奧斯陸歌劇院",
+          "imageHint": "Oslo Opera House"
+        }
+      ]
+    },
+    {
+      "cityEn": "Helsinki",
+      "cityZh": "赫爾辛基",
+      "countryEn": "Finland",
+      "countryZh": "芬蘭",
+      "countryCode": "FI",
+      "regionZh": "歐洲",
+      "dealCode": "HEL",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Helsinki Cathedral",
+          "nameZh": "赫爾辛基主教座堂",
+          "imageHint": "Helsinki Cathedral"
+        },
+        {
+          "nameEn": "Suomenlinna",
+          "nameZh": "芬蘭堡",
+          "imageHint": "Suomenlinna"
+        }
+      ]
+    },
+    {
+      "cityEn": "Reykjavik",
+      "cityZh": "雷克雅維克",
+      "countryEn": "Iceland",
+      "countryZh": "冰島",
+      "countryCode": "IS",
+      "regionZh": "歐洲",
+      "dealCode": "KEF",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Hallgrímskirkja",
+          "nameZh": "哈爾格林姆教堂",
+          "imageHint": "Hallgrímskirkja"
+        },
+        {
+          "nameEn": "Blue Lagoon",
+          "nameZh": "藍湖溫泉",
+          "imageHint": "Blue Lagoon, Iceland"
+        }
+      ]
+    },
+    {
+      "cityEn": "Tallinn",
+      "cityZh": "塔林",
+      "countryEn": "Estonia",
+      "countryZh": "愛沙尼亞",
+      "countryCode": "EE",
+      "regionZh": "歐洲",
+      "dealCode": "TLL",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Tallinn Old Town",
+          "nameZh": "塔林老城",
+          "imageHint": "Tallinn Old Town"
+        },
+        {
+          "nameEn": "Alexander Nevsky Cathedral",
+          "nameZh": "亞歷山大涅夫斯基主教座堂",
+          "imageHint": "Alexander Nevsky Cathedral, Tallinn"
+        }
+      ]
+    },
+    {
+      "cityEn": "Riga",
+      "cityZh": "里加",
+      "countryEn": "Latvia",
+      "countryZh": "拉脫維亞",
+      "countryCode": "LV",
+      "regionZh": "歐洲",
+      "dealCode": "RIX",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Riga Old Town",
+          "nameZh": "里加老城",
+          "imageHint": "Riga Old Town"
+        },
+        {
+          "nameEn": "Riga Central Market",
+          "nameZh": "里加中央市場",
+          "imageHint": "Riga Central Market"
+        }
+      ]
+    },
+    {
+      "cityEn": "Vilnius",
+      "cityZh": "維爾紐斯",
+      "countryEn": "Lithuania",
+      "countryZh": "立陶宛",
+      "countryCode": "LT",
+      "regionZh": "歐洲",
+      "dealCode": "VNO",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Vilnius Old Town",
+          "nameZh": "維爾紐斯老城",
+          "imageHint": "Vilnius Old Town"
+        },
+        {
+          "nameEn": "Gediminas Tower",
+          "nameZh": "格迪米納斯塔",
+          "imageHint": "Gediminas Tower"
+        }
+      ]
+    },
+    {
+      "cityEn": "Rome",
+      "cityZh": "羅馬",
+      "countryEn": "Italy",
+      "countryZh": "意大利",
+      "countryCode": "IT",
+      "regionZh": "歐洲",
+      "dealCode": "FCO",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Colosseum",
+          "nameZh": "羅馬競技場",
+          "imageHint": "Colosseum"
+        },
+        {
+          "nameEn": "Pantheon",
+          "nameZh": "萬神殿",
+          "imageHint": "Pantheon, Rome"
+        },
+        {
+          "nameEn": "Trevi Fountain",
+          "nameZh": "特雷維噴泉",
+          "imageHint": "Trevi Fountain"
+        },
+        {
+          "nameEn": "Roman Forum",
+          "nameZh": "羅馬廣場",
+          "imageHint": "Roman Forum"
+        }
+      ]
+    },
+    {
+      "cityEn": "Vatican City",
+      "cityZh": "梵蒂岡",
+      "countryEn": "Vatican City",
+      "countryZh": "梵蒂岡",
+      "countryCode": "VA",
+      "regionZh": "歐洲",
+      "dealCode": "FCO",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "St. Peter's Basilica",
+          "nameZh": "聖伯多祿大殿",
+          "imageHint": "St. Peter's Basilica"
+        },
+        {
+          "nameEn": "Sistine Chapel",
+          "nameZh": "西斯汀禮拜堂",
+          "imageHint": "Sistine Chapel"
+        },
+        {
+          "nameEn": "Vatican Museums",
+          "nameZh": "梵蒂岡博物館",
+          "imageHint": "Vatican Museums"
+        }
+      ]
+    },
+    {
+      "cityEn": "Milan",
+      "cityZh": "米蘭",
+      "countryEn": "Italy",
+      "countryZh": "意大利",
+      "countryCode": "IT",
+      "regionZh": "歐洲",
+      "dealCode": "MXP",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Milan Cathedral",
+          "nameZh": "米蘭主教座堂",
+          "imageHint": "Milan Cathedral"
+        },
+        {
+          "nameEn": "The Last Supper",
+          "nameZh": "最後的晚餐",
+          "imageHint": "The Last Supper (Leonardo)"
+        },
+        {
+          "nameEn": "Galleria Vittorio Emanuele II",
+          "nameZh": "艾曼紐二世迴廊",
+          "imageHint": "Galleria Vittorio Emanuele II"
+        }
+      ]
+    },
+    {
+      "cityEn": "Venice",
+      "cityZh": "威尼斯",
+      "countryEn": "Italy",
+      "countryZh": "意大利",
+      "countryCode": "IT",
+      "regionZh": "歐洲",
+      "dealCode": "VCE",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "St. Mark's Basilica",
+          "nameZh": "聖馬可大教堂",
+          "imageHint": "St. Mark's Basilica"
+        },
+        {
+          "nameEn": "Rialto Bridge",
+          "nameZh": "里阿爾托橋",
+          "imageHint": "Rialto Bridge"
+        },
+        {
+          "nameEn": "St. Mark's Square",
+          "nameZh": "聖馬可廣場",
+          "imageHint": "St. Mark's Square, Venice"
+        }
+      ]
+    },
+    {
+      "cityEn": "Florence",
+      "cityZh": "佛羅倫斯",
+      "countryEn": "Italy",
+      "countryZh": "意大利",
+      "countryCode": "IT",
+      "regionZh": "歐洲",
+      "dealCode": "FLR",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Florence Cathedral",
+          "nameZh": "佛羅倫斯主教座堂",
+          "imageHint": "Florence Cathedral"
+        },
+        {
+          "nameEn": "Uffizi Gallery",
+          "nameZh": "烏菲茲美術館",
+          "imageHint": "Uffizi Gallery"
+        },
+        {
+          "nameEn": "Ponte Vecchio",
+          "nameZh": "老橋",
+          "imageHint": "Ponte Vecchio"
+        }
+      ]
+    },
+    {
+      "cityEn": "Naples",
+      "cityZh": "那不勒斯",
+      "countryEn": "Italy",
+      "countryZh": "意大利",
+      "countryCode": "IT",
+      "regionZh": "歐洲",
+      "dealCode": "NAP",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Pompeii",
+          "nameZh": "龐貝古城",
+          "imageHint": "Pompeii"
+        },
+        {
+          "nameEn": "Mount Vesuvius",
+          "nameZh": "維蘇威火山",
+          "imageHint": "Mount Vesuvius"
+        }
+      ]
+    },
+    {
+      "cityEn": "Cinque Terre",
+      "cityZh": "五漁村",
+      "countryEn": "Italy",
+      "countryZh": "意大利",
+      "countryCode": "IT",
+      "regionZh": "歐洲",
+      "dealCode": "PSA",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Cinque Terre",
+          "nameZh": "五漁村",
+          "imageHint": "Cinque Terre"
+        },
+        {
+          "nameEn": "Vernazza",
+          "nameZh": "韋爾納扎",
+          "imageHint": "Vernazza"
+        }
+      ]
+    },
+    {
+      "cityEn": "Pisa",
+      "cityZh": "比薩",
+      "countryEn": "Italy",
+      "countryZh": "意大利",
+      "countryCode": "IT",
+      "regionZh": "歐洲",
+      "dealCode": "PSA",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Leaning Tower of Pisa",
+          "nameZh": "比薩斜塔",
+          "imageHint": "Leaning Tower of Pisa"
+        },
+        {
+          "nameEn": "Piazza dei Miracoli",
+          "nameZh": "奇蹟廣場",
+          "imageHint": "Piazza dei Miracoli"
+        }
+      ]
+    },
+    {
+      "cityEn": "Verona",
+      "cityZh": "維羅納",
+      "countryEn": "Italy",
+      "countryZh": "意大利",
+      "countryCode": "IT",
+      "regionZh": "歐洲",
+      "dealCode": "VRN",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Verona Arena",
+          "nameZh": "維羅納圓形劇場",
+          "imageHint": "Verona Arena"
+        },
+        {
+          "nameEn": "Juliet's House",
+          "nameZh": "茱麗葉之家",
+          "imageHint": "Juliet's House, Verona"
+        }
+      ]
+    },
+    {
+      "cityEn": "Madrid",
+      "cityZh": "馬德里",
+      "countryEn": "Spain",
+      "countryZh": "西班牙",
+      "countryCode": "ES",
+      "regionZh": "歐洲",
+      "dealCode": "MAD",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Prado Museum",
+          "nameZh": "普拉多博物館",
+          "imageHint": "Prado Museum"
+        },
+        {
+          "nameEn": "Royal Palace of Madrid",
+          "nameZh": "馬德里皇宮",
+          "imageHint": "Royal Palace of Madrid"
+        },
+        {
+          "nameEn": "Plaza Mayor",
+          "nameZh": "主廣場",
+          "imageHint": "Plaza Mayor, Madrid"
+        }
+      ]
+    },
+    {
+      "cityEn": "Barcelona",
+      "cityZh": "巴塞隆拿",
+      "countryEn": "Spain",
+      "countryZh": "西班牙",
+      "countryCode": "ES",
+      "regionZh": "歐洲",
+      "dealCode": "BCN",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Sagrada Família",
+          "nameZh": "聖家堂",
+          "imageHint": "Sagrada Família"
+        },
+        {
+          "nameEn": "Park Güell",
+          "nameZh": "奎爾公園",
+          "imageHint": "Park Güell"
+        },
+        {
+          "nameEn": "Casa Batlló",
+          "nameZh": "巴特羅之家",
+          "imageHint": "Casa Batlló"
+        }
+      ]
+    },
+    {
+      "cityEn": "Seville",
+      "cityZh": "西維爾",
+      "countryEn": "Spain",
+      "countryZh": "西班牙",
+      "countryCode": "ES",
+      "regionZh": "歐洲",
+      "dealCode": "SVQ",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Alcázar of Seville",
+          "nameZh": "西維爾王宮",
+          "imageHint": "Alcázar of Seville"
+        },
+        {
+          "nameEn": "Seville Cathedral",
+          "nameZh": "西維爾主教座堂",
+          "imageHint": "Seville Cathedral"
+        },
+        {
+          "nameEn": "Plaza de España",
+          "nameZh": "西班牙廣場",
+          "imageHint": "Plaza de España, Seville"
+        }
+      ]
+    },
+    {
+      "cityEn": "Granada",
+      "cityZh": "格拉納達",
+      "countryEn": "Spain",
+      "countryZh": "西班牙",
+      "countryCode": "ES",
+      "regionZh": "歐洲",
+      "dealCode": "GRX",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Alhambra",
+          "nameZh": "阿爾罕布拉宮",
+          "imageHint": "Alhambra"
+        },
+        {
+          "nameEn": "Generalife",
+          "nameZh": "赫內拉利費宮",
+          "imageHint": "Generalife"
+        }
+      ]
+    },
+    {
+      "cityEn": "Valencia",
+      "cityZh": "華倫西亞",
+      "countryEn": "Spain",
+      "countryZh": "西班牙",
+      "countryCode": "ES",
+      "regionZh": "歐洲",
+      "dealCode": "VLC",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "City of Arts and Sciences",
+          "nameZh": "藝術科學城",
+          "imageHint": "City of Arts and Sciences"
+        },
+        {
+          "nameEn": "Valencia Cathedral",
+          "nameZh": "華倫西亞主教座堂",
+          "imageHint": "Valencia Cathedral"
+        }
+      ]
+    },
+    {
+      "cityEn": "Lisbon",
+      "cityZh": "里斯本",
+      "countryEn": "Portugal",
+      "countryZh": "葡萄牙",
+      "countryCode": "PT",
+      "regionZh": "歐洲",
+      "dealCode": "LIS",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Belém Tower",
+          "nameZh": "貝倫塔",
+          "imageHint": "Belém Tower"
+        },
+        {
+          "nameEn": "Jerónimos Monastery",
+          "nameZh": "傑羅尼莫斯修道院",
+          "imageHint": "Jerónimos Monastery"
+        },
+        {
+          "nameEn": "Tram 28",
+          "nameZh": "28號電車",
+          "imageHint": "Tram 28, Lisbon"
+        }
+      ]
+    },
+    {
+      "cityEn": "Porto",
+      "cityZh": "波爾圖",
+      "countryEn": "Portugal",
+      "countryZh": "葡萄牙",
+      "countryCode": "PT",
+      "regionZh": "歐洲",
+      "dealCode": "OPO",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Dom Luís I Bridge",
+          "nameZh": "路易一世大橋",
+          "imageHint": "Dom Luís I Bridge"
+        },
+        {
+          "nameEn": "Livraria Lello",
+          "nameZh": "萊羅書店",
+          "imageHint": "Livraria Lello"
+        }
+      ]
+    },
+    {
+      "cityEn": "Athens",
+      "cityZh": "雅典",
+      "countryEn": "Greece",
+      "countryZh": "希臘",
+      "countryCode": "GR",
+      "regionZh": "歐洲",
+      "dealCode": "ATH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Acropolis of Athens",
+          "nameZh": "雅典衛城",
+          "imageHint": "Acropolis of Athens"
+        },
+        {
+          "nameEn": "Parthenon",
+          "nameZh": "帕德嫩神廟",
+          "imageHint": "Parthenon"
+        }
+      ]
+    },
+    {
+      "cityEn": "Santorini",
+      "cityZh": "聖托里尼",
+      "countryEn": "Greece",
+      "countryZh": "希臘",
+      "countryCode": "GR",
+      "regionZh": "歐洲",
+      "dealCode": "JTR",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Santorini caldera",
+          "nameZh": "聖托里尼火山口",
+          "imageHint": "Santorini"
+        },
+        {
+          "nameEn": "Oia village",
+          "nameZh": "伊亞村",
+          "imageHint": "Oia, Santorini"
+        }
+      ]
+    },
+    {
+      "cityEn": "Mykonos",
+      "cityZh": "米克諾斯",
+      "countryEn": "Greece",
+      "countryZh": "希臘",
+      "countryCode": "GR",
+      "regionZh": "歐洲",
+      "dealCode": "JMK",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Mykonos windmills",
+          "nameZh": "米克諾斯風車",
+          "imageHint": "Mykonos windmills"
+        },
+        {
+          "nameEn": "Little Venice",
+          "nameZh": "小威尼斯",
+          "imageHint": "Little Venice, Mykonos"
+        }
+      ]
+    },
+    {
+      "cityEn": "Crete",
+      "cityZh": "克里特",
+      "countryEn": "Greece",
+      "countryZh": "希臘",
+      "countryCode": "GR",
+      "regionZh": "歐洲",
+      "dealCode": "HER",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Knossos",
+          "nameZh": "克諾索斯宮",
+          "imageHint": "Knossos"
+        },
+        {
+          "nameEn": "Elafonissi Beach",
+          "nameZh": "埃拉福尼西海灘",
+          "imageHint": "Elafonissi Beach"
+        }
+      ]
+    },
+    {
+      "cityEn": "Istanbul",
+      "cityZh": "伊斯坦堡",
+      "countryEn": "Turkey",
+      "countryZh": "土耳其",
+      "countryCode": "TR",
+      "regionZh": "歐洲",
+      "dealCode": "IST",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Hagia Sophia",
+          "nameZh": "聖索菲亞大教堂",
+          "imageHint": "Hagia Sophia"
+        },
+        {
+          "nameEn": "Blue Mosque",
+          "nameZh": "藍色清真寺",
+          "imageHint": "Blue Mosque"
+        },
+        {
+          "nameEn": "Topkapi Palace",
+          "nameZh": "托卡比皇宮",
+          "imageHint": "Topkapi Palace"
+        },
+        {
+          "nameEn": "Grand Bazaar",
+          "nameZh": "大巴扎",
+          "imageHint": "Grand Bazaar, Istanbul"
+        }
+      ]
+    },
+    {
+      "cityEn": "Cappadocia",
+      "cityZh": "卡帕多奇亞",
+      "countryEn": "Turkey",
+      "countryZh": "土耳其",
+      "countryCode": "TR",
+      "regionZh": "歐洲",
+      "dealCode": "ASR",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Göreme",
+          "nameZh": "格雷梅",
+          "imageHint": "Göreme"
+        },
+        {
+          "nameEn": "Cappadocia hot air balloon",
+          "nameZh": "卡帕多奇亞熱氣球",
+          "imageHint": "Cappadocia hot air balloon"
+        }
+      ]
+    },
+    {
+      "cityEn": "Pamukkale",
+      "cityZh": "棉花堡",
+      "countryEn": "Turkey",
+      "countryZh": "土耳其",
+      "countryCode": "TR",
+      "regionZh": "歐洲",
+      "dealCode": "IST",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Pamukkale travertine terraces",
+          "nameZh": "棉花堡石灰華梯田",
+          "imageHint": "Pamukkale"
+        },
+        {
+          "nameEn": "Hierapolis",
+          "nameZh": "希艾拉波利斯",
+          "imageHint": "Hierapolis"
+        }
+      ]
+    },
+    {
+      "cityEn": "Antalya",
+      "cityZh": "安塔利亞",
+      "countryEn": "Turkey",
+      "countryZh": "土耳其",
+      "countryCode": "TR",
+      "regionZh": "歐洲",
+      "dealCode": "AYT",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Old Town of Antalya",
+          "nameZh": "安塔利亞舊城",
+          "imageHint": "Kaleiçi, Antalya"
+        },
+        {
+          "nameEn": "Düden Waterfalls",
+          "nameZh": "杜登瀑布",
+          "imageHint": "Düden Waterfalls"
+        }
+      ]
+    },
+    {
+      "cityEn": "Dubrovnik",
+      "cityZh": "杜布羅夫尼克",
+      "countryEn": "Croatia",
+      "countryZh": "克羅地亞",
+      "countryCode": "HR",
+      "regionZh": "歐洲",
+      "dealCode": "DBV",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Dubrovnik Old Town walls",
+          "nameZh": "杜布羅夫尼克城牆",
+          "imageHint": "Dubrovnik Old Town walls"
+        },
+        {
+          "nameEn": "Lovrijenac",
+          "nameZh": "洛夫里耶納茨堡",
+          "imageHint": "Lovrijenac"
+        }
+      ]
+    },
+    {
+      "cityEn": "Split",
+      "cityZh": "斯普利特",
+      "countryEn": "Croatia",
+      "countryZh": "克羅地亞",
+      "countryCode": "HR",
+      "regionZh": "歐洲",
+      "dealCode": "SPU",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Diocletian's Palace",
+          "nameZh": "戴克里先宮",
+          "imageHint": "Diocletian's Palace"
+        },
+        {
+          "nameEn": "Cathedral of Saint Domnius",
+          "nameZh": "聖杜姆紐斯主教座堂",
+          "imageHint": "Cathedral of Saint Domnius"
+        }
+      ]
+    },
+    {
+      "cityEn": "Kotor",
+      "cityZh": "科托爾",
+      "countryEn": "Montenegro",
+      "countryZh": "蒙特內哥羅",
+      "countryCode": "ME",
+      "regionZh": "歐洲",
+      "dealCode": "TIV",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Kotor Old Town",
+          "nameZh": "科托爾老城",
+          "imageHint": "Kotor Old Town"
+        },
+        {
+          "nameEn": "Bay of Kotor",
+          "nameZh": "科托爾灣",
+          "imageHint": "Bay of Kotor"
+        }
+      ]
+    },
+    {
+      "cityEn": "Bucharest",
+      "cityZh": "布加勒斯特",
+      "countryEn": "Romania",
+      "countryZh": "羅馬尼亞",
+      "countryCode": "RO",
+      "regionZh": "歐洲",
+      "dealCode": "OTP",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Palace of the Parliament",
+          "nameZh": "人民宮",
+          "imageHint": "Palace of the Parliament, Bucharest"
+        },
+        {
+          "nameEn": "Old Town Bucharest",
+          "nameZh": "布加勒斯特舊城",
+          "imageHint": "Old Town Bucharest"
+        }
+      ]
+    },
+    {
+      "cityEn": "Sofia",
+      "cityZh": "索菲亞",
+      "countryEn": "Bulgaria",
+      "countryZh": "保加利亞",
+      "countryCode": "BG",
+      "regionZh": "歐洲",
+      "dealCode": "SOF",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Alexander Nevsky Cathedral",
+          "nameZh": "亞歷山大涅夫斯基主教座堂",
+          "imageHint": "Alexander Nevsky Cathedral, Sofia"
+        },
+        {
+          "nameEn": "Boyana Church",
+          "nameZh": "博亞納教堂",
+          "imageHint": "Boyana Church"
+        }
+      ]
+    },
+    {
+      "cityEn": "Valletta",
+      "cityZh": "瓦勒他",
+      "countryEn": "Malta",
+      "countryZh": "馬耳他",
+      "countryCode": "MT",
+      "regionZh": "歐洲",
+      "dealCode": "MLA",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "St. John's Co-Cathedral",
+          "nameZh": "聖若望副主教座堂",
+          "imageHint": "St. John's Co-Cathedral"
+        },
+        {
+          "nameEn": "Upper Barrakka Gardens",
+          "nameZh": "上巴拉卡花園",
+          "imageHint": "Upper Barrakka Gardens"
+        }
+      ]
+    },
+    {
+      "cityEn": "Dubai",
+      "cityZh": "杜拜",
+      "countryEn": "United Arab Emirates",
+      "countryZh": "阿聯酋",
+      "countryCode": "AE",
+      "regionZh": "中東",
+      "dealCode": "DXB",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Burj Khalifa",
+          "nameZh": "哈里發塔",
+          "imageHint": "Burj Khalifa"
+        },
+        {
+          "nameEn": "Burj Al Arab",
+          "nameZh": "帆船酒店",
+          "imageHint": "Burj Al Arab"
+        },
+        {
+          "nameEn": "Palm Jumeirah",
+          "nameZh": "朱美拉棕櫚島",
+          "imageHint": "Palm Jumeirah"
+        }
+      ]
+    },
+    {
+      "cityEn": "Abu Dhabi",
+      "cityZh": "阿布扎比",
+      "countryEn": "United Arab Emirates",
+      "countryZh": "阿聯酋",
+      "countryCode": "AE",
+      "regionZh": "中東",
+      "dealCode": "AUH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Sheikh Zayed Grand Mosque",
+          "nameZh": "謝赫扎耶德大清真寺",
+          "imageHint": "Sheikh Zayed Grand Mosque"
+        },
+        {
+          "nameEn": "Louvre Abu Dhabi",
+          "nameZh": "阿布扎比羅浮宮",
+          "imageHint": "Louvre Abu Dhabi"
+        }
+      ]
+    },
+    {
+      "cityEn": "Doha",
+      "cityZh": "多哈",
+      "countryEn": "Qatar",
+      "countryZh": "卡塔爾",
+      "countryCode": "QA",
+      "regionZh": "中東",
+      "dealCode": "DOH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Museum of Islamic Art",
+          "nameZh": "伊斯蘭藝術博物館",
+          "imageHint": "Museum of Islamic Art, Doha"
+        },
+        {
+          "nameEn": "Souq Waqif",
+          "nameZh": "瓦其夫市集",
+          "imageHint": "Souq Waqif"
+        }
+      ]
+    },
+    {
+      "cityEn": "Manama",
+      "cityZh": "麥納瑪",
+      "countryEn": "Bahrain",
+      "countryZh": "巴林",
+      "countryCode": "BH",
+      "regionZh": "中東",
+      "dealCode": "BAH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Bahrain Fort",
+          "nameZh": "巴林堡",
+          "imageHint": "Bahrain Fort"
+        },
+        {
+          "nameEn": "Bahrain World Trade Center",
+          "nameZh": "巴林世貿中心",
+          "imageHint": "Bahrain World Trade Center"
+        }
+      ]
+    },
+    {
+      "cityEn": "Kuwait City",
+      "cityZh": "科威特城",
+      "countryEn": "Kuwait",
+      "countryZh": "科威特",
+      "countryCode": "KW",
+      "regionZh": "中東",
+      "dealCode": "KWI",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Kuwait Towers",
+          "nameZh": "科威特塔",
+          "imageHint": "Kuwait Towers"
+        },
+        {
+          "nameEn": "Grand Mosque of Kuwait",
+          "nameZh": "科威特大清真寺",
+          "imageHint": "Grand Mosque of Kuwait"
+        }
+      ]
+    },
+    {
+      "cityEn": "Riyadh",
+      "cityZh": "利雅德",
+      "countryEn": "Saudi Arabia",
+      "countryZh": "沙特阿拉伯",
+      "countryCode": "SA",
+      "regionZh": "中東",
+      "dealCode": "RUH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Masmak Fort",
+          "nameZh": "馬斯馬克城堡",
+          "imageHint": "Masmak Fort"
+        },
+        {
+          "nameEn": "Diriyah",
+          "nameZh": "迪里耶",
+          "imageHint": "Diriyah"
+        }
+      ]
+    },
+    {
+      "cityEn": "Jeddah",
+      "cityZh": "吉達",
+      "countryEn": "Saudi Arabia",
+      "countryZh": "沙特阿拉伯",
+      "countryCode": "SA",
+      "regionZh": "中東",
+      "dealCode": "JED",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Al-Balad",
+          "nameZh": "巴拉德老城",
+          "imageHint": "Al-Balad, Jeddah"
+        },
+        {
+          "nameEn": "King Fahd Fountain",
+          "nameZh": "法赫德國王噴泉",
+          "imageHint": "King Fahd Fountain"
+        }
+      ]
+    },
+    {
+      "cityEn": "Muscat",
+      "cityZh": "馬斯喀特",
+      "countryEn": "Oman",
+      "countryZh": "阿曼",
+      "countryCode": "OM",
+      "regionZh": "中東",
+      "dealCode": "MCT",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Sultan Qaboos Grand Mosque",
+          "nameZh": "蘇丹卡布斯大清真寺",
+          "imageHint": "Sultan Qaboos Grand Mosque"
+        },
+        {
+          "nameEn": "Mutrah Souq",
+          "nameZh": "穆特拉市集",
+          "imageHint": "Mutrah Souq"
+        }
+      ]
+    },
+    {
+      "cityEn": "Amman",
+      "cityZh": "安曼",
+      "countryEn": "Jordan",
+      "countryZh": "約旦",
+      "countryCode": "JO",
+      "regionZh": "中東",
+      "dealCode": "AMM",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Petra",
+          "nameZh": "佩特拉",
+          "imageHint": "Petra"
+        },
+        {
+          "nameEn": "Wadi Rum",
+          "nameZh": "瓦迪拉姆",
+          "imageHint": "Wadi Rum"
+        },
+        {
+          "nameEn": "Roman Theatre of Amman",
+          "nameZh": "安曼羅馬劇場",
+          "imageHint": "Roman Theatre of Amman"
+        }
+      ]
+    },
+    {
+      "cityEn": "Jerusalem",
+      "cityZh": "耶路撒冷",
+      "countryEn": "Israel",
+      "countryZh": "以色列",
+      "countryCode": "IL",
+      "regionZh": "中東",
+      "dealCode": "TLV",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Western Wall",
+          "nameZh": "西牆",
+          "imageHint": "Western Wall"
+        },
+        {
+          "nameEn": "Church of the Holy Sepulchre",
+          "nameZh": "聖墓教堂",
+          "imageHint": "Church of the Holy Sepulchre"
+        },
+        {
+          "nameEn": "Dome of the Rock",
+          "nameZh": "圓頂清真寺",
+          "imageHint": "Dome of the Rock"
+        }
+      ]
+    },
+    {
+      "cityEn": "Tel Aviv",
+      "cityZh": "特拉維夫",
+      "countryEn": "Israel",
+      "countryZh": "以色列",
+      "countryCode": "IL",
+      "regionZh": "中東",
+      "dealCode": "TLV",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Old Jaffa",
+          "nameZh": "雅法老城",
+          "imageHint": "Old Jaffa"
+        },
+        {
+          "nameEn": "Tel Aviv Museum of Art",
+          "nameZh": "特拉維夫藝術博物館",
+          "imageHint": "Tel Aviv Museum of Art"
+        }
+      ]
+    },
+    {
+      "cityEn": "Haifa",
+      "cityZh": "海法",
+      "countryEn": "Israel",
+      "countryZh": "以色列",
+      "countryCode": "IL",
+      "regionZh": "中東",
+      "dealCode": "HFA",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Bahá'í Gardens",
+          "nameZh": "巴哈伊花園",
+          "imageHint": "Bahá'í Gardens"
+        },
+        {
+          "nameEn": "Carmel Center",
+          "nameZh": "卡梅爾中心",
+          "imageHint": "Carmel Center, Haifa"
+        }
+      ]
+    },
+    {
+      "cityEn": "Beirut",
+      "cityZh": "貝魯特",
+      "countryEn": "Lebanon",
+      "countryZh": "黎巴嫩",
+      "countryCode": "LB",
+      "regionZh": "中東",
+      "dealCode": "BEY",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Beirut National Museum",
+          "nameZh": "貝魯特國立博物館",
+          "imageHint": "Beirut National Museum"
+        },
+        {
+          "nameEn": "Pigeon Rocks",
+          "nameZh": "鴿子岩",
+          "imageHint": "Pigeon Rocks"
+        }
+      ]
+    },
+    {
+      "cityEn": "Baalbek",
+      "cityZh": "巴勒貝克",
+      "countryEn": "Lebanon",
+      "countryZh": "黎巴嫩",
+      "countryCode": "LB",
+      "regionZh": "中東",
+      "dealCode": "BEY",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Baalbek",
+          "nameZh": "巴勒貝克",
+          "imageHint": "Baalbek"
+        },
+        {
+          "nameEn": "Temple of Bacchus",
+          "nameZh": "巴克斯神廟",
+          "imageHint": "Temple of Bacchus"
+        }
+      ]
+    },
+    {
+      "cityEn": "Erbil",
+      "cityZh": "埃爾比勒",
+      "countryEn": "Iraq",
+      "countryZh": "伊拉克",
+      "countryCode": "IQ",
+      "regionZh": "中東",
+      "dealCode": "EBL",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Citadel of Erbil",
+          "nameZh": "埃爾比勒城堡",
+          "imageHint": "Citadel of Erbil"
+        },
+        {
+          "nameEn": "Erbil Citadel",
+          "nameZh": "埃爾比勒城堡",
+          "imageHint": "Citadel of Erbil"
+        }
+      ]
+    },
+    {
+      "cityEn": "Tehran",
+      "cityZh": "德黑蘭",
+      "countryEn": "Iran",
+      "countryZh": "伊朗",
+      "countryCode": "IR",
+      "regionZh": "中東",
+      "dealCode": "IKA",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Golestan Palace",
+          "nameZh": "戈勒斯坦宮",
+          "imageHint": "Golestan Palace"
+        },
+        {
+          "nameEn": "Azadi Tower",
+          "nameZh": "自由塔",
+          "imageHint": "Azadi Tower"
+        }
+      ]
+    },
+    {
+      "cityEn": "Isfahan",
+      "cityZh": "伊斯法罕",
+      "countryEn": "Iran",
+      "countryZh": "伊朗",
+      "countryCode": "IR",
+      "regionZh": "中東",
+      "dealCode": "IFN",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Naqsh-e Jahan Square",
+          "nameZh": "伊瑪目廣場",
+          "imageHint": "Naqsh-e Jahan Square"
+        },
+        {
+          "nameEn": "Sheikh Lotfollah Mosque",
+          "nameZh": "謝赫洛特芙拉清真寺",
+          "imageHint": "Sheikh Lotfollah Mosque"
+        }
+      ]
+    },
+    {
+      "cityEn": "Shiraz",
+      "cityZh": "設拉子",
+      "countryEn": "Iran",
+      "countryZh": "伊朗",
+      "countryCode": "IR",
+      "regionZh": "中東",
+      "dealCode": "SYZ",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Persepolis",
+          "nameZh": "波斯波利斯",
+          "imageHint": "Persepolis"
+        },
+        {
+          "nameEn": "Nasir al-Mulk Mosque",
+          "nameZh": "納西爾阿爾穆克清真寺",
+          "imageHint": "Nasir al-Mulk Mosque"
+        }
+      ]
+    },
+    {
+      "cityEn": "Yazd",
+      "cityZh": "亞茲德",
+      "countryEn": "Iran",
+      "countryZh": "伊朗",
+      "countryCode": "IR",
+      "regionZh": "中東",
+      "dealCode": "AZD",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Yazd Old City",
+          "nameZh": "亞茲德舊城",
+          "imageHint": "Yazd"
+        },
+        {
+          "nameEn": "Yazd Atash Behram",
+          "nameZh": "亞茲德拜火廟",
+          "imageHint": "Yazd Atash Behram"
+        }
+      ]
+    },
+    {
+      "cityEn": "Cairo",
+      "cityZh": "開羅",
+      "countryEn": "Egypt",
+      "countryZh": "埃及",
+      "countryCode": "EG",
+      "regionZh": "非洲",
+      "dealCode": "CAI",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Pyramids of Giza",
+          "nameZh": "吉薩金字塔",
+          "imageHint": "Pyramids of Giza"
+        },
+        {
+          "nameEn": "Egyptian Museum",
+          "nameZh": "埃及博物館",
+          "imageHint": "Egyptian Museum, Cairo"
+        },
+        {
+          "nameEn": "Khan el-Khalili",
+          "nameZh": "汗哈利利市集",
+          "imageHint": "Khan el-Khalili"
+        }
+      ]
+    },
+    {
+      "cityEn": "Luxor",
+      "cityZh": "樂蜀",
+      "countryEn": "Egypt",
+      "countryZh": "埃及",
+      "countryCode": "EG",
+      "regionZh": "非洲",
+      "dealCode": "LXR",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Karnak Temple",
+          "nameZh": "卡納克神廟",
+          "imageHint": "Karnak"
+        },
+        {
+          "nameEn": "Valley of the Kings",
+          "nameZh": "帝王谷",
+          "imageHint": "Valley of the Kings"
+        }
+      ]
+    },
+    {
+      "cityEn": "Aswan",
+      "cityZh": "亞斯文",
+      "countryEn": "Egypt",
+      "countryZh": "埃及",
+      "countryCode": "EG",
+      "regionZh": "非洲",
+      "dealCode": "ASW",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Abu Simbel",
+          "nameZh": "阿布辛貝",
+          "imageHint": "Abu Simbel"
+        },
+        {
+          "nameEn": "Philae Temple",
+          "nameZh": "菲萊神廟",
+          "imageHint": "Philae Temple"
+        }
+      ]
+    },
+    {
+      "cityEn": "Marrakech",
+      "cityZh": "馬拉喀什",
+      "countryEn": "Morocco",
+      "countryZh": "摩洛哥",
+      "countryCode": "MA",
+      "regionZh": "非洲",
+      "dealCode": "RAK",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Jemaa el-Fnaa",
+          "nameZh": "德吉瑪廣場",
+          "imageHint": "Jemaa el-Fnaa"
+        },
+        {
+          "nameEn": "Bahia Palace",
+          "nameZh": "巴伊亞宮",
+          "imageHint": "Bahia Palace, Marrakech"
+        }
+      ]
+    },
+    {
+      "cityEn": "Fez",
+      "cityZh": "非斯",
+      "countryEn": "Morocco",
+      "countryZh": "摩洛哥",
+      "countryCode": "MA",
+      "regionZh": "非洲",
+      "dealCode": "FEZ",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Fes el-Bali",
+          "nameZh": "非斯舊城",
+          "imageHint": "Fes el-Bali"
+        },
+        {
+          "nameEn": "Bou Inania Medersa",
+          "nameZh": "布伊納尼亞神學院",
+          "imageHint": "Bou Inania Medersa"
+        }
+      ]
+    },
+    {
+      "cityEn": "Casablanca",
+      "cityZh": "卡薩布蘭卡",
+      "countryEn": "Morocco",
+      "countryZh": "摩洛哥",
+      "countryCode": "MA",
+      "regionZh": "非洲",
+      "dealCode": "CMN",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Hassan II Mosque",
+          "nameZh": "哈桑二世清真寺",
+          "imageHint": "Hassan II Mosque"
+        },
+        {
+          "nameEn": "Hassan II Mosque minaret",
+          "nameZh": "哈桑二世清真寺宣禮塔",
+          "imageHint": "Hassan II Mosque minaret"
+        }
+      ]
+    },
+    {
+      "cityEn": "Rabat",
+      "cityZh": "拉巴特",
+      "countryEn": "Morocco",
+      "countryZh": "摩洛哥",
+      "countryCode": "MA",
+      "regionZh": "非洲",
+      "dealCode": "RBA",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Kasbah of the Udayas",
+          "nameZh": "烏達雅堡",
+          "imageHint": "Kasbah of the Udayas"
+        },
+        {
+          "nameEn": "Hassan Tower",
+          "nameZh": "哈桑塔",
+          "imageHint": "Hassan Tower"
+        }
+      ]
+    },
+    {
+      "cityEn": "Tunis",
+      "cityZh": "突尼斯",
+      "countryEn": "Tunisia",
+      "countryZh": "突尼西亞",
+      "countryCode": "TN",
+      "regionZh": "非洲",
+      "dealCode": "TUN",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Tunis Medina",
+          "nameZh": "突尼斯麥地那",
+          "imageHint": "Tunis Medina"
+        },
+        {
+          "nameEn": "Bardo National Museum",
+          "nameZh": "巴爾多國家博物館",
+          "imageHint": "Bardo National Museum"
+        }
+      ]
+    },
+    {
+      "cityEn": "Carthage",
+      "cityZh": "迦太基",
+      "countryEn": "Tunisia",
+      "countryZh": "突尼西亞",
+      "countryCode": "TN",
+      "regionZh": "非洲",
+      "dealCode": "TUN",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Carthage",
+          "nameZh": "迦太基",
+          "imageHint": "Carthage"
+        },
+        {
+          "nameEn": "Antonine Baths",
+          "nameZh": "安東尼浴場",
+          "imageHint": "Antonine Baths, Carthage"
+        }
+      ]
+    },
+    {
+      "cityEn": "Cape Town",
+      "cityZh": "開普敦",
+      "countryEn": "South Africa",
+      "countryZh": "南非",
+      "countryCode": "ZA",
+      "regionZh": "非洲",
+      "dealCode": "CPT",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Table Mountain",
+          "nameZh": "桌山",
+          "imageHint": "Table Mountain"
+        },
+        {
+          "nameEn": "Robben Island",
+          "nameZh": "羅本島",
+          "imageHint": "Robben Island"
+        },
+        {
+          "nameEn": "Cape Point",
+          "nameZh": "好望角",
+          "imageHint": "Cape Point"
+        }
+      ]
+    },
+    {
+      "cityEn": "Nairobi",
+      "cityZh": "奈洛比",
+      "countryEn": "Kenya",
+      "countryZh": "肯亞",
+      "countryCode": "KE",
+      "regionZh": "非洲",
+      "dealCode": "NBO",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Nairobi National Park",
+          "nameZh": "奈洛比國家公園",
+          "imageHint": "Nairobi National Park"
+        },
+        {
+          "nameEn": "Giraffe Centre",
+          "nameZh": "長頸鹿中心",
+          "imageHint": "Giraffe Centre, Nairobi"
+        }
+      ]
+    },
+    {
+      "cityEn": "Zanzibar",
+      "cityZh": "桑吉巴",
+      "countryEn": "Tanzania",
+      "countryZh": "坦桑尼亞",
+      "countryCode": "TZ",
+      "regionZh": "非洲",
+      "dealCode": "ZNZ",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Stone Town",
+          "nameZh": "石頭城",
+          "imageHint": "Stone Town, Zanzibar"
+        },
+        {
+          "nameEn": "House of Wonders",
+          "nameZh": "奇蹟之屋",
+          "imageHint": "House of Wonders, Zanzibar"
+        }
+      ]
+    },
+    {
+      "cityEn": "Livingstone",
+      "cityZh": "利文斯敦",
+      "countryEn": "Zambia",
+      "countryZh": "尚比亞",
+      "countryCode": "ZM",
+      "regionZh": "非洲",
+      "dealCode": "LVI",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Victoria Falls",
+          "nameZh": "維多利亞瀑布",
+          "imageHint": "Victoria Falls"
+        },
+        {
+          "nameEn": "Victoria Falls Bridge",
+          "nameZh": "維多利亞瀑布橋",
+          "imageHint": "Victoria Falls Bridge"
+        }
+      ]
+    },
+    {
+      "cityEn": "Mauritius",
+      "cityZh": "毛里裘斯",
+      "countryEn": "Mauritius",
+      "countryZh": "毛里裘斯",
+      "countryCode": "MU",
+      "regionZh": "非洲",
+      "dealCode": "MRU",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Le Morne Brabant",
+          "nameZh": "勒莫爾尼布拉班山",
+          "imageHint": "Le Morne Brabant"
+        },
+        {
+          "nameEn": "Black River Gorges",
+          "nameZh": "黑河峽谷",
+          "imageHint": "Black River Gorges National Park"
+        }
+      ]
+    },
+    {
+      "cityEn": "Seychelles",
+      "cityZh": "塞舌爾",
+      "countryEn": "Seychelles",
+      "countryZh": "塞舌爾",
+      "countryCode": "SC",
+      "regionZh": "非洲",
+      "dealCode": "SEZ",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Anse Source d'Argent",
+          "nameZh": "銀泉灣",
+          "imageHint": "Anse Source d'Argent"
+        },
+        {
+          "nameEn": "Vallée de Mai",
+          "nameZh": "五月谷",
+          "imageHint": "Vallée de Mai"
+        }
+      ]
+    },
+    {
+      "cityEn": "Delhi",
+      "cityZh": "德里",
+      "countryEn": "India",
+      "countryZh": "印度",
+      "countryCode": "IN",
+      "regionZh": "南亞",
+      "dealCode": "DEL",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Red Fort",
+          "nameZh": "紅堡",
+          "imageHint": "Red Fort"
+        },
+        {
+          "nameEn": "Qutub Minar",
+          "nameZh": "古達明納塔",
+          "imageHint": "Qutub Minar"
+        },
+        {
+          "nameEn": "India Gate",
+          "nameZh": "印度門",
+          "imageHint": "India Gate"
+        }
+      ]
+    },
+    {
+      "cityEn": "Agra",
+      "cityZh": "阿格拉",
+      "countryEn": "India",
+      "countryZh": "印度",
+      "countryCode": "IN",
+      "regionZh": "南亞",
+      "dealCode": "AGR",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Taj Mahal",
+          "nameZh": "泰姬陵",
+          "imageHint": "Taj Mahal"
+        },
+        {
+          "nameEn": "Agra Fort",
+          "nameZh": "阿格拉堡",
+          "imageHint": "Agra Fort"
+        }
+      ]
+    },
+    {
+      "cityEn": "Jaipur",
+      "cityZh": "齋浦爾",
+      "countryEn": "India",
+      "countryZh": "印度",
+      "countryCode": "IN",
+      "regionZh": "南亞",
+      "dealCode": "JAI",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Hawa Mahal",
+          "nameZh": "風之宮殿",
+          "imageHint": "Hawa Mahal"
+        },
+        {
+          "nameEn": "Amber Fort",
+          "nameZh": "琥珀堡",
+          "imageHint": "Amber Fort"
+        }
+      ]
+    },
+    {
+      "cityEn": "Udaipur",
+      "cityZh": "烏代浦",
+      "countryEn": "India",
+      "countryZh": "印度",
+      "countryCode": "IN",
+      "regionZh": "南亞",
+      "dealCode": "UDR",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "City Palace, Udaipur",
+          "nameZh": "烏代浦城市宮殿",
+          "imageHint": "City Palace, Udaipur"
+        },
+        {
+          "nameEn": "Lake Pichola",
+          "nameZh": "皮丘拉湖",
+          "imageHint": "Lake Pichola"
+        }
+      ]
+    },
+    {
+      "cityEn": "Jodhpur",
+      "cityZh": "焦特布爾",
+      "countryEn": "India",
+      "countryZh": "印度",
+      "countryCode": "IN",
+      "regionZh": "南亞",
+      "dealCode": "JDH",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Mehrangarh Fort",
+          "nameZh": "梅蘭加爾堡",
+          "imageHint": "Mehrangarh Fort"
+        },
+        {
+          "nameEn": "Jaswant Thada",
+          "nameZh": "賈斯旺特塔",
+          "imageHint": "Jaswant Thada"
+        }
+      ]
+    },
+    {
+      "cityEn": "Goa",
+      "cityZh": "果阿",
+      "countryEn": "India",
+      "countryZh": "印度",
+      "countryCode": "IN",
+      "regionZh": "南亞",
+      "dealCode": "GOI",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Basilica of Bom Jesus",
+          "nameZh": "Bom Jesus教堂",
+          "imageHint": "Basilica of Bom Jesus"
+        },
+        {
+          "nameEn": "Basilica of Bom Jesus (Goa)",
+          "nameZh": "Bom Jesus教堂",
+          "imageHint": "Basilica of Bom Jesus, Old Goa"
+        }
+      ]
+    },
+    {
+      "cityEn": "Mumbai",
+      "cityZh": "孟買",
+      "countryEn": "India",
+      "countryZh": "印度",
+      "countryCode": "IN",
+      "regionZh": "南亞",
+      "dealCode": "BOM",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Gateway of India",
+          "nameZh": "印度門",
+          "imageHint": "Gateway of India, Mumbai"
+        },
+        {
+          "nameEn": "Chhatrapati Shivaji Terminus",
+          "nameZh": "賈特拉帕蒂·希瓦吉總站",
+          "imageHint": "Chhatrapati Shivaji Terminus"
+        }
+      ]
+    },
+    {
+      "cityEn": "Kolkata",
+      "cityZh": "加爾各答",
+      "countryEn": "India",
+      "countryZh": "印度",
+      "countryCode": "IN",
+      "regionZh": "南亞",
+      "dealCode": "CCU",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Victoria Memorial",
+          "nameZh": "維多利亞紀念堂",
+          "imageHint": "Victoria Memorial, Kolkata"
+        },
+        {
+          "nameEn": "Howrah Bridge",
+          "nameZh": "豪拉橋",
+          "imageHint": "Howrah Bridge"
+        }
+      ]
+    },
+    {
+      "cityEn": "Alleppey",
+      "cityZh": "阿勒皮",
+      "countryEn": "India",
+      "countryZh": "印度",
+      "countryCode": "IN",
+      "regionZh": "南亞",
+      "dealCode": "COK",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Alappuzha backwaters",
+          "nameZh": "阿勒皮後海水域",
+          "imageHint": "Alappuzha backwaters"
+        },
+        {
+          "nameEn": "Kumarakom Bird Sanctuary",
+          "nameZh": "庫瑪拉孔鳥類保護區",
+          "imageHint": "Kumarakom Bird Sanctuary"
+        }
+      ]
+    },
+    {
+      "cityEn": "Colombo",
+      "cityZh": "可倫坡",
+      "countryEn": "Sri Lanka",
+      "countryZh": "斯里蘭卡",
+      "countryCode": "LK",
+      "regionZh": "南亞",
+      "dealCode": "CMB",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Gangaramaya Temple",
+          "nameZh": "甘加拉馬雅寺",
+          "imageHint": "Gangaramaya Temple"
+        },
+        {
+          "nameEn": "Galle Face Green",
+          "nameZh": "加勒菲斯綠地",
+          "imageHint": "Galle Face Green"
+        }
+      ]
+    },
+    {
+      "cityEn": "Sigiriya",
+      "cityZh": "錫吉里耶",
+      "countryEn": "Sri Lanka",
+      "countryZh": "斯里蘭卡",
+      "countryCode": "LK",
+      "regionZh": "南亞",
+      "dealCode": "CMB",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Sigiriya",
+          "nameZh": "錫吉里耶",
+          "imageHint": "Sigiriya"
+        },
+        {
+          "nameEn": "Dambulla Cave Temple",
+          "nameZh": "丹布勒石窟寺",
+          "imageHint": "Dambulla Cave Temple"
+        }
+      ]
+    },
+    {
+      "cityEn": "Kathmandu",
+      "cityZh": "加德滿都",
+      "countryEn": "Nepal",
+      "countryZh": "尼泊爾",
+      "countryCode": "NP",
+      "regionZh": "南亞",
+      "dealCode": "KTM",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Boudhanath",
+          "nameZh": "博達佛塔",
+          "imageHint": "Boudhanath"
+        },
+        {
+          "nameEn": "Durbar Square",
+          "nameZh": "杜巴廣場",
+          "imageHint": "Kathmandu Durbar Square"
+        }
+      ]
+    },
+    {
+      "cityEn": "Thimphu",
+      "cityZh": "廷布",
+      "countryEn": "Bhutan",
+      "countryZh": "不丹",
+      "countryCode": "BT",
+      "regionZh": "南亞",
+      "dealCode": "PBH",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Tashichho Dzong",
+          "nameZh": "扎西卻宗",
+          "imageHint": "Tashichho Dzong"
+        },
+        {
+          "nameEn": "Buddha Dordenma",
+          "nameZh": "大佛",
+          "imageHint": "Buddha Dordenma"
+        }
+      ]
+    },
+    {
+      "cityEn": "Paro",
+      "cityZh": "帕羅",
+      "countryEn": "Bhutan",
+      "countryZh": "不丹",
+      "countryCode": "BT",
+      "regionZh": "南亞",
+      "dealCode": "PBH",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Taktsang Monastery",
+          "nameZh": "虎穴寺",
+          "imageHint": "Taktsang Monastery"
+        },
+        {
+          "nameEn": "Paro Dzong",
+          "nameZh": "帕羅宗堡",
+          "imageHint": "Paro Dzong"
+        }
+      ]
+    },
+    {
+      "cityEn": "Almaty",
+      "cityZh": "阿拉木圖",
+      "countryEn": "Kazakhstan",
+      "countryZh": "哈薩克",
+      "countryCode": "KZ",
+      "regionZh": "中亞",
+      "dealCode": "ALA",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Medeu",
+          "nameZh": "麥迪奧",
+          "imageHint": "Medeu"
+        },
+        {
+          "nameEn": "Shymbulak",
+          "nameZh": "什姆布拉克",
+          "imageHint": "Shymbulak"
+        }
+      ]
+    },
+    {
+      "cityEn": "Tashkent",
+      "cityZh": "塔什干",
+      "countryEn": "Uzbekistan",
+      "countryZh": "烏茲別克",
+      "countryCode": "UZ",
+      "regionZh": "中亞",
+      "dealCode": "TAS",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Khast Imam Complex",
+          "nameZh": "哈斯特伊瑪目建築群",
+          "imageHint": "Khast Imam Complex"
+        },
+        {
+          "nameEn": "Chorsu Bazaar",
+          "nameZh": "喬爾蘇巴扎",
+          "imageHint": "Chorsu Bazaar"
+        }
+      ]
+    },
+    {
+      "cityEn": "Samarkand",
+      "cityZh": "撒馬爾罕",
+      "countryEn": "Uzbekistan",
+      "countryZh": "烏茲別克",
+      "countryCode": "UZ",
+      "regionZh": "中亞",
+      "dealCode": "SKD",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Registan",
+          "nameZh": "雷吉斯坦廣場",
+          "imageHint": "Registan, Samarkand"
+        },
+        {
+          "nameEn": "Bibi-Khanym Mosque",
+          "nameZh": "比比哈努姆清真寺",
+          "imageHint": "Bibi-Khanym Mosque"
+        }
+      ]
+    },
+    {
+      "cityEn": "Tbilisi",
+      "cityZh": "提比里斯",
+      "countryEn": "Georgia",
+      "countryZh": "格魯吉亞",
+      "countryCode": "GE",
+      "regionZh": "中亞",
+      "dealCode": "TBS",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Narikala Fortress",
+          "nameZh": "納里卡拉要塞",
+          "imageHint": "Narikala Fortress"
+        },
+        {
+          "nameEn": "Old Town Tbilisi",
+          "nameZh": "提比里斯老城",
+          "imageHint": "Old Town Tbilisi"
+        }
+      ]
+    },
+    {
+      "cityEn": "Yerevan",
+      "cityZh": "葉里溫",
+      "countryEn": "Armenia",
+      "countryZh": "亞美尼亞",
+      "countryCode": "AM",
+      "regionZh": "中亞",
+      "dealCode": "EVN",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Geghard",
+          "nameZh": "格加爾德修道院",
+          "imageHint": "Geghard"
+        },
+        {
+          "nameEn": "Republic Square",
+          "nameZh": "共和國廣場",
+          "imageHint": "Republic Square, Yerevan"
+        }
+      ]
+    },
+    {
+      "cityEn": "Baku",
+      "cityZh": "巴庫",
+      "countryEn": "Azerbaijan",
+      "countryZh": "亞塞拜然",
+      "countryCode": "AZ",
+      "regionZh": "中亞",
+      "dealCode": "GYD",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Maiden Tower",
+          "nameZh": "少女塔",
+          "imageHint": "Maiden Tower, Baku"
+        },
+        {
+          "nameEn": "Heydar Aliyev Center",
+          "nameZh": "蓋達爾·阿利耶夫中心",
+          "imageHint": "Heydar Aliyev Center"
+        }
+      ]
+    },
+    {
+      "cityEn": "Ulaanbaatar",
+      "cityZh": "烏蘭巴托",
+      "countryEn": "Mongolia",
+      "countryZh": "蒙古",
+      "countryCode": "MN",
+      "regionZh": "北亞",
+      "dealCode": "ULN",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Genghis Khan Statue",
+          "nameZh": "成吉思汗雕像",
+          "imageHint": "Genghis Khan Statue"
+        },
+        {
+          "nameEn": "Gandan Monastery",
+          "nameZh": "甘丹寺",
+          "imageHint": "Gandantegchinlen Monastery"
+        }
+      ]
+    },
+    {
+      "cityEn": "Irkutsk",
+      "cityZh": "伊爾庫茨克",
+      "countryEn": "Russia",
+      "countryZh": "俄羅斯",
+      "countryCode": "RU",
+      "regionZh": "北亞",
+      "dealCode": "IKT",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Lake Baikal",
+          "nameZh": "貝加爾湖",
+          "imageHint": "Lake Baikal"
+        },
+        {
+          "nameEn": "Listvyanka",
+          "nameZh": "利斯維揚卡",
+          "imageHint": "Listvyanka"
+        }
+      ]
+    },
+    {
+      "cityEn": "Galle",
+      "cityZh": "加勒",
+      "countryEn": "Sri Lanka",
+      "countryZh": "斯里蘭卡",
+      "countryCode": "LK",
+      "regionZh": "南亞",
+      "dealCode": "CMB",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Galle Fort",
+          "nameZh": "加勒城堡",
+          "imageHint": "Galle Fort"
+        },
+        {
+          "nameEn": "Unawatuna Beach",
+          "nameZh": "烏納瓦圖納海灘",
+          "imageHint": "Unawatuna Beach"
+        }
+      ]
+    },
+    {
+      "cityEn": "Johannesburg",
+      "cityZh": "約翰內斯堡",
+      "countryEn": "South Africa",
+      "countryZh": "南非",
+      "countryCode": "ZA",
+      "regionZh": "非洲",
+      "dealCode": "JNB",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Apartheid Museum",
+          "nameZh": "種族隔離博物館",
+          "imageHint": "Apartheid Museum"
+        },
+        {
+          "nameEn": "Gold Reef City",
+          "nameZh": "金礁城",
+          "imageHint": "Gold Reef City"
+        }
+      ]
+    },
+    {
+      "cityEn": "Chefchaouen",
+      "cityZh": "舍夫沙萬",
+      "countryEn": "Morocco",
+      "countryZh": "摩洛哥",
+      "countryCode": "MA",
+      "regionZh": "非洲",
+      "dealCode": "FEZ",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Chefchaouen Blue City",
+          "nameZh": "舍夫沙萬藍城",
+          "imageHint": "Chefchaouen"
+        },
+        {
+          "nameEn": "Ras El Maa waterfall",
+          "nameZh": "Ras El Maa瀑布",
+          "imageHint": "Ras El Maa waterfall"
+        }
+      ]
+    },
+    {
+      "cityEn": "Bukhara",
+      "cityZh": "布哈拉",
+      "countryEn": "Uzbekistan",
+      "countryZh": "烏茲別克",
+      "countryCode": "UZ",
+      "regionZh": "中亞",
+      "dealCode": "BHK",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Po-i-Kalyan",
+          "nameZh": "卡梁宣禮塔",
+          "imageHint": "Po-i-Kalyan"
+        },
+        {
+          "nameEn": "Ark of Bukhara",
+          "nameZh": "布哈拉城堡",
+          "imageHint": "Ark of Bukhara"
+        }
+      ]
+    },
+    {
+      "cityEn": "Astana",
+      "cityZh": "阿斯塔納",
+      "countryEn": "Kazakhstan",
+      "countryZh": "哈薩克",
+      "countryCode": "KZ",
+      "regionZh": "中亞",
+      "dealCode": "NQZ",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Bayterek",
+          "nameZh": "巴伊捷列克塔",
+          "imageHint": "Bayterek"
+        },
+        {
+          "nameEn": "Nur-Astana Mosque",
+          "nameZh": "努爾阿斯塔納清真寺",
+          "imageHint": "Nur-Astana Mosque"
+        }
+      ]
+    },
+    {
+      "cityEn": "Vladivostok",
+      "cityZh": "海參崴",
+      "countryEn": "Russia",
+      "countryZh": "俄羅斯",
+      "countryCode": "RU",
+      "regionZh": "北亞",
+      "dealCode": "VVO",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Golden Bridge",
+          "nameZh": "金橋",
+          "imageHint": "Golden Bridge, Vladivostok"
+        },
+        {
+          "nameEn": "Russky Bridge",
+          "nameZh": "俄羅斯島大橋",
+          "imageHint": "Russky Bridge"
+        }
+      ]
+    },
+    {
+      "cityEn": "AlUla",
+      "cityZh": "阿爾烏拉",
+      "countryEn": "Saudi Arabia",
+      "countryZh": "沙特阿拉伯",
+      "countryCode": "SA",
+      "regionZh": "中東",
+      "dealCode": "ULH",
+      "defaultPriceLevel": 3,
+      "landmarks": [
+        {
+          "nameEn": "Hegra",
+          "nameZh": "黑格拉",
+          "imageHint": "Hegra"
+        },
+        {
+          "nameEn": "Elephant Rock",
+          "nameZh": "大象岩",
+          "imageHint": "Elephant Rock, AlUla"
+        }
+      ]
+    },
+    {
+      "cityEn": "Varanasi",
+      "cityZh": "瓦拉納西",
+      "countryEn": "India",
+      "countryZh": "印度",
+      "countryCode": "IN",
+      "regionZh": "南亞",
+      "dealCode": "VNS",
+      "defaultPriceLevel": 2,
+      "landmarks": [
+        {
+          "nameEn": "Ghats of Varanasi",
+          "nameZh": "瓦拉納西河壇",
+          "imageHint": "Ghats of Varanasi"
+        },
+        {
+          "nameEn": "Kashi Vishwanath Temple",
+          "nameZh": "卡西維斯瓦納特廟",
+          "imageHint": "Kashi Vishwanath Temple"
+        }
+      ]
+    }
+  ]
+}
