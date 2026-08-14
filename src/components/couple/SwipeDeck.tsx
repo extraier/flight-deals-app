@@ -99,10 +99,10 @@ export function SwipeDeck({
         onClick={handleCardTap}
       >
         {nextCard && (
-          // Hermes 2026-08-14: matched aspect-[3/4] + max-h-[95%] to match
-          // the active card so the preview peeks correctly.
+          // Hermes 2026-08-14: matched max-h-[70vh] + max-w-sm to the active
+          // card so the preview peeks correctly. border-4 to match the frame.
           <div
-            className="absolute w-[92%] rounded-3xl bg-gray-800 shadow-sm overflow-hidden border-2 border-pink-900/30 select-none aspect-[3/4] max-h-[95%]"
+            className="absolute w-[88%] max-w-sm rounded-3xl bg-gray-800 shadow-2xl overflow-hidden border-4 border-pink-500/50 select-none touch-none max-h-[70vh]"
             style={{ transform: 'scale(0.95) translateY(15px)', opacity: 0.6, zIndex: 1 }}
           >
             <div

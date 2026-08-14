@@ -65,20 +65,27 @@ export function SpotCard({
   // Hermes 2026-08-14: shared frame styles. The image + overlay layers live
   // inside a rounded container with overflow-hidden so the photo respects
   // the card's rounded corners regardless of viewport size.
-  // The outer div uses aspect-ratio so the frame stays proportional across
-  // iPhone SE (320x568) → iPhone Pro Max (430x932) without stretching.
+  //
+  // Layout strategy (revised after user screenshot 2):
+  //   - Frame uses a 4:5 aspect ratio (Instagram portrait) which is the
+  //     dominant mobile photo aspect — gives the card a "photo" feel,
+  //     not a "fullscreen" feel.
+  //   - max-h + max-w cap the card so it doesn't dominate tall portrait
+  //     phones (where aspect-[3/4] at 92% width became nearly full-height).
+  //   - 4px solid pink border (no opacity) + soft drop-shadow so the card
+  //     looks like a proper "framed photo."
+  //   - Photo is centered inside the frame with bg-cover; doesn't stretch.
   const frameShell =
-    'absolute w-[92%] rounded-3xl bg-gray-900 shadow-2xl overflow-hidden select-none touch-none';
+    'absolute w-[88%] max-w-sm rounded-3xl bg-gray-900 shadow-2xl overflow-hidden border-4 border-pink-500 select-none touch-none';
   const imageLayer = 'w-full h-full bg-cover bg-center';
 
   if (isAd) {
     const ad = card as any;
     return (
       <div
-        // Hermes 2026-08-14: aspect-ratio 3/4 keeps the frame proportional
-        // across viewports; h-[95%] kept as max-height fallback for very
-        // short viewports (landscape phones, small windows).
-        className={`${frameShell} aspect-[3/4] max-h-[95%] border-2 border-blue-500/50`}
+        // Hermes 2026-08-14: max-h-[70vh] caps the card on tall viewports
+        // so it doesn't dominate. max-w-sm caps it on landscape viewports.
+        className={`${frameShell} max-h-[70vh] border-blue-500`}
         style={{
           transform: `translate(${dx}px, ${dy}px) rotate(${rotate}deg)`,
           transition: isDragging ? 'none' : 'transform 0.3s ease-out',
@@ -134,9 +141,10 @@ export function SpotCard({
 
   return (
     <div
-      // Hermes 2026-08-14: aspect-ratio 3/4 keeps the frame proportional
-      // across viewports; h-[95%] kept as max-height fallback.
-      className={`${frameShell} aspect-[3/4] max-h-[95%] border-2 border-pink-500/50`}
+      // Hermes 2026-08-14: max-h-[70vh] caps the card on tall viewports
+      // so it doesn't dominate the screen. The frame is the visible pink
+      // border-4 — this is what gives the card a "framed photo" look.
+      className={`${frameShell} max-h-[70vh]`}
       style={{
         transform: `translate(${dx}px, ${dy}px) rotate(${rotate}deg)`,
         transition: isDragging ? 'none' : 'transform 0.3s ease-out',
@@ -149,8 +157,8 @@ export function SpotCard({
     >
       <div
         // Hermes 2026-08-14: plain block-level fill so the photo respects
-        // the rounded corners. `object-cover` via bg-cover centers and crops
-        // the photo without distorting aspect ratio.
+        // the rounded corners. bg-cover centers and crops the photo
+        // without distorting aspect ratio.
         className={imageLayer}
         style={{ backgroundImage: `url(${spot.image})` }}
       />
