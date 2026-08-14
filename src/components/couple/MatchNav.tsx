@@ -27,17 +27,25 @@ import { ArrowLeft, Heart, Users, Sun, Moon } from 'lucide-react';
  * room page writes a sessionStorage entry (matchWishlistBack) on click;
  * we read it here and clear it after the user clicks back, so a hard
  * refresh of the wishlist page doesn't leave a stale back link.
+ *
+ * Hermes 2026-08-14 (screenshot 10): Default back link changed from
+ * "返回機票格價" (flight deals landing page) to "返回一起揀目的地"
+ * (destination picker at /match). The destination picker is the meaningful
+ * "back" context for the /match/* subtree. If sessionStorage has a
+ * room-specific back link (from opening the wishlist inside a room), we
+ * still honor that — returning to the room takes precedence.
  */
 export function MatchNav() {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  // Dynamic back-link: if the user opened the wishlist from inside a room,
-  // the back button should return to that room. Otherwise default to "/"
-  // (the flight deals page).
+  // Hermes 2026-08-14 (screenshot 10): default back link is the destination
+  // picker (/match). The room page writes a sessionStorage entry on click
+  // that overrides this with "返回情侶房間" + /match/room/{id} when the user
+  // opened the wishlist from inside a room.
   const [backLink, setBackLink] = useState<{ href: string; label: string }>({
-    href: '/',
-    label: '返回機票格價',
+    href: '/match',
+    label: '返回一起揀目的地',
   });
 
   useEffect(() => {
@@ -46,7 +54,7 @@ export function MatchNav() {
 
   // Hermes 2026-08-14 (screenshot 9): only honor the sessionStorage back
   // link on the wishlist page. On /match/account or /match/admin the user
-  // got there via direct navigation, so falling back to "/" is correct.
+  // got there via direct navigation, so falling back to /match is correct.
   useEffect(() => {
     if (!pathname?.startsWith('/match/wishlist')) {
       // Not on wishlist — clear any stale entry so it doesn't leak.
@@ -65,8 +73,8 @@ export function MatchNav() {
         }
       }
     } catch {}
-    // Fallback: flight deals home page.
-    setBackLink({ href: '/', label: '返回機票格價' });
+    // Fallback: destination picker page.
+    setBackLink({ href: '/match', label: '返回一起揀目的地' });
   }, [pathname]);
 
   const isMatch = pathname === '/match';
