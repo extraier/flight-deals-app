@@ -236,7 +236,9 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         </div>
         <Link
           href="/match"
-          className="mt-8 text-gray-400 font-bold text-sm underline"
+          // Hermes 2026-08-14: text-gray-400 was invisible on pink-50.
+          // Bumped to text-gray-600 (still subtle but readable).
+          className="mt-8 text-gray-600 hover:text-gray-900 font-bold text-sm underline"
         >
           離開房間
         </Link>

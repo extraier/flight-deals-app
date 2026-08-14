@@ -95,7 +95,8 @@ export default function WishlistPage() {
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100">
-        <div className="text-gray-400 text-sm">驗證中...</div>
+        {/* Hermes 2026-08-14: text-gray-400 was invisible on pink-50. */}
+        <div className="text-gray-500 text-sm">驗證中...</div>
       </div>
     );
   }
@@ -145,13 +146,14 @@ export default function WishlistPage() {
         </div>
 
         {wishlistLoading ? (
-          <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 text-center text-gray-400">
+          // Hermes 2026-08-14: text-gray-400 was invisible on white.
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 text-center text-gray-500">
             載入中...
           </div>
         ) : entries.length === 0 ? (
           <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 text-center border border-pink-100">
-            <Heart size={48} className="text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
+            <Heart size={48} className="text-pink-300 mx-auto mb-3" />
+            <p className="text-gray-700 dark:text-gray-300 mb-4 font-medium">
               去 <Link href="/match" className="text-pink-600 underline font-bold">配對頁</Link> 揀你心水嘅地方<br />
               Like 一張卡會自動加入呢度
             </p>
@@ -252,10 +254,12 @@ function WishlistCard({
           </div>
         )}
 
+        {/* Hermes 2026-08-14: text-gray-400 'remove' button was invisible on white.
+            Bumped to text-gray-500 so the affordance is discoverable. */}
         <button
           onClick={() => onRemove(spot.id)}
           disabled={removing}
-          className="mt-3 w-full text-xs text-gray-400 hover:text-red-500 flex items-center justify-center gap-1 disabled:opacity-50"
+          className="mt-3 w-full text-xs text-gray-500 hover:text-red-500 flex items-center justify-center gap-1 disabled:opacity-50"
           aria-label={`從心願清單移除 ${spot.name}`}
         >
           <Trash2 size={12} /> {removing ? '移除中...' : '移除'}

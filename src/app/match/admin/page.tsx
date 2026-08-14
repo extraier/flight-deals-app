@@ -208,7 +208,8 @@ export default function AdminPage() {
   if (authed === null) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
-        <div className="text-gray-400 text-sm">驗證中...</div>
+        {/* Hermes 2026-08-14: text-gray-400 was invisible on gray-50. */}
+        <div className="text-gray-500 text-sm">驗證中...</div>
       </div>
     );
   }

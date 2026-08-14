@@ -70,7 +70,9 @@ export default function CouplePage() {
           <h1 className="text-3xl font-black text-gray-900 dark:text-white mb-2">
             🗺 一起揀目的地
           </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+          {/* Hermes 2026-08-14: was text-gray-600 which rendered too faintly on
+              the pink-50 gradient. Bumped to text-gray-700 for AA contrast. */}
+          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-medium">
             兩個人一起 Swipe 想去嘅地方 ·
             <br />
             兩個都 Like 就會配對成功！情侶、朋友、同事都啱用
@@ -94,7 +96,9 @@ export default function CouplePage() {
               <div className="w-full border-t border-gray-200 dark:border-gray-800" />
             </div>
             <div className="relative flex justify-center">
-              <span className="px-3 bg-white dark:bg-gray-900 text-gray-400 text-xs font-bold uppercase">
+              {/* Hermes 2026-08-14: was text-gray-400 which was nearly invisible
+                  on light theme. Bumped to text-gray-500 + font-semibold. */}
+              <span className="px-3 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400 text-xs font-semibold uppercase">
                 OR
               </span>
             </div>
@@ -107,7 +111,9 @@ export default function CouplePage() {
               onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
               placeholder="輸入 8 位房間號碼"
               maxLength={8}
-              className="flex-1 bg-transparent px-4 font-bold text-gray-700 dark:text-gray-200 placeholder-gray-400 tracking-widest outline-none uppercase"
+              // Hermes 2026-08-14: placeholder-gray-400 was too faint on the
+              // gray-50 inner card. Bumped to placeholder-gray-500.
+              className="flex-1 bg-transparent px-4 font-bold text-gray-700 dark:text-gray-200 placeholder-gray-500 tracking-widest outline-none uppercase"
             />
             <button
               onClick={handleJoin}
@@ -140,7 +146,9 @@ export default function CouplePage() {
           </Link>
         </div>
 
-        <div className="text-center text-xs text-gray-400 mt-6">
+        {/* Hermes 2026-08-14: was text-gray-400 which was invisible on light.
+            Bumped to text-gray-600 + font-medium. */}
+        <div className="text-center text-xs text-gray-600 dark:text-gray-400 font-medium mt-6">
           配對成功後可查看相關機票優惠
         </div>
       </div>

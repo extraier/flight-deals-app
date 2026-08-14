@@ -114,7 +114,8 @@ export default function AccountPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100">
-        <div className="text-gray-400 text-sm">驗證中...</div>
+        {/* Hermes 2026-08-14: text-gray-400 was invisible on pink-50. */}
+        <div className="text-gray-500 text-sm">驗證中...</div>
       </div>
     );
   }
@@ -217,9 +218,11 @@ export default function AccountPage() {
               {mode && (
                 <form onSubmit={handleEmail} className="space-y-3">
                   <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Email</label>
+                    {/* Hermes 2026-08-14: text-gray-500 was too faint for form labels. Bumped
+                  to text-gray-700 for proper affordance on light bg. */}
+                     <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Email</label>
                     <div className="relative">
-                      <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                      <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                       <input
                         type="email"
                         value={email}
@@ -231,9 +234,11 @@ export default function AccountPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">密碼</label>
+                    {/* Hermes 2026-08-14: text-gray-500 was too faint for form labels. Bumped
+                  to text-gray-700 for proper affordance on light bg. */}
+                     <label className="block text-xs font-bold text-gray-700 uppercase mb-1">密碼</label>
                     <div className="relative">
-                      <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                      <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                       <input
                         type="password"
                         value={password}
