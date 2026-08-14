@@ -1,16 +1,29 @@
 'use client';
 
 import { useTheme } from 'next-themes';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Hermes 2026-08-14 (screenshot 6): hide the global ThemeToggle on
+  // /match/room/* pages — the room has its own top-right exit button
+  // (absolute top-2 right-2) that the global toggle was overlapping.
+  // /match/wishlist, /match/account, /match/admin all use MatchNav which
+  // has its own theme toggle button, so the global one is redundant there
+  // too. Show it only on the home page (/) where it's the primary
+  // dark/light switch.
+  const isMatchRoom = pathname?.startsWith('/match/room');
+  const isMatchSubtree = pathname?.startsWith('/match');
+  if (isMatchSubtree) return null;
 
   if (!mounted) return null;
 

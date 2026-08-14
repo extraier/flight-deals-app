@@ -44,6 +44,11 @@ export function SpotCard({
   isBackground = false,
   onToggleWishlist,
   savedToWishlist = false,
+  // Hermes 2026-08-14 (screenshot 6): parent (SwipeDeck) passes a custom
+  // height style. Used to override the default h-[60vh] max-h-[600px] with
+  // a calc(100svh - X) that adapts to the actual viewport height on
+  // iOS Safari (which has a dynamic bottom toolbar).
+  heightStyle,
 }: {
   card: DeckCard;
   onSwipe?: (direction: 'left' | 'right') => void;
@@ -56,6 +61,7 @@ export function SpotCard({
   isBackground?: boolean;
   onToggleWishlist?: (card: DeckCard) => void;
   savedToWishlist?: boolean;
+  heightStyle?: React.CSSProperties;
 }) {
   const isAd = card.__kind === 'ad';
   const dx = dragOffset?.x ?? 0;
@@ -96,8 +102,11 @@ export function SpotCard({
         // Hermes 2026-08-14: explicit h-[60vh] + max-h-[600px] gives the
         // card a defined box (no zero-height collapse). w-full inherits
         // from the parent's w-[88%] wrapper.
-        className={`${frameShell} h-[60vh] max-h-[600px] border-blue-500`}
+        // Hermes 2026-08-14 (screenshot 6): if parent passed a heightStyle,
+        // use that instead (calc(100svh - X) — adapts to viewport).
+        className={`${frameShell} ${heightStyle ? '' : 'h-[60vh] max-h-[600px]'} border-blue-500`}
         style={{
+          ...heightStyle,
           transform: `translate(${dx}px, ${dy}px) rotate(${rotate}deg)`,
           transition: isDragging ? 'none' : 'transform 0.3s ease-out',
           zIndex,
@@ -181,8 +190,11 @@ export function SpotCard({
       // card a defined box. The parent wrapper (SwipeDeck) provides the
       // centered positioning via flexbox. Drag/rotation is applied via
       // the inline transform.
-      className={`${frameShell} h-[60vh] max-h-[600px]`}
+      // Hermes 2026-08-14 (screenshot 6): if parent passed a heightStyle,
+      // use that instead (calc(100svh - X) — adapts to viewport).
+      className={`${frameShell} ${heightStyle ? '' : 'h-[60vh] max-h-[600px]'}`}
       style={{
+        ...heightStyle,
         transform: `translate(${dx}px, ${dy}px) rotate(${rotate}deg)`,
         transition: isDragging ? 'none' : 'transform 0.3s ease-out',
         zIndex,

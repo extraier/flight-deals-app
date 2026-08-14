@@ -92,6 +92,22 @@ export function SwipeDeck({
   const topCard = cards[0];
   const nextCard = cards[1];
 
+  // Hermes 2026-08-14 (screenshot 6): card height uses calc(100svh - X)
+  // where X is the fixed UI chrome (status pill row + action buttons row +
+  // padding). This makes the card scale with viewport height instead of
+  // being tied to a vh unit (which on iOS Safari with dynamic toolbar is
+  // unreliable). 100svh = small viewport height = visible area when Safari's
+  // bottom toolbar is shown. So the card always fits between the top pill
+  // and the bottom buttons.
+  //
+  // Approx fixed chrome:
+  //   - top:    pt-12 (48) + py-3 (24) = ~72px
+  //   - bottom: action buttons (64) + pb-6 (24) + pb-safe (~34 on iPhone X+) = ~122px
+  //   - total fixed chrome ≈ 194-228px depending on device
+  //   - use min(calc(...), 600px) to cap the card height on landscape.
+  const cardHeight = 'min(calc(100svh - 210px), 600px)';
+  const cardHeightStyle = { height: cardHeight };
+
   return (
     <div className="flex-1 flex flex-col">
       <div
@@ -112,7 +128,10 @@ export function SwipeDeck({
             className="absolute top-1/2 left-1/2 w-[88%] max-w-sm"
             style={{ transform: 'translate(-50%, -50%) scale(0.95) translateY(15px)', opacity: 0.6, zIndex: 1, pointerEvents: 'none' }}
           >
-            <div className="w-full h-[60vh] max-h-[600px] rounded-3xl bg-gray-800 shadow-sm overflow-hidden border-4 border-pink-500/50">
+            <div
+              className="w-full rounded-3xl bg-gray-800 shadow-sm overflow-hidden border-4 border-pink-500/50"
+              style={cardHeightStyle}
+            >
               <div
                 className="w-full h-full bg-cover bg-center"
                 style={{
@@ -136,11 +155,23 @@ export function SwipeDeck({
             zIndex={10}
             onToggleWishlist={onToggleWishlist}
             savedToWishlist={topCardSavedToWishlist}
+            // Hermes 2026-08-14 (screenshot 6): pass card height as an inline
+            // style override so SpotCard doesn't need to know about vh units.
+            // SpotCard's existing className h-[60vh] max-h-[600px] is overridden
+            // by this inline style which uses calc(100svh - 210px) instead.
+            heightStyle={cardHeightStyle}
           />
         </div>
       </div>
 
-      <div className="shrink-0 w-full flex justify-center space-x-12 px-6 pb-6 pt-2">
+      {/* Hermes 2026-08-14 (screenshot 6): pb-[env(safe-area-inset-bottom)]
+          keeps the X/heart buttons above iOS Safari's bottom toolbar. On
+          iPhones with a home indicator (X and newer), env(safe-area-inset-
+          bottom) ≈ 34px. On older devices it falls back to 0. */}
+      <div
+        className="shrink-0 w-full flex justify-center space-x-12 px-6 pt-2"
+        style={{ paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))' }}
+      >
         <button
           onClick={() => handleActionSwipe('left')}
           disabled={cards.length === 0 || isDragging}

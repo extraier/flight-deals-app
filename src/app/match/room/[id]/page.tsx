@@ -247,9 +247,17 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 via-pink-950/30 to-gray-900">
-      {/* Hermes 2026-08-14: status pill + exit button moved to top-2 so the
-          card's top border (currently cut off behind them) is fully visible. */}
+    // Hermes 2026-08-14 (screenshot 6): use 100svh (small viewport height) on
+    // iOS Safari. 100vh INCLUDES Safari's dynamic bottom toolbar (URL bar +
+    // back/forward/refresh/menu), which used to push the X/heart action
+    // buttons behind the toolbar. 100svh is the visible area when the
+    // toolbar is shown — so the card + buttons always fit.
+    <div
+      className="flex flex-col bg-gradient-to-br from-gray-900 via-pink-950/30 to-gray-900 relative"
+      style={{ minHeight: '100svh' }}
+    >
+      {/* Hermes 2026-08-14: status pill + exit button at top-2 so the
+          card's top border is fully visible. */}
       <div className="absolute top-2 left-2 z-30 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-gray-700 flex items-center">
         <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" />
         <span className="text-white text-xs font-bold">配對成功 · 開始 Swipe</span>
