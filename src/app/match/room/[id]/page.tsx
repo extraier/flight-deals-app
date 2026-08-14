@@ -4,12 +4,21 @@ import { use, useEffect, useState, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Heart, LogOut, Copy, Users, Sparkles } from 'lucide-react';
-import { ensureAnonAuth } from '@/lib/firebase/client';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth, ensureAnonAuth } from '@/lib/firebase/client';
 import { subscribeRoom, swipe, fetchSpots, fetchAds, type RoomData } from '@/lib/couple/room';
 import { buildDeck, filterUnswiped, intersection, type DeckCard, type SpotCard, type AdCard } from '@/lib/couple/cards';
 import { SwipeDeck } from '@/components/couple/SwipeDeck';
 import { MatchModal } from '@/components/couple/MatchModal';
 import { recordAdMetric } from '@/lib/couple/ads';
+import {
+  subscribeWishlist,
+  addToWishlist,
+  removeFromWishlist,
+  isInWishlist,
+  type WishlistEntry,
+} from '@/lib/couple/wishlist';
+import type { User } from 'firebase/auth';
 
 export default function RoomPage({ params }: { params: Promise<{ id: string }> }) {
   // Proxy lowercases URL paths (src/proxy.ts) so /match/room/eoog stays eoog.
@@ -27,6 +36,10 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   const [seenAdIds, setSeenAdIds] = useState<Set<string>>(new Set());
   const impressionedAdIdsRef = useRef<Set<string>>(new Set());
   const matchCountRef = useRef(0);
+  // Phase 2.6: track the signed-in user (not anon) + their wishlist for
+  // the heart-fill state on SpotCard.
+  const [authUser, setAuthUser] = useState<User | null>(null);
+  const [wishlistEntries, setWishlistEntries] = useState<WishlistEntry[]>([]);
 
   // Bootstrap: auth + fetch spots/ads
   useEffect(() => {
@@ -38,6 +51,28 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
       })
       .catch((err) => setError('初始化失敗: ' + err.message));
   }, []);
+
+  // Phase 2.6: track the signed-in user separately from the anon uid.
+  // `uid` is the couple-room identity (anon or permanent — both work for rooms).
+  // `authUser` is the optional permanent-account context used for wishlist.
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => setAuthUser(u));
+    return unsub;
+  }, []);
+
+  // Phase 2.6: subscribe to the user's wishlist when signed in (non-anon).
+  useEffect(() => {
+    if (!authUser || authUser.isAnonymous) {
+      setWishlistEntries([]);
+      return;
+    }
+    const unsub = subscribeWishlist(
+      authUser.uid,
+      setWishlistEntries,
+      (err) => console.warn('Wishlist subscription error:', err)
+    );
+    return unsub;
+  }, [authUser]);
 
   // Subscribe to room
   useEffect(() => {
@@ -97,6 +132,19 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
       setSeenAdIds((prev) => new Set([...prev, card.id]));
     }
 
+    // Phase 2.6: auto-save liked spots to the signed-in user's wishlist.
+    // Fire-and-forget — analytics-style. Don't block the swipe UX.
+    if (
+      direction === 'right' &&
+      card.__kind === 'spot' &&
+      authUser &&
+      !authUser.isAnonymous
+    ) {
+      addToWishlist(authUser.uid, card.id).catch((err) =>
+        console.warn('wishlist auto-save failed:', err)
+      );
+    }
+
     try {
       await swipe(roomId, uid, card.id, direction);
     } catch (err: any) {
@@ -115,6 +163,26 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
       );
     }
   };
+
+  // Phase 2.6: toggle wishlist entry from the heart button on the card.
+  // Anonymous users get a passive prompt via the wishlist page; this handler
+  // is only invoked when onToggleWishlist is wired to a signed-in user.
+  const handleToggleWishlist = async (card: DeckCard) => {
+    if (!authUser || authUser.isAnonymous || card.__kind !== 'spot') return;
+    if (isInWishlist(wishlistEntries, card.id)) {
+      await removeFromWishlist(authUser.uid, card.id).catch((err) =>
+        console.warn('wishlist remove failed:', err),
+      );
+    } else {
+      await addToWishlist(authUser.uid, card.id).catch((err) =>
+        console.warn('wishlist add failed:', err),
+      );
+    }
+  };
+
+  // Whether the top card is currently in the user's wishlist.
+  const topCardSavedToWishlist =
+    deck[0]?.__kind === 'spot' && isInWishlist(wishlistEntries, deck[0].id);
 
   const isUser1 = room?.user1 === uid;
   const isUser2 = room?.user2 === uid;
@@ -193,6 +261,10 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         cards={deck}
         onSwipe={handleSwipe}
         onAdClick={handleAdClick}
+        onToggleWishlist={
+          authUser && !authUser.isAnonymous ? handleToggleWishlist : undefined
+        }
+        topCardSavedToWishlist={topCardSavedToWishlist}
         emptyHint={`所有卡片都 Swipe 完！${spotMatchCount(room, isUser1 ? 'user1' : 'user2')} 個配對。`}
       />
 

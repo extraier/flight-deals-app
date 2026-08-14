@@ -42,6 +42,8 @@ export function SpotCard({
   onDragEnd,
   zIndex,
   isBackground = false,
+  onToggleWishlist,
+  savedToWishlist = false,
 }: {
   card: DeckCard;
   onSwipe?: (direction: 'left' | 'right') => void;
@@ -52,6 +54,8 @@ export function SpotCard({
   onDragEnd?: () => void;
   zIndex: number;
   isBackground?: boolean;
+  onToggleWishlist?: (card: DeckCard) => void;
+  savedToWishlist?: boolean;
 }) {
   const isAd = card.__kind === 'ad';
   const dx = dragOffset?.x ?? 0;
@@ -144,6 +148,23 @@ export function SpotCard({
         <span className={`px-3 py-1.5 backdrop-blur-md rounded-full text-xs font-bold shadow-lg border ${priceColor}`}>
           {PRICE_LABEL[spot.priceLevel] || PRICE_LABEL[2]}
         </span>
+        {onToggleWishlist && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleWishlist(card);
+            }}
+            className={`ml-auto p-2 rounded-full backdrop-blur-md shadow-lg transition ${
+              savedToWishlist
+                ? 'bg-pink-500 text-white'
+                : 'bg-black/60 text-white/80 hover:bg-black/80'
+            }`}
+            aria-label={savedToWishlist ? '從心願清單移除' : '加入心願清單'}
+          >
+            <Heart size={16} className={savedToWishlist ? 'fill-current' : ''} />
+          </button>
+        )}
       </div>
 
       {dx > 20 && (

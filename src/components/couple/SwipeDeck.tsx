@@ -9,12 +9,16 @@ export function SwipeDeck({
   cards,
   onSwipe,
   onAdClick,
+  onToggleWishlist,
   emptyHint,
+  topCardSavedToWishlist = false,
 }: {
   cards: DeckCard[];
   onSwipe: (direction: 'left' | 'right', card: DeckCard) => void;
   onAdClick?: (card: DeckCard) => void;
+  onToggleWishlist?: (card: DeckCard) => void;
   emptyHint?: string;
+  topCardSavedToWishlist?: boolean;
 }) {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -116,6 +120,8 @@ export function SwipeDeck({
           onDragMove={handleDragMove}
           onDragEnd={handleDragEnd}
           zIndex={10}
+          onToggleWishlist={onToggleWishlist}
+          savedToWishlist={topCardSavedToWishlist}
         />
       </div>
 
