@@ -125,6 +125,21 @@ export default function CouplePage() {
           )}
         </div>
 
+        <div className="mt-4 flex justify-center gap-4 text-sm">
+          <Link
+            href="/match/wishlist"
+            className="text-pink-600 dark:text-pink-400 hover:underline font-bold flex items-center gap-1"
+          >
+            💖 心願清單
+          </Link>
+          <Link
+            href="/match/account"
+            className="text-pink-600 dark:text-pink-400 hover:underline font-bold flex items-center gap-1"
+          >
+            👤 帳戶
+          </Link>
+        </div>
+
         <div className="text-center text-xs text-gray-400 mt-6">
           配對成功後可查看相關機票優惠
         </div>
