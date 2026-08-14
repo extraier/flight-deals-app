@@ -336,17 +336,29 @@ export default function Home() {
                 </div>
                 <div className="text-xs text-muted-foreground">最低價</div>
               </div>
-              {/* One-row actions: today's deals + travel-companion picker */}
-              <div className="flex flex-row gap-2">
+              {/* Hermes 2026-08-14 (screenshot 12): iOS-style segmented control.
+                  The two CTAs (today's deals + couple mode picker) used to be
+                  two side-by-side buttons, but the second one's "一起揀目的地"
+                  text was 6 chars + emoji and was wrapping to 2 rows on the
+                  50/50 flex-1 split. Wrapping them in a single rounded pill
+                  with a vertical divider lets each segment claim more width
+                  with horizontal padding, and the shared pill container
+                  visually unifies them as "two ways to browse prices".
+
+                  Both segments are still <Link> tags so they navigate; the
+                  matching pattern is also used below for the region/country
+                  filter (按地區 / 按國家). */}
+              <div className="inline-flex items-center gap-0 rounded-xl border border-border bg-card p-1 shadow-sm">
                 <Link
                   href="/deals"
-                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-orange-500/40 bg-orange-500/10 px-4 py-2 text-sm font-bold text-orange-600 dark:text-orange-400 transition-all hover:bg-orange-500/20 hover:border-orange-500/60 hover:shadow-md hover:shadow-orange-500/20"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-bold text-orange-600 dark:text-orange-400 transition-all hover:bg-orange-500/10"
                 >
                   🔥 今日劈價
                 </Link>
+                <span className="h-6 w-px bg-border" aria-hidden="true" />
                 <Link
                   href="/match"
-                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-pink-500/40 bg-pink-500/10 px-4 py-2 text-sm font-bold text-pink-600 dark:text-pink-400 transition-all hover:bg-pink-500/20 hover:border-pink-500/60 hover:shadow-md hover:shadow-pink-500/20"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-bold text-pink-600 dark:text-pink-400 transition-all hover:bg-pink-500/10"
                 >
                   🗺 一起揀目的地
                 </Link>
