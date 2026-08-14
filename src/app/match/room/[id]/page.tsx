@@ -3,7 +3,7 @@
 import { use, useEffect, useState, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Heart, LogOut, Copy, Users, Sparkles } from 'lucide-react';
+import { Heart, LogOut, Copy, Users, Sparkles, Moon, Sun } from 'lucide-react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, ensureAnonAuth } from '@/lib/firebase/client';
 import { subscribeRoom, swipe, fetchSpots, fetchAds, type RoomData } from '@/lib/couple/room';
@@ -19,6 +19,7 @@ import {
   type WishlistEntry,
 } from '@/lib/couple/wishlist';
 import type { User } from 'firebase/auth';
+import { useTheme } from 'next-themes';
 
 export default function RoomPage({ params }: { params: Promise<{ id: string }> }) {
   // Proxy lowercases URL paths (src/proxy.ts) so /match/room/eoog stays eoog.
@@ -262,6 +263,10 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" />
         <span className="text-white text-xs font-bold">配對成功 · 開始 Swipe</span>
       </div>
+      {/* Hermes 2026-08-14 (screenshot 7): theme toggle next to the exit
+          button. right-14 (56px) clears the 40px-wide exit button (right-2 +
+          p-2 + w-4 icon ≈ 40px). */}
+      <RoomThemeToggle />
       <Link
         href="/match"
         className="absolute top-2 right-2 z-30 p-2 bg-black/50 text-white rounded-full hover:bg-red-500 transition"
@@ -298,4 +303,26 @@ function spotMatchCount(room: RoomData, side: 'user1' | 'user2'): number {
   const myLikes = side === 'user1' ? room.user1Likes : room.user2Likes;
   const partnerLikes = side === 'user1' ? room.user2Likes : room.user1Likes;
   return intersection(myLikes, partnerLikes).length;
+}
+
+// Hermes 2026-08-14 (screenshot 7): inline theme toggle for the room page.
+// The global ThemeToggle is hidden on /match/* (it was overlapping the exit
+// button at top-2 right-2), but the room page doesn't use MatchNav — it has
+// its own absolute buttons. So we render our own Sun/Moon toggle at
+// top-2 right-14, just to the LEFT of the exit button (which is at right-2).
+function RoomThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+  return (
+    <button
+      type="button"
+      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      aria-label={theme === 'dark' ? '切換到淺色主題' : '切換到深色主題'}
+      className="absolute top-2 right-14 z-30 p-2 bg-black/50 text-white rounded-full hover:bg-pink-500 transition"
+    >
+      {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+    </button>
+  );
 }
