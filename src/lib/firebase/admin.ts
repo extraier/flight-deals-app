@@ -136,6 +136,28 @@ export async function adminPatchDocument(
   return res.json();
 }
 
+/** Delete a document via service-account access token (bypasses rules). */
+export async function adminDeleteDocument(
+  collectionId: string,
+  documentId: string
+): Promise<unknown> {
+  const token = await getAccessToken();
+  const projectId = getProjectId();
+  const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${collectionId}/${documentId}`;
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'x-goog-user-project': projectId,
+    },
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`adminDeleteDocument failed: ${res.status} ${body}`);
+  }
+  return res.json();
+}
+
 // ─── Field conversion helpers ──────────────────────────────────────────────
 // These convert JS values to the Firestore REST wire format. Keep minimal —
 // extend as needed. Datetime stored as ISO string in `timestampValue`.

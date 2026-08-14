@@ -16,6 +16,7 @@ import {
   ADMIN_COOKIE_NAME,
   verifyAdminSessionCookie,
   adminPatchDocument,
+  adminDeleteDocument,
 } from '@/lib/firebase/admin';
 
 const ALLOWED_COLLECTIONS = new Set(['coupleAds', 'coupleSpots']);
@@ -34,16 +35,16 @@ export async function POST(request: Request) {
   }
 
   // 2. Parse body
-  let body: { collection?: string; id?: string; fields?: Record<string, unknown> };
+  let body: { collection?: string; id?: string; fields?: Record<string, unknown>; delete?: boolean };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ ok: false, error: '無效的請求' }, { status: 400 });
   }
-  const { collection, id, fields } = body;
-  if (!collection || !id || typeof fields !== 'object' || fields === null) {
+  const { collection, id, fields, delete: isDelete } = body;
+  if (!collection || !id) {
     return NextResponse.json(
-      { ok: false, error: '缺少 collection / id / fields' },
+      { ok: false, error: '缺少 collection / id' },
       { status: 400 }
     );
   }
@@ -58,7 +59,26 @@ export async function POST(request: Request) {
   const url = new URL(request.url);
   const updateMask = url.searchParams.getAll('updateMask');
 
-  // 4. Perform admin write
+  // 4. Perform admin write — DELETE branch (skip fields)
+  if (isDelete) {
+    try {
+      const result = await adminDeleteDocument(collection, id);
+      return NextResponse.json({ ok: true, result });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error('admin-delete failed:', message);
+      return NextResponse.json({ ok: false, error: message }, { status: 500 });
+    }
+  }
+
+  if (typeof fields !== 'object' || fields === null) {
+    return NextResponse.json(
+      { ok: false, error: '缺少 fields (或設定 delete: true)' },
+      { status: 400 }
+    );
+  }
+
+  // 5. PATCH branch
   try {
     const result = await adminPatchDocument(collection, id, fields, updateMask);
     return NextResponse.json({ ok: true, result });

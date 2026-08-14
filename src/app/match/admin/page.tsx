@@ -2,53 +2,33 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Lock, BarChart3, Image as ImageIcon, Plus, ToggleLeft, ToggleRight, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Lock, BarChart3, Plus, ToggleLeft, ToggleRight, ExternalLink, Pencil, Trash2 } from 'lucide-react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/client';
+import { SpotEditModal, type SpotRow } from './SpotEditModal';
+import { AdEditModal, type AdRow } from './AdEditModal';
 
-type Spot = {
-  id: string;
-  name: string;
-  city: string;
-  country: string;
-  region: string;
-  image: string;
-  blurb: string;
-  tags: string[];
-  priceLevel: number;
-  dealCode?: string;
-};
-
-type Ad = {
-  id: string;
-  sponsor: string;
-  title: string;
-  image: string;
-  body: string;
-  ctaLabel: string;
-  clickUrl: string;
-  impressions: number;
-  clicks: number;
-  budget?: number;
-  active: boolean;
-};
+type Ad = AdRow;
 
 /**
  * Server-side admin mutations. The browser never gets to write Firestore
  * directly for `coupleAds`/`coupleSpots` — the route handler validates the
  * HMAC-signed session cookie, then writes via the service-account access
  * token (which bypasses Firestore rules).
+ *
+ * `options.delete: true` triggers a Firestore DELETE on the document.
  */
 async function adminMutate(
   collection: 'coupleAds' | 'coupleSpots',
   id: string,
-  fields: Record<string, unknown>
+  fields: Record<string, unknown>,
+  options?: { delete?: boolean }
 ): Promise<void> {
   const res = await fetch('/match/api/admin-mutate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'same-origin',
-    body: JSON.stringify({ collection, id, fields }),
+    body: JSON.stringify({ collection, id, fields, ...(options?.delete ? { delete: true } : {}) }),
   });
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
@@ -66,17 +46,20 @@ function StatCard({ label, value }: { label: string; value: number | string }) {
 }
 
 export default function AdminPage() {
-  const [authed, setAuthed] = useState<boolean | null>(null); // null = loading
+  const [authed, setAuthed] = useState<boolean | null>(null);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [spots, setSpots] = useState<Spot[]>([]);
+  const [spots, setSpots] = useState<SpotRow[]>([]);
   const [ads, setAds] = useState<Ad[]>([]);
   const [tab, setTab] = useState<'spots' | 'ads'>('ads');
 
-  // Verify session on mount by asking the server (cookie is httpOnly so
-  // document.cookie can't see it). F-05 fix: server-side check replaces
-  // the broken client-side cookie scan.
+  // Edit modal state — exactly one modal open at a time
+  const [editingSpot, setEditingSpot] = useState<SpotRow | null>(null);
+  const [spotIsNew, setSpotIsNew] = useState(false);
+  const [editingAd, setEditingAd] = useState<Ad | null>(null);
+  const [adIsNew, setAdIsNew] = useState(false);
+
   useEffect(() => {
     fetch('/match/api/admin-auth', { credentials: 'same-origin' })
       .then((res) => {
@@ -86,7 +69,6 @@ export default function AdminPage() {
       .catch(() => setAuthed(false));
   }, []);
 
-  // Load data when authed
   useEffect(() => {
     if (!authed) return;
     Promise.all([
@@ -143,6 +125,78 @@ export default function AdminPage() {
     }
   };
 
+  // ── Spot CRUD wiring ──────────────────────────────────────────────
+  const openNewSpot = () => {
+    setSpotIsNew(true);
+    setEditingSpot({
+      id: '',
+      name: '',
+      nameEn: '',
+      city: '',
+      cityEn: '',
+      country: '',
+      countryCode: '',
+      region: '東南亞',
+      image: '',
+      imageCredit: '',
+      blurb: '',
+      tags: [],
+      travelMood: [],
+      priceLevel: 1,
+      dealCode: '',
+    });
+  };
+
+  const openEditSpot = (spot: SpotRow) => {
+    setSpotIsNew(false);
+    setEditingSpot(spot);
+  };
+
+  const onSpotSaved = (saved: SpotRow) => {
+    setSpots((prev) => {
+      const idx = prev.findIndex((s) => s.id === saved.id);
+      if (idx === -1) return [...prev, saved];
+      return prev.map((s) => (s.id === saved.id ? saved : s));
+    });
+    setEditingSpot(null);
+  };
+
+  const onSpotDeleted = (id: string) => {
+    setSpots((prev) => prev.filter((s) => s.id !== id));
+  };
+
+  // ── Ad CRUD wiring ────────────────────────────────────────────────
+  const openNewAd = () => {
+    setAdIsNew(true);
+    setEditingAd({
+      id: '',
+      sponsor: '',
+      title: '',
+      image: '',
+      body: '',
+      ctaLabel: '了解更多',
+      clickUrl: '',
+      impressions: 0,
+      clicks: 0,
+      budget: undefined,
+      active: true,
+    });
+  };
+
+  const openEditAd = (ad: Ad) => {
+    setAdIsNew(false);
+    setEditingAd(ad);
+  };
+
+  const onAdSaved = (saved: Ad) => {
+    setAds((prev) => {
+      const idx = prev.findIndex((a) => a.id === saved.id);
+      if (idx === -1) return [...prev, saved];
+      return prev.map((a) => (a.id === saved.id ? saved : a));
+    });
+    setEditingAd(null);
+  };
+
   // Loading state until session check resolves
   if (authed === null) {
     return (
@@ -160,8 +214,7 @@ export default function AdminPage() {
             href="/match"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
           >
-            <ArrowLeft size={16} />
-            返回配對頁
+            <ArrowLeft size={16} /> 返回配對頁
           </Link>
           <div className="text-center mb-6">
             <div className="inline-flex w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 items-center justify-center mb-4">
@@ -201,11 +254,10 @@ export default function AdminPage() {
           href="/match"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
         >
-          <ArrowLeft size={16} />
-          返回配對頁
+          <ArrowLeft size={16} /> 返回配對頁
         </Link>
 
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
           <h1 className="text-3xl font-black text-gray-900 dark:text-white flex items-center gap-3">
             <BarChart3 size={28} className="text-pink-500" />
             配對後台
@@ -226,9 +278,16 @@ export default function AdminPage() {
           </div>
         </div>
 
+        {error && (
+          <div className="mb-4 bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2 rounded-lg flex items-start justify-between gap-2">
+            <span>{error}</span>
+            <button onClick={() => setError('')} className="text-red-700 hover:text-red-900">✕</button>
+          </div>
+        )}
+
         {tab === 'ads' && (
           <div className="space-y-4">
-            {/* Aggregate stats row — north-star metrics at a glance. */}
+            {/* Aggregate stats row */}
             {ads.length > 0 && (() => {
               const totalImpressions = ads.reduce((s, a) => s + (a.impressions || 0), 0);
               const totalClicks = ads.reduce((s, a) => s + (a.clicks || 0), 0);
@@ -243,8 +302,14 @@ export default function AdminPage() {
                 </div>
               );
             })()}
-            {/* Sort by CTR (active ads first, then descending CTR). Ads with
-                zero impressions sort last so newly-added ads don't dominate. */}
+
+            <button
+              onClick={openNewAd}
+              className="w-full bg-white dark:bg-gray-900 rounded-2xl p-3 border-2 border-dashed border-gray-300 dark:border-gray-700 text-gray-500 hover:text-pink-600 hover:border-pink-400 transition flex items-center justify-center gap-2 text-sm font-bold"
+            >
+              <Plus size={16} /> 新增廣告
+            </button>
+
             {[...ads]
               .sort((a, b) => {
                 if (a.active !== b.active) return a.active ? -1 : 1;
@@ -258,26 +323,34 @@ export default function AdminPage() {
                 className="bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-sm border border-gray-200 dark:border-gray-800"
               >
                 <div className="flex gap-4">
-                  <div
-                    className="w-24 h-24 rounded-xl bg-cover bg-center shrink-0"
+                  <button
+                    type="button"
+                    onClick={() => openEditAd(ad)}
+                    className="w-24 h-24 rounded-xl bg-cover bg-center shrink-0 cursor-pointer hover:opacity-80 transition ring-0 hover:ring-2 hover:ring-pink-400"
                     style={{ backgroundImage: `url(${ad.image})` }}
+                    aria-label={`編輯 ${ad.title}`}
                   />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
-                      <div>
+                      <button
+                        type="button"
+                        onClick={() => openEditAd(ad)}
+                        className="text-left min-w-0 flex-1"
+                      >
                         <span className="text-xs font-bold text-pink-600 uppercase">{ad.sponsor}</span>
                         <h3 className="font-bold text-gray-900 dark:text-white truncate">{ad.title}</h3>
                         <p className="text-xs text-gray-500 mt-1 line-clamp-2">{ad.body}</p>
-                      </div>
+                      </button>
                       <button
                         onClick={() => toggleAdActive(ad)}
                         className={`shrink-0 p-2 rounded-lg ${ad.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'}`}
+                        aria-label={ad.active ? '停用' : '啟用'}
                       >
                         {ad.active ? <ToggleRight size={20} /> : <ToggleLeft size={20} />}
                       </button>
                     </div>
-                    <div className="flex items-center justify-between mt-3">
-                      <div className="flex gap-4 text-xs">
+                    <div className="flex items-center justify-between mt-3 flex-wrap gap-2">
+                      <div className="flex gap-3 text-xs">
                         <span className="text-gray-500">
                           曝光: <strong className="text-gray-900 dark:text-white">{ad.impressions || 0}</strong>
                         </span>
@@ -296,6 +369,7 @@ export default function AdminPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="p-1.5 text-gray-400 hover:text-pink-500"
+                          aria-label="開新分頁預覽"
                         >
                           <ExternalLink size={14} />
                         </a>
@@ -304,6 +378,12 @@ export default function AdminPage() {
                           className="text-xs text-gray-400 hover:text-red-500 px-2 py-1"
                         >
                           重置
+                        </button>
+                        <button
+                          onClick={() => openEditAd(ad)}
+                          className="text-xs text-gray-400 hover:text-pink-500 px-2 py-1 flex items-center gap-1"
+                        >
+                          <Pencil size={12} /> 編輯
                         </button>
                       </div>
                     </div>
@@ -315,32 +395,69 @@ export default function AdminPage() {
         )}
 
         {tab === 'spots' && (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {spots.map((spot) => (
-              <div
-                key={spot.id}
-                className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-800"
-              >
-                <div
-                  className="w-full h-32 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${spot.image})` }}
-                />
-                <div className="p-3">
-                  <h3 className="font-bold text-sm text-gray-900 dark:text-white truncate">{spot.name}</h3>
-                  <p className="text-xs text-gray-500 mt-1">{spot.city} · {spot.country}</p>
-                  <span className="text-[10px] uppercase font-bold text-pink-600 mt-1 inline-block">
-                    {spot.region}
-                  </span>
-                </div>
-              </div>
-            ))}
+          <div className="space-y-3">
+            <button
+              onClick={openNewSpot}
+              className="w-full bg-white dark:bg-gray-900 rounded-2xl p-3 border-2 border-dashed border-gray-300 dark:border-gray-700 text-gray-500 hover:text-pink-600 hover:border-pink-400 transition flex items-center justify-center gap-2 text-sm font-bold"
+            >
+              <Plus size={16} /> 新增景點
+            </button>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {spots.map((spot) => (
+                <button
+                  key={spot.id}
+                  type="button"
+                  onClick={() => openEditSpot(spot)}
+                  className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-800 text-left hover:shadow-md hover:border-pink-300 transition group"
+                >
+                  <div className="relative">
+                    <div
+                      className="w-full h-32 bg-cover bg-center group-hover:scale-105 transition-transform duration-300"
+                      style={{ backgroundImage: `url(${spot.image})` }}
+                    />
+                    <div className="absolute top-2 right-2 bg-black/60 text-white p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Pencil size={12} />
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <h3 className="font-bold text-sm text-gray-900 dark:text-white truncate">{spot.name}</h3>
+                    <p className="text-xs text-gray-500 mt-1">{spot.city} · {spot.country}</p>
+                    <span className="text-[10px] uppercase font-bold text-pink-600 mt-1 inline-block">
+                      {spot.region || '—'}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
         )}
 
         <div className="mt-8 p-4 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-xl text-xs text-yellow-800 dark:text-yellow-200">
-          💡 新增景點或廣告：編輯 <code className="bg-yellow-100 dark:bg-yellow-900/50 px-1.5 py-0.5 rounded">src/data/couple/spots.json</code> 或 <code className="bg-yellow-100 dark:bg-yellow-900/50 px-1.5 py-0.5 rounded">ads.json</code>，執行 <code className="bg-yellow-100 dark:bg-yellow-900/50 px-1.5 py-0.5 rounded">node /Users/roger/scripts/seed-firestore-couple.mjs</code> 同步到 Firestore，push 即可部署。
+          💡 新增景點或廣告：按上面的「＋ 新增」按鈕。編輯現有項目：點擊卡片。所有改動會即時寫入 Firestore。
         </div>
       </div>
+
+      {/* Edit modals — only one open at a time */}
+      {editingSpot && (
+        <SpotEditModal
+          spot={editingSpot}
+          isNew={spotIsNew}
+          onClose={() => setEditingSpot(null)}
+          onSaved={onSpotSaved}
+          onDeleted={onSpotDeleted}
+          adminMutate={adminMutate as any}
+        />
+      )}
+      {editingAd && (
+        <AdEditModal
+          ad={editingAd}
+          isNew={adIsNew}
+          onClose={() => setEditingAd(null)}
+          onSaved={onAdSaved}
+          adminMutate={adminMutate as any}
+        />
+      )}
     </div>
   );
 }
