@@ -22,6 +22,7 @@ import {
   Sparkles,
   ArrowLeft,
 } from 'lucide-react';
+import { MatchNav } from '@/components/couple/MatchNav';
 import type { User } from 'firebase/auth';
 
 type Mode = 'login' | 'signup' | null;
@@ -123,12 +124,7 @@ export default function AccountPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 dark:from-gray-950 dark:via-pink-950/30 dark:to-gray-950 px-4 py-8">
       <div className="mx-auto max-w-md">
-        <Link
-          href="/match"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
-        >
-          <ArrowLeft size={16} /> 返回配對頁
-        </Link>
+        <MatchNav />
 
         <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 shadow-xl border border-pink-100 dark:border-pink-900/30">
           <div className="text-center mb-6">

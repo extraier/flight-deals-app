@@ -4,15 +4,15 @@ import { Heart, X, Plane } from 'lucide-react';
 import Link from 'next/link';
 import type { SpotCard as SpotCardType } from '@/lib/couple/cards';
 
-export function MatchModal({
-  match,
-  onClose,
-  onNext,
-}: {
+interface MatchModalProps {
   match: SpotCardType;
   onClose: () => void;
   onNext: () => void;
-}) {
+  roomId?: string;  // Hermes 2026-08-14: passed so the 查看機票 back-button
+                    // returns to THIS room instead of the airport selector.
+}
+
+export function MatchModal({ match, onClose, onNext, roomId }: MatchModalProps) {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-pink-950/40 backdrop-blur-md p-4 animate-in fade-in duration-300">
       <div className="bg-gradient-to-br from-pink-500 via-rose-500 to-pink-600 rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl relative text-center">
@@ -47,8 +47,10 @@ export function MatchModal({
           </div>
 
           {match.dealCode && (
+            // Hermes 2026-08-14: pass ?from=room:<roomId> so the route page's
+            // back button returns to this couple room.
             <Link
-              href={`/route/${match.dealCode}`}
+              href={`/route/${match.dealCode}${roomId ? `?from=room:${roomId}` : ''}`}
               className="flex items-center justify-center gap-2 w-full bg-white text-pink-600 font-bold py-3 rounded-2xl mb-2 hover:bg-pink-50 transition shadow-lg"
             >
               <Plane size={18} />

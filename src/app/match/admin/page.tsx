@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, Lock, BarChart3, Plus, ToggleLeft, ToggleRight, ExternalLink, Pencil, Trash2 } from 'lucide-react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/client';
+import { MatchNav } from '@/components/couple/MatchNav';
 import { SpotEditModal, type SpotRow } from './SpotEditModal';
 import { AdEditModal, type AdRow } from './AdEditModal';
 
@@ -218,12 +219,11 @@ export default function AdminPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-950 flex items-center justify-center px-6">
         <div className="w-full max-w-sm bg-white dark:bg-gray-900 rounded-3xl p-8 shadow-2xl">
-          <Link
-            href="/match"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
-          >
-            <ArrowLeft size={16} /> 返回配對頁
-          </Link>
+          {/* Hermes 2026-08-14: MatchNav replaces inline arrow so admin matches
+              the /match/wishlist/account nav pattern. */}
+          <div className="mb-6 -mx-8 -mt-8 px-8 pt-8 pb-6 rounded-t-3xl">
+            <MatchNav />
+          </div>
           <div className="text-center mb-6">
             <div className="inline-flex w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 items-center justify-center mb-4">
               <Lock size={28} className="text-slate-600 dark:text-slate-300" />
@@ -258,12 +258,7 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 px-6 py-8">
       <div className="mx-auto max-w-4xl">
-        <Link
-          href="/match"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
-        >
-          <ArrowLeft size={16} /> 返回配對頁
-        </Link>
+        <MatchNav />
 
         <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
           <h1 className="text-3xl font-black text-gray-900 dark:text-white flex items-center gap-3">

@@ -21,6 +21,7 @@ import {
   Plane,
   LogIn,
 } from 'lucide-react';
+import { MatchNav } from '@/components/couple/MatchNav';
 import type { User } from 'firebase/auth';
 
 export default function WishlistPage() {
@@ -105,9 +106,7 @@ export default function WishlistPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 dark:from-gray-950 dark:via-pink-950/30 dark:to-gray-950 px-4 py-8">
         <div className="mx-auto max-w-md">
-          <Link href="/match" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
-            <ArrowLeft size={16} /> 返回配對頁
-          </Link>
+          <MatchNav />
           <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 shadow-xl border border-pink-100 text-center">
             <div className="inline-flex w-16 h-16 rounded-full bg-pink-100 dark:bg-pink-900/30 items-center justify-center mb-3">
               <Heart size={28} className="text-pink-500" />
@@ -132,9 +131,7 @@ export default function WishlistPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 dark:from-gray-950 dark:via-pink-950/30 dark:to-gray-950 px-4 py-8">
       <div className="mx-auto max-w-2xl">
-        <Link href="/match" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
-          <ArrowLeft size={16} /> 返回配對頁
-        </Link>
+        <MatchNav />
 
         <div className="mb-6">
           <h1 className="text-3xl font-black text-gray-900 dark:text-white flex items-center gap-2">
@@ -218,7 +215,7 @@ function WishlistCard({
       >
         {spot.dealCode && (
           <Link
-            href={`/route/${spot.dealCode}`}
+            href={`/route/${spot.dealCode}?from=wishlist`}
             className="absolute bottom-2 right-2 bg-white/90 text-pink-600 px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-white shadow"
           >
             <Plane size={12} /> 查機票

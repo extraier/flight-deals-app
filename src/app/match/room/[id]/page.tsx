@@ -275,6 +275,9 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
           match={matchSpot}
           onClose={() => setMatchSpot(null)}
           onNext={() => setMatchSpot(null)}
+          // Hermes 2026-08-14: pass roomId so the 查看機票 back button
+          // returns to THIS room instead of the airport selector.
+          roomId={roomId}
         />
       )}
     </div>

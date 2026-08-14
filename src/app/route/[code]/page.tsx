@@ -2,12 +2,12 @@ import { FlightDealCard } from '@/components/FlightDealCard';
 import allDatesHkg from '@/data/all_dates.json';
 import allDatesSzx from '@/data/all_dates_szx.json';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Plane } from 'lucide-react';
 import type { FlightDeal } from '@/types/flight';
 
 interface PageProps {
   params: Promise<{ code: string }>;
-  searchParams: Promise<{ dep?: string }>;
+  searchParams: Promise<{ dep?: string; from?: string }>;
 }
 
 // Hermes 2026-07-01: route page used to read ONLY the bundled static JSON,
@@ -38,8 +38,22 @@ async function fetchDealsLive(dep: 'HKG' | 'SZX'): Promise<FlightDeal[] | null> 
 
 export default async function RoutePage({ params, searchParams }: PageProps) {
   const { code } = await params;
-  const { dep } = await searchParams;
+  const { dep, from } = await searchParams;
   const departure = (dep === 'SZX' ? 'SZX' : 'HKG') as 'HKG' | 'SZX';
+  // Hermes 2026-08-14: `from` query param tells us where the user came from.
+  // `from=room:<roomId>` → back to couple room
+  // `from=wishlist` → back to /match/wishlist
+  // default → back to airport selector
+  const backHref = from?.startsWith('room:')
+    ? `/match/room/${from.slice('room:'.length)}`
+    : from === 'wishlist'
+    ? '/match/wishlist'
+    : `/?dep=${departure}`;
+  const backLabel = from?.startsWith('room:')
+    ? '返回情侶房間'
+    : from === 'wishlist'
+    ? '返回心願清單'
+    : `返回 ${departure === 'HKG' ? '香港國際機場' : '深圳寶安機場'}`;
   // Hermes 2026-07-01: uppercase the URL code before lookup. The case-
   // insensitive middleware may have lowercased the path (e.g. /route/BKK
   // → /route/bkk) before this handler runs. Codes in the data are always
@@ -62,13 +76,13 @@ export default async function RoutePage({ params, searchParams }: PageProps) {
   return (
     <div className="min-h-screen bg-background py-12">
       <div className="mx-auto max-w-lg px-4">
-        {/* Back Link */}
+        {/* Back Link — Hermes 2026-08-14: smart target based on ?from= param */}
         <Link
-          href={`/?dep=${departure}`}
-          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          href={backHref}
+          className="mb-8 inline-flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white font-medium transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
-          返回 {departure === 'HKG' ? '香港國際機場' : '深圳寶安機場'}
+          {backLabel}
         </Link>
 
         {/* Departure Badge */}
@@ -93,10 +107,10 @@ export default async function RoutePage({ params, searchParams }: PageProps) {
                 : `找不到 ${normalizedCode} 的數據`}
             </p>
             <Link
-              href={`/?dep=${departure}`}
+              href={backHref}
               className="mt-4 inline-block text-sm text-sky-600 hover:text-sky-500"
             >
-              ← 返回機票列表
+              ← {backLabel}
             </Link>
           </div>
         )}

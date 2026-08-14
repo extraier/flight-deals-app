@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Heart, Copy, Users, ArrowLeft, Shuffle } from 'lucide-react';
 import { ensureAnonAuth } from '@/lib/firebase/client';
 import { createRoom, joinRoom } from '@/lib/couple/room';
+import { MatchNav } from '@/components/couple/MatchNav';
 
 export default function CouplePage() {
   const router = useRouter();
@@ -55,13 +56,7 @@ export default function CouplePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 dark:from-gray-950 dark:via-pink-950/30 dark:to-gray-950">
       <div className="mx-auto max-w-md px-4 py-8">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
-        >
-          <ArrowLeft size={16} />
-          返回主頁
-        </Link>
+        <MatchNav />
 
         <div className="text-center mb-8">
           <div className="inline-flex w-20 h-20 rounded-full bg-pink-100 dark:bg-pink-900/30 items-center justify-center mb-4">
@@ -129,21 +124,6 @@ export default function CouplePage() {
               {error}
             </div>
           )}
-        </div>
-
-        <div className="mt-4 flex justify-center gap-4 text-sm">
-          <Link
-            href="/match/wishlist"
-            className="text-pink-600 dark:text-pink-400 hover:underline font-bold flex items-center gap-1"
-          >
-            💖 心願清單
-          </Link>
-          <Link
-            href="/match/account"
-            className="text-pink-600 dark:text-pink-400 hover:underline font-bold flex items-center gap-1"
-          >
-            👤 帳戶
-          </Link>
         </div>
 
         {/* Hermes 2026-08-14: was text-gray-400 which was invisible on light.
