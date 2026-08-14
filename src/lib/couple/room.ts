@@ -123,11 +123,29 @@ export async function leaveRoom(roomId: string): Promise<void> {
   await updateDoc(ref, { endedAt: Date.now() });
 }
 
-/** Fetch all spots (client-side; cached by Firestore). */
+/** Fetch spots for a couple room (client-side; cached by Firestore).
+ *
+ * Hermes 2026-08-14 (Phase 3.5): with 674 spots live, fetching all of
+ * them on every room open is ~1 MB of payload per session. We cap at
+ * SESSION_SPOT_CAP random spots per session — variety across rooms
+ * comes from the random sample + shuffled deck, not from showing the
+ * whole library. Firestore's IndexedDB cache makes subsequent room
+ * opens instant.
+ */
+const SESSION_SPOT_CAP = 200;
+
 export async function fetchSpots(): Promise<SpotCard[]> {
   const q = query(collection(db, 'coupleSpots'));
   const snap = await getDocs(q);
-  return snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+  const all = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+  if (all.length <= SESSION_SPOT_CAP) return all;
+  // Random sample without replacement (Fisher–Yates partial shuffle).
+  const sampled = [...all];
+  for (let i = 0; i < SESSION_SPOT_CAP; i++) {
+    const j = i + Math.floor(Math.random() * (sampled.length - i));
+    [sampled[i], sampled[j]] = [sampled[j], sampled[i]];
+  }
+  return sampled.slice(0, SESSION_SPOT_CAP);
 }
 
 /** Fetch all ads. */
