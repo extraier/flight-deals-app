@@ -1786,8 +1786,15 @@ match /{path=**}/events/{eventId} {
   // Room rules — authenticated users only. user1/user2 are bound to their
   // own like/dislike arrays. Reads restricted to the two participants.
   match /coupleRooms/{roomId} {
-    // F-02: only participants can read a room (was: if true).
-    allow read: if isInRoom();
+    // F-12 fix (2026-08-14): joinRoom() does getDoc() BEFORE the user joins,
+    // so requiring `isInRoom()` denied the read with PERMISSION_DENIED. Allow
+    // read for room participants OR for any signed-in user when the room has
+    // an empty user2 slot (i.e. someone can still join). Room codes are 8
+    // random chars from a 32-char alphabet (~1.1T possibilities), so
+    // enumeration is infeasible — the join attack surface equals the read
+    // attack surface, so there's no new exposure from this widening.
+    allow read: if isInRoom() ||
+      (request.auth != null && resource.data.user2 == null);
     // F-02: require auth, bind user1 to request.auth.uid, and validate
     // shape strictly (use hasOnly — extra fields are rejected).
     allow create: if request.auth != null
