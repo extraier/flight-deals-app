@@ -181,8 +181,8 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
       <div className="min-h-screen flex items-center justify-center px-6 bg-gradient-to-br from-pink-50 to-rose-100">
         <div className="text-center">
           <p className="text-red-600 font-bold mb-4">{error}</p>
-          <Link href="/match" className="text-pink-600 underline">
-            返回配對頁
+          <Link href="/" className="text-pink-600 underline">
+            返回機票格價
           </Link>
         </div>
       </div>
@@ -223,10 +223,10 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
           <p className="text-sm font-bold text-pink-500 animate-pulse">等待另一半加入...</p>
         </div>
         <Link
-          href="/match"
+          href="/"
           className="mt-8 text-gray-600 hover:text-gray-900 font-bold text-sm underline"
         >
-          離開房間
+          返回機票格價
         </Link>
       </div>
     );
@@ -243,13 +243,18 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
       </div>
       {/* Hermes 2026-08-14 (screenshot 9): top-right buttons (wishlist, theme, exit).
           The wishlist link saves roomId to sessionStorage so MatchNav's back
-          button on the wishlist page renders "返回情侶房間" + href=/match/room/{id}. */}
+          button on the wishlist page renders "返回情侶房間" + href=/match/room/{id}.
+
+          Hermes 2026-08-14 (screenshot 11): the exit button (↗) goes to /
+          (flight deals landing page) — not /match. The room page is the
+          OUTER page in the couple flow, so "leaving" means going back to
+          where the user came from, which is the flight deals page (機票格價). */}
       <div className="absolute top-2 right-2 z-30 flex items-center gap-2">
         <RoomWishlistLink roomId={roomId} />
         <RoomThemeToggle />
         <Link
-          href="/match"
-          aria-label="離開房間"
+          href="/"
+          aria-label="返回機票格價"
           className="p-2 bg-black/50 text-white rounded-full hover:bg-red-500 transition"
         >
           <LogOut size={16} />
@@ -288,7 +293,7 @@ function spotMatchCount(room: RoomData, side: 'user1' | 'user2'): number {
 // Hermes 2026-08-14 (screenshot 9): inline wishlist link for the room page.
 // Saves the current room ID to sessionStorage on click so MatchNav (the
 // wishlist page's nav) can render a "back to room" button instead of the
-// generic "返回機票格價". The sessionStorage key is intentionally scoped
+// generic "返回一起揀目的地". The sessionStorage key is intentionally scoped
 // to this single use case so other nav refreshes don't pick it up.
 function RoomWishlistLink({ roomId }: { roomId: string }) {
   return (

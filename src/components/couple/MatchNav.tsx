@@ -11,10 +11,17 @@ import { ArrowLeft, Heart, Users, Sun, Moon } from 'lucide-react';
  * /match/account, and /match/admin. Highlights the current page with a pink
  * background so users know where they are.
  *
- * Hermes 2026-08-14: User feedback — persistent nav (wishlist + account) should
- * sit at the top, not below the main CTA. This component consolidates the
- * repeated "back arrow + heart/account" pattern that was duplicated across all
- * 4 match pages.
+ * Back-button logic (pathname-aware, sessionStorage override for room context):
+ *
+ *   /match             → "/", label "返回機票格價" (flight deals landing)
+ *   /match/wishlist
+ *     with no room ctx → "/match", label "返回一起揀目的地"
+ *     with room ctx   → "/match/room/{id}", label "返回情侶房間"
+ *   /match/account     → "/match", label "返回一起揀目的地"
+ *   /match/admin       → "/match", label "返回一起揀目的地"
+ *
+ * The room page does NOT use MatchNav (it has its own absolute buttons), but
+ * its exit (↗) button follows the same semantics: room → flight deals ("/").
  *
  * Hermes 2026-08-14 (screenshot 5): User asked for:
  *   1. Dark/light theme toggle in same row as back button
@@ -23,57 +30,74 @@ import { ArrowLeft, Heart, Users, Sun, Moon } from 'lucide-react';
  *
  * Hermes 2026-08-14 (screenshot 9): When the user opens the wishlist from
  * inside a match room, the back button should say "返回情侶房間" and link
- * to /match/room/{id} — not the generic "返回機票格價" landing page. The
- * room page writes a sessionStorage entry (matchWishlistBack) on click;
- * we read it here and clear it after the user clicks back, so a hard
- * refresh of the wishlist page doesn't leave a stale back link.
+ * to /match/room/{id} — not the generic "返回一起揀目的地" picker. The room
+ * page writes a sessionStorage entry (matchWishlistBack) on click; we read
+ * it here and clear it after the user clicks back, so a hard refresh of
+ * the wishlist page doesn't leave a stale back link.
  *
- * Hermes 2026-08-14 (screenshot 10): Default back link changed from
- * "返回機票格價" (flight deals landing page) to "返回一起揀目的地"
- * (destination picker at /match). The destination picker is the meaningful
- * "back" context for the /match/* subtree. If sessionStorage has a
- * room-specific back link (from opening the wishlist inside a room), we
- * still honor that — returning to the room takes precedence.
+ * Hermes 2026-08-14 (screenshot 10): Default back link on /match/wishlist
+ * (when no room context) changed from "返回機票格價" to "返回一起揀目的地",
+ * because the destination picker is the meaningful "back" context for the
+ * /match/* subtree, not the flight deals landing page.
+ *
+ * Hermes 2026-08-14 (screenshot 11): On /match specifically, the back
+ * button goes to "/" with label "返回機票格價" (the destination picker is
+ * the OUTER page, not the back-button target). The earlier default
+ * "返回一起揀目的地" was wrong on /match itself — it would loop back to
+ * the same page. Fixed by varying the default per pathname.
  */
 export function MatchNav() {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  // Hermes 2026-08-14 (screenshot 10): default back link is the destination
-  // picker (/match). The room page writes a sessionStorage entry on click
-  // that overrides this with "返回情侶房間" + /match/room/{id} when the user
-  // opened the wishlist from inside a room.
+  // Default back link — set per-pathname in the useEffect below.
   const [backLink, setBackLink] = useState<{ href: string; label: string }>({
-    href: '/match',
-    label: '返回一起揀目的地',
+    href: '/',
+    label: '返回機票格價',
   });
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Hermes 2026-08-14 (screenshot 9): only honor the sessionStorage back
-  // link on the wishlist page. On /match/account or /match/admin the user
-  // got there via direct navigation, so falling back to /match is correct.
+  // Hermes 2026-08-14 (screenshots 9, 10, 11): back button logic per pathname.
+  // 1. /match/wishlist with a room sessionStorage entry → return to that room.
+  // 2. /match/wishlist without room context → /match (destination picker).
+  // 3. /match itself → / (flight deals — the destination picker is the page,
+  //    not a back target).
+  // 4. /match/account or /match/admin → /match (destination picker).
   useEffect(() => {
     if (!pathname?.startsWith('/match/wishlist')) {
-      // Not on wishlist — clear any stale entry so it doesn't leak.
+      // Clear any stale entry so it doesn't leak to other pages.
       try {
         sessionStorage.removeItem('matchWishlistBack');
       } catch {}
+    }
+
+    // Wishlist gets special handling: room context overrides default.
+    if (pathname?.startsWith('/match/wishlist')) {
+      try {
+        const raw = sessionStorage.getItem('matchWishlistBack');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed?.href && parsed?.label) {
+            setBackLink(parsed);
+            return;
+          }
+        }
+      } catch {}
+      // No room context → back to destination picker.
+      setBackLink({ href: '/match', label: '返回一起揀目的地' });
       return;
     }
-    try {
-      const raw = sessionStorage.getItem('matchWishlistBack');
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (parsed?.href && parsed?.label) {
-          setBackLink(parsed);
-          return;
-        }
-      }
-    } catch {}
-    // Fallback: destination picker page.
+
+    // /match itself → back to flight deals.
+    if (pathname === '/match') {
+      setBackLink({ href: '/', label: '返回機票格價' });
+      return;
+    }
+
+    // /match/account, /match/admin, or any other /match/* → back to picker.
     setBackLink({ href: '/match', label: '返回一起揀目的地' });
   }, [pathname]);
 
