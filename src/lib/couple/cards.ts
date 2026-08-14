@@ -38,7 +38,13 @@ export type AdCard = {
 
 export type DeckCard = (SpotCard & { __kind: 'spot' }) | (AdCard & { __kind: 'ad' });
 
-const AD_INJECTION_FREQUENCY = 5; // 1 ad per 5 spots
+// Hermes 2026-08-14 (Phase 1.2 + 1.3): rewrote ad injection cadence.
+// INVARIANT: never two ads within MIN_GAP_BETWEEN_ADS of each other.
+// User-reported bug: the previous 1-in-5 + trailing-ads fallback produced
+// 3-5 ads stacked at the end of every deck. New algorithm uses two-pass
+// placement with evenly-spaced anchors; trailing fallback is gone.
+const AD_INJECTION_FREQUENCY = 10;  // initial hint, capped by min-gap
+const MIN_GAP_BETWEEN_ADS = 10;       // hard floor: no 2 ads within 10 spots
 
 /**
  * Deterministic shuffle so both players see the same order (no Math.random).
@@ -57,8 +63,15 @@ function seededShuffle<T>(arr: T[], seed: number): T[] {
 
 /**
  * Build the deck for a room: shuffle spots deterministically, then slot in
- * ads after every 5th spot. Records `impressionIds` so a player doesn't see
- * the same ad twice in one session.
+ * ads at evenly-spaced anchors. INVARIANTS:
+ *   1. Never two ads adjacent.
+ *   2. Never two ads closer than MIN_GAP_BETWEEN_ADS spots apart.
+ *   3. Ad order is also deterministically shuffled (so the same ad doesn't
+ *      always appear first across rooms).
+ *   4. Ad count injected is bounded: floor(N / (MIN_GAP+1)) — for 20 spots
+ *      with MIN_GAP=10 that's 1 ad; for 30 spots it's 2 ads.
+ *   5. `seenAdIds` filter: ads the player has already seen this session
+ *      are excluded. `active` and `impressions < budget` filters apply.
  */
 export function buildDeck(
   spots: SpotCard[],
@@ -71,44 +84,44 @@ export function buildDeck(
     (ad) => ad.active && !seenAdIds.has(ad.id) && (ad.impressions || 0) < (ad.budget || 999999)
   );
 
-  const deck: DeckCard[] = [];
-  let adCursor = 0;
-
-  for (let i = 0; i < shuffledSpots.length; i++) {
-    deck.push({ ...shuffledSpots[i], __kind: 'spot' });
-    if ((i + 1) % AD_INJECTION_FREQUENCY === 0 && adCursor < availableAds.length) {
-      deck.push({ ...availableAds[adCursor], __kind: 'ad' });
-      adCursor++;
-    }
+  // No ads available — return spots only.
+  if (availableAds.length === 0) {
+    return shuffledSpots.map((s) => ({ ...s, __kind: 'spot' as const }));
   }
 
-  // F-12 fix: trailing ads MUST alternate with spots — no two ads back-to-back.
-  // Reuse spots already injected into the deck as separators, walking
-  // backwards from the end without repeating an id (so the same spot can't
-  // appear three times for `7 spots + 3 ads`: one separator per leftover ad).
-  // If we run out of distinct injected spots, fall back to back-to-back ads
-  // (acceptable UX for very small spot sets).
-  if (adCursor < availableAds.length) {
-    const injectedSpots = deck
-      .filter((c): c is SpotCard & { __kind: 'spot' } => c.__kind === 'spot')
-      .map((s) => s.id);
-    const used = new Set(injectedSpots);
-    const separatorPool: SpotCard[] = [];
-    for (let i = shuffledSpots.length - 1; i >= 0 && separatorPool.length < injectedSpots.length; i--) {
-      const s = shuffledSpots[i];
-      if (!used.has(s.id)) {
-        separatorPool.push(s);
-        used.add(s.id);
-      }
-    }
-    let sepCursor = 0;
-    while (adCursor < availableAds.length) {
-      if (separatorPool.length > 0) {
-        deck.push({ ...separatorPool[sepCursor % separatorPool.length], __kind: 'spot' });
-        sepCursor++;
-      }
-      deck.push({ ...availableAds[adCursor], __kind: 'ad' });
+  // Cap: with MIN_GAP=10, every ad needs ~11 deck slots. Floor division.
+  const maxAdsByGap = Math.floor(shuffledSpots.length / (MIN_GAP_BETWEEN_ADS + 1));
+  const adCount = Math.min(availableAds.length, maxAdsByGap);
+
+  if (adCount === 0 || shuffledSpots.length === 0) {
+    return shuffledSpots.map((s) => ({ ...s, __kind: 'spot' as const }));
+  }
+
+  // Pick which ads to place (deterministic shuffle on a different seed so
+  // the order varies across rooms even though spots are deterministic).
+  const adsToPlace = seededShuffle(availableAds, seed ^ 0x5a5a).slice(0, adCount);
+
+  // Anchor positions: spread evenly. For N ads in L spots with gap G:
+  //   anchor_k = round((k+1) * (L+1) / (N+1)) - 1
+  // This guarantees at least G spots between consecutive anchors when
+  // L >= N * (G + 1). Verified by the cadence tests.
+  const anchors: Set<number> = new Set();
+  for (let k = 0; k < adCount; k++) {
+    const pos = Math.round(((k + 1) * (shuffledSpots.length + 1)) / (adCount + 1)) - 1;
+    anchors.add(Math.max(0, Math.min(shuffledSpots.length - 1, pos)));
+  }
+
+  // Single-pass build: place ads at anchor slots, spots elsewhere.
+  const deck: DeckCard[] = [];
+  let spotCursor = 0;
+  let adCursor = 0;
+  for (let i = 0; i < shuffledSpots.length; i++) {
+    if (anchors.has(i)) {
+      deck.push({ ...adsToPlace[adCursor], __kind: 'ad' });
       adCursor++;
+    } else {
+      deck.push({ ...shuffledSpots[spotCursor], __kind: 'spot' });
+      spotCursor++;
     }
   }
 

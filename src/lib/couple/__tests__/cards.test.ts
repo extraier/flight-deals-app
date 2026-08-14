@@ -63,18 +63,27 @@ test('buildDeck: at least 10 spots between any two consecutive ads', () => {
   }
 });
 
-test('buildDeck: total deck length = spots + ads (no spots dropped)', () => {
+test('buildDeck: total deck length = spots.length (ads replace spots at anchor slots, not appended)', () => {
   const deck = buildDeck(spots20, ads5, 42);
-  // Some spots may be dropped to make room for ads (e.g. 20 spots + 2 ads = 22 entries)
-  // We require: deck length = spots.length + adCount-injected
-  const adCount = deck.filter((c) => c.__kind === 'ad').length;
-  assert.equal(deck.length, spots20.length + adCount);
+  // Ads sit IN PLACE OF spots at evenly-spaced anchors — they don't add
+  // to the deck length. The total deck is always exactly spots.length.
+  assert.equal(deck.length, spots20.length);
 });
 
-test('buildDeck: with 5 ads and 20 spots, inject exactly 2 ads (1 per 10)', () => {
+test('buildDeck: with 5 ads and 20 spots, inject exactly 1 ad (floor(20/11) = 1)', () => {
   const deck = buildDeck(spots20, ads5, 42);
+  // cap = floor(N / (MIN_GAP+1)) = floor(20 / 11) = 1
   const adCount = deck.filter((c) => c.__kind === 'ad').length;
-  assert.equal(adCount, 2, `expected 2 ads in 20 spots, got ${adCount}`);
+  assert.equal(adCount, 1, `expected 1 ad in 20 spots, got ${adCount}`);
+});
+
+test('buildDeck: with 5 ads and 30 spots, inject exactly 2 ads (floor(30/11) = 2)', () => {
+  const spots30 = spots20.concat(Array.from({ length: 10 }, (_, i) => ({
+    ...spots20[0], id: `extra${i}`,
+  })));
+  const deck = buildDeck(spots30, ads5, 42);
+  const adCount = deck.filter((c) => c.__kind === 'ad').length;
+  assert.equal(adCount, 2, `expected 2 ads in 30 spots, got ${adCount}`);
 });
 
 test('buildDeck: with no ads, returns all spots in shuffled order', () => {
