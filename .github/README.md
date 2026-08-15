@@ -24,9 +24,33 @@ issues for the team to clean up separately.
 ## Current state (2026-08-15)
 
   * `test-alerter` ✅ green
-  * `lint` ❌ 41 errors / 65 warnings — pre-existing in `src/`
-  * `test-cards` ❌ — pre-existing
-  * `build` ❌ — pre-existing (needs Firebase env to prerender /match/account)
+  * `test-cards` ✅ green (was Node 20 vs 22 — fixed by bumping Node)
+  * `build` ✅ green (was missing Firebase env — fixed by dummy env vars)
+  * `lint` ❌ 41 errors — pre-existing in `src/`. See "Lint cleanup"
+    below.
+
+The CI now has only one red job: `lint`, which has 41 pre-existing
+errors in `src/`. The remaining job failures from before this commit
+have all been resolved by config changes alone, no source code touched.
+
+## Lint cleanup (separate task)
+
+41 errors to fix before `lint` goes green:
+
+  * 29 × `@typescript-eslint/no-explicit-any` — `any` types need proper
+    generics or `unknown`. Mostly mechanical.
+  * 12 × `react-hooks/set-state-in-effect` — calling `setState()` directly
+    inside an effect can cause cascading renders. Needs the right pattern
+    per use case (often `useEffect` for true side effects or moving state
+    outside the component).
+
+Note: `AGENTS.md` warns that this Next.js version has breaking changes
+not present in upstream — read the relevant guide in
+`node_modules/next/dist/docs/` before changing React state patterns in
+`src/app/match/`.
+
+The 55 unused-vars warnings don't break CI — leave them alone or fix
+opportunistically.
 
 ## Running the tests locally
 
