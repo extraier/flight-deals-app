@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: npm
       - run: npm ci
       - run: npm run lint
@@ -26,7 +26,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          # Node 22+ is required for `--experimental-strip-types` (see
+          # the test:cards script in package.json). Node 24 LTS also
+          # works but Node 22 LTS is the safer target since it
+          # matches the version pinned in AGENTS.md recommendations.
+          node-version: "22"
           cache: npm
       - run: npm ci
       - run: npm run test:cards
@@ -49,15 +53,27 @@ jobs:
   build:
     name: "Next.js build"
     runs-on: ubuntu-latest
-    # Don't gate build on lint/test-cards: those are pre-existing issues
-    # in src/ unrelated to this workflow's purpose. They show as
-    # standalone job failures in the PR but don't break the build.
-    needs: [test-alerter]
+    needs: [test-alerter, test-cards]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: npm
       - run: npm ci
-      - run: npm run build
+      # Next.js prerenders static pages during build. /match/account
+      # imports @/lib/firebase/client, which calls initializeApp() at
+      # module-eval time and validates every NEXT_PUBLIC_FIREBASE_*
+      # env var. Provide dummy values so the build completes — actual
+      # auth happens at runtime in the browser, not at build time.
+      # Real keys live in Vercel env vars and are NOT needed for the
+      # build artifact to be valid.
+      - name: Build with dummy Firebase env
+        env:
+          NEXT_PUBLIC_FIREBASE_API_KEY: "AIzaSyDUMMY-BUILD-TIME-KEY-NOT-A-REAL-ONE"
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: "savetheday-2377a-dummy.firebaseapp.com"
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: "savetheday-2377a-dummy"
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: "savetheday-2377a-dummy.appspot.com"
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: "000000000000"
+          NEXT_PUBLIC_FIREBASE_APP_ID: "1:000000000000:web:0000000000000000000000"
+        run: npm run build
