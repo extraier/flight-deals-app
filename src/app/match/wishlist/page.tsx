@@ -48,17 +48,22 @@ export default function WishlistPage() {
         const snap = await getDocs(collection(db, 'coupleSpots'));
         const map: Record<string, SpotCard> = {};
         snap.forEach((d) => {
-          const data = d.data() as any;
+          const data = d.data() as Partial<SpotCard>;
           map[d.id] = { id: d.id, kind: 'spot', ...data } as SpotCard;
         });
         setAllSpots(map);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.warn('Failed to load spots:', err);
       }
     })();
   }, []);
 
-  // Wishlist subscription (only when signed in)
+  // Wishlist subscription (only when signed in). Setting state inside
+  // the effect to clear `entries` when the user transitions to anon/null
+  // is the cleanest way to keep the UI in sync — the alternative
+  // (deriving from a separate "subscribedEntries" state guarded by a
+  // render check) doubles the bookkeeping without simplifying the path.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!user || user.isAnonymous) {
       setEntries([]);
@@ -79,15 +84,17 @@ export default function WishlistPage() {
     );
     return unsub;
   }, [user]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleRemove = async (spotId: string) => {
     if (!user) return;
     setRemovingId(spotId);
     try {
       await removeFromWishlist(user.uid, spotId);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const e = err as { message?: string };
       console.error('Remove failed:', err);
-      alert('移除失敗: ' + (err.message || String(err)));
+      alert('移除失敗: ' + (e.message || String(err)));
     } finally {
       setRemovingId(null);
     }

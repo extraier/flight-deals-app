@@ -47,7 +47,7 @@ export default function AccountPage() {
   const onAuthSuccess = async (u: User) => {
     try {
       await ensureUserProfile(u);
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Non-fatal — the wishlist write will surface the real error.
       console.warn('ensureUserProfile failed:', err);
     }
@@ -68,8 +68,9 @@ export default function AccountPage() {
       }
       const cred = await signInWithGoogle();
       await onAuthSuccess(cred.user);
-    } catch (err: any) {
-      setError('Google 登入失敗: ' + (err.message || String(err)));
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      setError('Google 登入失敗: ' + (e.message || String(err)));
     } finally {
       setBusy(false);
     }
@@ -88,13 +89,14 @@ export default function AccountPage() {
         ? await signUpWithEmail(email, password)
         : await signInWithEmail(email, password);
       await onAuthSuccess(cred.user);
-    } catch (err: any) {
-      const code = err?.code ?? '';
+    } catch (err: unknown) {
+      const e = err as { code?: string; message?: string };
+      const code = e.code ?? '';
       const msg = code === 'auth/email-already-in-use'
         ? '此 email 已被註冊，請用「登入」模式'
         : code === 'auth/invalid-credential'
         ? 'Email 或密碼錯誤'
-        : err.message || String(err);
+        : e.message || String(err);
       setError(msg);
     } finally {
       setBusy(false);

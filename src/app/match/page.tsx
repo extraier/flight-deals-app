@@ -29,8 +29,9 @@ export default function CouplePage() {
     try {
       const roomId = await createRoom(uid);
       router.push(`/match/room/${roomId}`);
-    } catch (err: any) {
-      setError('建立房間失敗: ' + err.message);
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      setError('建立房間失敗: ' + (e.message ?? String(err)));
       setLoading(false);
     }
   };
@@ -47,8 +48,9 @@ export default function CouplePage() {
       const code = joinCode.toUpperCase();
       const room = await joinRoom(uid, code);
       router.push(`/match/room/${code}`);
-    } catch (err: any) {
-      setError(err.message || '加入房間失敗');
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      setError(e.message || '加入房間失敗');
       setLoading(false);
     }
   };

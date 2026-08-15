@@ -10,9 +10,16 @@ export function ThemeToggle() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
 
+  // Hermes 2026-08-14: standard next-themes hydration pattern. The
+  // `mounted` flag delays rendering until after hydration so the server
+  // and client agree on the theme. This IS a legitimate effect — we
+  // can't derive `mounted` from props/state, and switching to
+  // useSyncExternalStore would require upstream changes to next-themes.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     setMounted(true);
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Hermes 2026-08-14 (screenshot 6): hide the global ThemeToggle on
   // /match/room/* pages — the room has its own top-right exit button

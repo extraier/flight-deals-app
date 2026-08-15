@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { ArrowLeft, Heart, Users, Sun, Moon } from 'lucide-react';
 
 /**
@@ -50,55 +50,81 @@ export function MatchNav() {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  // Default back link — set per-pathname in the useEffect below.
-  const [backLink, setBackLink] = useState<{ href: string; label: string }>({
-    href: '/',
-    label: '返回機票格價',
-  });
 
+  // Hermes 2026-08-14: standard next-themes hydration pattern. The
+  // `mounted` flag delays rendering until after hydration so the server
+  // and client agree on the theme. This IS a legitimate effect — we
+  // can't derive `mounted` from props/state, and switching to
+  // useSyncExternalStore would require upstream changes to next-themes.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     setMounted(true);
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
-  // Hermes 2026-08-14 (screenshots 9, 10, 11): back button logic per pathname.
+  // Hermes 2026-08-14: sessionStorage read via useSyncExternalStore so we
+  // don't need a setState-in-effect to mirror storage into React state.
+  // Returns null on the server (safe default) and the parsed object on
+  // the client when storage has an entry under 'matchWishlistBack'.
+  const wishlistBackOverride = useSyncExternalStore<{ href: string; label: string } | null>(
+    (cb) => {
+      // Hermes 2026-08-14: storage events fire on OTHER tabs only; we
+      // also re-fire on same-tab writes via the custom event below.
+      const onStorage = (e: StorageEvent) => {
+        if (e.key === 'matchWishlistBack') cb();
+      };
+      const onCustom = () => cb();
+      window.addEventListener('storage', onStorage);
+      window.addEventListener('matchWishlistBackChange', onCustom);
+      return () => {
+        window.removeEventListener('storage', onStorage);
+        window.removeEventListener('matchWishlistBackChange', onCustom);
+      };
+    },
+    () => {
+      // Client snapshot — parse the entry defensively.
+      try {
+        const raw = sessionStorage.getItem('matchWishlistBack');
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed.href === 'string' && typeof parsed.label === 'string') {
+          return parsed as { href: string; label: string };
+        }
+        return null;
+      } catch {
+        return null;
+      }
+    },
+    () => null // Server snapshot — always null
+  );
+
+  // Hermes 2026-08-14 (screenshots 9, 10, 11): back-button logic derived
+  // in render from pathname + sessionStorage, no useEffect needed.
   // 1. /match/wishlist with a room sessionStorage entry → return to that room.
   // 2. /match/wishlist without room context → /match (destination picker).
   // 3. /match itself → / (flight deals — the destination picker is the page,
   //    not a back target).
   // 4. /match/account or /match/admin → /match (destination picker).
+  const backLink = (() => {
+    if (pathname?.startsWith('/match/wishlist')) {
+      return wishlistBackOverride ?? { href: '/match', label: '返回一起揀目的地' };
+    }
+    if (pathname === '/match') {
+      return { href: '/', label: '返回機票格價' };
+    }
+    return { href: '/match', label: '返回一起揀目的地' };
+  })();
+
+  // Hermes 2026-08-14 (screenshot 9): clear the stale sessionStorage entry
+  // when the user navigates to a non-wishlist page so the next visit to
+  // the wishlist doesn't accidentally return to a room they already left.
   useEffect(() => {
     if (!pathname?.startsWith('/match/wishlist')) {
-      // Clear any stale entry so it doesn't leak to other pages.
       try {
         sessionStorage.removeItem('matchWishlistBack');
+        window.dispatchEvent(new Event('matchWishlistBackChange'));
       } catch {}
     }
-
-    // Wishlist gets special handling: room context overrides default.
-    if (pathname?.startsWith('/match/wishlist')) {
-      try {
-        const raw = sessionStorage.getItem('matchWishlistBack');
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (parsed?.href && parsed?.label) {
-            setBackLink(parsed);
-            return;
-          }
-        }
-      } catch {}
-      // No room context → back to destination picker.
-      setBackLink({ href: '/match', label: '返回一起揀目的地' });
-      return;
-    }
-
-    // /match itself → back to flight deals.
-    if (pathname === '/match') {
-      setBackLink({ href: '/', label: '返回機票格價' });
-      return;
-    }
-
-    // /match/account, /match/admin, or any other /match/* → back to picker.
-    setBackLink({ href: '/match', label: '返回一起揀目的地' });
   }, [pathname]);
 
   const isMatch = pathname === '/match';
@@ -111,6 +137,9 @@ export function MatchNav() {
   const handleBackClick = () => {
     try {
       sessionStorage.removeItem('matchWishlistBack');
+      // Hermes 2026-08-14: notify any other MatchNav listeners (storage
+      // event doesn't fire on the same tab that wrote).
+      window.dispatchEvent(new Event('matchWishlistBackChange'));
     } catch {}
   };
 

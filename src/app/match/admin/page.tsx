@@ -8,6 +8,7 @@ import { db } from '@/lib/firebase/client';
 import { MatchNav } from '@/components/couple/MatchNav';
 import { SpotEditModal, type SpotRow } from './SpotEditModal';
 import { AdEditModal, type AdRow } from './AdEditModal';
+import type { AdminMutate } from './types';
 
 type Ad = AdRow;
 
@@ -20,11 +21,9 @@ type Ad = AdRow;
  * `options.delete: true` triggers a Firestore DELETE on the document.
  */
 async function adminMutate(
-  collection: 'coupleAds' | 'coupleSpots',
-  id: string,
-  fields: Record<string, unknown>,
-  options?: { delete?: boolean }
-): Promise<void> {
+  ...args: Parameters<AdminMutate>
+): ReturnType<AdminMutate> {
+  const [collection, id, fields, options] = args;
   const res = await fetch('/match/api/admin-mutate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -81,12 +80,25 @@ export default function AdminPage() {
     if (!authed) return;
     Promise.all([
       getDocs(collection(db, 'coupleSpots')).then((snap) => {
-        setSpots(snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) })));
+        setSpots(
+          snap.docs.map((d) => {
+            const data = d.data() as Omit<SpotRow, 'id'>;
+            return { ...data, id: d.id };
+          })
+        );
       }),
       getDocs(collection(db, 'coupleAds')).then((snap) => {
-        setAds(snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) })));
+        setAds(
+          snap.docs.map((d) => {
+            const data = d.data() as Omit<AdRow, 'id'>;
+            return { ...data, id: d.id };
+          })
+        );
       }),
-    ]).catch((err) => setError('失敗: ' + err.message));
+    ]).catch((err: unknown) => {
+      const e = err as { message?: string };
+      setError('失敗: ' + (e.message ?? String(err)));
+    });
   }, [authed]);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -106,8 +118,9 @@ export default function AdminPage() {
       } else {
         setError(data.error || '登入失敗');
       }
-    } catch (err: any) {
-      setError('登入失敗: ' + err.message);
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      setError('登入失敗: ' + (e.message ?? String(err)));
     } finally {
       setLoading(false);
     }
@@ -117,8 +130,9 @@ export default function AdminPage() {
     try {
       await adminMutate('coupleAds', ad.id, { active: !ad.active });
       setAds((prev) => prev.map((a) => (a.id === ad.id ? { ...a, active: !a.active } : a)));
-    } catch (err: any) {
-      setError('切換失敗: ' + err.message);
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      setError('切換失敗: ' + (e.message ?? String(err)));
     }
   };
 
@@ -128,8 +142,9 @@ export default function AdminPage() {
       setAds((prev) =>
         prev.map((a) => (a.id === ad.id ? { ...a, impressions: 0, clicks: 0 } : a))
       );
-    } catch (err: any) {
-      setError('重置失敗: ' + err.message);
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      setError('重置失敗: ' + (e.message ?? String(err)));
     }
   };
 
@@ -523,7 +538,7 @@ export default function AdminPage() {
           onClose={() => setEditingSpot(null)}
           onSaved={onSpotSaved}
           onDeleted={onSpotDeleted}
-          adminMutate={adminMutate as any}
+          adminMutate={adminMutate}
         />
       )}
       {editingAd && (
@@ -532,7 +547,7 @@ export default function AdminPage() {
           isNew={adIsNew}
           onClose={() => setEditingAd(null)}
           onSaved={onAdSaved}
-          adminMutate={adminMutate as any}
+          adminMutate={adminMutate}
         />
       )}
     </div>

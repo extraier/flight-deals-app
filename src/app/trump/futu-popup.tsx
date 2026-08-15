@@ -8,6 +8,11 @@ const DISMISS_KEY = 'futu_ad_dismissed_v1';
 export function FutuAdPopup() {
   const [visible, setVisible] = useState(false);
 
+  // Hermes 2026-08-14: standard SSR hydration pattern. We can't read
+  // localStorage on the server, so we defer the visibility check until
+  // after mount to avoid a hydration mismatch (server always renders
+  // hidden; client may flip to visible on mount).
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     try {
       const dismissed = window.localStorage.getItem(DISMISS_KEY);
@@ -16,6 +21,7 @@ export function FutuAdPopup() {
       setVisible(true); // localStorage blocked → show anyway
     }
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   if (!visible) return null;
 

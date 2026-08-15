@@ -137,7 +137,10 @@ const SESSION_SPOT_CAP = 200;
 export async function fetchSpots(): Promise<SpotCard[]> {
   const q = query(collection(db, 'coupleSpots'));
   const snap = await getDocs(q);
-  const all = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+  const all = snap.docs.map((d) => {
+    const data = d.data() as Omit<SpotCard, 'id'>;
+    return { ...data, id: d.id };
+  });
   if (all.length <= SESSION_SPOT_CAP) return all;
   // Random sample without replacement (Fisher–Yates partial shuffle).
   const sampled = [...all];
@@ -153,6 +156,9 @@ export async function fetchAds(): Promise<AdCard[]> {
   const q = query(collection(db, 'coupleAds'));
   const snap = await getDocs(q);
   return snap.docs
-    .map((d) => ({ id: d.id, ...(d.data() as any) }))
+    .map((d) => {
+      const data = d.data() as Omit<AdCard, 'id'>;
+      return { ...data, id: d.id };
+    })
     .filter((ad) => ad.active);
 }

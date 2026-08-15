@@ -83,7 +83,7 @@ export function SpotCard({
   const imageLayer = 'w-full h-full bg-cover bg-center';
 
   if (isAd) {
-    const ad = card as any;
+    const ad = card;
     // Hermes 2026-08-14 (screenshot 5): same image fix as the spot card —
     // encodeURI + CSS-quote-wrap the URL, fall back to a gradient if empty.
     const safeAdUrl = (() => {
@@ -160,7 +160,7 @@ export function SpotCard({
     );
   }
 
-  const spot = card as any;
+  const spot = card;
   const regionColor = REGION_COLORS[spot.region] || 'bg-slate-500/30 text-slate-100 border-slate-300/40';
   const priceColor = PRICE_COLOR[spot.priceLevel] || PRICE_COLOR[2];
 
@@ -174,7 +174,7 @@ export function SpotCard({
   // Fix: encodeURI the URL, wrap in CSS quotes, AND add an emoji fallback
   // so empty/broken images still show *something* thematic.
   const safeImageUrl = (() => {
-    const url = (spot as any).image;
+    const url = spot.image;
     if (!url || typeof url !== 'string') return '';
     try {
       return encodeURI(url);
@@ -223,10 +223,10 @@ export function SpotCard({
         // rendering as a blank dark rectangle.
         <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-pink-700 via-purple-700 to-indigo-800">
           <span className="text-7xl mb-2" aria-hidden>
-            {(spot as any).cityEmoji || '🌍'}
+            🌍
           </span>
           <span className="text-white/80 text-xs font-medium px-3 text-center">
-            {(spot as any).city || spot.title || '目的地'}
+            {spot.city || spot.name || '目的地'}
           </span>
         </div>
       )}

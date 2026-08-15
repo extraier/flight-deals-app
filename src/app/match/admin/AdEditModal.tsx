@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { X, Loader2, Image as ImageIcon } from 'lucide-react';
+import type { AdminMutate } from './types';
 
 export type AdRow = {
   id: string;
@@ -22,11 +23,7 @@ type Props = {
   isNew: boolean;
   onClose: () => void;
   onSaved: (ad: AdRow) => void;
-  adminMutate: (
-    collection: 'coupleAds',
-    id: string,
-    fields: Record<string, unknown>
-  ) => Promise<void>;
+  adminMutate: AdminMutate;
 };
 
 /**
@@ -44,6 +41,15 @@ export function AdEditModal({ ad, isNew, onClose, onSaved, adminMutate }: Props)
   const [error, setError] = useState('');
   const dialogRef = useRef<HTMLDivElement>(null);
 
+  /* Hermes 2026-08-14: when the parent passes a different `ad`, reset
+   * the local form state to match. This is the standard React pattern
+   * for "controlled component receiving new props" — the React docs'
+   * preferred alternative (deriving state during render with a
+   * previousValue ref) doesn't fit our case because the user edits
+   * arbitrary fields before save, so we can't derive form from ad
+   * alone. The parent could force a remount via key={ad?.id} but that
+   * would lose other internal state (imageError, busy). */
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!ad) {
       setForm(null);
@@ -53,6 +59,7 @@ export function AdEditModal({ ad, isNew, onClose, onSaved, adminMutate }: Props)
     setImageError(false);
     setError('');
   }, [ad]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     if (!ad) return;
@@ -133,8 +140,9 @@ export function AdEditModal({ ad, isNew, onClose, onSaved, adminMutate }: Props)
       }
       await adminMutate('coupleAds', form.id, payload);
       onSaved({ ...form });
-    } catch (err: any) {
-      setError('儲存失敗: ' + (err.message || String(err)));
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      setError('儲存失敗: ' + (e.message || String(err)));
     } finally {
       setBusy(false);
     }

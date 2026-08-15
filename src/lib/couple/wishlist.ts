@@ -75,8 +75,8 @@ export function subscribeWishlist(
     q,
     (snap: QuerySnapshot) => {
       const entries: WishlistEntry[] = snap.docs.map((d) => {
-        const data = d.data() as any;
-        return { id: d.id, spotId: data.spotId ?? d.id, ...data };
+        const data = d.data() as Omit<WishlistEntry, 'id'>;
+        return { ...data, id: d.id, spotId: data.spotId ?? d.id };
       });
       cb(entries);
     },

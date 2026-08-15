@@ -82,7 +82,11 @@ const sortLabel = (w: Window) => ({ '1h': '1小時前', '4h': '4小時前', '24h
 export default function WorldCupPage() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  // Hermes 2026-08-14: standard next-themes hydration pattern (same as
+  // the global ThemeToggle — see that component for full rationale).
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => setMounted(true), []);
+  /* eslint-enable react-hooks/set-state-in-effect */
   const isDark = mounted ? theme === 'dark' : true;
 
   // Default to 4h because yesterday (06-30) had no matches, so chg_24h would

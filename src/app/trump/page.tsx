@@ -279,7 +279,11 @@ export default function TrumpPage() {
   const [tab, setTab] = useState<Tab>('trades');
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  // Hermes 2026-08-14: standard next-themes hydration pattern (same as
+  // the global ThemeToggle — see that component for full rationale).
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => setMounted(true), []);
+  /* eslint-enable react-hooks/set-state-in-effect */
   const isDark = mounted ? resolvedTheme === 'dark' : true;
   const updated = data.updated?.replace('T', ' ').slice(0, 16) || '';
 

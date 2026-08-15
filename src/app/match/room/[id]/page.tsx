@@ -60,6 +60,11 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   }, []);
 
   // Phase 2.6: subscribe to the user's wishlist when signed in (non-anon).
+  // We set state inside the effect to clear the list when the user
+  // transitions to anon/null — alternative would be to derive from a
+  // separate "subscribedEntries" state guarded by a render check, but
+  // that doubles the bookkeeping without simplifying the code path.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!authUser || authUser.isAnonymous) {
       setWishlistEntries([]);
@@ -72,6 +77,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
     );
     return unsub;
   }, [authUser]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Subscribe to room
   useEffect(() => {
@@ -86,7 +92,14 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
     return unsub;
   }, [uid, roomId]);
 
-  // Detect new matches
+  // Detect new matches. The matchCountRef tracks the previously-seen
+  // count so we only fire the match modal when a NEW mutual like
+  // appears. This is a "compare against previous value" pattern that
+  // requires an effect — the alternative (a derived useMemo that diffs
+  // the mutual array) would still need an effect to surface the
+  // modal at the right time, so we'd be moving the setState around
+  // without removing it.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!room || !uid) return;
     const myLikes = room.user1 === uid ? room.user1Likes : room.user2Likes;
@@ -102,6 +115,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
       matchCountRef.current = mutual.length;
     }
   }, [room, uid, spots]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Build the deck
   const deck = useMemo(() => {
@@ -142,8 +156,9 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
 
     try {
       await swipe(roomId, uid, card.id, direction);
-    } catch (err: any) {
-      setError('記錄失敗: ' + err.message);
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      setError('記錄失敗: ' + (e.message ?? String(err)));
     }
   };
 
@@ -306,6 +321,11 @@ function RoomWishlistLink({ roomId }: { roomId: string }) {
             'matchWishlistBack',
             JSON.stringify({ href: `/match/room/${roomId}`, label: '返回情侶房間' })
           );
+          // Hermes 2026-08-14: dispatch a custom event so any mounted
+          // MatchNav on this same tab re-reads sessionStorage via its
+          // useSyncExternalStore subscription. (The browser's 'storage'
+          // event fires across tabs but NOT on the same tab that wrote.)
+          window.dispatchEvent(new Event('matchWishlistBackChange'));
         } catch {
           // sessionStorage might be disabled (privacy mode etc.) — fall
           // back to /match which is the MatchNav default.
@@ -321,7 +341,11 @@ function RoomWishlistLink({ roomId }: { roomId: string }) {
 function RoomThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  // Hermes 2026-08-14: standard next-themes hydration pattern (same as
+  // the global ThemeToggle — see that component for full rationale).
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => setMounted(true), []);
+  /* eslint-enable react-hooks/set-state-in-effect */
   if (!mounted) return null;
   return (
     <button

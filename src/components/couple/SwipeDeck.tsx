@@ -68,10 +68,9 @@ export function SwipeDeck({
     if (!card) return;
     if (card.__kind === 'ad') {
       // Tap ad = open URL
-      const ad = card as any;
-      if (ad.clickUrl) {
+      if (card.clickUrl) {
         try {
-          window.open(ad.clickUrl, '_blank', 'noopener,noreferrer');
+          window.open(card.clickUrl, '_blank', 'noopener,noreferrer');
         } catch {}
       }
       onAdClick?.(card);
@@ -135,7 +134,7 @@ export function SwipeDeck({
               <div
                 className="w-full h-full bg-cover bg-center"
                 style={{
-                  backgroundImage: `url(${(nextCard as any).image})`,
+                  backgroundImage: `url(${nextCard.image})`,
                 }}
               />
             </div>

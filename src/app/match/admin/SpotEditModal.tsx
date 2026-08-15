@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { X, Loader2, Image as ImageIcon, Trash2 } from 'lucide-react';
+import type { AdminMutate } from './types';
 
 export type SpotRow = {
   id: string;
@@ -27,12 +28,7 @@ type Props = {
   onClose: () => void;
   onSaved: (spot: SpotRow) => void;
   onDeleted?: (id: string) => void;
-  adminMutate: (
-    collection: 'coupleSpots',
-    id: string,
-    fields: Record<string, unknown>,
-    options?: { delete?: boolean }
-  ) => Promise<void>;
+  adminMutate: AdminMutate;
 };
 
 const REGIONS = ['東南亞', '東北亞', '歐洲', '美洲', '大洋洲', '中東', '非洲', '中國大陸'];
@@ -60,6 +56,12 @@ export function SpotEditModal({ spot, isNew, onClose, onSaved, onDeleted, adminM
   const dialogRef = useRef<HTMLDivElement>(null);
 
   // Sync state when the spot prop changes (modal opens)
+  /* Hermes 2026-08-14: when the parent passes a different `spot`, reset
+   * local form state to match. Same justification as AdEditModal — the
+   * user edits arbitrary fields before save, so we can't derive form
+   * from spot alone. The parent could remount via key={spot?.id} but
+   * that would lose tagsInput/moodInput/imageError/busy state. */
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!spot) {
       setForm(null);
@@ -72,6 +74,7 @@ export function SpotEditModal({ spot, isNew, onClose, onSaved, onDeleted, adminM
     setError('');
     setConfirmDelete(false);
   }, [spot]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Close on Escape (Phase 1: standard pattern from react-modal-defensive-ux)
   useEffect(() => {
@@ -150,8 +153,9 @@ export function SpotEditModal({ spot, isNew, onClose, onSaved, onDeleted, adminM
       }
       await adminMutate('coupleSpots', form.id, payload);
       onSaved({ ...form, tags, travelMood });
-    } catch (err: any) {
-      setError('儲存失敗: ' + (err.message || String(err)));
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      setError('儲存失敗: ' + (e.message || String(err)));
     } finally {
       setBusy(false);
     }
@@ -168,8 +172,9 @@ export function SpotEditModal({ spot, isNew, onClose, onSaved, onDeleted, adminM
       await adminMutate('coupleSpots', form.id, {}, { delete: true });
       onDeleted?.(form.id);
       onClose();
-    } catch (err: any) {
-      setError('刪除失敗: ' + (err.message || String(err)));
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      setError('刪除失敗: ' + (e.message || String(err)));
       setConfirmDelete(false);
     } finally {
       setBusy(false);
