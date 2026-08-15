@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Hermes 2026-08-15: template plist for the CompareTiger hourly Telegram
+  deal alerter. Mirror of the active ~/Library/LaunchAgents plist but
+  with the bot token REMOVED. To deploy:
+
+    1. Copy to ~/Library/LaunchAgents/com.comparetiger.flight-report.plist
+    2. Replace TELEGRAM_BOT_TOKEN_VALUE with your real bot token
+    3. launchctl unload ~/Library/LaunchAgents/com.comparetiger.flight-report.plist
+       launchctl load ~/Library/LaunchAgents/com.comparetiger.flight-report.plist
+
+  Run frequency: top of every hour (StartCalendarInterval Minute=0).
+  Log: /tmp/flight_report.log
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.comparetiger.flight-report</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/python3</string>
+        <string>/Users/roger/send_flight_report.py</string>
+    </array>
+    <key>StartCalendarInterval</key>
+    <array>
+        <dict>
+            <key>Minute</key>
+            <integer>0</integer>
+        </dict>
+    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>TELEGRAM_BOT_TOKEN</key>
+        <string>REPLACE_ME_WITH_YOUR_BOT_TOKEN</string>
+        <!-- Optional: override the chat the bot posts to (default: 181186542) -->
+        <!-- <key>TELEGRAM_CHAT_ID</key><string>YOUR_CHAT_ID</string> -->
+        <!-- Optional: override the live API base (default: Vercel production) -->
+        <!-- <key>FLIGHT_DEALS_API_BASE</key><string>https://your-staging.example</string> -->
+    </dict>
+    <key>StandardOutPath</key>
+    <string>/tmp/flight_report.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/flight_report.log</string>
+</dict>
+</plist>
