@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:cards": "node --experimental-strip-types --no-warnings --test src/lib/couple/__tests__/cards.test.ts"
+    "test:cards": "node --experimental-strip-types --no-warnings --test src/lib/couple/__tests__/cards.test.ts",
+    "test:alerter": "python3 scanner/test_send_flight_report.py"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
