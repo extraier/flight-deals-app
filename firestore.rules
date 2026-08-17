@@ -1843,7 +1843,7 @@ match /{path=**}/events/{eventId} {
       }
     }
 
-   ───────────────────────────────────────────────────────
+   // ----------------------------------------------------------------------
   function isInRoom() {
     return request.auth != null && (
       resource.data.user1 == request.auth.uid ||
