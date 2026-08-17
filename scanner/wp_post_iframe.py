@@ -24,7 +24,11 @@ import urllib.request
 WP_USER = "Comparetiger"
 WP_APP_PASSWORD = "ohWl WFCL g0rd RwJo kqle Ibep"
 WP_PAGE = "5161"
-VIEWSITE_URL = "https://flight-deals-app-seven.vercel.app"
+# 2026-08-17: switch from raw vercel.app URL to the custom domain.
+# The old .vercel.app URL was 14d stale; flight.comparetiger.com alias
+# auto-promotes with each new production deploy, so this stays current
+# without manual updates.
+VIEWSITE_URL = "https://flight.comparetiger.com"
 
 HTML = (
     '<meta http-equiv="refresh" content="0; url=' + VIEWSITE_URL + '">\n'
