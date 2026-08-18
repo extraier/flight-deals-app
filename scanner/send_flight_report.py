@@ -104,7 +104,9 @@ COOLDOWN_WINDOW = timedelta(hours=24)  # used for GC of old entries
 # allow a genuine new drop on the same route to fire (real drops are
 # hours-to-days apart on the same destination), but blocks the same-day
 # phantom repeat. 24h is the cap used for GC of old entries (separate).
-COOLDOWN_DEDUP_WINDOW = timedelta(hours=6)
+COOLDOWN_DEDUP_WINDOW = timedelta(hours=24)  # Bug D (2026-08-17): widened from 6h
+# Same-day-different-date duplicate fires (ORD case: Sep 23 + Sep 28 both
+# at $5895 within 11h) needed a wider window than 6h to suppress cleanly.
 
 # Hermes 2026-08-15: price-aware cooldown for phantom alerts.
 # The 6h time-window dedup alone doesn't catch the case where the
@@ -122,7 +124,16 @@ COOLDOWN_DEDUP_WINDOW = timedelta(hours=6)
 # timestamp. If a new "fresh drop" matches the previously alerted
 # tuple EXACTLY (within $1 / 0.1% — exporter round-trip noise),
 # it's a phantom and is suppressed regardless of the time window.
-PHANTOM_PRICE_TOLERANCE = 1.0   # HKD — price/amount must match within this
+PHANTOM_PRICE_TOLERANCE = 1.0   # HKD — minimum tolerance floor (cheap routes)
+# Hermes 2026-08-17 (Bug D): widened tolerance from a flat $1 to 1% of
+# the previously-alerted price, with the $1 floor above for very cheap
+# routes. The flat $1 was too narrow for $4k–$8k range flights where a
+# $50 noise difference would slip through as "not a phantom" when it
+# actually was. The 1% tolerance catches the ORD case: Sep 28 alert
+# prev price $5895 → tolerance = max($1, $58.95) = $58.95. A re-fire at
+# $5895 with a different drop_amount now matches and is suppressed as a
+# same-destination event.
+PHANTOM_PRICE_PCT = 0.01        # 1% of previously-alerted price
 
 # Do not publish an old airline snapshot forever when its scanner/exporter
 # stalls. The hourly reporter may still use fresh HKG/SZX data while omitting
@@ -375,13 +386,15 @@ def filter_already_alerted(fresh: list, cooldown: dict, today: str | None = None
     OR whose (price, pct, amount) tuple matches a previously alerted entry
     even if outside the time window (phantom repeat from stale exporter baseline).
 
-    Hermes 2026-08-14 (Bug B): window is now a rolling N hours (default 6h),
-    NOT the same HK calendar day. The calendar-day check had a midnight race:
-    the 00:00 cron would see yesterday's stamps as "not today" and re-alert
-    absorbed-baseline drops verbatim. The 6h rolling window still allows a
-    genuine new drop on the same route to fire later in the day (real drops
-    on a given route are hours-to-days apart, not minutes), while blocking
-    the same-day phantom repeat.
+    Hermes 2026-08-14 (Bug B): window is now a rolling N hours (default 6h).
+    Hermes 2026-08-17 (Bug D): window widened to 24h to suppress
+    same-day-different-date duplicate fires (ORD case: Sep 23 + Sep 28
+    both at $5895 within 11h needed a wider window than 6h to suppress).
+    The calendar-day check used to have a midnight race (00:00 cron
+    would see yesterday's stamps as "yesterday"); the rolling 6→24h
+    window still allows a genuine new drop on the same route to fire
+    hours/days later, while blocking intra-day phantom repeats and
+    same-day-different-date duplicates.
 
     Hermes 2026-08-15 (Bug C): the 6h window alone doesn't catch the case
     where the EXPORTER itself has a stale historical_prices baseline (the
