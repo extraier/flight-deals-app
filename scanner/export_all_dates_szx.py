@@ -234,15 +234,23 @@ for o in results:
         o['dropPct'] = 0
         o['dropPrice'] = 0
         continue
-    # Today's destination lowest
-    today_low = min((cd.get('price') or 0) for cd in dates) or 0
-    # Yesterday's destination lowest
-    yest_prices = [
-        (cd.get('history') or {}).get('1d', {}).get('price')
-        for cd in dates
-    ]
-    yest_prices = [p for p in yest_prices if p and p > 0]
-    yest_low = min(yest_prices) if yest_prices else None
+    # Hermes 2026-08-20: use the SAME date for today and yesterday (fixes
+    # the single-date-comparison bug). Previously, today_low = min of all
+    # dates' prices and yest_low = min of all dates' history.1d prices,
+    # which could compare TWO DIFFERENT dates. For example, SZX→CMB:
+    # today_low=2305 (Sep 13) but yest_low=2320 (Nov 13, unrelated date),
+    # giving the false drop_pct=-0.65% → no stamp, dropAmount=0. With the
+    # fix we read today_low AND yest_low from the SAME cheapest date.
+    # Mirrors HKG v2 (`export_all_dates_hkg_v2.py`) which fixed this earlier.
+    today_low = (dates[0].get('price') or 0) if dates else 0
+    yest_low = None
+    yest_period = None
+    for _p in ('1d', '4d', '7d'):
+        _bp = (dates[0].get('history') or {}).get(_p, {}).get('price') if dates else None
+        if _bp and _bp > 0:
+            yest_low = _bp
+            yest_period = _p
+            break
     drop_pct = ((today_low - yest_low) / yest_low * 100) if (yest_low and yest_low > 0 and today_low > 0) else 0
 
     key = f"SZX→{o.get('destination', {}).get('code', '')}"

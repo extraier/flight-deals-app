@@ -194,7 +194,12 @@ function buildDropList(deals: Deal[], departure: Departure): DropRow[] {
     }
     if (!cd) continue;
     // Drop below 1% is noise — same threshold as send_flight_report.py.
-    if (dropPct < 1) continue;
+    // Hermes 2026-08-20: use Math.abs() because the fallback path returns
+    // dropPct as signed-negative (e.g. -48.4 for a 48.4% drop), while the
+    // export-stamped path normalizes to positive. Without abs(), the
+    // fallback path always passes the < 1 check and gets skipped → drops
+    // that the export missed (e.g. SZX→CMB) silently disappear from the page.
+    if (Math.abs(dropPct) < 1) continue;
 
     const f = cd.flight || undefined;
     const typical = d.typicalPrice || undefined;
