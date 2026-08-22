@@ -14,6 +14,7 @@ module.exports = {
   testMatch: [
     '<rootDir>/src/lib/couple/__tests__/adminMetrics.test.ts',
     '<rootDir>/src/lib/couple/__tests__/matchNavigation.test.ts',
+    '<rootDir>/src/lib/couple/__tests__/adminAdUrls.test.ts',
   ],
   moduleNameMapper: { '^@/(.*)$': '<rootDir>/src/$1' },
   clearMocks: true,

@@ -10,6 +10,10 @@ import { SpotEditModal, type SpotRow } from './SpotEditModal';
 import { AdEditModal, type AdRow } from './AdEditModal';
 import type { AdminMutate } from './types';
 import { normalizedAdMetrics } from '@/lib/couple/adminMetrics';
+import {
+  safeAdminAdBackgroundImage,
+  safeAdminAdPreviewUrl,
+} from '@/lib/couple/adminAdUrls';
 
 type Ad = AdRow;
 
@@ -352,7 +356,9 @@ export default function AdminPage() {
                 const bCtr = normalizedAdMetrics(b).ctr;
                 return bCtr - aCtr;
               })
-              .map((ad) => (
+              .map((ad) => {
+                const previewUrl = safeAdminAdPreviewUrl(ad.clickUrl);
+                return (
               <div
                 key={ad.id}
                 className="bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-sm border border-gray-200 dark:border-gray-800"
@@ -362,7 +368,7 @@ export default function AdminPage() {
                     type="button"
                     onClick={() => openEditAd(ad)}
                     className="w-24 h-24 rounded-xl bg-cover bg-center shrink-0 cursor-pointer hover:opacity-80 transition ring-0 hover:ring-2 hover:ring-pink-400"
-                    style={{ backgroundImage: `url(${ad.image})` }}
+                    style={{ backgroundImage: safeAdminAdBackgroundImage(ad.image) }}
                     aria-label={`編輯 ${ad.title}`}
                   />
                   <div className="flex-1 min-w-0">
@@ -399,15 +405,25 @@ export default function AdminPage() {
                         </span>
                       </div>
                       <div className="flex gap-1">
-                        <a
-                          href={ad.clickUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-1.5 text-gray-400 hover:text-pink-500"
-                          aria-label="開新分頁預覽"
-                        >
-                          <ExternalLink size={14} />
-                        </a>
+                        {previewUrl ? (
+                          <a
+                            href={previewUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-1.5 text-gray-400 hover:text-pink-500"
+                            aria-label="開新分頁預覽"
+                          >
+                            <ExternalLink size={14} />
+                          </a>
+                        ) : (
+                          <span
+                            className="p-1.5 text-gray-300 dark:text-gray-700 cursor-not-allowed"
+                            aria-label="未設定有效預覽連結"
+                            title="未設定有效預覽連結"
+                          >
+                            <ExternalLink size={14} />
+                          </span>
+                        )}
                         <button
                           onClick={() => resetAdCounters(ad)}
                           className="text-xs text-gray-400 hover:text-red-500 px-2 py-1"
@@ -425,7 +441,8 @@ export default function AdminPage() {
                   </div>
                 </div>
               </div>
-            ))}
+                );
+              })}
           </div>
         )}
 
