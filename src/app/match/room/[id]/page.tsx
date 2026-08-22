@@ -11,6 +11,7 @@ import { buildDeck, filterUnswiped, intersection, type DeckCard, type SpotCard, 
 import { SwipeDeck } from '@/components/couple/SwipeDeck';
 import { MatchModal } from '@/components/couple/MatchModal';
 import { recordAdMetric } from '@/lib/couple/ads';
+import { buildMatchRoomHref } from '@/lib/couple/matchNavigation';
 import {
   subscribeWishlist,
   addToWishlist,
@@ -310,6 +311,12 @@ function spotMatchCount(room: RoomData, side: 'user1' | 'user2'): number {
 // wishlist page's nav) can render a "back to room" button instead of the
 // generic "返回一起揀目的地". The sessionStorage key is intentionally scoped
 // to this single use case so other nav refreshes don't pick it up.
+//
+// Hermes 2026-08-22 (Manus Defect A): use buildMatchRoomHref() to validate
+// the roomId before writing storage. If the ID doesn't match the alphabet
+// (e.g. an unresolved React state variable like the literal string
+// "undefined" reaches this onClick), we skip the write entirely and let
+// the user land on /match via MatchNav's default fallback.
 function RoomWishlistLink({ roomId }: { roomId: string }) {
   return (
     <Link
@@ -317,9 +324,11 @@ function RoomWishlistLink({ roomId }: { roomId: string }) {
       aria-label="查看心願清單"
       onClick={() => {
         try {
+          const href = buildMatchRoomHref(roomId);
+          if (!href) return; // malformed roomId — skip the write.
           sessionStorage.setItem(
             'matchWishlistBack',
-            JSON.stringify({ href: `/match/room/${roomId}`, label: '返回情侶房間' })
+            JSON.stringify({ href, label: '返回情侶房間' })
           );
           // Hermes 2026-08-14: dispatch a custom event so any mounted
           // MatchNav on this same tab re-reads sessionStorage via its
