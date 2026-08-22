@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { ArrowLeft, Heart, Users, Sun, Moon } from 'lucide-react';
+import { parseMatchWishlistBack } from '@/lib/couple/matchNavigation';
 
 /**
  * Persistent top nav for the /match/* subtree. Used by /match, /match/wishlist,
@@ -82,18 +83,11 @@ export function MatchNav() {
       };
     },
     () => {
-      // Client snapshot — parse the entry defensively.
-      try {
-        const raw = sessionStorage.getItem('matchWishlistBack');
-        if (!raw) return null;
-        const parsed = JSON.parse(raw);
-        if (parsed && typeof parsed.href === 'string' && typeof parsed.label === 'string') {
-          return parsed as { href: string; label: string };
-        }
-        return null;
-      } catch {
-        return null;
-      }
+      // Hermes 2026-08-22 (Manus Defect A): sessionStorage entry is
+      // parsed by the shared helper in lib/couple/matchNavigation. The
+      // helper enforces a strict regex on `href` so malformed values
+      // (e.g. {"href":"/match/undefined"}) can't render as a 404 link.
+      return parseMatchWishlistBack(sessionStorage.getItem('matchWishlistBack'));
     },
     () => null // Server snapshot — always null
   );

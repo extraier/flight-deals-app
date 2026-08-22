@@ -9,6 +9,7 @@ import { MatchNav } from '@/components/couple/MatchNav';
 import { SpotEditModal, type SpotRow } from './SpotEditModal';
 import { AdEditModal, type AdRow } from './AdEditModal';
 import type { AdminMutate } from './types';
+import { normalizedAdMetrics } from '@/lib/couple/adminMetrics';
 
 type Ad = AdRow;
 
@@ -307,14 +308,27 @@ export default function AdminPage() {
           <div className="space-y-4">
             {/* Aggregate stats row */}
             {ads.length > 0 && (() => {
-              const totalImpressions = ads.reduce((s, a) => s + (a.impressions || 0), 0);
-              const totalClicks = ads.reduce((s, a) => s + (a.clicks || 0), 0);
+              // Hermes 2026-08-22 (Manus Defect B): normalize every ad
+              // before summing so a malformed record can't inject NaN
+              // into the totals. The helper is the single source of
+              // truth for safe CTR math.
+              const totals = ads.reduce(
+                (acc, ad) => {
+                  const m = normalizedAdMetrics(ad);
+                  acc.impressions += m.impressions;
+                  acc.clicks += m.clicks;
+                  return acc;
+                },
+                { impressions: 0, clicks: 0 }
+              );
               const activeAds = ads.filter((a) => a.active).length;
-              const overallCtr = totalImpressions > 0 ? (totalClicks / totalImpressions) * 100 : 0;
+              const overallCtr = totals.impressions > 0
+                ? (totals.clicks / totals.impressions) * 100
+                : 0;
               return (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  <StatCard label="總曝光" value={totalImpressions} />
-                  <StatCard label="總點擊" value={totalClicks} />
+                  <StatCard label="總曝光" value={totals.impressions} />
+                  <StatCard label="總點擊" value={totals.clicks} />
                   <StatCard label="整體 CTR" value={`${overallCtr.toFixed(2)}%`} />
                   <StatCard label="活躍廣告" value={`${activeAds} / ${ads.length}`} />
                 </div>
@@ -331,8 +345,11 @@ export default function AdminPage() {
             {[...ads]
               .sort((a, b) => {
                 if (a.active !== b.active) return a.active ? -1 : 1;
-                const aCtr = a.impressions ? a.clicks / a.impressions : -1;
-                const bCtr = b.impressions ? b.clicks / b.impressions : -1;
+                // Hermes 2026-08-22 (Manus Defect B): use the shared
+                // helper so a malformed ad (NaN impressions, string
+                // clicks) never poisons the sort comparator.
+                const aCtr = normalizedAdMetrics(a).ctr;
+                const bCtr = normalizedAdMetrics(b).ctr;
                 return bCtr - aCtr;
               })
               .map((ad) => (
@@ -370,14 +387,14 @@ export default function AdminPage() {
                     <div className="flex items-center justify-between mt-3 flex-wrap gap-2">
                       <div className="flex gap-3 text-xs">
                         <span className="text-gray-500">
-                          曝光: <strong className="text-gray-900 dark:text-white">{ad.impressions || 0}</strong>
+                          曝光: <strong className="text-gray-900 dark:text-white">{normalizedAdMetrics(ad).impressions}</strong>
                         </span>
                         <span className="text-gray-500">
-                          點擊: <strong className="text-gray-900 dark:text-white">{ad.clicks || 0}</strong>
+                          點擊: <strong className="text-gray-900 dark:text-white">{normalizedAdMetrics(ad).clicks}</strong>
                         </span>
                         <span className="text-gray-500">
                           CTR: <strong className="text-gray-900 dark:text-white">
-                            {ad.impressions ? ((ad.clicks / ad.impressions) * 100).toFixed(1) : 0}%
+                            {normalizedAdMetrics(ad).ctr.toFixed(1)}%
                           </strong>
                         </span>
                       </div>

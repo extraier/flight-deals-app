@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test:cards": "node --experimental-strip-types --no-warnings --test src/lib/couple/__tests__/cards.test.ts",
+    "test:admin": "jest --config jest.config.cjs --runInBand",
+    "check:comparetiger-firestore": "bash scripts/check-comparetiger-firestore-rules.sh",
     "test:alerter": "python3 scanner/test_send_flight_report.py"
   },
   "dependencies": {
@@ -25,13 +27,17 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
+    "shadcn": "^4.11.0",
     "tailwindcss": "^4",
-    "typescript": "^5",
-    "shadcn": "^4.11.0"
+    "ts-jest": "^29.4.12",
+    "typescript": "^5"
   }
 }
