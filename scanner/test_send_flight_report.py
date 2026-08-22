@@ -108,10 +108,18 @@ def test_filter_suppresses_phantom_after_6h():
 
 
 def test_filter_allows_genuine_new_drop_after_6h():
-    """Real new drop with different price passes after 6h window."""
+    """Real new drop with different price passes after the dedup window.
+
+    Hermes 2026-08-22 (CI alerter regression): COOLDOWN_DEDUP_WINDOW was
+    widened 6h→24h on 2026-08-17 (Bug D), but this test's fixture still
+    used _ago(10). At that age, the cooldown entry is still within the 24h
+    window and gets suppressed — the test only passes when the fixture's
+    "now" is more than 24h after the CI clock's "now" (intermittent fail).
+    Use _ago(25) so the entry is reliably outside the window.
+    """
     fresh = [{"price": 1100, "drop_pct": -21, "drop_amount": -338,
               "route_key": "HKG→台北 (TPE)"}]
-    cooldown = {"HKG→台北 (TPE)": {"ts": _ago(10), "price": 1278, "pct": -11.1, "amount": -160}}
+    cooldown = {"HKG→台北 (TPE)": {"ts": _ago(25), "price": 1278, "pct": -11.1, "amount": -160}}
     out = sfr.filter_already_alerted(fresh, cooldown)
     assert len(out) == 1, f"Expected pass, got {len(out)}"
     assert out[0]["price"] == 1100
@@ -129,7 +137,14 @@ def test_filter_passes_unseen_route():
 
 
 def test_filter_mixed_phantom_and_real():
-    """Two candidates: one phantom, one real. Only the real one passes."""
+    """Two candidates: one phantom, one real. Only the real one passes.
+
+    Hermes 2026-08-22 (CI alerter regression): NRT cooldown used
+    _ago(20). After Bug D widened the dedup window 6h→24h, NRT (20h
+    old) is still within the window and gets suppressed — only the
+    phantom case survives, both entries get filtered. Move NRT to
+    _ago(25) so it's reliably outside the 24h window.
+    """
     fresh = [
         {"price": 1278, "drop_pct": -11.1, "drop_amount": -160,
          "route_key": "HKG→台北 (TPE)"},       # phantom (matches TPE entry)
@@ -138,7 +153,7 @@ def test_filter_mixed_phantom_and_real():
     ]
     cooldown = {
         "HKG→台北 (TPE)": {"ts": _ago(8), "price": 1278, "pct": -11.1, "amount": -160},
-        "HKG→東京 (NRT)": {"ts": _ago(20), "price": 1500, "pct": -3, "amount": -50},
+        "HKG→東京 (NRT)": {"ts": _ago(25), "price": 1500, "pct": -3, "amount": -50},
     }
     out = sfr.filter_already_alerted(fresh, cooldown)
     assert len(out) == 1
@@ -240,9 +255,15 @@ def test_round_trip_phantom_suppression():
 
 
 def test_round_trip_real_drop_after_phantom():
-    """After a phantom has been suppressed, a real price event still fires."""
+    """After a phantom has been suppressed, a real price event still fires.
+
+    Hermes 2026-08-22 (CI alerter regression): cooldown used _ago(8).
+    After Bug D widened the dedup window 6h→24h, an 8h-old cooldown
+    still suppresses the route — the real drop never fires. Move to
+    _ago(25) so the entry is reliably outside the 24h window.
+    """
     cooldown = {
-        "HKG→台北 (TPE)": {"ts": _ago(8), "price": 1278, "pct": -11.1, "amount": -160}
+        "HKG→台北 (TPE)": {"ts": _ago(25), "price": 1278, "pct": -11.1, "amount": -160}
     }
     fresh = [{
         "price": 1050, "drop_pct": -25, "drop_amount": -388,
