@@ -362,7 +362,9 @@ def get_flight_details(searcher, origin, dest, dep_date, ret_date, consecutive_4
             airlines=[Airline.UO],   # Hermes: UO-only filter — proven 2026-06-30
         )
 
-        results = searcher.search(filters)
+        # Hermes 2026-08-23: top_n=1 cuts request amplification.
+        # See fli_detail_scan_aggressive.py for the rationale.
+        results = searcher.search(filters, top_n=1)
 
         # Hermes 2026-07-01: a successful call clears the 429 streak.
         consecutive_429_box[0] = 0
