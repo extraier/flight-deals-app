@@ -6,11 +6,38 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { X, AlertTriangle } from 'lucide-react';
-import type { CheapDate, FlightDeal } from '@/types/flight';
+import { ComparisonMetric } from '@/components/ComparisonMetric';
+import type { CheapDate, FlightDeal, Itinerary } from '@/types/flight';
 
 export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal: FlightDeal; onMoreMonths?: () => void; departure?: 'HKG' | 'SZX' }) {
-  const { destination, price, badge, cheapestDates, moreMonths, typicalPrice } = deal;
+  const { destination, price, badge, cheapestDates, moreMonths, typicalPrice,
+    dateComparison, historyComparison, marketComparison } = deal;
   const [selectedDate, setSelectedDate] = useState<CheapDate | null>(null);
+
+  /**
+   * Pick the best flight-info source for a given CheapDate.
+   *
+   * New exporters always emit `itinerary`. The legacy `flight` field is
+   * kept as a fallback for older JSON files; the page renders the same
+   * shape either way.
+   */
+  const pickFlightInfo = (d: CheapDate): CheapDate['flight'] | null => {
+    if (d.itinerary?.status === 'selected') {
+      // Build the legacy FlightInfo shape from itinerary.
+      return {
+        airline: d.itinerary.outbound?.airline ?? '',
+        flight_no: d.itinerary.outbound?.flight ?? '',
+        dep_time: d.itinerary.outbound?.depTime ?? '',
+        arr_time: d.itinerary.outbound?.arrTime ?? '',
+        return_airline: d.itinerary.return?.airline,
+        return_flight: d.itinerary.return?.flight,
+        return_dep_time: d.itinerary.return?.depTime,
+        return_arr_time: d.itinerary.return?.arrTime,
+        ret_date: d.itinerary.retDate,
+      };
+    }
+    return d.flight ?? null;
+  };
 
   const cheapestPrice = price;
   const greenDates = cheapestDates.filter(d => d.price === cheapestPrice);
@@ -71,6 +98,15 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
           )}
         </div>
 
+        {/* Hermes 2026-08-23: deal-confidence badges (dateComparison +
+            historyComparison + marketComparison). Renders nothing when
+            the exporter hasn't emitted any comparison fields. */}
+        <ComparisonMetric
+          dateComparison={dateComparison}
+          historyComparison={historyComparison}
+          marketComparison={marketComparison}
+        />
+
         {/* Legend */}
         <div className="px-6 pb-4">
           <p className="text-xs text-muted-foreground">
@@ -111,6 +147,7 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
                         const staleBadgeText = isStaleDown
                           ? `昨日HK$${Math.round(h1.price).toLocaleString()}`
                           : null;
+                        const flightInfo = pickFlightInfo(date);
 
                         return (
                         <button
@@ -122,7 +159,7 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
                           className={`relative inline-flex flex-col items-center gap-1 rounded-lg border px-3 py-1.5 text-sm transition-all cursor-pointer ${
                             isStaleDown
                               ? 'border-amber-500/40 bg-amber-500/10 hover:border-amber-500/60 hover:bg-amber-500/20'
-                              : date.flight
+                              : flightInfo
                               ? 'border-emerald-500/30 bg-emerald-500/10 hover:border-emerald-500/50 hover:bg-emerald-500/20'
                               : 'border-border bg-secondary/30 hover:border-muted-foreground/30 hover:bg-secondary/50'
                           }`}
@@ -131,7 +168,7 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
                             <span className={`font-medium ${
                               isStaleDown
                                 ? 'text-amber-700 dark:text-amber-400'
-                                : date.flight
+                                : flightInfo
                                 ? 'text-emerald-600 dark:text-emerald-400'
                                 : 'text-foreground'
                             }`}>
@@ -146,10 +183,10 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
                               <AlertTriangle className="h-3 w-3" />
                               <span>{staleBadgeText}</span>
                             </div>
-                          ) : date.flight ? (
+                          ) : flightInfo ? (
                             <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                              <span>{date.flight.airline}</span>
-                              <span>{date.flight.dep_time}</span>
+                              <span>{flightInfo.airline}</span>
+                              <span>{flightInfo.dep_time}</span>
                             </div>
                           ) : (
                             <div className="text-xs text-muted-foreground">詳情待確認</div>
@@ -182,7 +219,9 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
       </Card>
 
       {/* Flight Detail Modal */}
-      {selectedDate && (
+      {selectedDate && (() => {
+        const flightInfo = pickFlightInfo(selectedDate);
+        return (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
           onClick={() => setSelectedDate(null)}
@@ -210,8 +249,24 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
             </div>
 
             {/* Flight Details - with data */}
-            {selectedDate.flight ? (
+            {pickFlightInfo(selectedDate) ? (
               <div className="space-y-4">
+                {/* Hermes 2026-08-23: itinerary status banner. Surfaces
+                    whether this is a freshly selected itinerary or a
+                    stale one. The user sees "selected itinerary" vs
+                    "stale — re-scan in progress" so they know whether
+                    the flight numbers are current. */}
+                {selectedDate.itinerary && selectedDate.itinerary.status !== 'selected' && (
+                  <div className={`rounded-xl border p-3 text-xs ${
+                    selectedDate.itinerary.status === 'stale'
+                      ? 'border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400'
+                      : 'border-slate-500/30 bg-slate-500/10 text-slate-700 dark:text-slate-400'
+                  }`}>
+                    {selectedDate.itinerary.status === 'stale'
+                      ? '⚠️ 行程資料已過時，待下次掃描更新'
+                      : 'ℹ️ 行程資料待確認'}
+                  </div>
+                )}
                 {/* Outbound Flight */}
                 <div className="rounded-xl bg-secondary p-4">
                   <p className="text-xs font-medium text-muted-foreground mb-3">去程 · {destination.name}</p>
@@ -222,11 +277,11 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
                       </div>
                       <div>
                         <p className="font-bold text-card-foreground">
-                          {selectedDate.flight.airline.replace(/^_/, '')} {selectedDate.flight.flight_no}
+                          {flightInfo!.airline.replace(/^_/, '')} {flightInfo!.flight_no}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {selectedDate.flight.dep_time}
-                          {selectedDate.flight.arr_time && ` → ${selectedDate.flight.arr_time}`}
+                          {flightInfo!.dep_time}
+                          {flightInfo!.arr_time && ` → ${flightInfo!.arr_time}`}
                         </p>
                       </div>
                     </div>
@@ -239,7 +294,7 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
                 </div>
 
                 {/* Return Flight */}
-                {selectedDate.flight.return_airline && (
+                {flightInfo!.return_airline && (
                   <div className="rounded-xl bg-secondary p-4">
                     <p className="text-xs font-medium text-muted-foreground mb-3">回程 · 香港</p>
                     <div className="flex items-center gap-3">
@@ -248,11 +303,11 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
                       </div>
                       <div>
                         <p className="font-bold text-card-foreground">
-                          {selectedDate.flight.return_airline.replace(/^_/, '')} {selectedDate.flight.return_flight || selectedDate.flight.flight_no}
+                          {flightInfo!.return_airline.replace(/^_/, '')} {flightInfo!.return_flight || flightInfo!.flight_no}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {selectedDate.flight.return_dep_time}
-                          {selectedDate.flight.return_arr_time && ` → ${selectedDate.flight.return_arr_time}`}
+                          {flightInfo!.return_dep_time}
+                          {flightInfo!.return_arr_time && ` → ${flightInfo!.return_arr_time}`}
                         </p>
                       </div>
                     </div>
@@ -261,7 +316,7 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
 
                 {/* Action Button */}
                 <a
-                  href={`https://www.google.com/travel/flights?q=${departure}+to+${destination.code}+${selectedDate.year}-${String(selectedDate.month).padStart(2,'0')}-${String(selectedDate.day).padStart(2,'0')}+${selectedDate.flight?.ret_date}&gl=hk&hl=zh-TW&curr=HKD`}
+                  href={`https://www.google.com/travel/flights?q=${departure}+to+${destination.code}+${selectedDate.year}-${String(selectedDate.month).padStart(2,'0')}-${String(selectedDate.day).padStart(2,'0')}+${flightInfo?.ret_date}&gl=hk&hl=zh-TW&curr=HKD`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
@@ -295,7 +350,8 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
             )}
           </div>
         </div>
-      )}
+        );
+      })()}
     </>
   );
 }
