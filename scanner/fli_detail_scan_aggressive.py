@@ -18,6 +18,8 @@ from detail_scan_safety import (
     ProviderDenied,
     ProviderSchemaChanged,
     QuotaExceeded,
+    mark_provider_blocked,
+    open_circuit,
     raise_if_circuit_open,
 )
 
@@ -117,13 +119,26 @@ def get_dates_at_cheapest_prices(conn, route, max_dates=9999):
     return c.fetchall()
 
 def get_flight_details(searcher, origin, dest, dep_date, ret_date):
+    """Fetch flight details for one (route, dep_date, ret_date) tuple.
+
+    Hermes 2026-08-23: distinguish empty results (genuine "no flights
+    those dates") from a stealth ban (HTTP 200 + captcha page parsed
+    to empty in <2s). The latter raises ProviderBlocked so the caller
+    can open the fleet circuit. Both behaviors were indistinguishable
+    before this fix (R5: typed failures at the HTTP boundary).
+    """
     try:
         orig_apt = resolve_enum(Airport, origin)
         dest_apt = resolve_enum(Airport, dest)
     except Exception as e:
         log(f"  Airport resolve error: {e}")
         return None
-    
+
+    # Hermes 2026-08-23: time the call. A sub-2-second empty result is
+    # the stealth-ban signature — captcha pages are served instantly,
+    # real empty queries take 1-9s. See Detail-Flight Scan Enforcement
+    # Incident Review.md (2026-08-23) and the fleet-status skill.
+    t0 = time.monotonic()
     try:
         filters = FlightSearchFilters(
             trip_type=TripType.ROUND_TRIP,
@@ -141,7 +156,7 @@ def get_flight_details(searcher, origin, dest, dep_date, ret_date):
                 )
             ]
         )
-        
+
         # Hermes 2026-08-23: top_n=1 cuts request amplification. fli's
         # default top_n=5 triggers 5 outbound expansions per round-trip
         # search — but the scanner only consumes results[0], so the
@@ -149,16 +164,28 @@ def get_flight_details(searcher, origin, dest, dep_date, ret_date):
         # Detail-Flight Scan Enforcement Incident Review.md (2026-08-23)
         # for the request-budget math.
         results = searcher.search(filters, top_n=1)
-        
+        elapsed = time.monotonic() - t0
+
         if not results or len(results) == 0:
-            log(f"  Warning: Empty results for {dep_date}→{ret_date}")
+            # Hermes 2026-08-23: sub-2s empty = stealth-ban signal. Raise
+            # ProviderBlocked so the route loop opens the fleet circuit
+            # and stamps provider_status on recent flight_details rows.
+            # (R5: typed failures at the HTTP boundary.)
+            if elapsed < 2.0:
+                msg = (f"empty result in {elapsed:.2f}s for "
+                       f"{origin}→{dest} {dep_date}/{ret_date} — "
+                       f"likely stealth ban (captcha interstitial)")
+                log(f"  BLOCKED: {msg}")
+                raise ProviderBlocked(msg)
+            log(f"  Note: empty result in {elapsed:.1f}s "
+                f"(probably genuine 'no flights' for {dep_date}→{ret_date})")
             return None
-        
+
         outbound, ret = results[0]
-        
+
         out_leg = outbound.legs[0] if outbound.legs else None
         ret_leg = ret.legs[0] if ret and ret.legs else None
-        
+
         return {
             'price': outbound.price,
             'outbound_airline': out_leg.airline.name if out_leg else None,
@@ -175,7 +202,13 @@ def get_flight_details(searcher, origin, dest, dep_date, ret_date):
             'return_aircraft': ret_leg.aircraft if ret_leg else None,
             'total_duration': outbound.duration + ret.duration if (outbound and ret) else None
         }
+    except ProviderBlocked:
+        # Already typed — let the caller handle it.
+        raise
     except Exception as e:
+        # Hermes 2026-08-23: unknown failure — log loudly. The original
+        # code swallowed this silently. Now we at least tag it so the
+        # operator can see why a route skipped.
         log(f"  Error in get_flight_details: {e}")
         import traceback
         log(f"  Trace: {traceback.format_exc()[-500:]}")
@@ -304,7 +337,25 @@ def main():
                 log(f"  CIRCUIT OPEN: {e} — halting fleet mid-route")
                 raise SystemExit(0)  # Clean exit, not a crash.
 
-            details = get_flight_details(searcher, origin, dest, dep_date, ret_date)
+            try:
+                details = get_flight_details(searcher, origin, dest,
+                                             dep_date, ret_date)
+            except ProviderBlocked as e:
+                # Hermes 2026-08-23: R5 typed failure at the HTTP boundary.
+                # Sub-2s empty result = stealth-ban signature. Open the
+                # fleet circuit, stamp every recent flight_details row with
+                # provider_status='blocked' so the exporter can render
+                # "details unavailable", and exit. The next run will not
+                # restart until the operator removes the sentinel.
+                log(f"  BLOCKED on {route}: {e}")
+                stamped = mark_provider_blocked(conn, route=route,
+                                                reason="blocked",
+                                                max_age_hours=24)
+                log(f"  marked {stamped} recent flight_details rows "
+                    f"as provider_status=blocked for {route}")
+                open_circuit(str(e), "/data/.fleet_circuit_open")
+                log("  fleet circuit opened — halting")
+                raise SystemExit(0)
 
             # Record the attempt — whether or not the result was usable.
             # The quota bounds total HTTP requests, not just successful ones.

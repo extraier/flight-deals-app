@@ -219,6 +219,59 @@ class DailyRouteQuota:
         self._save()
 
 
+def mark_provider_blocked(conn, *, route: str | None = None,
+                         reason: str = "blocked",
+                         max_age_hours: int = 24) -> int:
+    """Stamp `provider_status` on recent flight_details rows.
+
+    Called by a detail scanner the moment it detects a ProviderBlocked /
+    ProviderDenied / ProviderSchemaChanged signal. The exporter reads this
+    field to:
+      - surface "details unavailable" in the UI for the affected route
+      - avoid pinning a stale `flight_details` row in front of the fresh
+        `flight_dates` price
+
+    Args:
+        conn: sqlite3 connection to /data/fli_calendar.db. Caller must
+              hold a transaction (the rows update is a single UPDATE).
+        route: if provided, only this route is stamped. If None, ALL
+               recent rows for every route are stamped (used when the
+               fleet circuit opens — the entire fleet's output is now
+               suspect, regardless of which route triggered it).
+        reason: human-readable value to write into provider_status.
+                Use 'blocked', 'denied', or 'schema_changed'.
+        max_age_hours: only stamp rows whose scan_time is fresher than
+                       this. Defaults to 24h to mirror the export's
+                       staleness threshold.
+
+    Returns:
+        Number of rows updated.
+    """
+    cur = conn.cursor()
+    if route is not None:
+        cur.execute(
+            """
+            UPDATE flight_details
+            SET provider_status = ?
+            WHERE route = ?
+              AND scan_time >= datetime('now', ?)
+              AND provider_status = 'ok'
+            """,
+            (reason, route, f"-{max_age_hours} hours"),
+        )
+    else:
+        cur.execute(
+            """
+            UPDATE flight_details
+            SET provider_status = ?
+            WHERE scan_time >= datetime('now', ?)
+              AND provider_status = 'ok'
+            """,
+            (reason, f"-{max_age_hours} hours"),
+        )
+    return cur.rowcount
+
+
 __all__ = [
     "DetailScanError",
     "ProviderBlocked",
@@ -234,4 +287,5 @@ __all__ = [
     "close_circuit",
     "DailyRouteQuota",
     "DEFAULT_DAILY_ROUTE_QUOTA",
+    "mark_provider_blocked",
 ]

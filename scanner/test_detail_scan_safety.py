@@ -24,6 +24,7 @@ from detail_scan_safety import (
     QuotaExceeded,
     circuit_is_open,
     close_circuit,
+    mark_provider_blocked,
     open_circuit,
     raise_if_circuit_open,
     read_circuit_reason,
@@ -239,6 +240,93 @@ class TestSafetyPrimitiveIntegration(unittest.TestCase):
             if quota.is_exhausted("HKG→BKK"):
                 raise QuotaExceeded("daily cap reached for HKG→BKK")
         self.assertIn("HKG→BKK", str(ctx.exception))
+
+
+class TestMarkProviderBlocked(unittest.TestCase):
+    """mark_provider_blocked stamps `provider_status` on flight_details rows.
+
+    This is the bridge between detail-scan safety primitives and the
+    data model — once a row is marked 'blocked', the exporter can
+    render "details unavailable" instead of stale detail data.
+    """
+
+    def setUp(self):
+        # In-memory sqlite for test isolation. Mirrors the production
+        # flight_details schema (provider_status column is added by the
+        # migration in fli_db._ensure_schema — we create it here directly).
+        import sqlite3
+        self.conn = sqlite3.connect(":memory:")
+        self.conn.execute("""
+            CREATE TABLE flight_details (
+                route TEXT NOT NULL,
+                dep_date TEXT NOT NULL,
+                ret_date TEXT NOT NULL,
+                price REAL NOT NULL,
+                scan_time TEXT NOT NULL,
+                provider_status TEXT NOT NULL DEFAULT 'ok'
+            )
+        """)
+        self.conn.execute("""
+            INSERT INTO flight_details (route, dep_date, ret_date, price, scan_time)
+            VALUES
+                ('HKG→BKK', '2026-09-01', '2026-09-08', 4500, datetime('now')),
+                ('HKG→BKK', '2026-09-15', '2026-09-22', 4800, datetime('now')),
+                ('HKG→NRT', '2026-10-01', '2026-10-08', 5500, datetime('now')),
+                ('HKG→BKK', '2026-08-01', '2026-08-08', 5000,
+                 datetime('now', '-7 days'))
+        """)
+
+    def tearDown(self):
+        self.conn.close()
+
+    def test_mark_specific_route(self):
+        n = mark_provider_blocked(self.conn, route="HKG→BKK",
+                                  reason="blocked", max_age_hours=24)
+        self.assertEqual(n, 2)  # The two fresh HKG→BKK rows
+
+        # HKG→NRT untouched (different route).
+        self.assertEqual(self._status("HKG→NRT", '2026-10-01'), "ok")
+        # HKG→BKK fresh rows are stamped.
+        self.assertEqual(self._status("HKG→BKK", '2026-09-01'), "blocked")
+        self.assertEqual(self._status("HKG→BKK", '2026-09-15'), "blocked")
+        # Old HKG→BKK row not touched (beyond max_age).
+        self.assertEqual(self._status("HKG→BKK", '2026-08-01'), "ok")
+
+    def test_mark_all_recent(self):
+        # No route filter — the entire fleet has been warned.
+        n = mark_provider_blocked(self.conn, reason="denied",
+                                  max_age_hours=24)
+        self.assertEqual(n, 3)  # All 3 fresh rows
+
+        self.assertEqual(self._status("HKG→BKK", '2026-09-01'), "denied")
+        self.assertEqual(self._status("HKG→BKK", '2026-09-15'), "denied")
+        self.assertEqual(self._status("HKG→NRT", '2026-10-01'), "denied")
+        # Old row preserved (still 'ok').
+        self.assertEqual(self._status("HKG→BKK", '2026-08-01'), "ok")
+
+    def test_idempotent_does_not_re_stamp(self):
+        # First stamp: 2 rows.
+        n1 = mark_provider_blocked(self.conn, route="HKG→BKK",
+                                   reason="blocked", max_age_hours=24)
+        self.assertEqual(n1, 2)
+        # Second stamp on the same rows: 0 rows (already 'blocked').
+        n2 = mark_provider_blocked(self.conn, route="HKG→BKK",
+                                   reason="blocked", max_age_hours=24)
+        self.assertEqual(n2, 0)
+
+    def test_stale_rows_preserved(self):
+        # max_age_hours=1 should not touch the 7-day-old row.
+        n = mark_provider_blocked(self.conn, max_age_hours=1)
+        self.assertEqual(n, 3)  # only the 3 fresh rows
+        self.assertEqual(self._status("HKG→BKK", '2026-08-01'), "ok")
+
+    def _status(self, route: str, dep_date: str) -> str:
+        row = self.conn.execute(
+            "SELECT provider_status FROM flight_details "
+            "WHERE route=? AND dep_date=?",
+            (route, dep_date),
+        ).fetchone()
+        return row[0] if row else "<missing>"
 
 
 if __name__ == "__main__":

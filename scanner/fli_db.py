@@ -53,6 +53,21 @@ FLOCK_TIMEOUT_S = 30.0
 BUSY_RETRIES = 5
 BUSY_BACKOFF_S = 1.0
 
+# Hermes 2026-08-23: unified schema migrations. See detail_scan_safety.py
+# for the provider_status semantics. These are idempotent — safe to call
+# on every connect, just like _ensure_wal(). The columns are added once
+# (CREATE TABLE IF NOT EXISTS won't add columns to existing tables), so
+# we use PRAGMA table_info to detect them and ALTER if missing.
+_MIGRATIONS = [
+    # (table, column_name, column_def)
+    # flight_details.provider_status: 'ok' | 'blocked' | 'denied' | 'schema_changed'.
+    # Written by detail scanners when they detect a ban signal. Read by
+    # the exporters to surface ban status up to the UI (so a deal never
+    # presents stale detail data without a banner).
+    ('flight_details', 'provider_status',
+     "ALTER TABLE flight_details ADD COLUMN provider_status TEXT NOT NULL DEFAULT 'ok'"),
+]
+
 
 def _log(msg):
     ts = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -66,6 +81,23 @@ def _ensure_wal(conn):
     cur.execute("PRAGMA journal_mode = WAL")
     cur.execute(f"PRAGMA busy_timeout = {BUSY_TIMEOUT_MS}")
     cur.execute("PRAGMA synchronous = NORMAL")  # WAL + NORMAL is safe + faster
+    conn.commit()
+
+
+def _ensure_schema(conn):
+    """Run idempotent column migrations. Cheap (one PRAGMA per migration).
+
+    Safe to call on every connect — checks PRAGMA table_info before
+    running the ALTER. ALTER TABLE on an already-present column is a
+    syntax error in SQLite, so we MUST guard.
+    """
+    cur = conn.cursor()
+    for table, column, alter_sql in _MIGRATIONS:
+        cur.execute(f"PRAGMA table_info({table})")
+        existing = {row[1] for row in cur.fetchall()}
+        if column not in existing:
+            _log(f"migration: adding {table}.{column} column")
+            cur.execute(alter_sql)
     conn.commit()
 
 
@@ -83,6 +115,7 @@ def connect(timeout_s: float = 60.0) -> sqlite3.Connection:
     """
     conn = sqlite3.connect(DB_PATH, timeout=timeout_s, isolation_level=None)
     _ensure_wal(conn)
+    _ensure_schema(conn)
     return conn
 
 

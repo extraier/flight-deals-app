@@ -13,17 +13,21 @@ PROXY_POOL_ENABLED=0 before launching the container.
 import os, sys, sqlite3, subprocess, time
 from datetime import datetime
 sys.path.insert(0, '/install')
-sys.path.insert(0, '/data')  # Hermes: fli_db.py + proxy_pool.py live next to the scanners
-# Activate free proxy pool before importing fli.search so the
-# monkey-patch on fli.search.client.Client._session fires before
-# any thread creates its first session.
-try:
-    import proxy_pool
-    proxy_pool.activate()
-except Exception as _pool_err:
-    # Don't fail the whole scan if the pool can't bootstrap — we'll
-    # just fall back to direct connections (current behaviour).
-    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] proxy pool activate failed, falling back to direct: {_pool_err}")
+sys.path.insert(0, '/data')  # Hermes: fli_db.py lives next to the scanners
+
+# Hermes 2026-08-23: R2 — proxy_pool is DISABLED. Detail-Flight Scan
+# Enforcement Incident Review recommends removing proxy pool + Google-
+# based proxy validation from every detail path. If you need IP
+# rotation when re-enabling, use a Tailscale egress (see
+# scheduler_supervisor.env: PROXY_TUNNEL_FOR_SZX) — NOT this proxy
+# pool, which validates addresses by hitting Google Flights and burns
+# quota faster than the scanner itself.
+#
+# try:
+#     import proxy_pool
+#     proxy_pool.activate()
+# except Exception as _pool_err:
+#     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] proxy pool activate failed, falling back to direct: {_pool_err}")
 from fli.search import SearchFlights
 from fli.models.google_flights.base import TripType, FlightSegment
 from fli.models.google_flights.flights import FlightSearchFilters

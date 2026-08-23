@@ -36,14 +36,20 @@ try:
 except Exception:
     pass  # Not fatal — fall back to default if API changes
 
-# Hermes 2026-07-10: activate the free HTTPS proxy pool so UO's home-IP
-# 429s (which SZX also saw) get routed through proxies. Same pattern as
-# fli_detail_scan_szx.py. PROXY_POOL_ENABLED=0 to disable.
-try:
-    import proxy_pool
-    proxy_pool.activate()
-except Exception as _pool_err:
-    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] proxy pool activate failed, falling back to direct: {_pool_err}")
+# Hermes 2026-08-23: R2 — proxy_pool is DISABLED. The Detail-Flight Scan
+# Enforcement Incident Review recommends removing proxy pool + Google-
+# based proxy validation from every detail path; the largest avoidable
+# amplification factor. Re-enabling detail scans must NOT bring this
+# import back. If you need proxy-style IP rotation, use a Tailscale
+# egress (see scheduler_supervisor.env: PROXY_TUNNEL_FOR_*) or wait for
+# recovery of an existing egress IP. The block below is preserved as a
+# reference but commented out so a future operator can see WHY it's gone.
+#
+# try:
+#     import proxy_pool
+#     proxy_pool.activate()
+# except Exception as _pool_err:
+#     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] proxy pool activate failed, falling back to direct: {_pool_err}")
 
 from fli.search import SearchFlights
 from fli.models.google_flights.base import TripType, FlightSegment
