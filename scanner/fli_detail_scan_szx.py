@@ -262,7 +262,9 @@ def get_details(searcher, origin, dest, dep_date, ret_date):
                 )
             ]
         )
-        results = searcher.search(filters)
+        # Hermes 2026-08-23: top_n=1 cuts request amplification.
+        # See fli_detail_scan_aggressive.py for the rationale.
+        results = searcher.search(filters, top_n=1)
         if not results:
             log(f"  Empty results for {dep_date}→{ret_date}")
             return None

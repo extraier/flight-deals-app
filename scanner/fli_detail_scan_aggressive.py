@@ -9,6 +9,18 @@ from datetime import datetime
 sys.path.insert(0, '/install')
 sys.path.insert(0, '/data')  # Hermes: fli_db.py lives next to the scanners
 
+# Hermes 2026-08-23: safety primitives from Detail-Flight Scan Enforcement
+# Incident Review.md — bounded quota, fleet circuit breaker, typed errors.
+from detail_scan_safety import (
+    CircuitOpen,
+    DailyRouteQuota,
+    ProviderBlocked,
+    ProviderDenied,
+    ProviderSchemaChanged,
+    QuotaExceeded,
+    raise_if_circuit_open,
+)
+
 # Hermes 2026-07-10: cap fli.search's internal ThreadPoolExecutor at 2
 # workers. Same OOM-fix as SZX/UO pilots — see fli_detail_scan_szx.py
 # for full rationale. With 3 concurrent scanners (4x daily, 4x
@@ -130,7 +142,13 @@ def get_flight_details(searcher, origin, dest, dep_date, ret_date):
             ]
         )
         
-        results = searcher.search(filters)
+        # Hermes 2026-08-23: top_n=1 cuts request amplification. fli's
+        # default top_n=5 triggers 5 outbound expansions per round-trip
+        # search — but the scanner only consumes results[0], so the
+        # other 4 expansions are pure wasted quota. See
+        # Detail-Flight Scan Enforcement Incident Review.md (2026-08-23)
+        # for the request-budget math.
+        results = searcher.search(filters, top_n=1)
         
         if not results or len(results) == 0:
             log(f"  Warning: Empty results for {dep_date}→{ret_date}")
@@ -174,6 +192,10 @@ def main():
     total_saved = 0
     success = 0
 
+    # Hermes 2026-08-23: per-route daily request counter. Loaded once
+    # for the whole run so concurrent reads see consistent counts.
+    daily_quota = DailyRouteQuota()
+
     # Hermes 2026-07-10: per-route typical price cache for the CAPTCHA
     # safeguard below. Loaded lazily — most routes need it, and computing
     # all 51 medians upfront takes ~1s for ~30k rows.
@@ -205,16 +227,39 @@ def main():
         origin, dest = route.split('→')
         log(f"Processing {route}...")
 
+        # Hermes 2026-08-23: fleet circuit breaker check at the top of
+        # each route. If a single ban signal has been observed on any
+        # egress, the entire fleet must stop — no per-IP retry, no
+        # proxy rotation, just halt.
+        try:
+            raise_if_circuit_open()
+        except Exception as e:
+            log(f"  CIRCUIT OPEN: {e} — halting fleet")
+            break
+
+        # Hermes 2026-08-23: per-route daily cap. Bounded so a
+        # temporary broad price movement can't turn one round into
+        # thousands of detail queries.
+        if daily_quota.is_exhausted(route):
+            log(f"  daily quota exhausted for {route} "
+                f"({daily_quota.used(route)}/{daily_quota.cap}), skipping")
+            continue
+
         # Hermes 2026-07-10: lazy-load the per-route typical once for
-        # the CAPTCHA safeguard below. Caches for the whole round so we
-        # don't query SQLite on every (dep_date, ret_date) iteration.
+        # the CAPTCHA safeguard below. Caches for the whole round so
+        # we don't query SQLite on every (dep_date, ret_date) iteration.
         if route not in route_typical_map:
             route_typical_map[route] = _load_route_typical(route)
         route_typical = route_typical_map[route]
         if route_typical is not None:
             log(f"  route typical: HK${int(route_typical):,} (used by safeguard)")
 
-        dates_to_scan = get_dates_at_cheapest_prices(conn, route, max_dates=9999)
+        # Hermes 2026-08-23: max_dates dropped 9999 -> daily_quota.cap.
+        # The "within 15% of route minimum" filter still bounds the
+        # candidate population, but the absolute count is now capped.
+        dates_to_scan = get_dates_at_cheapest_prices(
+            conn, route, max_dates=daily_quota.remaining(route),
+        )
         
         if not dates_to_scan:
             log(f"  No dates found")
@@ -235,6 +280,12 @@ def main():
             #      mirror today's price into historical_prices so history.1d/4d/7d
             #      always reflects the latest scan, not a stale snapshot.
             c = conn.cursor()
+
+            # Hermes 2026-08-23: re-check quota each iteration. Once we
+            # hit the daily cap, stop the route and move on.
+            if daily_quota.is_exhausted(route):
+                log(f"  daily quota hit for {route}, ending route scan")
+                break
             c.execute("SELECT price FROM flight_details WHERE route=? AND dep_date=? AND ret_date=?",
                      (route, dep_date, ret_date))
             row = c.fetchone()
@@ -245,7 +296,19 @@ def main():
                 saved_for_route += 1
                 continue
 
+            # Hermes 2026-08-23: circuit breaker check before every request.
+            # A single ban signal on any egress must stop this loop too.
+            try:
+                raise_if_circuit_open()
+            except CircuitOpen as e:
+                log(f"  CIRCUIT OPEN: {e} — halting fleet mid-route")
+                raise SystemExit(0)  # Clean exit, not a crash.
+
             details = get_flight_details(searcher, origin, dest, dep_date, ret_date)
+
+            # Record the attempt — whether or not the result was usable.
+            # The quota bounds total HTTP requests, not just successful ones.
+            daily_quota.record(route)
 
             if details:
                 # Hermes 2026-07-10: CAPTCHA/garbage guard. Mirrors the
