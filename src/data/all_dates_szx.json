@@ -167,7 +167,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -408,7 +410,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-23T00:55:10.599348",
       "dropAmount": -379,
@@ -649,7 +653,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-23T00:55:10.599348",
       "dropAmount": -685,
@@ -990,7 +996,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-19T00:07:18.322168",
       "dropAmount": -475,
@@ -1161,7 +1169,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -1332,7 +1342,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -1585,7 +1597,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-23T00:55:10.599348",
       "dropAmount": -588,
@@ -1896,7 +1910,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-23T00:55:10.599348",
       "dropAmount": -483,
@@ -2091,7 +2107,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -2329,7 +2347,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -2514,7 +2534,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -2855,7 +2877,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-19T00:09:54.575046",
       "dropAmount": -824,
@@ -3026,7 +3050,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -3271,7 +3297,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-20T05:54:15.261479",
       "dropAmount": -2527,
@@ -3612,7 +3640,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-16T01:32:28.982292",
       "dropAmount": -986,
@@ -3783,7 +3813,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -4024,7 +4056,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -4216,7 +4250,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-23T00:55:10.599348",
       "dropAmount": -720,
@@ -4557,7 +4593,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -4883,7 +4921,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-10T00:18:55.012566",
       "dropAmount": -429,
@@ -5224,7 +5264,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-13T02:56:25.341225",
       "dropAmount": -137,
@@ -5465,7 +5507,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-23T00:55:10.599348",
       "dropAmount": -2210,
@@ -5636,7 +5680,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -5828,7 +5874,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -5999,7 +6047,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -6240,7 +6290,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-23T00:55:10.599348",
       "dropAmount": -3143,
@@ -6481,7 +6533,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-23T00:55:10.599348",
       "dropAmount": -2155,
@@ -6762,7 +6816,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-23T00:55:10.599348",
       "dropAmount": -1111,
@@ -7088,7 +7144,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-21T08:34:11.171584",
       "dropAmount": -1539,
@@ -7353,7 +7411,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-21T08:34:11.171584",
       "dropAmount": -303,
@@ -7524,7 +7584,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -7702,7 +7764,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -8043,7 +8107,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -8214,7 +8280,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -8476,7 +8544,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -8702,7 +8772,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-22T00:44:07.164540",
       "dropAmount": -186,
@@ -8967,7 +9039,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-15T00:01:40.547336",
       "dropAmount": -5265,
@@ -9194,7 +9268,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-23T00:55:10.599348",
       "dropAmount": -219,
@@ -9435,7 +9511,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-23T00:55:10.599348",
       "dropAmount": -815,
@@ -9776,7 +9854,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -10024,7 +10104,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -10195,7 +10277,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -10436,7 +10520,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-23T00:55:10.599348",
       "dropAmount": -888,
@@ -10631,7 +10717,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -10972,7 +11060,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-15T00:01:40.547336",
       "dropAmount": -3342,
@@ -11143,7 +11233,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -11484,7 +11576,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-15T00:01:40.547336",
       "dropAmount": -1804,
@@ -11763,7 +11857,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": "2026-08-18T00:47:35.184955",
       "dropAmount": -4988,
@@ -11934,7 +12030,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
@@ -12105,7 +12203,9 @@
       },
       "marketComparison": {
         "status": "not_collected",
-        "reason": "requires_all_comparable_itineraries"
+        "reason": "requires_all_comparable_itineraries",
+        "scope": "carrier_overlay",
+        "sampleSize": 0
       },
       "firstDetected": null,
       "dropAmount": 0,
