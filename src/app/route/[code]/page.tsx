@@ -103,7 +103,7 @@ export default async function RoutePage({ params, searchParams }: PageProps) {
           <div className="rounded-2xl border border-border bg-card p-8 text-center">
             <p className="text-muted-foreground">
               {departure === 'SZX'
-                ? '深圳航班資料掃描中...'
+                ? '深圳航班資料載入中...'
                 : `找不到 ${normalizedCode} 的數據`}
             </p>
             <Link

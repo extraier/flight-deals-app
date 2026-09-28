@@ -319,8 +319,8 @@ export default function Home() {
         {szxLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="text-4xl mb-4">🔄</div>
-            <p className="text-lg text-muted-foreground">深圳航班資料掃描中...</p>
-            <p className="text-sm text-muted-foreground mt-1">預計 60-90 分鐘後完成首次掃描</p>
+            <p className="text-lg text-muted-foreground">深圳航班資料載入中...</p>
+            <p className="text-sm text-muted-foreground mt-1">預計 1-2 分鐘後可見數據</p>
           </div>
         ) : (
           <>
