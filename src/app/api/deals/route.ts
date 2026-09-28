@@ -1,13 +1,15 @@
 /**
  * Flight deals API route.
  *
- * Hermes 2026-07-01: rewrote upstream strategy.
- *   1. Try Tailscale Funnel (https://ugreen-nas.tail20bf1.ts.net) — same-LAN fast path.
- *      Often unreachable from Vercel edge workers because Tailscale peer discovery
- *      fails across regions.
- *   2. Fall back to public HTTPS CDN (cdn.savetheday.io/deals) — reachable
- *      from anywhere, served via nginx on the NAS fronted by cloudflared.
- *      This is the new primary on Vercel since the funnel breaks.
+ * Hermes 2026-09-28: rewrote upstream strategy after the cloudflared tunnel on the
+ * NAS died (since Jul 28) and Tailscale Funnel was discovered to actually work
+ * from public internet via *.ts.net public DNS records.
+ *   1. Try Tailscale Funnel (https://dh4300plus-70ca-1.tail20bf1.ts.net) — public
+ *      DNS resolves *.ts.net to Tailscale's DERP proxy IPs (verified 2026-09-28).
+ *      This is the primary path. WAS BROKEN because route.ts used the wrong
+ *      hostname (ugreen-nas.tail20bf1.ts.net — old NAS, replaced).
+ *   2. Fall back to public HTTPS CDN (cdn.savetheday.io/deals) — dead since
+ *      cloudflared tunnel went down Jul 28, 2026. Kept as secondary for resilience.
  *   3. Last resort: bundled static JSON in src/data/.
  *
  * Cache: 20s in-memory with request coalescing — concurrent visitors within
@@ -27,7 +29,12 @@ import path from 'node:path';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-const FUNNEL_BASE = 'https://ugreen-nas.tail20bf1.ts.net';
+// Hermes 2026-09-28: Funnel hostname is the actual NAS's tailscale name
+// (dh4300plus-70ca-1, NOT the old ugreen-nas). *.ts.net has public DNS
+// records pointing at Tailscale's DERP proxy IPs, so this resolves from
+// any network — not just MagicDNS clients. Tested with DoH 2026-09-28:
+// `dig dh4300plus-70ca-1.tail20bf1.ts.net @1.1.1.1` → 103.84.155.153
+const FUNNEL_BASE = 'https://dh4300plus-70ca-1.tail20bf1.ts.net';
 const CDN_BASE = 'https://cdn.savetheday.io/deals';
 const CACHE_TTL_MS = 20_000; // 20 seconds — matches deals page poll interval
 
