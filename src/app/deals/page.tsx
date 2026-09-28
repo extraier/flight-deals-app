@@ -56,7 +56,14 @@ interface DropRow {
   cheapestDate: { day: number; month: number; year: number; stay: number | null; airline?: string; dep_time?: string };
   typicalPrice?: number;
   discountVsTypical?: number; // pct off the typical price (informational)
-  firstDetected?: string | null; // ISO timestamp when this drop was first seen
+  // Hermes 2026-09-29: timestamp sources so every card shows a "首次發現" label.
+  // - firstDetected: stamped by the detail scanner when a drop is first seen
+  // - pendingFirstSeen: stamped by the calendar scanner when a likely drop
+  //   is first seen (no detail confirmation yet). Same field the old pending
+  //   UI used. Falls back to this so typical-comparison rows also have a
+  //   timestamp.
+  firstDetected?: string | null;
+  pendingFirstSeen?: string | null;
   // Hermes 2026-09-29: source of the oldPrice comparison.
   //   'yesterday' — oldPrice came from cheapestDates[].history.1d (real yesterday vs today)
   //   'typical'   — oldPrice is the destination's typicalPrice (no history baseline yet)
@@ -212,6 +219,7 @@ function buildDropList(deals: Deal[], departure: Departure): DropRow[] {
       typicalPrice: typical,
       discountVsTypical,
       firstDetected: d.firstDetected ?? null,
+      pendingFirstSeen: d.pendingFirstSeen ?? null,
       // Hermes 2026-09-29: both export-stamped and computed-from-history paths
       // produce a "real yesterday vs today" comparison, so they share the same
       // source label. The 'typical' fallback is added below.
@@ -263,6 +271,7 @@ function buildDropList(deals: Deal[], departure: Departure): DropRow[] {
       typicalPrice: typical,
       discountVsTypical,
       firstDetected: d.firstDetected ?? null,
+      pendingFirstSeen: d.pendingFirstSeen ?? null,
       comparisonSource: 'typical',
       _computedFallback: true,
     } as DropRow & { _computedFallback?: boolean });
@@ -504,10 +513,12 @@ export default function DealsPage() {
       );
     }
     if (sortMode === 'recency') {
-      // Newest first. Routes without firstDetected sort to the bottom.
+      // Hermes 2026-09-29: include pendingFirstSeen in recency sort so the
+      // "newest first" list still orders correctly now that most routes use
+      // pendingFirstSeen instead of firstDetected.
       copy.sort((a, b) => {
-        const ta = a.firstDetected ? Date.parse(a.firstDetected) : -Infinity;
-        const tb = b.firstDetected ? Date.parse(b.firstDetected) : -Infinity;
+        const ta = (a.firstDetected || a.pendingFirstSeen) ? Date.parse((a.firstDetected || a.pendingFirstSeen) as string) : -Infinity;
+        const tb = (b.firstDetected || b.pendingFirstSeen) ? Date.parse((b.firstDetected || b.pendingFirstSeen) as string) : -Infinity;
         return tb - ta;
       });
     } else {
@@ -698,7 +709,11 @@ export default function DealsPage() {
               {renderedRows.map((r, idx) => {
                 const h = heat(r.dropPct);
                 const dateLabel = `${r.cheapestDate.year}年${r.cheapestDate.month}月${r.cheapestDate.day}日`;
-                const alertLabel = formatAlertTime(r.firstDetected);
+                // Hermes 2026-09-29: prefer detail-scanner firstDetected,
+                // fall back to calendar-scanner pendingFirstSeen so every
+                // card shows a consistent "首次發現" timestamp.
+                const detectedAt = r.firstDetected ?? r.pendingFirstSeen ?? null;
+                const alertLabel = formatAlertTime(detectedAt);
                 return (
                   <Link
                     key={`${r.departure}-${r.route}-${idx}`}
@@ -770,21 +785,29 @@ export default function DealsPage() {
                                 )}
                               </div>
                             </div>
-                            {/* Alert time — bottom row, full width */}
-                            {alertLabel && (
-                              <div className="mt-2 pt-2 border-t border-border/50 flex items-center gap-1 text-[11px] text-muted-foreground">
-                                <Clock className="h-3 w-3" />
-                                首次發現：{alertLabel}
-                                {r.firstDetected && (
+                            {/* Hermes 2026-09-29: always render the alert-time row.
+                                Previously the whole row was hidden when firstDetected
+                                was null, leaving some cards without a timestamp.
+                                Now we always show "首次發現：" + a fallback label so
+                                every card looks consistent. */}
+                            <div className="mt-2 pt-2 border-t border-border/50 flex items-center gap-1 text-[11px] text-muted-foreground">
+                              <Clock className="h-3 w-3" />
+                              {detectedAt ? (
+                                <>
+                                  首次發現：{alertLabel}
                                   <span className="text-muted-foreground/60 ml-1">
-                                    ({new Date(r.firstDetected).toLocaleString('zh-HK', {
+                                    ({new Date(detectedAt).toLocaleString('zh-HK', {
                                       month: 'numeric', day: 'numeric',
                                       hour: '2-digit', minute: '2-digit',
                                     })})
                                   </span>
-                                )}
-                              </div>
-                            )}
+                                </>
+                              ) : (
+                                <span className="text-muted-foreground/60">
+                                  首次發現：等待首次掃描
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </CardContent>
