@@ -345,7 +345,7 @@ function buildDropList(
       //   "UO:HKG→廣島 (HIJ)"     → "廣島 (HIJ)"
       //   "HKG→廣島 (HIJ)"        → "廣島 (HIJ)"
       //   "HKG→HIJ"               → no parens, skip
-      const m = key.match(/(?:^|→|:HKG→)(.+?)\s*\(([A-Z]{3})\)\s*$/);
+      const m = key.match(/(?:^|→|:HKG→)([^→]+?)\s*\(([A-Z]{3})\)\s*$/);
       if (!m) continue;
       const destName = `${m[1]} (${m[2]})`;
       // First match wins (so explicit-airline keys are preferred when
