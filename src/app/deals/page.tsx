@@ -323,7 +323,7 @@ function buildDropList(
   }
 
   // Hermes 2026-09-29: 持續跌價 overrides — if a route has a recent
-  // (≤24h) cooldown entry showing a real vs-yesterday drop, override
+  // cooldown entry showing a real vs-yesterday drop, override
   // whatever source we picked (yesterday / typical) so the card shows
   // the same numbers the Telegram 持續跌價 section surfaces. Without
   // this, routes whose baseline has rebased to today's price would
@@ -338,10 +338,22 @@ function buildDropList(
     // the row alone — the lookup has to be fuzzy on destName.
     const cdByName = new Map<string, { entry: { amount: number | null; pct: number | null; price: number | null; ts: string | null }; ageMs: number }>();
     const nowMs = Date.now();
+    // Hermes 2026-09-29 (later): the previous 24h gate filtered out cooldown
+    // entries before they could even seed cdByName, which meant routes whose
+    // Telegram alert was older than 24h fell through to firstDetected (null)
+    // → pendingFirstSeen (re-stamped by every calendar scanner run as "now")
+    // and rendered as "首次發現: 2分鐘前". For PEK alerted 27h ago that's
+    // nonsense — the bot alerted almost a day ago, not 2 minutes ago.
+    //
+    // Fix: index ALL cooldown entries (up to 14d) so we can use cd.ts for
+    // the 首次發現 label regardless of age. The dropAmount override below
+    // keeps the stricter 24h gate because a stale baseline produces wrong
+    // numbers — but the timestamp itself doesn't go stale.
+    const CD_INDEX_MAX_AGE_MS = 14 * 24 * 60 * 60 * 1000;
     for (const [key, c] of Object.entries(cooldown)) {
       if (!c?.ts) continue;
       const ageMs = nowMs - new Date(c.ts).getTime();
-      if (ageMs < 0 || ageMs > 24 * 60 * 60 * 1000) continue;
+      if (ageMs < 0 || ageMs > CD_INDEX_MAX_AGE_MS) continue;
       // Extract the destination name from the key. Bot keys look like:
       //   "HKG→UO→廣島 (HIJ)"     → "廣島 (HIJ)"
       //   "UO:HKG→廣島 (HIJ)"     → "廣島 (HIJ)"
@@ -364,10 +376,24 @@ function buildDropList(
         cdByName.set(destName, { entry: c, ageMs });
       }
     }
+    // Hermes 2026-09-29 (later): two-pass override.
+    // Pass 1: stamp firstDetected from cooldown for ALL entries ≤14d.
+    //   This fixes the "首次發現: 2分鐘前" bug for routes Telegram alerted
+    //   >24h ago. The comparisonSource stays at whatever it was (yesterday
+    //   / typical) because the actual drop numbers might be stale.
+    // Pass 2: dropAmount / dropPct / oldPrice / comparisonSource override
+    //   ONLY for entries ≤24h, where the baseline is fresh enough to trust.
     for (const row of rows) {
-      const destName = row.destName;
-      const match = cdByName.get(destName);
+      const match = cdByName.get(row.destName);
       if (!match) continue;
+      // Pass 1: always apply cd.ts as the 首次發現 timestamp when the
+      // row has no other firstDetected. This guarantees the timestamp
+      // matches Telegram's alert time, not the latest calendar scan.
+      if (!row.firstDetected && match.entry.ts) {
+        row.firstDetected = match.entry.ts;
+      }
+      // Pass 2: full drop override only when the cooldown is fresh enough.
+      if (match.ageMs > 24 * 60 * 60 * 1000) continue;
 
       // Hermes 2026-09-29: cooldown entries may have null amount/pct/price
       // when the alert fired but the fingerprint wasn't captured (some
@@ -402,7 +428,9 @@ function buildDropList(
       row.dropAmount = absAmount;
       row.dropPct = absPct;
       row.oldPrice = row.newPrice + absAmount;
-      row.firstDetected = cdEntry.ts;
+      // Note: row.firstDetected already set above (Pass 1) — only set
+      // comparisonSource to 'cooldown' here, since the badge label only
+      // makes sense when the drop override also fired.
       row.comparisonSource = 'cooldown';
       (row as DropRow & { _cooldownOverride?: boolean })._cooldownOverride = true;
     }
