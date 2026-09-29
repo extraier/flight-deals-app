@@ -64,7 +64,9 @@ TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "181186542")
 # fallback cache warm in case the API is ever down.
 FLIGHT_DEALS_API_BASE = os.environ.get(
     "FLIGHT_DEALS_API_BASE",
-    "https://flight-deals-app-seven.vercel.app",
+    # Hermes 2026-09-21: repointed to 7w7r79wx5 after src/data/ refresh deploy.
+    # Previous jr31w3ucv URL was returning stale 2026-09-21T07:30 UTC cache.
+    "https://flight-deals-7w7r79wx5-extraiers-projects.vercel.app",
 ).rstrip("/")
 DATA_DIR = os.environ.get(
     "FLIGHT_DATA_DIR",
@@ -74,6 +76,7 @@ DATA_DIR = os.environ.get(
 # Section thresholds (see module docstring for what each does).
 FRESH_DROP_MIN_PCT = 1.0
 FRESH_DROP_TOP_N = 10
+STALE_DROP_TOP_N = 10
 STABLE_DEAL_MIN_PCT = 15.0
 STABLE_DEAL_TOP_N = 8
 
@@ -108,6 +111,17 @@ COOLDOWN_DEDUP_WINDOW = timedelta(hours=24)  # Bug D (2026-08-17): widened from 
 # Same-day-different-date duplicate fires (ORD case: Sep 23 + Sep 28 both
 # at $5895 within 11h) needed a wider window than 6h to suppress cleanly.
 
+# Hermes 2026-09-27: STALE_DISPLAY_WINDOW collapsed back into
+# COOLDOWN_DEDUP_WINDOW. Separating them caused the 📌 section to
+# disappear for ~18h of every 24h cycle (entries stamped together at
+# 03:00 were >6h old by 11:00; user reported "where is 持續跌價,
+# disappeared"). The Bug E idempotent-stamp fix means the "Xh前" timer
+# no longer freezes — entries' age labels tick up correctly across
+# hourly cron fires — so we don't need a shorter display window to
+# keep the report feeling dynamic. The "stuck timer" problem is gone,
+# and a too-short display window was the wrong knob for "feels static".
+STALE_DISPLAY_WINDOW = COOLDOWN_DEDUP_WINDOW
+
 # Hermes 2026-08-15: price-aware cooldown for phantom alerts.
 # The 6h time-window dedup alone doesn't catch the case where the
 # exporter's history.1d baseline is stale (still showing yesterday's
@@ -139,6 +153,7 @@ PHANTOM_PRICE_PCT = 0.01        # 1% of previously-alerted price
 # stalls. The hourly reporter may still use fresh HKG/SZX data while omitting
 # only the stale CX block.
 CX_MAX_DATA_AGE = timedelta(hours=12)
+UO_MAX_DATA_AGE = timedelta(hours=12)
 
 
 # ---------- I/O helpers ----------
@@ -208,17 +223,35 @@ def fetch_json_url(url: str, timeout: float = 15.0):
 
 
 def load_with_fallback(fetch_fn, fallback_path: str):
-    """Try `fetch_fn()` first; if it returns None, fall back to a local file.
+    """Try LOCAL first (synced hourly from NAS, always fresh), fall back to live API.
 
-    Lets us use the live API as the source of truth (so the alert always
-    matches the website) but still degrade gracefully when the API is down
-    — the sync_flightdeals.sh step in main() keeps the local fallback warm.
+    Hermes 2026-09-21: was trying live API first, but Vercel cache often lags
+    the NAS sync by hours. Local file (sync_flightdeals.sh cron @ :17 every
+    hour) is fresher because it bypasses Vercel's static fallback.
+    Live API only used when local file is missing or stale > 6 hours.
     """
+    local = load_json(fallback_path)
+    if local and local.get("results"):
+        local_gen = local.get("generated", "")
+        # If local file has a valid generated timestamp within 6 hours, prefer it
+        try:
+            stamp = datetime.fromisoformat(local_gen.replace("Z", "+00:00"))
+            if stamp.tzinfo is None:
+                stamp = stamp.replace(tzinfo=timezone.utc)
+            age = _now_hk() - stamp.astimezone(_now_hk().tzinfo)
+            if timedelta(hours=0) <= age <= timedelta(hours=6):
+                print(f"  using local {fallback_path} (age={age}, generated={local_gen})")
+                return local
+        except Exception:
+            pass
+    # Local stale or invalid — try live API as backup
     data = fetch_fn()
     if data:
         return data
-    print(f"  live fetch failed — falling back to local file {fallback_path}")
-    return load_json(fallback_path)
+    if local:
+        print(f"  live fetch failed — using local file {fallback_path}")
+        return local
+    return None
 
 
 # ---------- Cooldown (daily dedup of Telegram fresh-drop alerts) ----------
@@ -226,6 +259,26 @@ def load_with_fallback(fetch_fn, fallback_path: str):
 def _now_hk() -> datetime:
     """Current time as a tz-aware datetime in Asia/Hong_Kong (UTC+8)."""
     return datetime.now(timezone(timedelta(hours=8)))
+
+
+def _hkt_ts_from_iso(iso: str) -> str:
+    """Convert an ISO timestamp (UTC or naive) → 'YYYY-MM-DD HH:MM HKT' (UTC+8).
+
+    The NAS-side exporter writes `datetime.now().isoformat()` (naive UTC).
+    We treat naive as UTC, then shift to Asia/Hong_Kong for display.
+    Used in fmt_airport_block to render the data-stamp line in the user's
+    local timezone instead of UTC.
+    """
+    if not iso:
+        return ""
+    try:
+        stamp = datetime.fromisoformat(iso.replace("Z", "+00:00"))
+    except Exception:
+        return iso[:16] + " HKT"  # fall back to raw slice
+    if stamp.tzinfo is None:
+        stamp = stamp.replace(tzinfo=timezone.utc)
+    hkt = stamp.astimezone(timezone(timedelta(hours=8)))
+    return hkt.strftime("%Y-%m-%d %H:%M HKT")
 
 
 def _today_key_hk() -> str:
@@ -236,6 +289,72 @@ def _today_key_hk() -> str:
     when the script is invoked manually from a different shell timezone.
     """
     return _now_hk().strftime("%Y-%m-%d")
+
+
+# Hermes 2026-09-09: IATA → Cantonese-traditional-Chinese city name fallback
+# for destinations whose source JSON has only an airport code in `name`
+# (some scan paths and older exporters write "HIJ" instead of "廣島 (HIJ)").
+IATA_NAME_CN = {
+    'HIJ': '廣島', 'TAK': '高松', 'SDJ': '仙台', 'KMI': '宮崎',
+    'AOJ': '青森', 'HKD': '釧路', 'HNA': '花卷', 'KIJ': '新潟',
+    'AKJ': '旭川', 'TOY': '富山', 'ISG': '石垣', 'NGO': '名古屋',
+    'KIX': '大阪關西', 'ITM': '大阪伊丹', 'KOB': '神戶',
+    'CTS': '札幌', 'HND': '羽田', 'NRT': '成田', 'OKA': '沖繩',
+    'FUK': '福岡', 'KOJ': '鹿兒島', 'KMJ': '熊本', 'TYO': '東京',
+    'ICN': '首爾仁川', 'GMP': '首爾金浦', 'PUS': '釜山',
+    'CJU': '濟州', 'TAE': '大邱',
+    'TPE': '台北', 'TSA': '台北松山', 'KHH': '高雄',
+    'BKK': '曼谷', 'DMK': '曼谷廊曼', 'HKT': '布吉', 'CNX': '清邁',
+    'KBV': '喀比', 'HDY': '合艾', 'CEI': '清萊', 'UTH': '烏隆',
+    'SIN': '新加坡', 'KUL': '吉隆坡', 'PEN': '檳城', 'LGK': '蘭卡威',
+    'BKI': '亞庇', 'KCH': '古晉', 'MYY': '美里',
+    'MNL': '馬尼拉', 'CRK': '克拉克', 'CEB': '宿霧', 'DVO': '達沃',
+    'PQC': '富國島', 'SGN': '胡志明市', 'HAN': '河內', 'DAD': '峴港',
+    'REP': '暹粒', 'DPS': '峇里島', 'KLO': '卡利博',
+    'CGK': '雅加達', 'DPS': '峇里島', 'SUB': '泗水', 'MDC': '萬鴉老',
+    'CAN': '廣州', 'PEK': '北京', 'PKX': '北京大興', 'PVG': '上海浦東',
+    'SHA': '上海虹橋', 'SZX': '深圳', 'HGH': '杭州', 'NGB': '寧波',
+    'CZX': '長沙', 'XIY': '西安', 'CTU': '成都', 'CKG': '重慶',
+    'XMN': '廈門', 'FOC': '福州', 'HAK': '海口', 'SYX': '三亞',
+    'WUX': '無錫', 'KMG': '昆明', 'WUH': '武漢', 'NKG': '南京',
+    'SHE': '瀋陽', 'TSN': '天津', 'YIW': '義烏', 'DLC': '大連',
+    'CSX': '長沙', 'HFE': '合肥', 'HET': '呼和浩特',
+    'DEL': '德里', 'BOM': '孟買', 'BLR': '班加羅爾', 'MAA': '清奈',
+    'CCU': '加爾各答', 'CMB': '科倫坡', 'KTM': '加德滿都',
+    'DXB': '杜拜', 'DOH': '多哈', 'AUH': '阿布扎比', 'CAI': '開羅',
+    'JNB': '約翰內斯堡', 'CPT': '開普敦', 'LOS': '拉各斯', 'NBO': '奈洛比',
+    'CDG': '巴黎', 'ORY': '巴黎奧利', 'LHR': '倫敦', 'LGW': '倫敦蓋威克',
+    'AMS': '阿姆斯特丹', 'FRA': '法蘭克福', 'MUC': '慕尼黑',
+    'MAD': '馬德里', 'BCN': '巴塞羅拿', 'FCO': '羅馬', 'MXP': '米蘭',
+    'VCE': '威尼斯', 'ZRH': '蘇黎世', 'VIE': '維也納', 'CPH': '哥本哈根',
+    'ARN': '斯德哥爾摩', 'OSL': '奧斯陸', 'HEL': '赫爾辛基',
+    'WAW': '華沙', 'IST': '伊斯坦堡', 'SVO': '莫斯科',
+    'JFK': '紐約', 'LAX': '洛杉磯', 'ORD': '芝加哥', 'SFO': '三藩市',
+    'SEA': '西雅圖', 'YVR': '溫哥華', 'YYZ': '多倫多', 'BOS': '波士頓',
+    'ATL': '亞特蘭大', 'DFW': '達拉斯', 'MIA': '邁阿密', 'DEN': '丹佛',
+    'IAH': '休斯敦', 'LGB': '長堤', 'OAK': '奧克蘭', 'SAN': '聖地牙哥',
+    'ANC': '安克雷奇', 'HNL': '檀香山', 'GUM': '關島',
+    'AKL': '奧克蘭', 'WLG': '威靈頓', 'SYD': '悉尼', 'MEL': '墨爾本',
+    'BNE': '布里斯班', 'PER': '珀斯', 'ADL': '阿德萊德', 'CBR': '坎培拉',
+}
+
+
+def _localize_dest(dest: dict | None, fallback_code: str = "") -> str:
+    """Return a Cantonese-traditional-Chinese destination label like '廣島 (HIJ)'.
+
+    Hermes 2026-09-09: most scan paths now stamp Chinese names at the
+    scanner source, but we keep this fallback because (a) cache layers
+    occasionally write 'HIJ' only, (b) exporters from third-party
+    scanners may not localize at all, and (c) Telegram users expect
+    every airport to render with both the city and the IATA code.
+    """
+    code = (dest or {}).get('code') or fallback_code or ''
+    name = (dest or {}).get('name') or ''
+    has_cjk = any('\u4e00' <= ch <= '\u9fff' for ch in name)
+    if has_cjk and name:
+        return name
+    city = IATA_NAME_CN.get(code, code or name)
+    return f'{city} ({code})' if code else city
 
 
 def data_is_fresh(data: dict | None, max_age: timedelta) -> bool:
@@ -381,7 +500,62 @@ def save_cooldown(data: dict) -> None:
         print(f"save_cooldown failed: {e}")
 
 
+
+def _cooldown_alerted(entry) -> datetime | None:
+    """Parse a cooldown entry (str or dict) → datetime in HK tz.
+
+    Hermes 2026-09-23: companion to filter_with_stale_alerted. Pulled out
+    of the existing _cooldown_alerted_at (returns tz-aware datetime).
+    """
+    return _cooldown_alerted_at(entry)
+
+
+
+def filter_with_stale_alerted(fresh: list, cooldown: dict) -> tuple[list, list]:
+    """Like filter_already_alerted but ALSO returns in-cooldown drops.
+
+    Returns (new_fresh, stale_fresh) where stale_fresh contains drops that
+    were alerted within COOLDOWN_DEDUP_WINDOW (24h) but are still real
+    today-vs-yesterday drops. Callers render stale as "📌 持續跌價".
+
+    Hermes 2026-09-23: user feedback — empty section after cooldown
+    filtering looked like "no drops at all", hiding the fact that the
+    route is still below yesterday. Show them with a badge instead.
+    """
+    new = []
+    stale = []
+    now_hk = _now_hk()
+    for d in fresh:
+        key = d.get("route_key") or d.get("dest")
+        entry = cooldown.get(key)
+        if entry is None:
+            new.append(d)
+            continue
+        last_dt = _cooldown_alerted(entry)
+        if last_dt is not None:
+            age = now_hk - last_dt
+            if age < COOLDOWN_DEDUP_WINDOW:
+                # Hermes 2026-09-27: only surface in the 📌 block for
+                # STALE_DISPLAY_WINDOW. After that the entry stays in the
+                # cooldown dict (so we don't re-fire) but drops out of the
+                # hourly report. The report is meant to feel current;
+                # showing the same 24 routes verbatim for 24h was noise.
+                if age < STALE_DISPLAY_WINDOW:
+                    age_min = int(age.total_seconds() / 60)
+                    if age_min >= 60:
+                        age_h_int = age_min // 60
+                        age_m_rem = age_min % 60
+                        d["_stale_age"] = f"{age_h_int}h{age_m_rem:02d}m前"
+                    else:
+                        d["_stale_age"] = f"{age_min}m前"
+                    stale.append(d)
+                continue
+        new.append(d)
+    return new, stale
+
+
 def filter_already_alerted(fresh: list, cooldown: dict, today: str | None = None) -> list:
+# Hermes 2026-09-23: 持續跌價 section
     """Drop any Fresh entries whose route_key was alerted within COOLDOWN_DEDUP_WINDOW,
     OR whose (price, pct, amount) tuple matches a previously alerted entry
     even if outside the time window (phantom repeat from stale exporter baseline).
@@ -450,7 +624,11 @@ def filter_already_alerted(fresh: list, cooldown: dict, today: str | None = None
         print(f"  cooldown: {len(skipped_window)} route(s) alerted within {int(COOLDOWN_DEDUP_WINDOW.total_seconds()/3600)}h, skipping: {skipped_window}")
     if skipped_phantom:
         print(f"  phantom-repeat: {len(skipped_phantom)} route(s) re-firing with identical (price, pct, amount), skipping: {skipped_phantom}")
-    return out
+    # Hermes 2026-09-27 (Bug F): cap fresh list to FRESH_DROP_TOP_N after
+    # the cooldown/phantom filter so the user-visible section stays bounded,
+    # even though extract_deals now over-fetches to give non-cooldown drops
+    # a chance of surviving the dedup step.
+    return out[:FRESH_DROP_TOP_N]
 
 
 def mark_alerted(route_keys: list, cooldown: dict, *, alert_payload: dict | None = None) -> dict:
@@ -462,11 +640,34 @@ def mark_alerted(route_keys: list, cooldown: dict, *, alert_payload: dict | None
     built in main() that maps route_key → {price, drop_pct, drop_amount}.
     Routes that aren't in the payload (or that aren't fresh drops —
     e.g. stable-only alerts) keep the legacy plain-string format.
+
+    Hermes 2026-09-27 (Bug E): idempotent stamping. main() previously
+    collected every raw UO fresh drop into route_keys, including ones
+    already in cooldown (where filter_already_alerted was bypassed for
+    the uo_fresh_raw / uo_uo_raw paths). That caused every hourly cron
+    to REFRESH the timestamp of routes still in the 📌 block, pinning
+    the displayed "Xh前" timer near 0m indefinitely. Fix: only stamp
+    routes that don't already have a valid cooldown entry. Stale
+    (already-stamped) routes keep their original ts so the timer
+    counts up correctly across hourly cron fires.
     """
     now_iso = _now_hk().isoformat()
     new = dict(cooldown)
     payload = alert_payload or {}
+
+    def _existing_ts(entry) -> str:
+        if isinstance(entry, str):
+            return entry
+        if isinstance(entry, dict):
+            return entry.get("ts", "")
+        return ""
+
     for k in route_keys:
+        existing_ts = _existing_ts(new.get(k))
+        if existing_ts:
+            # Route is already in cooldown — keep original timestamp
+            # so the 📌 display timer increments hour-over-hour.
+            continue
         fingerprint = payload.get(k)
         if fingerprint:
             new[k] = {
@@ -484,14 +685,7 @@ def mark_alerted(route_keys: list, cooldown: dict, *, alert_payload: dict | None
     # night still has its entry through the next day's window.
     cutoff = (_now_hk() - COOLDOWN_WINDOW).isoformat()
 
-    def _entry_ts(entry):
-        if isinstance(entry, str):
-            return entry
-        if isinstance(entry, dict):
-            return entry.get("ts", "")
-        return ""
-
-    new = {k: v for k, v in new.items() if _entry_ts(v) >= cutoff}
+    new = {k: v for k, v in new.items() if _existing_ts(v) >= cutoff}
     return new
 
 
@@ -502,6 +696,8 @@ def month_short(m: int) -> str:
 
 
 def extract_deals(data: dict, *, departure: str, fresh_min_pct: float, stable_min_pct: float):
+# Hermes 2026-09-23: allow stable deals without yest baseline
+
     """Pull (fresh_drops, stable_deals) from a scanner output dict.
 
     Both lists are sorted best-to-worst by their own metric.
@@ -535,7 +731,7 @@ def extract_deals(data: dict, *, departure: str, fresh_min_pct: float, stable_mi
         dates = r.get("cheapestDates") or []
         if not dates:
             continue
-        dest_name = (r.get("destination") or {}).get("name") or r.get("route", "")
+        dest_name = _localize_dest(r.get("destination"), fallback_code=r.get("route", ""))
         typical = r.get("typicalPrice") or 0
         if typical <= 0:
             continue
@@ -544,10 +740,22 @@ def extract_deals(data: dict, *, departure: str, fresh_min_pct: float, stable_mi
         priced = [(cd.get("price"), cd) for cd in dates if cd.get("price")]
         if not priced:
             continue
-        today_low, today_cd = min(
+        # Hermes 2026-09-01: outlier filter — Google Flights occasionally
+        # returns a single garbage cache-hit price (e.g. HK$188 for BKK when
+        # the real cheapest is HK$1,500+). If today_low is < 30% of the
+        # second-cheapest date, treat it as an anomaly and use the
+        # second-cheapest instead. This prevents bogus "低典型 90%" alerts
+        # when the cached typicalPrice is right but the historical depth
+        # is poisoned. (Underlying data not mutated — filter is local.)
+        priced_sorted = sorted(
             priced,
             key=lambda x: (x[0], x[1].get("month", 99), x[1].get("day", 99)),
         )
+        today_low, today_cd = priced_sorted[0]
+        if len(priced_sorted) >= 3 and typical > 0:
+            second_low = priced_sorted[1][0]
+            if second_low > 0 and today_low < second_low * 0.30:
+                today_low, today_cd = priced_sorted[1]
 
         # ---- That date's OWN history.1d baseline ----
         # Per-date comparison: we compare this exact date's price today
@@ -556,12 +764,17 @@ def extract_deals(data: dict, *, departure: str, fresh_min_pct: float, stable_mi
         # different history dilute the answer).
         hist = today_cd.get("history") or {}
         yest_low = (hist.get("1d") or {}).get("price") or 0
-        if not yest_low or yest_low <= 0:
-            continue  # no yesterday baseline on this date → skip
 
-        # ---- Fresh drop: this date today vs this date yesterday ----
-        diff = today_low - yest_low              # negative = drop
-        drop_pct = diff / yest_low * 100         # negative = drop
+        # Hermes 2026-09-23: yest is OPTIONAL. The fresh (vs昨日) section
+        # needs it; the stable (vs typical) section does NOT. Previously
+        # the whole route was skipped if no yest existed, which killed
+        # the stable section for routes where the baseline scanner is
+        # currently down (HKG as of 2026-09-23).
+        diff = None
+        drop_pct = None
+        if yest_low and yest_low > 0:
+            diff = today_low - yest_low              # negative = drop
+            drop_pct = diff / yest_low * 100         # negative = drop
         # Hermes 2026-08-14: noise-floor gate (Bug A). The exporter rewrites
         # history.1d each cycle; on a stable baseline this can produce a
         # $1-$2 / 0.1-0.4% delta that satisfies the -1% threshold but is
@@ -572,9 +785,11 @@ def extract_deals(data: dict, *, departure: str, fresh_min_pct: float, stable_mi
         # but the baseline-rewriting exporter defeats that assumption.
         NOISE_FLOOR_AMOUNT = 10   # HKD — anything < this is noise
         NOISE_FLOOR_PCT    = 0.5  # %    — anything < this is noise
-        if (drop_pct <= -fresh_min_pct
-                and (abs(diff) >= NOISE_FLOOR_AMOUNT
-                     or abs(drop_pct) >= NOISE_FLOOR_PCT)):
+        if drop_pct is not None and (
+            drop_pct <= -fresh_min_pct
+            and (abs(diff) >= NOISE_FLOOR_AMOUNT
+                 or abs(drop_pct) >= NOISE_FLOOR_PCT)
+        ):
             flight = today_cd.get("flight") or {}
             airline = (flight.get("airline") or "").lstrip("_")
             fresh.append({
@@ -587,7 +802,7 @@ def extract_deals(data: dict, *, departure: str, fresh_min_pct: float, stable_mi
                 "typical_savings": (typical - today_low) / typical * 100,
             })
 
-        # ---- Stable deal: today_low vs typical ----
+        # ---- Stable deal: today_low vs typical (no yest required) ----
         typical_savings = (typical - today_low) / typical * 100
         if typical_savings >= stable_min_pct:
             flight = today_cd.get("flight") or {}
@@ -613,7 +828,17 @@ def extract_deals(data: dict, *, departure: str, fresh_min_pct: float, stable_mi
     fresh_dests = {d["dest"] for d in fresh}
     stable = [d for d in stable if d["dest"] not in fresh_dests]
 
-    return fresh[:FRESH_DROP_TOP_N], stable[:STABLE_DEAL_TOP_N]
+    # Hermes 2026-09-27 (Bug F): expand the slice ceiling past the cooldown
+    # overlap so the downstream `filter_already_alerted` step still has
+    # non-cooldown entries to surface. Previously we sliced to FRESH_DROP_TOP_N
+    # here, before any cooldown filtering — and on days where many routes
+    # are in cooldown, all top-N fresh items were already alerted and got
+    # filtered out, leaving an empty 🔥 section. Now slice to the larger
+    # of FRESH_DROP_TOP_N and a 3x ceiling so smaller drops have a chance
+    # of surviving the cooldown filter. Caller's filter_already_alerted
+    # does the final top-N trimming.
+    slice_ceiling = max(FRESH_DROP_TOP_N, FRESH_DROP_TOP_N * 3)
+    return fresh[:slice_ceiling], stable[:STABLE_DEAL_TOP_N]
 
 
 # ---------- Format ----------
@@ -676,7 +901,7 @@ def extract_uo_drops(data: dict, departure: str, fresh_min_pct: float) -> list:
         dates = r.get("cheapestDates") or []
         if not dates:
             continue
-        dest_name = (r.get("destination") or {}).get("name") or r.get("route", "")
+        dest_name = _localize_dest(r.get("destination"), fallback_code=r.get("route", ""))
         # Restrict to dates that have a UO flight stamp
         uo_dates = [
             cd for cd in dates
@@ -746,6 +971,8 @@ def fmt_airport_block(
     label: str, emoji: str,
     fresh: list, stable: list, generated: str, total_routes: int,
     uo_drops: list | None = None,
+    stale: list | None = None,
+    departure: str = "",
 ) -> str:
     """Build one airport's section (HKG or SZX).
 
@@ -755,15 +982,20 @@ def fmt_airport_block(
     again", not "any drop"); the caller can still filter them but by
     default we show all of them.
     """
-    lines = [f"{emoji} {label} · {total_routes} 條路線 · {generated[:16]}"]
+    lines = [f"{emoji} {label} · {total_routes} 條路線 · {_hkt_ts_from_iso(generated)}"]
 
-    if not fresh and not stable and not uo_drops:
+    if not fresh and not stable and not uo_drops and not stale:
         lines.append("   ⏳ 暫無符合條件嘅劈價（需累積更多歷史數據）")
         return "\n".join(lines)
 
     if fresh:
-        lines.append(f"   🔥 今日跌咗 ({len(fresh)} 條)")
-        for d in fresh:
+        # Hermes 2026-09-27 (Bug F): cap fresh list to FRESH_DROP_TOP_N at the
+        # display boundary as well. extract_deals now over-fetches to give
+        # non-cooldown drops a chance to survive the dedup filter, so the
+        # caller may pass in more than FRESH_DROP_TOP_N. Truncate here so
+        # the user's message stays bounded.
+        lines.append(f"   🔥 今日跌咗 ({min(len(fresh), FRESH_DROP_TOP_N)} 條)")
+        for d in fresh[:FRESH_DROP_TOP_N]:
             lines.append(fmt_drop(d))
         lines.append("")
 
@@ -778,18 +1010,62 @@ def fmt_airport_block(
         for d in stable:
             lines.append(fmt_stable(d))
 
+    if stale:
+        # Hermes 2026-09-23: show in-cooldown drops so user knows the
+        # route is still below yesterday even though we already alerted.
+        # Include departure code in the header so it's unambiguous which
+        # airport's routes these belong to (otherwise the block reads as
+        # a floating section between airports).
+        lines.append("")
+        header_label = departure if departure else label.split()[-1]
+        lines.append("   📌 " + header_label + " 持續跌價 (" + str(min(len(stale), STALE_DROP_TOP_N)) + " 條 · 已 alert)")
+        for d in stale[:STALE_DROP_TOP_N]:
+            age_label = d.get("_stale_age", "")
+            airline = d.get("airline", "") or "—"
+            dest = d["dest"]
+            price = d["price"]
+            dep = d["dep"]
+            base = (
+                "📌 " + dest + "\n"
+                "   HK$" + format(price, ",.0f") + " " + dep + " " + airline + "\n"
+            )
+            if d.get("drop_amount", 0) != 0:
+                drop_amount = d["drop_amount"]
+                drop_pct = d["drop_pct"]
+                typical_savings = d["typical_savings"]
+                lines.append(
+                    base
+                    + "   vs昨日 " + format(drop_amount, "+.0f") + "元 ("
+                    + format(drop_pct, "+.1f") + "%)"
+                    + " · 低典型 " + format(typical_savings, ".0f") + "%"
+                    + " · " + age_label
+                )
+            else:
+                typical_savings = d["typical_savings"]
+                lines.append(
+                    base
+                    + "   低典型 " + format(typical_savings, ".0f") + "%"
+                    + " · " + age_label
+                )
+
     return "\n".join(lines)
 
 
 # ---------- Main ----------
 
-def build_message(hkg_data, szx_data, cx_data=None, cooldown: dict | None = None) -> str:
+def build_message(hkg_data, szx_data, cx_data=None, uo_data=None, cooldown: dict | None = None) -> str:
     if cx_data and not data_is_fresh(cx_data, CX_MAX_DATA_AGE):
         print(
             "  CX data stale/invalid "
             f"(generated={(cx_data or {}).get('generated')!r}); omitting CX block"
         )
         cx_data = None
+    if uo_data and not data_is_fresh(uo_data, UO_MAX_DATA_AGE):
+        print(
+            "  UO data stale/invalid "
+            f"(generated={(uo_data or {}).get('generated')!r}); omitting UO block"
+        )
+        uo_data = None
     hkg_fresh, hkg_stable = extract_deals(
         hkg_data,
         departure="HKG",
@@ -806,9 +1082,11 @@ def build_message(hkg_data, szx_data, cx_data=None, cooldown: dict | None = None
     # Hermes 2026-06-30: cooldown now compares against COOLDOWN_WINDOW (24h)
     # instead of "same HK calendar day" — see filter_already_alerted. The
     # `today` arg is kept for back-compat but no longer used.
+    hkg_stale = []
+    szx_stale = []
     if cooldown is not None:
-        hkg_fresh = filter_already_alerted(hkg_fresh, cooldown)
-        szx_fresh = filter_already_alerted(szx_fresh, cooldown)
+        hkg_fresh, hkg_stale = filter_with_stale_alerted(hkg_fresh, cooldown)
+        szx_fresh, szx_stale = filter_with_stale_alerted(szx_fresh, cooldown)
 
         # Hermes 2026-06-30: HK Express-only drops (Approach A — UO at the new
     # low). Subject to the same 24h cooldown as the main fresh section so
@@ -829,6 +1107,7 @@ def build_message(hkg_data, szx_data, cx_data=None, cooldown: dict | None = None
     # works as-is. No UO drop extraction for CX (CX data has no per-date
     # flight.airline stamps).
     cx_fresh, cx_stable = ([], [])
+    cx_stale = []
     if cx_data:
         cx_fresh, cx_stable = extract_deals(
             cx_data,
@@ -840,22 +1119,54 @@ def build_message(hkg_data, szx_data, cx_data=None, cooldown: dict | None = None
             stable_min_pct=STABLE_DEAL_MIN_PCT,
         )
         if cooldown is not None:
-            cx_fresh = filter_already_alerted(cx_fresh, cooldown)
+            cx_fresh, cx_stale = filter_with_stale_alerted(cx_fresh, cooldown)
     cx_total = len((cx_data or {}).get("results") or [])
     cx_generated = (cx_data or {}).get("generated", "")
+
+    # UO (HK Express) — fourth block. export_all_dates_airline.py normalizes
+    # the UO SQLite table to the same shape as all_dates.json, so
+    # extract_deals works as-is. Each cheapestDate already has flight.airline
+    # stamped so extract_uo_drops() can also pick vs昨日 drops. We dedupe so a
+    # deal appearing in both fresh and stable doesn't double-print.
+    uo_fresh, uo_stable = ([], [])
+    uo_drop_only = []
+    uo_stale = []
+    if uo_data:
+        uo_fresh, uo_stable = extract_deals(
+            uo_data,
+            departure="UO:HKG",
+            fresh_min_pct=FRESH_DROP_MIN_PCT,
+            stable_min_pct=STABLE_DEAL_MIN_PCT,
+        )
+        # build_message will pass uo_data through extract_uo_drops again below
+        # for the vs昨日 signal — easier than threading two flags, so reuse
+        # the same hkg/szx-style uo_drops arg on the airport block. Strip them
+        # from the main fresh list to avoid double-alerting when the same
+        # route appears as a daily drop AND a vs昨日 drop.
+        uo_drop_only = []  # currently unused — vs昨日 handled by fmt_airport_block
+        if cooldown is not None:
+            uo_fresh, uo_stale = filter_with_stale_alerted(uo_fresh, cooldown)
+            uo_stable = filter_already_alerted(uo_stable, cooldown)
+    uo_total = len((uo_data or {}).get("results") or [])
+    uo_generated = (uo_data or {}).get("generated", "")
 
     parts = [
         "🦅 CompareTiger 機票快訊",
         "對比昨日最低價 + 歷史典型價 · 每小時更新",
         "",
-        fmt_airport_block("🇭🇰 香港 HKG", "🛫", hkg_fresh, hkg_stable, hkg_generated, hkg_total, uo_drops=hkg_uo),
+        fmt_airport_block("🇭🇰 香港 HKG", "🛫", hkg_fresh, hkg_stable, hkg_generated, hkg_total, uo_drops=hkg_uo, stale=hkg_stale, departure="HKG"),
         "",
-        fmt_airport_block("🇨🇳 深圳 SZX", "🛫", szx_fresh, szx_stable, szx_generated, szx_total, uo_drops=szx_uo),
+        fmt_airport_block("🇨🇳 深圳 SZX", "🛫", szx_fresh, szx_stable, szx_generated, szx_total, uo_drops=szx_uo, stale=szx_stale, departure="SZX"),
     ]
     if cx_data:
         parts += [
             "",
-            fmt_airport_block("✈️ 國泰 CX", "🛫", cx_fresh, cx_stable, cx_generated, cx_total),
+            fmt_airport_block("✈️ 國泰 CX", "🛫", cx_fresh, cx_stable, cx_generated, cx_total, stale=cx_stale, departure="CX"),
+        ]
+    if uo_data:
+        parts += [
+            "",
+            fmt_airport_block("✈️ 港快 UO", "🛫", uo_fresh, uo_stable, uo_generated, uo_total, stale=uo_stale, departure="UO"),
         ]
     parts += [
         "",
@@ -865,18 +1176,25 @@ def build_message(hkg_data, szx_data, cx_data=None, cooldown: dict | None = None
 
 
 def _collect_alerted_route_keys(
-    hkg_fresh, szx_fresh, hkg_uo=None, szx_uo=None, cx_fresh=None
+    hkg_fresh, szx_fresh, hkg_uo=None, szx_uo=None, cx_fresh=None,
+    uo_fresh=None, uo_uo=None,
 ) -> list:
     """Return the route_keys actually included in today's Telegram message.
 
     Hermes 2026-06-30: include UO drops so they get stamped into the
     cooldown file — otherwise the same UO drop would re-alert every hour.
+    Hermes 2026-09-07: also include the new uo_data fresh + vs-yesterday
+    drops so the UO JSON-derived section stops repeating every hour.
     """
     keys = [d["route_key"] for d in (hkg_fresh + szx_fresh) if d.get("route_key")]
     if hkg_uo:
         keys += [d["route_key"] for d in hkg_uo if d.get("route_key")]
     if szx_uo:
         keys += [d["route_key"] for d in szx_uo if d.get("route_key")]
+    if uo_fresh:
+        keys += [d["route_key"] for d in uo_fresh if d.get("route_key")]
+    if uo_uo:
+        keys += [d["route_key"] for d in uo_uo if d.get("route_key")]
     if cx_fresh:
         keys += [d["route_key"] for d in cx_fresh if d.get("route_key")]
     return keys
@@ -926,13 +1244,14 @@ def main():
         os.path.join(DATA_DIR, "all_dates_szx.json"),
     )
     cx = load_json(os.path.join(DATA_DIR, "all_dates_cx.json"))
+    uo = load_json(os.path.join(DATA_DIR, "all_dates_uo.json"))
     if not hkg or not hkg.get("results"):
         print("No HKG data — skipping send")
         return 0
 
     cooldown = load_cooldown()
     cooldown = migrate_legacy_cooldown(cooldown)
-    msg = build_message(hkg, szx, cx, cooldown=cooldown)
+    msg = build_message(hkg, szx, cx, uo, cooldown=cooldown)
     # Always log to stdout (captured by launchd to /tmp/flight_report.log)
     print(f"--- message ({len(msg)} chars) ---")
     print(msg)
@@ -965,26 +1284,51 @@ def main():
                     fresh_min_pct=FRESH_DROP_MIN_PCT,
                     stable_min_pct=STABLE_DEAL_MIN_PCT,
                 )
+            # 2026-09-07: UO is now its own JSON (all_dates_uo.json) generated by
+            # export_all_dates_airline.py. extract_uo_drops(hkg, ...) is left
+            # in place for back-compat (older data shape) but the fresh-drops
+            # list is now read straight from uo_data so the cooldown stamping
+            # actually runs (previously UO repeats fired every hour because
+            # the cooldown path looked in HKG/SZX which don't carry UO
+            # airline stamps).
+            uo_fresh_raw, _ = ([], [])
+            uo_uo_raw = []
+            if uo:
+                uo_fresh_raw, _ = extract_deals(
+                    uo, departure="UO:HKG",
+                    fresh_min_pct=FRESH_DROP_MIN_PCT,
+                    stable_min_pct=STABLE_DEAL_MIN_PCT,
+                )
+                uo_uo_raw = extract_uo_drops(uo, "HKG", FRESH_DROP_MIN_PCT)
             # 2026-06-30: same 24h-window dedup as in build_message above
             hkg_fresh = filter_already_alerted(hkg_fresh_raw, cooldown)
             szx_fresh = filter_already_alerted(szx_fresh_raw, cooldown)
-            # Hermes 2026-06-30: UO drops also need cooldown stamping
-            # so the same UO drop doesn't re-alert every hour.
-            hkg_uo_raw = extract_uo_drops(hkg, "HKG", FRESH_DROP_MIN_PCT)
-            szx_uo_raw = extract_uo_drops(szx, "SZX", FRESH_DROP_MIN_PCT)
-            hkg_uo = filter_already_alerted(hkg_uo_raw, cooldown)
-            szx_uo = filter_already_alerted(szx_uo_raw, cooldown)
+            hkg_uo_raw_legacy = extract_uo_drops(hkg, "HKG", FRESH_DROP_MIN_PCT)
+            szx_uo_raw_legacy = extract_uo_drops(szx, "SZX", FRESH_DROP_MIN_PCT)
+            hkg_uo_legacy = filter_already_alerted(hkg_uo_raw_legacy, cooldown)
+            szx_uo_legacy = filter_already_alerted(szx_uo_raw_legacy, cooldown)
+            # Merge legacy HKG/SZX UO with new uo_data UO so cooldown covers both
+            uo_combined = uo_uo_raw + hkg_uo_legacy + szx_uo_legacy
+            hkg_uo = hkg_uo_legacy
+            szx_uo = szx_uo_legacy
             cx_fresh = filter_already_alerted(cx_fresh_raw, cooldown)
             alerted_keys = _collect_alerted_route_keys(
                 hkg_fresh, szx_fresh, hkg_uo=hkg_uo, szx_uo=szx_uo,
-                cx_fresh=cx_fresh,
+                cx_fresh=cx_fresh, uo_fresh=uo_fresh_raw, uo_uo=uo_combined,
             )
             if alerted_keys:
                 # Hermes 2026-08-15: build the fingerprint payload for
                 # mark_alerted so future runs can detect phantom repeats.
                 # Map: route_key → {price, drop_pct, drop_amount}.
+                # Hermes 2026-09-29: include uo_fresh_raw + uo_combined so
+                # UO alerts (which used to get ts-only stamps because their
+                # route_keys weren't in the payload dict) now capture the
+                # full fingerprint. Without this, the web 持續跌價 view
+                # shows the typicalPrice-derived fallback instead of the
+                # actual alerted amount/pct.
                 alert_payload = {}
-                for d in (hkg_fresh + szx_fresh + hkg_uo + szx_uo + cx_fresh):
+                for d in (hkg_fresh + szx_fresh + hkg_uo + szx_uo + cx_fresh
+                          + uo_fresh_raw + uo_combined):
                     if d.get("route_key"):
                         alert_payload[d["route_key"]] = {
                             "price": d.get("price"),
