@@ -345,7 +345,15 @@ function buildDropList(
       //   "UO:HKG→廣島 (HIJ)"     → "廣島 (HIJ)"
       //   "HKG→廣島 (HIJ)"        → "廣島 (HIJ)"
       //   "HKG→HIJ"               → no parens, skip
-      const m = key.match(/(?:^|→|:HKG→)([^→]+?)\s*\(([A-Z]{3})\)\s*$/);
+      // Hermes 2026-09-29: the previous regex `/(?:^|→|:HKG→)([^→]+?)\s*\(.../`
+      // failed to match `HKG→UO→廣島 (HIJ)` because [^→]+? can't span →, so
+      // it tried to capture from position 0 (HKG) and then the rest failed.
+      // Use a "find the last name+(CODE) at end of string" pattern instead:
+      //   - `([^→\s]+(?:\s[^→\s]+)*)` captures non-→ tokens joined by spaces
+      //     (works for "廣島" or "約翰內斯堡" — single or multi-word)
+      //   - followed by optional space and `(CODE)` at end of string
+      // Code-only keys like `HKG→HIJ` (no parens) correctly fail to match.
+      const m = key.match(/([^→\s]+(?:\s[^→\s]+)*)\s*\(([A-Z]{3})\)\s*$/);
       if (!m) continue;
       const destName = `${m[1]} (${m[2]})`;
       // First match wins (so explicit-airline keys are preferred when

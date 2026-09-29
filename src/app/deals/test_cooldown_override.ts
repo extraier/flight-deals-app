@@ -34,7 +34,7 @@ function buildIndex(cooldown: Record<string, CooldownEntry>): Map<string, { entr
     if (!c?.ts) continue;
     const ageMs = nowMs - new Date(c.ts).getTime();
     if (ageMs < 0 || ageMs > 86400000) continue;
-    const m = key.match(/(?:^|→|:HKG→)([^→]+?)\s*\(([A-Z]{3})\)\s*$/);
+    const m = key.match(/([^→\s]+(?:\s[^→\s]+)*)\s*\(([A-Z]{3})\)\s*$/);
     if (!m) continue;
     const destName = `${m[1]} (${m[2]})`;
     if (!map.has(destName)) map.set(destName, { entry: c, ageMs });
