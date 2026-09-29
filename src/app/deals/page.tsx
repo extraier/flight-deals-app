@@ -183,18 +183,27 @@ function buildDropList(
     let cooldownSource: { amount: number; pct: number; price: number | null; ts: string } | null = null;
     if (cooldown && (!hasExportDrop || expDropAmount === 0)) {
       const code = d.destination?.code || '';
+      const airline = (d.airline || '').replace(/^_/, '').toUpperCase();
+      const bareName = d.destination?.name || '';
       const candidates = [
-        `HKG→${d.airline || ''}→${d.destination?.name || ''} (${code})`.replace('→→', '→'),
+        airline ? `HKG→${airline}→${bareName}` : null,
+        `HKG→${bareName}`,
+        airline ? `${airline}:HKG→${bareName}` : null,
         `HKG→${code}`,
-        `${departure === 'HKG' ? 'UO' : 'SZX'}:HKG→${d.destination?.name || ''} (${code})`,
-        `HKG→${d.destination?.name || ''} (${code})`,
-      ];
+      ].filter((k): k is string => !!k);
       for (const key of candidates) {
         const c = cooldown[key];
-        if (c && typeof c.amount === 'number' && typeof c.pct === 'number' && c.ts) {
+        if (c && c.ts) {
           const ageMs = Date.now() - new Date(c.ts).getTime();
           if (ageMs >= 0 && ageMs <= 24 * 60 * 60 * 1000) {
-            cooldownSource = { amount: c.amount, pct: c.pct, price: c.price, ts: c.ts };
+            // Prefer stamped fingerprint; fall back to ts-only so we can
+            // still mark the row as 持續跌價.
+            cooldownSource = {
+              amount: typeof c.amount === 'number' ? c.amount : 0,
+              pct: typeof c.pct === 'number' ? c.pct : 0,
+              price: c.price,
+              ts: c.ts,
+            };
             break;
           }
         }
@@ -321,12 +330,22 @@ function buildDropList(
   if (cooldown) {
     for (const row of rows) {
       const code = row.destCode;
+      const airline = (row.cheapestDate.airline || '').replace(/^_/, '').toUpperCase();
+      // Hermes 2026-09-29: cooldown keys come in a few shapes from the
+      // Telegram bot:
+      //   "HKG→UO→廣島 (HIJ)"     — with airline code (most common)
+      //   "UO:HKG→廣島 (HIJ)"     — airline-prefixed alternate
+      //   "HKG→廣島 (HIJ)"        — no airline (older)
+      //   "HKG→HIJ"               — code-only fallback
+      // destName already includes the code in parentheses, so we DON'T
+      // append "({code})" again — that would produce "廣島 (HIJ) (HIJ)".
+      const bareName = row.destName;
       const candidates = [
-        `HKG→${row.cheapestDate.airline || ''}→${row.destName} (${code})`.replace('→→', '→'),
+        airline ? `HKG→${airline}→${bareName}` : null,
+        `HKG→${bareName}`,
+        airline ? `${airline}:HKG→${bareName}` : null,
         `HKG→${code}`,
-        `${departure === 'HKG' ? 'UO' : 'SZX'}:HKG→${row.destName} (${code})`,
-        `HKG→${row.destName} (${code})`,
-      ];
+      ].filter((k): k is string => !!k);
       let cdEntry: { amount: number | null; pct: number | null; price: number | null; ts: string | null } | null = null;
       for (const k of candidates) {
         const c = cooldown[k];
