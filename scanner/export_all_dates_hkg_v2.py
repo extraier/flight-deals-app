@@ -376,6 +376,23 @@ try:
 except (FileNotFoundError, json.JSONDecodeError):
     first_detected_map = {}
 
+# Hermes 2026-09-29: persist pendingFirstSeen so it doesn't get re-stamped to
+# "now" every time the calendar scanner runs. Without this, routes whose
+# firstDetected is null (because the detail scanner never confirmed the drop)
+# — e.g. PEK which has history.1d.pct=-10.9 but the scanner's MIN-all-dates
+# formula zeroed it out — render on the /deals page as "首次發現: 2分鐘前"
+# every time the calendar scanner runs, even though the route was first
+# spotted days ago. We persist under a separate file so firstDetected and
+# pendingFirstSeen have independent lifetimes.
+PENDING_FIRST_SEEN_PATH = '/data/pending_first_seen.json'
+try:
+    with open(PENDING_FIRST_SEEN_PATH) as _f:
+        pending_first_seen_map = json.load(_f)
+        if not isinstance(pending_first_seen_map, dict):
+            pending_first_seen_map = {}
+except (FileNotFoundError, json.JSONDecodeError):
+    pending_first_seen_map = {}
+
 stamped = 0
 cleared = 0
 pending = 0
@@ -469,9 +486,20 @@ for o in output:
             # timestamp for pending routes, so the deals page can show
             # "spotted 30 秒前" recency. We use a separate field so we
             # don't pollute the confirmed-drop firstDetected store.
-            o['pendingFirstSeen'] = now_iso
+            # Hermes 2026-09-29: persist in pending_first_seen.json so the
+            # timestamp doesn't re-stamp to "now" every calendar scanner
+            # run. Clear when n_pending drops to 0 (route rebounded or
+            # got fully confirmed), mirroring firstDetected's clear-on-
+            # no-drop semantics.
+            pkey = f"HKG→{o.get('destination', {}).get('code', '')}"
+            if pkey not in pending_first_seen_map:
+                pending_first_seen_map[pkey] = now_iso
+            o['pendingFirstSeen'] = pending_first_seen_map[pkey]
         else:
             o['pendingScans'] = 0
+            pkey = f"HKG→{o.get('destination', {}).get('code', '')}"
+            if pkey in pending_first_seen_map:
+                del pending_first_seen_map[pkey]
             o['pendingFirstSeen'] = None
     else:
         # Already a confirmed drop — pendingScans is moot but we still
@@ -485,9 +513,15 @@ cutoff = (datetime.now() - timedelta(days=FIRST_DETECTED_MAX_AGE_DAYS)).isoforma
 before_gc = len(first_detected_map)
 first_detected_map = {k: v for k, v in first_detected_map.items() if v >= cutoff}
 
+# Hermes 2026-09-29: same 14d GC for pending_first_seen_map so abandoned
+# pending routes eventually fall off the list. Mirrors firstDetected.
+before_pgc = len(pending_first_seen_map)
+pending_first_seen_map = {k: v for k, v in pending_first_seen_map.items() if v >= cutoff}
+
 print(f"Routes: {len(output)}, Dates: {sum(len(o['cheapestDates']) for o in output)}")
 print(f"First-detected: {stamped} new entries stamped, {cleared} cleared (no longer dropping), {before_gc - len(first_detected_map)} stale entries GC'd")
 print(f"Pending scans: {pending} route(s) waiting for detail confirmation")
+print(f"Pending-first-seen: {before_pgc - len(pending_first_seen_map)} stale entries GC'd")
 
 with open('/data/all_dates.json', 'w') as f:
     json.dump({'results': output, 'generated': now_iso}, f, default=str, ensure_ascii=False)
@@ -496,3 +530,7 @@ print("Written /data/all_dates.json")
 with open(FIRST_DETECTED_PATH, 'w') as f:
     json.dump(first_detected_map, f, indent=2, ensure_ascii=False)
 print(f"Written {FIRST_DETECTED_PATH}")
+
+with open(PENDING_FIRST_SEEN_PATH, 'w') as f:
+    json.dump(pending_first_seen_map, f, indent=2, ensure_ascii=False)
+print(f"Written {PENDING_FIRST_SEEN_PATH}")
