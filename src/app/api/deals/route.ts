@@ -109,6 +109,106 @@ async function fetchFromAnyUpstream(
   );
 }
 
+// Hermes 2026-09-29: the NAS funnel (https://dh4300plus-70ca-1.tail20bf1.ts.net)
+// can only route one path per public URL — Tailscale Funnel doesn't support
+// path-based multiplexing to the same backend port. So the augmentation
+// happens on the NAS side: fli-data-server bundles uoDrops + cooldown INTO
+// the all_dates.json response when serving it. The Vercel function just
+// passes the merged body through. Sidecar fetch fields remain here as a
+// safety net for local-dev / static-fallback mode where augmentation may
+// not be available.
+interface SidecarData {
+  uoDrops: Array<{
+    route: string;
+    destination: { code: string; name: string };
+    price: number;
+    typicalPrice?: number;
+    dropAmount: number;
+    dropPct: number;
+    firstDetected?: string | null;
+    pendingFirstSeen?: string | null;
+    depDate?: string; // YYYY-MM-DD
+  }>;
+  cooldown: Record<string, {
+    amount: number | null;
+    pct: number | null;
+    price: number | null;
+    ts: string | null;
+  }>;
+}
+
+async function fetchSidecar(parentSignal: AbortSignal): Promise<SidecarData> {
+  const empty: SidecarData = { uoDrops: [], cooldown: {} };
+  // UO data: only needed for HKG (SZX has no UO routes)
+  const ac = new AbortController();
+  const timeout = setTimeout(() => ac.abort(), UPSTREAM_TIMEOUT_MS);
+  const abortParent = () => ac.abort();
+  parentSignal.addEventListener('abort', abortParent);
+  try {
+    const res = await fetch(`${FUNNEL_BASE}/all_dates_uo.json`, {
+      signal: ac.signal,
+      headers: { 'User-Agent': 'flight-deals-app/1.1 (vercel-edge)' },
+      cache: 'no-store',
+    });
+    if (res.ok) {
+      const uo = (await res.json()) as { results?: any[] };
+      if (Array.isArray(uo?.results)) {
+        // Project UO rows to DropRow-ish shape for the deals page
+        empty.uoDrops = uo.results.map((r: any) => {
+          const dest = r.destination || {};
+          const cheapest = (r.cheapestDates || [])
+            .filter((cd: any) => typeof cd?.price === 'number')
+            .sort((a: any, b: any) => (a.price || 0) - (b.price || 0))[0];
+          const depDate = cheapest
+            ? `${cheapest.year}-${String(cheapest.month).padStart(2, '0')}-${String(cheapest.day).padStart(2, '0')}`
+            : undefined;
+          return {
+            route: r.route,
+            destination: { code: dest.code, name: dest.name || dest.code },
+            price: r.price,
+            typicalPrice: r.typicalPrice,
+            dropAmount: r.dropAmount ?? 0,
+            dropPct: r.dropPct ?? 0,
+            firstDetected: r.firstDetected ?? null,
+            pendingFirstSeen: r.pendingFirstSeen ?? null,
+            depDate,
+          };
+        });
+      }
+    }
+  } catch (err) {
+    console.warn('[api/deals] UO sidecar fetch failed (non-fatal):', String(err));
+  } finally {
+    clearTimeout(timeout);
+    parentSignal.removeEventListener('abort', abortParent);
+  }
+  // Cooldown: best-effort, never blocks deals
+  try {
+    const res = await fetch(`${FUNNEL_BASE}/all_dates_cooldown.json`, {
+      signal: ac.signal,
+      headers: { 'User-Agent': 'flight-deals-app/1.1 (vercel-edge)' },
+      cache: 'no-store',
+    });
+    if (res.ok) {
+      const cd = (await res.json()) as Record<string, any>;
+      // Normalize entries: {amount, pct, price, ts}
+      for (const [k, v] of Object.entries(cd)) {
+        if (v && typeof v === 'object') {
+          empty.cooldown[k] = {
+            amount: typeof v.amount === 'number' ? v.amount : null,
+            pct: typeof v.pct === 'number' ? v.pct : null,
+            price: typeof v.price === 'number' ? v.price : null,
+            ts: typeof v.ts === 'string' ? v.ts : null,
+          };
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('[api/deals] cooldown sidecar fetch failed (non-fatal):', String(err));
+  }
+  return empty;
+}
+
 const UPSTREAM_TIMEOUT_MS = 8_000;
 
 async function getDeals(dep: Departure): Promise<CacheEntry> {
@@ -127,6 +227,14 @@ async function getDeals(dep: Departure): Promise<CacheEntry> {
     const ac = new AbortController();
     const overallTimer = setTimeout(() => ac.abort(), UPSTREAM_TIMEOUT_MS * 2);
     try {
+      // Hermes 2026-09-29: the NAS-side fli-data-server already augments
+      // all_dates.json with uoDrops + cooldown (because Tailscale Funnel
+      // can only route one path per public URL — separate UO/cooldown routes
+      // aren't reachable). The Vercel layer just passes the merged body
+      // through. The sidecar fetch below is a safety net: if augmentation
+      // ever stops, this re-merges the raw fields from the upstream JSON
+      // shape (uoDrops + cooldown already inline when augmentation is on,
+      // so the spread below is a no-op idempotent merge).
       const { body, mtime, source } = await fetchFromAnyUpstream(dep, ac.signal);
       const entry: CacheEntry = { body, fetchedAt: Date.now(), source, upstreamMtime: mtime };
       cache.set(dep, entry);

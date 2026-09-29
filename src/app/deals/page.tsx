@@ -34,6 +34,9 @@ interface Deal {
   // detail scanner's confirmation cycle.
   pendingScans?: number;
   pendingFirstSeen?: string | null;
+  // Hermes 2026-09-29: airline code (e.g. "UO", "CX") at destination level.
+  // Used by buildDropList to match the cooldown key format "HKG→UO→CODE".
+  airline?: string;
   cheapestDates: Array<{
     day: number; month: number; year: number;
     price: number; stay: number | null;
@@ -142,7 +145,11 @@ function computeDestLevelDrop(d: Deal): {
   };
 }
 
-function buildDropList(deals: Deal[], departure: Departure): DropRow[] {
+function buildDropList(
+  deals: Deal[],
+  departure: Departure,
+  cooldown?: Record<string, { amount: number | null; pct: number | null; price: number | null; ts: string | null }>,
+): DropRow[] {
   const rows: DropRow[] = []
   for (const d of deals) {
     // Prefer destination-level drop stamped by the export.
@@ -166,6 +173,33 @@ function buildDropList(deals: Deal[], departure: Departure): DropRow[] {
     let dropPct = 0;
     let cd: Deal['cheapestDates'][number] | undefined;
     let computedFallback = false;
+    // Hermes 2026-09-29: 持續跌價 source — when current data has no drop but
+    // the Telegram cooldown shows a recent alert, mirror the last alert's
+    // data on the card so the web and Telegram views agree. The cooldown
+    // key for HKG is "HKG→CODE" (or with airline: "HKG→UO→CODE",
+    // "UO:HKG→CODE"). ts within the last 24h keeps stale entries from
+    // surfacing indefinitely. comparisonSource: 'cooldown' is the marker
+    // the render code uses to pick the "持續跌價" badge.
+    let cooldownSource: { amount: number; pct: number; price: number | null; ts: string } | null = null;
+    if (cooldown && (!hasExportDrop || expDropAmount === 0)) {
+      const code = d.destination?.code || '';
+      const candidates = [
+        `HKG→${d.airline || ''}→${d.destination?.name || ''} (${code})`.replace('→→', '→'),
+        `HKG→${code}`,
+        `${departure === 'HKG' ? 'UO' : 'SZX'}:HKG→${d.destination?.name || ''} (${code})`,
+        `HKG→${d.destination?.name || ''} (${code})`,
+      ];
+      for (const key of candidates) {
+        const c = cooldown[key];
+        if (c && typeof c.amount === 'number' && typeof c.pct === 'number' && c.ts) {
+          const ageMs = Date.now() - new Date(c.ts).getTime();
+          if (ageMs >= 0 && ageMs <= 24 * 60 * 60 * 1000) {
+            cooldownSource = { amount: c.amount, pct: c.pct, price: c.price, ts: c.ts };
+            break;
+          }
+        }
+      }
+    }
 
     if (hasExportDrop) {
       // Destination-level: today's lowest = expDropPrice, yesterday's
@@ -275,6 +309,48 @@ function buildDropList(deals: Deal[], departure: Departure): DropRow[] {
       comparisonSource: 'typical',
       _computedFallback: true,
     } as DropRow & { _computedFallback?: boolean });
+  }
+
+  // Hermes 2026-09-29: 持續跌價 overrides — if a route has a recent
+  // (≤24h) cooldown entry showing a real vs-yesterday drop, override
+  // whatever source we picked (yesterday / typical) so the card shows
+  // the same numbers the Telegram 持續跌價 section surfaces. Without
+  // this, routes whose baseline has rebased to today's price would
+  // drop to comparisonSource: 'typical' and show 比一般價 instead of
+  // the alert the user just saw on Telegram.
+  if (cooldown) {
+    for (const row of rows) {
+      const code = row.destCode;
+      const candidates = [
+        `HKG→${row.cheapestDate.airline || ''}→${row.destName} (${code})`.replace('→→', '→'),
+        `HKG→${code}`,
+        `${departure === 'HKG' ? 'UO' : 'SZX'}:HKG→${row.destName} (${code})`,
+        `HKG→${row.destName} (${code})`,
+      ];
+      let cdEntry: { amount: number | null; pct: number | null; price: number | null; ts: string | null } | null = null;
+      for (const k of candidates) {
+        const c = cooldown[k];
+        if (c && c.ts) {
+          const ageMs = Date.now() - new Date(c.ts).getTime();
+          if (ageMs >= 0 && ageMs <= 24 * 60 * 60 * 1000) {
+            cdEntry = c;
+            break;
+          }
+        }
+      }
+      if (!cdEntry || typeof cdEntry.amount !== 'number' || typeof cdEntry.pct !== 'number') continue;
+      // Telegram stores amount as -X (drop of X). Normalize.
+      const absAmount = Math.abs(cdEntry.amount);
+      // Override: use last-alerted dropAmount / dropPct / firstDetected.
+      // We DON'T touch newPrice (current scanner price) so the price
+      // shown stays accurate; we DO set oldPrice to newPrice + absAmount
+      // so the strikethrough "yesterday" price renders correctly.
+      row.dropAmount = absAmount;
+      row.dropPct = Math.abs(Math.round(cdEntry.pct * 10) / 10);
+      row.oldPrice = row.newPrice + absAmount;
+      row.firstDetected = cdEntry.ts;
+      (row as DropRow & { _cooldownOverride?: boolean })._cooldownOverride = true;
+    }
   }
 
   return rows;
@@ -428,6 +504,15 @@ export default function DealsPage() {
   // the bundled src/data/all_dates*.json can be hours stale.
   const [hkgDeals, setHkgDeals] = useState<Deal[]>([]);
   const [szxDeals, setSzxDeals] = useState<Deal[]>([]);
+  // Hermes 2026-09-29: cooldown map from /api/deals — keyed by route_key
+  // variants (HKG→CODE, HKG→UO→CODE, UO:HKG→CODE). Used to surface
+  // 持續跌價 (持續跌價 = "still falling") entries where the current scanner
+  // baseline has caught up but the last alert (≤24h old) showed a real drop.
+  // Without this, the deals page would only show routes whose baseline
+  // hasn't rebased yet — a strict subset of what the Telegram 持續跌價
+  // section surfaces, so the two views disagree.
+  const [hkgCooldown, setHkgCooldown] = useState<Record<string, { amount: number | null; pct: number | null; price: number | null; ts: string | null }>>({});
+  const [szxCooldown, setSzxCooldown] = useState<Record<string, { amount: number | null; pct: number | null; price: number | null; ts: string | null }>>({});
   const [hkgGenerated, setHkgGenerated] = useState<string>('');
   const [szxGenerated, setSzxGenerated] = useState<string>('');
   const [loading, setLoading] = useState(true);
@@ -451,6 +536,8 @@ export default function DealsPage() {
         if (cancelled) return;
         setHkgDeals((hkgJson.results || []) as Deal[]);
         setSzxDeals((szxJson.results || []) as Deal[]);
+        setHkgCooldown(hkgJson.cooldown || {});
+        setSzxCooldown(szxJson.cooldown || {});
         setHkgGenerated(hkgJson.generated || '');
         setSzxGenerated(szxJson.generated || '');
       } catch (e) {
@@ -478,9 +565,17 @@ export default function DealsPage() {
     };
   }, []);
 
-  // Process both files once
-  const hkgRows = useMemo(() => buildDropList(hkgDeals, 'HKG'), [hkgDeals]);
-  const szxRows = useMemo(() => buildDropList(szxDeals, 'SZX'), [szxDeals]);
+  // Process both files once. Pass cooldown map so routes whose current
+  // baseline caught up (dropAmount=0) but that have a recent alert can still
+  // show the last-alerted drop data — matching the Telegram 📌 持續跌價 view.
+  const hkgRows = useMemo(
+    () => buildDropList(hkgDeals, 'HKG', hkgCooldown),
+    [hkgDeals, hkgCooldown],
+  );
+  const szxRows = useMemo(
+    () => buildDropList(szxDeals, 'SZX', szxCooldown),
+    [szxDeals, szxCooldown],
+  );
 
   const rows = departure === 'HKG' ? hkgRows : szxRows;
   const currentGenerated = departure === 'HKG' ? hkgGenerated : szxGenerated;
