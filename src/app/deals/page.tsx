@@ -338,15 +338,40 @@ function buildDropList(
           }
         }
       }
-      if (!cdEntry || typeof cdEntry.amount !== 'number' || typeof cdEntry.pct !== 'number') continue;
-      // Telegram stores amount as -X (drop of X). Normalize.
-      const absAmount = Math.abs(cdEntry.amount);
+      if (!cdEntry || !cdEntry.ts) continue;
+      const ageMs = Date.now() - new Date(cdEntry.ts).getTime();
+      if (ageMs < 0 || ageMs > 24 * 60 * 60 * 1000) continue;
+
+      // Hermes 2026-09-29: cooldown entries may have null amount/pct/price
+      // when the alert fired but the fingerprint wasn't captured (some
+      // bot paths stamp ts-only). In that case, fall back to deriving the
+      // drop from the route's typicalPrice vs current newPrice, which gives
+      // us a real "持續跌價" display even without the historical fingerprint.
+      // This matches what the Telegram section would compute today if it
+      // re-ran against current prices — the "持續跌價" label still applies
+      // because the user just got pinged about this route within the
+      // COOLDOWN window.
+      let absAmount: number;
+      let absPct: number;
+      if (typeof cdEntry.amount === 'number' && typeof cdEntry.pct === 'number') {
+        absAmount = Math.abs(cdEntry.amount);
+        absPct = Math.abs(Math.round(cdEntry.pct * 10) / 10);
+      } else {
+        // Fallback: derive from typicalPrice vs newPrice.
+        const typical = row.typicalPrice || 0;
+        if (typical > 0 && row.newPrice > 0 && typical > row.newPrice) {
+          absAmount = typical - row.newPrice;
+          absPct = Math.round((absAmount / typical) * 1000) / 10;
+        } else {
+          continue;  // No drop data available anywhere — leave row alone.
+        }
+      }
       // Override: use last-alerted dropAmount / dropPct / firstDetected.
       // We DON'T touch newPrice (current scanner price) so the price
       // shown stays accurate; we DO set oldPrice to newPrice + absAmount
       // so the strikethrough "yesterday" price renders correctly.
       row.dropAmount = absAmount;
-      row.dropPct = Math.abs(Math.round(cdEntry.pct * 10) / 10);
+      row.dropPct = absPct;
       row.oldPrice = row.newPrice + absAmount;
       row.firstDetected = cdEntry.ts;
       (row as DropRow & { _cooldownOverride?: boolean })._cooldownOverride = true;
