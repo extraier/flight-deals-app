@@ -70,8 +70,10 @@ interface DropRow {
   // Hermes 2026-09-29: source of the oldPrice comparison.
   //   'yesterday' — oldPrice came from cheapestDates[].history.1d (real yesterday vs today)
   //   'typical'   — oldPrice is the destination's typicalPrice (no history baseline yet)
-  // The UI uses this to label the $ diff correctly ("昨日" vs "比一般價").
-  comparisonSource: 'yesterday' | 'typical';
+  //   'cooldown'  — oldPrice is derived from the last Telegram-alerted cooldown
+  //                 fingerprint (持續跌價 view, see buildDropList cooldown override)
+  // The UI uses this to label the $ diff correctly ("昨日" vs "比一般價" vs "持續跌價").
+  comparisonSource: 'yesterday' | 'typical' | 'cooldown';
 }
 
 // Hermes 2026-09-29: PendingRow removed — see note above buildDropList.
@@ -401,6 +403,7 @@ function buildDropList(
       row.dropPct = absPct;
       row.oldPrice = row.newPrice + absAmount;
       row.firstDetected = cdEntry.ts;
+      row.comparisonSource = 'cooldown';
       (row as DropRow & { _cooldownOverride?: boolean })._cooldownOverride = true;
     }
   }
@@ -913,14 +916,16 @@ export default function DealsPage() {
                                     ${r.newPrice.toLocaleString()}
                                   </span>
                                 </div>
-                                {/* Hermes 2026-09-29: prominent $ drop vs yesterday.
-                                    comparisonSource === 'yesterday' → show "昨日"
-                                    label so the user sees this is real Y/D
-                                    movement. 'typical' → fallback when no history
-                                    baseline exists; label says "比一般價". */}
+                                {/* Hermes 2026-09-29: prominent $ drop with source label.
+                                    'yesterday' → "昨日" (real Y/D movement from history.1d)
+                                    'typical'   → "比一般價" (destination typicalPrice baseline)
+                                    'cooldown'  → "持續跌價" (last Telegram-alerted fingerprint,
+                                                   matches the 📌 持續跌價 section on Telegram) */}
                                 <div className="mt-1 flex items-center justify-end gap-1.5">
                                   <Badge className={`text-xs font-bold ${h.cls}`}>
-                                    {r.comparisonSource === 'yesterday' ? '昨日' : '比一般價'}
+                                    {r.comparisonSource === 'yesterday' ? '昨日'
+                                      : r.comparisonSource === 'cooldown' ? '持續跌價'
+                                      : '比一般價'}
                                     {' '}-${r.dropAmount.toLocaleString()}
                                     <span className="opacity-80"> · -{r.dropPct}%</span>
                                   </Badge>
