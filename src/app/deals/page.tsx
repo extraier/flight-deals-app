@@ -328,38 +328,36 @@ function buildDropList(
   // drop to comparisonSource: 'typical' and show 比一般價 instead of
   // the alert the user just saw on Telegram.
   if (cooldown) {
-    for (const row of rows) {
-      const code = row.destCode;
-      const airline = (row.cheapestDate.airline || '').replace(/^_/, '').toUpperCase();
-      // Hermes 2026-09-29: cooldown keys come in a few shapes from the
-      // Telegram bot:
-      //   "HKG→UO→廣島 (HIJ)"     — with airline code (most common)
-      //   "UO:HKG→廣島 (HIJ)"     — airline-prefixed alternate
-      //   "HKG→廣島 (HIJ)"        — no airline (older)
-      //   "HKG→HIJ"               — code-only fallback
-      // destName already includes the code in parentheses, so we DON'T
-      // append "({code})" again — that would produce "廣島 (HIJ) (HIJ)".
-      const bareName = row.destName;
-      const candidates = [
-        airline ? `HKG→${airline}→${bareName}` : null,
-        `HKG→${bareName}`,
-        airline ? `${airline}:HKG→${bareName}` : null,
-        `HKG→${code}`,
-      ].filter((k): k is string => !!k);
-      let cdEntry: { amount: number | null; pct: number | null; price: number | null; ts: string | null } | null = null;
-      for (const k of candidates) {
-        const c = cooldown[k];
-        if (c && c.ts) {
-          const ageMs = Date.now() - new Date(c.ts).getTime();
-          if (ageMs >= 0 && ageMs <= 24 * 60 * 60 * 1000) {
-            cdEntry = c;
-            break;
-          }
-        }
-      }
-      if (!cdEntry || !cdEntry.ts) continue;
-      const ageMs = Date.now() - new Date(cdEntry.ts).getTime();
+    // Hermes 2026-09-29: build a name-based index once (rather than per-row
+    // candidate generation) so we can match routes that don't carry an
+    // airline field. The deal records export `cheapestDate.airline` as
+    // undefined for many routes (e.g. HIJ has no flight metadata at all),
+    // so the bot's "HKG→UO→廣島 (HIJ)" key can never be reconstructed from
+    // the row alone — the lookup has to be fuzzy on destName.
+    const cdByName = new Map<string, { entry: { amount: number | null; pct: number | null; price: number | null; ts: string | null }; ageMs: number }>();
+    const nowMs = Date.now();
+    for (const [key, c] of Object.entries(cooldown)) {
+      if (!c?.ts) continue;
+      const ageMs = nowMs - new Date(c.ts).getTime();
       if (ageMs < 0 || ageMs > 24 * 60 * 60 * 1000) continue;
+      // Extract the destination name from the key. Bot keys look like:
+      //   "HKG→UO→廣島 (HIJ)"     → "廣島 (HIJ)"
+      //   "UO:HKG→廣島 (HIJ)"     → "廣島 (HIJ)"
+      //   "HKG→廣島 (HIJ)"        → "廣島 (HIJ)"
+      //   "HKG→HIJ"               → no parens, skip
+      const m = key.match(/(?:^|→|:HKG→)(.+?)\s*\(([A-Z]{3})\)\s*$/);
+      if (!m) continue;
+      const destName = `${m[1]} (${m[2]})`;
+      // First match wins (so explicit-airline keys are preferred when
+      // the same destName appears under multiple keys).
+      if (!cdByName.has(destName)) {
+        cdByName.set(destName, { entry: c, ageMs });
+      }
+    }
+    for (const row of rows) {
+      const destName = row.destName;
+      const match = cdByName.get(destName);
+      if (!match) continue;
 
       // Hermes 2026-09-29: cooldown entries may have null amount/pct/price
       // when the alert fired but the fingerprint wasn't captured (some
@@ -372,7 +370,9 @@ function buildDropList(
       // COOLDOWN window.
       let absAmount: number;
       let absPct: number;
-      if (typeof cdEntry.amount === 'number' && typeof cdEntry.pct === 'number') {
+      const cdEntry = match.entry;
+      if (typeof cdEntry.amount === 'number' && typeof cdEntry.pct === 'number'
+          && cdEntry.amount !== 0 && cdEntry.pct !== 0) {
         absAmount = Math.abs(cdEntry.amount);
         absPct = Math.abs(Math.round(cdEntry.pct * 10) / 10);
       } else {
