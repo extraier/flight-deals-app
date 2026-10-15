@@ -689,7 +689,57 @@ export default function DealsPage() {
         // UO-only, CX-only, or "all". Same destination can show as two cards
         // (e.g. one with airline=CX cheaper, one with airline=UO cheaper) which
         // matches the bot's behavior.
-        const hkgMerged = [...hkgBase, ...uoDrops, ...cxDrops];
+        const // Hermes 2026-10-15: dedupe hkgBase + uoDrops + cxDrops by destination code.
+// The same destination can appear in all three lists (e.g. HKG→NGO appears
+// in hkgBase, uoDrops, and cxDrops), producing 3 identical cards. The
+// cooldown's airline is the authoritative one (it's the airline the bot
+// actually alerted on). If none of the candidate deals has a matching
+// airline, prefer cxDrops > uoDrops > hkgBase (CX is the dominant scanner).
+hkgMerged = (() => {
+  // Cooldown's per-destination airline map (derived from the bot's most
+  // recent alert for that dest).
+  const cdAirlineByDest: Record<string, string> = {};
+  const cdKeys = Object.keys(hkgJson.cooldown || {});
+  for (const k of cdKeys) {
+    // Cooldown key shapes: "HKG→UO→CODE", "HKG→CODE", "UO:HKG→CODE",
+    // "CX:HKG→CODE". Pull the dest code and the airline.
+    let airline = '';
+    let bare = k;
+    if (k.includes(':')) {
+      const [pfx, rest] = k.split(':', 2);
+      if (pfx === 'UO' || pfx === 'CX' || pfx === 'HKE') airline = pfx;
+      bare = rest;
+    }
+    const parts = bare.split('→');
+    if (parts.length >= 3 && (parts[1] === 'UO' || parts[1] === 'CX' || parts[1] === 'HKE')) {
+      airline = parts[1];
+    }
+    const last = parts[parts.length - 1];
+    const m = last.match(/\(([A-Z]{3})\)/);
+    if (m) cdAirlineByDest[m[1]] = airline;
+  }
+  // Score each candidate: prefer cooldown airline match, then cxDrops > uoDrops > hkgBase.
+  const tier = (d: { airline?: string }): number => {
+    const a = (d.airline || '').toUpperCase();
+    if (a === 'CX') return 3;
+    if (a === 'UO') return 2;
+    return 1;
+  };
+  const destBest = new Map<string, typeof hkgBase[number]>();
+  const all = [...hkgBase, ...uoDrops, ...cxDrops];
+  for (const d of all) {
+    const code = d.destination?.code;
+    if (!code) continue;
+    const prev = destBest.get(code);
+    if (!prev) { destBest.set(code, d); continue; }
+    const codeMatchCd = cdAirlineByDest[code];
+    const prevMatch = codeMatchCd && (prev.airline || '').toUpperCase() === codeMatchCd;
+    const curMatch  = codeMatchCd && (d.airline     || '').toUpperCase() === codeMatchCd;
+    if (curMatch && !prevMatch) { destBest.set(code, d); continue; }
+    if (curMatch === prevMatch && tier(d) > tier(prev)) destBest.set(code, d);
+  }
+  return Array.from(destBest.values());
+})();
         setHkgDeals(hkgMerged);
         setSzxDeals((szxJson.results || []) as Deal[]);
         setHkgCooldown(hkgJson.cooldown || {});
