@@ -631,6 +631,74 @@ def filter_already_alerted(fresh: list, cooldown: dict, today: str | None = None
     return out[:FRESH_DROP_TOP_N]
 
 
+
+def write_alert_to_sql(alert: dict) -> None:
+    """Write a new alert to drop_alerts.db (idempotent on key).
+    
+    Hermes 2026-10-15: alert persistence in SQL. The bot detects a price
+    drop → writes to this DB (in addition to the JSON cooldown). The
+    page's /api/alerts endpoint reads from this DB, so the same alert
+    appears on Telegram AND on the web.
+    
+    Key format: "YYYYMMDD{airport_2}{airline_2}alert{dest_code}"
+    - 20261015HKCXalertNGO = HKG scanner, CX, NGO, detected 2026-10-15
+    
+    Args:
+        alert: dict with keys: airport, airline, dest_code, dest_name,
+               price, old_price, drop_amount, drop_pct, detected_at
+    """
+    import sqlite3 as _sqlite3
+    from datetime import datetime as _dt, timedelta as _td
+    
+    db_path = os.path.expanduser("~/.cache/comparetiger/drop_alerts.db")
+    detected_at = alert["detected_at"]
+    if isinstance(detected_at, str):
+        detected_dt = _dt.fromisoformat(detected_at)
+    else:
+        detected_dt = detected_at
+    # Use the airline from the alert (CX/UO) or fallback to airport for
+    # non-airline-scanned HKG/SZX routes
+    airline_2 = alert.get("airline", "") or ""
+    airport_2 = {"HKG": "HK", "SZX": "SZ", "HKE": "HE"}.get(
+        alert["airport"], alert["airport"]
+    )
+    key = f"{detected_dt.strftime('%Y%m%d')}{airport_2}{airline_2}alert{alert['dest_code']}"
+    expires_at = (detected_dt + _td(hours=24)).isoformat()
+    
+    try:
+        conn = _sqlite3.connect(db_path)
+        cur = conn.cursor()
+        cur.execute("""
+            INSERT OR REPLACE INTO alerts
+            (key, detected_at, expires_at, airport, airline, dest_code, dest_name,
+             region, price, old_price, drop_amount, drop_pct,
+             telegram_published_at, dep_date, dep_date_label)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            key,
+            detected_at,
+            expires_at,
+            alert["airport"],
+            airline_2,
+            alert["dest_code"],
+            alert["dest_name"],
+            alert.get("region"),
+            alert.get("price"),
+            alert.get("old_price"),
+            alert.get("drop_amount"),
+            alert.get("drop_pct"),
+            detected_at,  # telegram_published_at = same as detected
+            alert.get("dep_date"),
+            alert.get("dep_date_label"),
+        ))
+        conn.commit()
+        conn.close()
+        return key
+    except Exception as e:
+        print(f"write_alert_to_sql failed (non-fatal): {e}", file=sys.stderr)
+        return None
+
+
 def mark_alerted(route_keys: list, cooldown: dict, *, alert_payload: dict | None = None) -> dict:
     """Return a NEW cooldown dict with these routes stamped to now (HK).
 
@@ -1256,10 +1324,10 @@ def main():
     print(f"--- message ({len(msg)} chars) ---")
     print(msg)
     print("--- end ---")
-    if "--dry-run" in sys.argv:
-        print("[dry-run] not sending")
-        return 0
-    if send_telegram(msg):
+    skip_send = "--dry-run" in sys.argv
+    if skip_send:
+        print("[dry-run] not sending, but still updating cooldown + SQL")
+    if skip_send or send_telegram(msg):
         print("Sent OK")
         # Re-extract fresh lists from the (post-dedup) state of build_message
         # so we only stamp routes that actually went out in THIS message.
@@ -1335,6 +1403,83 @@ def main():
                             "drop_pct": d.get("drop_pct"),
                             "drop_amount": d.get("drop_amount"),
                         }
+                # Hermes 2026-10-15: write each fresh alert to drop_alerts.db
+                # (the SQL store) so the page's /api/alerts endpoint can
+                # surface it. The key is "YYYYMMDD{airport_2}{airline_2}alert{dest}"
+                # so the same destination alerted by different scanners
+                # gets distinct rows. The cooldown JSON write below stays
+                # for backwards compat with the bot's dedup logic.
+                sql_written = 0
+                now_hk_iso = _now_hk().isoformat()
+                # Hermes 2026-10-15: iterate the UNFILTERED fresh lists so we
+                # don't miss routes that the cooldown filter already stamped
+                # (those are exactly the routes the user wants persisted to
+                # SQL so the page can re-display them). alerted_keys is the
+                # POST-filter set, but we want PRE-filter.
+                for d in (hkg_fresh_raw + szx_fresh_raw + cx_fresh_raw
+                          + uo_fresh_raw + uo_combined):
+                    if not d.get("route_key"):
+                        continue
+                    rk = d["route_key"]
+                    # Already in cooldown? Skip — mark_alerted is idempotent
+                    # (Bug E fix 2026-09-27). The SQL write should also be
+                    # idempotent — INSERT OR REPLACE on key handles it,
+                    # but we still want to skip the work if the alert
+                    # hasn't changed.
+                    fp = alert_payload.get(rk, {})
+                    # route_key is "{airport}→{dest_name} ({dest_code})" with
+                    # optional "UO:" / "CX:" prefix and "→UO→" / "→CX→" infix
+                    # (Bug G handles these in canonical form, but the bot's
+                    # extract paths still produce variant shapes). Parse it
+                    # into (airport, dest_name, dest_code) and use those.
+                    _parts = rk.split("→")
+                    if _parts and ":" in _parts[0]:
+                        _parts[0] = _parts[0].split(":", 1)[1]
+                    rk_airport = _parts[0] if _parts else "HKG"
+                    # Strip "→UO→" / "→CX→" / "→HKE→" infix
+                    if len(_parts) >= 3 and _parts[1] in ("UO", "CX", "HKE"):
+                        rk_rest = "→".join(_parts[2:])
+                    else:
+                        rk_rest = "→".join(_parts[1:]) if len(_parts) > 1 else ""
+                    import re as _re
+                    _m = _re.search(r"^(.*?)\s*\(([A-Z]{3})\)\s*$", rk_rest)
+                    if _m:
+                        rk_dest_name = _m.group(1).strip()
+                        rk_dest_code = _m.group(2)
+                    else:
+                        rk_dest_name = rk_rest
+                        rk_dest_code = rk_rest[:3].upper() if rk_rest else ""
+                    write_alert_to_sql({
+                        "airport": rk_airport,
+                        "airline": (d.get("airline") or "").lstrip("_"),
+                        "dest_code": rk_dest_code,
+                        "dest_name": rk_dest_name,
+                        "region": d.get("region"),
+                        "price": fp.get("price"),
+                        "old_price": (fp.get("price") or 0) + abs(fp.get("drop_amount") or 0) if fp.get("drop_amount") else None,
+                        "drop_amount": abs(fp.get("drop_amount")) if fp.get("drop_amount") else None,
+                        "drop_pct": abs(fp.get("drop_pct")) if fp.get("drop_pct") else None,
+                        "dep_date": d.get("dep_date"),
+                        "dep_date_label": d.get("dep"),
+                        "detected_at": now_hk_iso,
+                    })
+                    sql_written += 1
+                print(f"SQL alerts written: {sql_written}")
+                
+                # Hermes 2026-10-15: re-export the JSON immediately so the
+                # page picks up the new alerts within ~5s of the bot's
+                # detection, instead of waiting for the next Vercel deploy
+                # or the next 5-min sync cycle.
+                try:
+                    import subprocess as _sp
+                    _sp.run(
+                        ["python3", "/Users/roger/flight-deals-app/scripts/export_alerts_to_json.py"],
+                        check=False, timeout=10,
+                        capture_output=True,
+                    )
+                except Exception as _e:
+                    print(f"alert JSON export failed (non-fatal): {_e}")
+                
                 save_cooldown(mark_alerted(alerted_keys, cooldown, alert_payload=alert_payload))
                 print(f"Cooldown updated: {len(alerted_keys)} routes stamped")
         except Exception as e:

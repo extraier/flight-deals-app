@@ -100,50 +100,34 @@ function computeDestLevelDrop(d: Deal): {
 } | null {
   const dates = d.cheapestDates || [];
   if (dates.length === 0) return null;
-  // Hermes 2026-07-20: match the new exporter logic. Per-date drops scoped to
-  // TOP 5 cheapest dates; filter out non-drops (pct >= 0) BEFORE taking median.
-  // The old `todayLow = min(all_dates_prices)` + `yestLow = min(all_dates_1d_baselines)`
-  // formula produced fake drops by comparing different dates' prices.
-  const top5 = dates.slice(0, 5);
-  const perDateDrops: Array<{ pct: number; cd: typeof dates[number]; todayPrice: number; yestPrice: number }> = [];
-  for (const cd of top5) {
-    const h = cd.history as Record<string, { price?: number }> | undefined;
-    const yestPrice = h?.['1d']?.price ?? 0;
-    const todayPrice = cd.price;
-    if (yestPrice > 0 && todayPrice > 0) {
-      const pct = (todayPrice - yestPrice) / yestPrice * 100;
-      perDateDrops.push({ pct, cd, todayPrice, yestPrice });
-    }
-  }
-  if (perDateDrops.length === 0) return null;
-  // Hermes 2026-07-20: filter out non-drops before median — otherwise median of
-  // [(-8.3), 0, 0, 0, 0] = 0 hides real drops when only 1-2 of top 5 have a baseline.
-  const realDrops = perDateDrops.filter((d) => d.pct < 0);
-  let chosen: { pct: number; cd: typeof dates[number]; todayPrice: number; yestPrice: number };
-  if (realDrops.length > 0) {
-    const sorted = [...realDrops].sort((a, b) => a.pct - b.pct);
-    const mid = Math.floor(sorted.length / 2);
-    if (sorted.length % 2 === 0) {
-      const medianPct = (sorted[mid - 1].pct + sorted[mid].pct) / 2;
-      // pick the entry closest to median
-      chosen = sorted.reduce((best, cur) => Math.abs(cur.pct - medianPct) < Math.abs(best.pct - medianPct) ? cur : best);
-    } else {
-      chosen = sorted[mid];
-    }
-  } else {
-    // All top-5 are unchanged — no real drop
-    return null;
-  }
-  const { pct, todayPrice, yestPrice } = chosen;
-  const dropAmount = yestPrice - todayPrice; // positive = drop
+  // Hermes 2026-10-15: simplified to check the CHEAPEST date only. The
+  // previous "top 5 cheapest + median" formula produced confusing results
+  // — for YVR (HKG→YVR✈️ CX), the cheapest date 11/9 had h1d=7924 (no
+  // drop) but a different date 11/4 in the top 5 had h1d=9814 (-19.3%
+  // drop). The page picked up the 11/4 drop and labeled the card as
+  // "昨日 -$1,890 -19.3%" while still displaying the cheapest date 11/9.
+  // That mismatched the export (which stamps dropAmount=0 for YVR because
+  // it only checks the cheapest date) and the Telegram bot (which trusts
+  // the export, so YVR fell through to "低典型 22%"). The user said:
+  // "I only need CX 持續跌價 (1 條 · 已 alert) to be on the deal alert."
+  // This new behavior matches the export exactly: if the cheapest date
+  // has a real yesterday drop, use it; otherwise return null and the
+  // caller falls through to typical-comparison.
+  const cd = dates[0];
+  const h = cd.history as Record<string, { price?: number }> | undefined;
+  const yestPrice = h?.['1d']?.price ?? 0;
+  const todayPrice = cd.price;
+  if (yestPrice <= 0 || todayPrice <= 0) return null;
+  const pct = (todayPrice - yestPrice) / yestPrice * 100;
+  if (pct >= 0) return null; // not a drop
+  const dropAmount = yestPrice - todayPrice;
   if (dropAmount <= 0) return null;
-  const dropPct = Math.round(pct * 10) / 10;
   return {
     oldPrice: yestPrice,
     newPrice: todayPrice,
     dropAmount,
-    dropPct,
-    cd: chosen.cd,
+    dropPct: Math.round(pct * 10) / 10,
+    cd,
   };
 }
 
@@ -227,13 +211,60 @@ function buildDropList(
       // Same algorithm as send_flight_report.py so the deals page and
       // the Telegram alert show the same routes.
       const computed = computeDestLevelDrop(d);
-      if (!computed) continue;
-      cd = pickDisplayDate(d.cheapestDates, computed.newPrice) ?? computed.cd;
-      oldPrice = computed.oldPrice;
-      newPrice = computed.newPrice;
-      dropAmount = computed.dropAmount;
-      dropPct = computed.dropPct;
-      computedFallback = true;
+      if (computed) {
+        cd = pickDisplayDate(d.cheapestDates, computed.newPrice) ?? computed.cd;
+        oldPrice = computed.oldPrice;
+        newPrice = computed.newPrice;
+        dropAmount = computed.dropAmount;
+        dropPct = computed.dropPct;
+        computedFallback = true;
+      } else if (cooldownSource) {
+        // Hermes 2026-10-15: cooldown-only entry. The deal has no real
+        // yesterday drop (export dropAmount=0, computed drop returns
+        // null because the cheapest date's h1d equals its price), but
+        // the Telegram bot has alerted on this route within the last
+        // 24h. The previous behavior was to skip the row entirely
+        // (continue), which meant the page missed the bot's 持續跌價
+        // entries. With the new strict page filter
+        // (`comparisonSource === 'cooldown'`) the bot-aligned view
+        // would show zero CX cards for routes like HKG→名古屋 (NGO)
+        // — which has dropAmount=0 in the cxDrops but is in the
+        // cooldown map because the bot's 11:00 HKT run fired on a
+        // -410 drop on its 1/6/2027 date. The fix: synthesize a row
+        // from the cooldown's stamped fingerprint, falling back to
+        // the typicalPrice delta if the stamp is missing. Comparison
+        // source is 'cooldown' so the strict filter keeps it and
+        // anything else (typical / yesterday) stays out.
+        const cs = cooldownSource;
+        if (typeof cs.amount === 'number' && typeof cs.pct === 'number'
+            && cs.amount !== 0 && cs.pct !== 0 && cs.price) {
+          // Use stamped fingerprint
+          const absAmt = Math.abs(cs.amount);
+          const absPct = Math.abs(Math.round(cs.pct * 10) / 10);
+          cd = pickDisplayDate(d.cheapestDates, cs.price) ?? d.cheapestDates?.[0];
+          newPrice = cs.price;
+          oldPrice = newPrice + absAmt;
+          dropAmount = absAmt;
+          dropPct = absPct;
+          computedFallback = true;
+        } else {
+          // Fall back to typicalPrice delta
+          const typical = d.typicalPrice || 0;
+          const np = d.price || 0;
+          if (typical > 0 && np > 0 && typical > np) {
+            cd = pickDisplayDate(d.cheapestDates, np) ?? d.cheapestDates?.[0];
+            newPrice = np;
+            oldPrice = typical;
+            dropAmount = typical - np;
+            dropPct = Math.round((dropAmount / typical) * 1000) / 10;
+            computedFallback = true;
+          } else {
+            continue;
+          }
+        }
+      } else {
+        continue;
+      }
     }
     if (!cd) continue;
     // Drop below 1% is noise — same threshold as send_flight_report.py.
@@ -268,7 +299,11 @@ function buildDropList(
       // Hermes 2026-09-29: both export-stamped and computed-from-history paths
       // produce a "real yesterday vs today" comparison, so they share the same
       // source label. The 'typical' fallback is added below.
-      comparisonSource: 'yesterday',
+      // Hermes 2026-10-15: cooldown-synthesized rows (no real drop but a
+      // recent bot alert) are tagged 'cooldown' up-front so the strict
+      // page filter keeps them and the override at the bottom of this
+      // function is a no-op for them.
+      comparisonSource: cooldownSource ? 'cooldown' : 'yesterday',
       _computedFallback: computedFallback,
     } as DropRow & { _computedFallback?: boolean });
   }
@@ -596,6 +631,15 @@ export default function DealsPage() {
   // section surfaces, so the two views disagree.
   const [hkgCooldown, setHkgCooldown] = useState<Record<string, { amount: number | null; pct: number | null; price: number | null; ts: string | null }>>({});
   const [szxCooldown, setSzxCooldown] = useState<Record<string, { amount: number | null; pct: number | null; price: number | null; ts: string | null }>>({});
+  // Hermes 2026-10-15: SQL-based alerts (key "YYYYMMDD{airport}{airline}alert{dest}"),
+  // fetched from /api/alerts. Used to filter the page by the SCANNER that
+  // alerted (CX/UO/HKG), not the cheapest flight's airline. Without this,
+  // the page's CX tab shows 6 cards (KUL/MNL/NGO/PEN/HAN/LAX — all have a
+  // CX flight option) when the bot's CX 持續跌價 only has 1 (NGO). The fix
+  // is to filter by the alert's `airline` field, which is the actual scanner
+  // source.
+  const [hkgAlerts, setHkgAlerts] = useState<Map<string, { airline: string; key: string; dest_code: string; dest_name: string; price: number; drop_amount: number; drop_pct: number; detected_at: string }>>(new Map());
+  const [szxAlerts, setSzxAlerts] = useState<Map<string, { airline: string; key: string; dest_code: string; dest_name: string; price: number; drop_amount: number; drop_pct: number; detected_at: string }>>(new Map());
   const [hkgGenerated, setHkgGenerated] = useState<string>('');
   const [szxGenerated, setSzxGenerated] = useState<string>('');
   const [loading, setLoading] = useState(true);
@@ -609,20 +653,51 @@ export default function DealsPage() {
       try {
         // F-07 fix: no force=1 — the server-side 20s in-memory cache matches
         // the poll interval, so users always see fresh data without a bypass.
-        const [hkgRes, szxRes] = await Promise.all([
+        const [hkgRes, szxRes, hkgAlertsRes, szxAlertsRes] = await Promise.all([
           fetch('/api/deals?dep=HKG', { cache: 'no-store' }),
           fetch('/api/deals?dep=SZX', { cache: 'no-store' }),
+          fetch('/api/alerts?airport=HKG', { cache: 'no-store' }),
+          fetch('/api/alerts?airport=SZX', { cache: 'no-store' }),
         ]);
         if (!hkgRes.ok) throw new Error(`HKG fetch ${hkgRes.status}`);
         if (!szxRes.ok) throw new Error(`SZX fetch ${szxRes.status}`);
-        const [hkgJson, szxJson] = await Promise.all([hkgRes.json(), szxRes.json()]);
+        const [hkgJson, szxJson, hkgAlertsJson, szxAlertsJson] = await Promise.all([
+          hkgRes.json(), szxRes.json(), hkgAlertsRes.json(), szxAlertsRes.json(),
+        ]);
         if (cancelled) return;
-        setHkgDeals((hkgJson.results || []) as Deal[]);
+        // Build alerts maps: destCode -> alert. The page filter uses this
+        // to show only routes that the SELECTED SCANNER alerted on.
+        const hkgAlertsMap = new Map<string, any>();
+        for (const a of (hkgAlertsJson.alerts || [])) {
+          hkgAlertsMap.set(a.dest_code, a);
+        }
+        const szxAlertsMap = new Map<string, any>();
+        for (const a of (szxAlertsJson.alerts || [])) {
+          szxAlertsMap.set(a.dest_code, a);
+        }
+        // Hermes 2026-10-14: merge UO + CX drops into hkgDeals so they participate
+        // in buildDropList (cooldown override, typical fallback, drop detection)
+        // and surface in the airline-filter dropdown. The API already stamps
+        // `airline: 'UO' | 'CX'` on each record and preserves the full Deal
+        // shape (destination with region, cheapestDates[], etc.). SZX has no
+        // airline-specific exports, so we don't merge for SZX.
+        const hkgBase = (hkgJson.results || []) as Deal[];
+        const uoDrops = ((hkgJson.uoDrops || []) as Deal[]);
+        const cxDrops = ((hkgJson.cxDrops || []) as Deal[]);
+        // Don't dedupe — if HKG→SYX appears in both the HKG export and the UO
+        // export, both rows are kept. The airline filter lets the user pick
+        // UO-only, CX-only, or "all". Same destination can show as two cards
+        // (e.g. one with airline=CX cheaper, one with airline=UO cheaper) which
+        // matches the bot's behavior.
+        const hkgMerged = [...hkgBase, ...uoDrops, ...cxDrops];
+        setHkgDeals(hkgMerged);
         setSzxDeals((szxJson.results || []) as Deal[]);
         setHkgCooldown(hkgJson.cooldown || {});
         setSzxCooldown(szxJson.cooldown || {});
         setHkgGenerated(hkgJson.generated || '');
         setSzxGenerated(szxJson.generated || '');
+        setHkgAlerts(hkgAlertsMap);
+        setSzxAlerts(szxAlertsMap);
       } catch (e) {
         if (!cancelled) setFetchError(e instanceof Error ? e.message : String(e));
       } finally {
@@ -681,29 +756,51 @@ export default function DealsPage() {
 
   const renderedRows = useMemo(() => {
     let copy = [...rows];
-    // Hermes 2026-07-01: multi-airline filter. When airlineFilter is set
-    // (e.g. 'UO'), only routes whose displayed cheapest date is operated
-    // by that airline are kept. Routes with no flight info are dropped
-    // from any airline-filtered view (can't attribute them).
+    // Hermes 2026-10-15: per-scanner airline filter. The legacy filter
+    // (cheapestDate.airline === filter) was the wrong axis — it conflated
+    // "this route has a CX flight option" with "this route was alerted by
+    // the CX scanner". With the new SQL alerts (key
+    // "YYYYMMDD{airport}{airline}alert{dest}", e.g. "20261015HKCXalertNGO"),
+    // we know exactly which scanner alerted on each route. The page's
+    // CX tab now shows only rows whose destCode has a CX alert in the
+    // SQL store, matching the bot's CX 持續跌價 section exactly.
+    // The cheapestDate.airline is still used for the displayed ✈️ badge
+    // (because that's the carrier of the cheapest flight), but NOT for
+    // the filter.
+    const activeAlerts = departure === 'HKG' ? hkgAlerts : szxAlerts;
     if (airlineFilter) {
-      copy = copy.filter(
-        (r) => (r.cheapestDate.airline || '').replace(/^_/, '').toUpperCase() === airlineFilter
-      );
+      copy = copy.filter((r) => {
+        const alert = activeAlerts.get(r.destCode);
+        return alert && alert.airline === airlineFilter;
+      });
     }
+    // Hermes 2026-10-15: page only shows 持續跌價 entries (cooldown-marked),
+    // matching the Telegram bot's 持續跌價 section exactly.
+    copy = copy.filter((r) => r.comparisonSource === 'cooldown');
     if (sortMode === 'recency') {
       // Hermes 2026-09-29: include pendingFirstSeen in recency sort so the
       // "newest first" list still orders correctly now that most routes use
       // pendingFirstSeen instead of firstDetected.
+      // Hermes 2026-10-15: third-tier fallback to currentGenerated. CX/UO
+      // export rows never set firstDetected or pendingFirstSeen, so without
+      // this they all sat at -Infinity and floated to the bottom even when
+      // their fallback "更新時間" was 5 seconds old. Using the same fallback
+      // chain as the display label keeps the sort and the visible label in
+      // sync.
       copy.sort((a, b) => {
-        const ta = (a.firstDetected || a.pendingFirstSeen) ? Date.parse((a.firstDetected || a.pendingFirstSeen) as string) : -Infinity;
-        const tb = (b.firstDetected || b.pendingFirstSeen) ? Date.parse((b.firstDetected || b.pendingFirstSeen) as string) : -Infinity;
+        const ta = (a.firstDetected ?? a.pendingFirstSeen ?? currentGenerated)
+          ? Date.parse((a.firstDetected ?? a.pendingFirstSeen ?? currentGenerated) as string)
+          : -Infinity;
+        const tb = (b.firstDetected ?? b.pendingFirstSeen ?? currentGenerated)
+          ? Date.parse((b.firstDetected ?? b.pendingFirstSeen ?? currentGenerated) as string)
+          : -Infinity;
         return tb - ta;
       });
     } else {
       copy.sort((a, b) => b.dropPct - a.dropPct);
     }
     return copy;
-  }, [rows, sortMode, airlineFilter]);
+  }, [rows, sortMode, airlineFilter, currentGenerated, departure, hkgAlerts, szxAlerts]);
 
   // Stats
   const stats = useMemo(() => {
@@ -890,8 +987,19 @@ export default function DealsPage() {
                 // Hermes 2026-09-29: prefer detail-scanner firstDetected,
                 // fall back to calendar-scanner pendingFirstSeen so every
                 // card shows a consistent "首次發現" timestamp.
-                const detectedAt = r.firstDetected ?? r.pendingFirstSeen ?? null;
+                // Hermes 2026-10-15: third-tier fallback to the response's
+                // `generated` timestamp. CX/UO export rows never set
+                // firstDetected or pendingFirstSeen (the airline exporter
+                // only knows price+date, not first-seen), so without this
+                // every CX/UO card showed "首次發現：等待首次掃描" even though
+                // the data is fresh. Using the export's generated time gives
+                // an honest "updated 2 minutes ago" label instead of an
+                // alarming "waiting" placeholder.
+                const detectedAt = r.firstDetected
+                  ?? r.pendingFirstSeen
+                  ?? (currentGenerated || null);
                 const alertLabel = formatAlertTime(detectedAt);
+                const isFallback = !r.firstDetected && !r.pendingFirstSeen;
                 return (
                   <Link
                     key={`${r.departure}-${r.route}-${idx}`}
