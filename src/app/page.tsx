@@ -183,18 +183,10 @@ export default function Home() {
   // Hermes 2026-10-17: Google Flights digest deals. Fetched from /api/gflights.
   // `showGf` toggles the section — collapsed by default so the main grid
   // stays clean, expanded via the "📧 Google Flights" button in the
-  // segmented control. Persisted in localStorage so users who opened it
-  // once don't have to click again next visit.
+  // segmented control.
   const [gfDeals, setGfDeals] = useState<GfDeal[]>([]);
   const [gfGenerated, setGfGenerated] = useState<string>('');
   const [showGf, setShowGf] = useState<boolean>(false);
-
-  useEffect(() => {
-    try {
-      const v = window.localStorage.getItem('showGf');
-      if (v === '1') setShowGf(true);
-    } catch {}
-  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -421,8 +413,8 @@ export default function Home() {
                     (no navigation, no full reload)
                   - Violet to distinguish from the orange/pink existing segments
                   - Count badge so the user sees there's fresh mail at a glance
-                  - Persists `showGf` to localStorage so users who opened it
-                    once don't have to re-click next visit */}
+                  - Default collapsed so the main grid stays clean; user
+                    toggles by clicking the button */}
               <div className="inline-flex items-center gap-0 rounded-xl border border-border bg-card p-1 shadow-sm">
                 <Link
                   href="/deals"
@@ -441,11 +433,7 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => {
-                    setShowGf((v) => {
-                      const nv = !v;
-                      try { window.localStorage.setItem('showGf', nv ? '1' : '0'); } catch {}
-                      return nv;
-                    });
+                    setShowGf((v) => !v);
                   }}
                   className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-bold transition-all ${
                     showGf
