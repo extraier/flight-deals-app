@@ -46,6 +46,29 @@ interface Deal {
   totalDestinations?: number;
 }
 
+// Hermes 2026-10-17: Google Flights digest deal shape.
+// One deal per (route, date_range) parsed from a noreply-travel@google.com email.
+// 24h GC enforced server-side; only fresh deals reach the client.
+interface GfDeal {
+  id: string;
+  source: 'google_flights';
+  origin: string;             // e.g. "Hong Kong"
+  destination_name: string;   // e.g. "Las Vegas"
+  dep_date: string;           // YYYY-MM-DD
+  date_range: string;         // e.g. "Mon, Jan 4 – Sun, Jan 10"
+  price_hkd: number;
+  save_pct: number | null;
+  airlines: string | null;    // e.g. "China Airlines, Delta"
+  stops: number | null;
+  duration: string | null;    // e.g. "21hr"
+  trip_label: string | null;  // e.g. "1-week trips in January"
+  params: string | null;      // e.g. "6–9 days · Round trip · 1 adult · Economy"
+  price_range: [number, number] | null;
+  min_price: number;          // from subject (lowest across all deals in the email)
+  first_seen: string;         // ISO
+  prices_updated: string | null;
+}
+
 interface DropRow {
   route: string;
   destCode: string;
@@ -644,6 +667,13 @@ export default function DealsPage() {
   const [szxGenerated, setSzxGenerated] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  // Hermes 2026-10-17: Google Flights digest deals. Fetched from /api/gflights,
+  // populated by the Gmail poller (gflights_poller.py). Rendered in a separate
+  // visual section above the main 今日劈價 list — different color (purple vs
+  // orange), different icon (📧 vs 🔥), different copy, no 持續跌價 / 比一般價
+  // badges (Google doesn't have those concepts). Outbound link to Google Flights.
+  const [gfDeals, setGfDeals] = useState<GfDeal[]>([]);
+  const [gfGenerated, setGfGenerated] = useState<string>('');
 
   useEffect(() => {
     let cancelled = false;
@@ -653,16 +683,22 @@ export default function DealsPage() {
       try {
         // F-07 fix: no force=1 — the server-side 20s in-memory cache matches
         // the poll interval, so users always see fresh data without a bypass.
-        const [hkgRes, szxRes, hkgAlertsRes, szxAlertsRes] = await Promise.all([
+        // Hermes 2026-10-17: also fetch Google Flights digest. Same poll
+        // pattern — Promise.all so a slow gflights endpoint doesn't block
+        // the main deals. /api/gflights returns an empty list (not 404)
+        // if the JSON file is missing, so a fresh deploy never errors here.
+        const [hkgRes, szxRes, hkgAlertsRes, szxAlertsRes, gfRes] = await Promise.all([
           fetch('/api/deals?dep=HKG', { cache: 'no-store' }),
           fetch('/api/deals?dep=SZX', { cache: 'no-store' }),
           fetch('/api/alerts?airport=HKG', { cache: 'no-store' }),
           fetch('/api/alerts?airport=SZX', { cache: 'no-store' }),
+          fetch('/api/gflights', { cache: 'no-store' }),
         ]);
         if (!hkgRes.ok) throw new Error(`HKG fetch ${hkgRes.status}`);
         if (!szxRes.ok) throw new Error(`SZX fetch ${szxRes.status}`);
-        const [hkgJson, szxJson, hkgAlertsJson, szxAlertsJson] = await Promise.all([
+        const [hkgJson, szxJson, hkgAlertsJson, szxAlertsJson, gfJson] = await Promise.all([
           hkgRes.json(), szxRes.json(), hkgAlertsRes.json(), szxAlertsRes.json(),
+          gfRes.json(),
         ]);
         if (cancelled) return;
         // Build alerts maps: destCode -> alert. The page filter uses this
@@ -748,6 +784,13 @@ hkgMerged = (() => {
         setSzxGenerated(szxJson.generated || '');
         setHkgAlerts(hkgAlertsMap);
         setSzxAlerts(szxAlertsMap);
+        // Hermes 2026-10-17: also persist Google Flights digest deals.
+        // Filter to HKG origin for now (the user only tracks HKG routes
+        // in Google Flights per the email subjects I sampled). If SZX
+        // tracked routes exist later, change the origin filter to a
+        // depart tab like the main deals list.
+        setGfDeals(((gfJson.deals || []) as GfDeal[]).filter((d) => d.origin === 'Hong Kong'));
+        setGfGenerated(gfJson.generated || '');
       } catch (e) {
         if (!cancelled) setFetchError(e instanceof Error ? e.message : String(e));
       } finally {
@@ -874,6 +917,108 @@ hkgMerged = (() => {
             返回主頁
           </Link>
         </div>
+
+        {/* Hermes 2026-10-17: Google Flights digest section.
+            Visually distinct from the main 今日劈價 list:
+            - 📧 icon (vs 🔥) and "Google Flights 推介" wording
+            - Purple/violet accent (vs orange/green of main)
+            - No 持續跌價 / 比一般價 badges (Google doesn't have those)
+            - Outbound link to Google Flights (target=_blank)
+            - One card per (route, date_range), sorted by price ascending
+              so the cheapest option for each destination is most prominent.
+            Sits ABOVE the main 今日劈價 section because the data is
+            "fresh from Gmail" (≤24h GC) while the main list is "ongoing
+            scanner drops" (24h+ horizons). The two read together as
+            "what just hit" + "what's been falling". */}
+        {gfDeals.length > 0 && (
+          <section className="mb-8" aria-label="Google Flights 推介">
+            <div className="rounded-xl border border-violet-200/60 bg-gradient-to-br from-violet-50/40 to-white p-4 sm:p-5">
+              <div className="mb-3 flex items-baseline justify-between gap-2 flex-wrap">
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground inline-flex items-center gap-2">
+                    <span aria-hidden>📧</span>
+                    <span>Google Flights 推介</span>
+                  </h2>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    過去 24 小時 · 由 Gmail 自動解析
+                  </p>
+                </div>
+                {gfGenerated && (
+                  <p className="text-[11px] text-muted-foreground inline-flex items-center gap-1">
+                    <Clock className="h-3 w-3" />
+                    更新：{new Date(gfGenerated).toLocaleString('zh-HK', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2.5">
+                {gfDeals
+                  .slice()
+                  .sort((a, b) => (a.price_hkd ?? Infinity) - (b.price_hkd ?? Infinity))
+                  .slice(0, 10)
+                  .map((d, idx) => {
+                    const low = d.price_range?.[0];
+                    const high = d.price_range?.[1];
+                    const savingPct = (low != null && high != null && d.price_hkd && low > 0)
+                      ? Math.max(0, Math.round((1 - d.price_hkd / ((low + high) / 2)) * 100))
+                      : null;
+                    return (
+                      <a
+                        key={`gf-${d.id}-${idx}`}
+                        href={`https://www.google.com/travel/flights?q=Flights%20to%20${encodeURIComponent(d.destination_name)}%20from%20${encodeURIComponent(d.origin)}%20on%20${d.dep_date}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block group"
+                      >
+                        <div className="rounded-lg border border-violet-200/60 bg-white p-3 transition-all hover:border-violet-400 hover:shadow-md hover:shadow-violet-500/10">
+                          <div className="flex items-start gap-3">
+                            <div className="shrink-0 text-xl select-none pt-0.5" aria-hidden>✈️</div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-start justify-between gap-2 flex-wrap">
+                                <div className="min-w-0">
+                                  <div className="font-semibold text-foreground truncate">
+                                    {d.origin} → {d.destination_name}
+                                  </div>
+                                  <div className="text-[11px] text-muted-foreground mt-0.5 truncate">
+                                    {d.date_range}
+                                    {d.airlines && <span className="ml-2">· {d.airlines}</span>}
+                                    {d.stops != null && <span className="ml-2">· {d.stops} stop{d.stops === 1 ? '' : 's'}</span>}
+                                    {d.duration && <span className="ml-2">· {d.duration}</span>}
+                                  </div>
+                                </div>
+                                <div className="text-right shrink-0">
+                                  <div className="text-lg font-bold text-violet-700">
+                                    HK${(d.price_hkd ?? 0).toLocaleString()}
+                                  </div>
+                                  {d.save_pct != null && d.save_pct > 0 && (
+                                    <span className="inline-block mt-0.5 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                                      SAVE {d.save_pct}%
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              {low && high && (
+                                <div className="mt-1.5 text-[10px] text-muted-foreground">
+                                  過去 12 個月範圍：HK${low.toLocaleString()} – HK${high.toLocaleString()}
+                                  {savingPct != null && savingPct > 0 && (
+                                    <span className="ml-2 text-emerald-700 font-medium">
+                                      · 低於平均 {savingPct}%
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    );
+                  })}
+              </div>
+              <p className="mt-3 text-center text-[10px] text-muted-foreground">
+                點擊卡片到 Google Flights 搜尋 · 數據由 Gmail noreply-travel@google.com 自動解析
+              </p>
+            </div>
+          </section>
+        )}
 
         {/* Header */}
         <div className="mb-4 text-center">
