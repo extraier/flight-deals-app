@@ -5,6 +5,13 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  translateDateRange,
+  translateAirlines,
+  translateCity,
+  translateStops,
+  translateDuration,
+} from '@/lib/gflights_i18n';
 // Static JSONs are kept as the build-time fallback only — the live data comes
 // from /api/deals which fetches directly from the NAS via Tailscale Funnel.
 // See src/app/api/deals/route.ts.
@@ -91,6 +98,7 @@ interface GfDeal {
   airlines: string | null;
   stops: number | null;
   duration: string | null;
+  view_link: string | null;
   trip_label: string | null;
   params: string | null;
   price_range: [number, number] | null;
@@ -510,7 +518,7 @@ export default function Home() {
                           return (
                             <a
                               key={`gf-${d.id}-${idx}`}
-                              href={`https://www.google.com/travel/flights?q=Flights%20to%20${encodeURIComponent(d.destination_name)}%20from%20${encodeURIComponent(d.origin)}%20on%20${d.dep_date}`}
+                              href={d.view_link || `https://www.google.com/travel/flights?q=Flights%20to%20${encodeURIComponent(d.destination_name)}%20from%20${encodeURIComponent(d.origin)}%20on%20${d.dep_date}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="block group"
@@ -522,13 +530,13 @@ export default function Home() {
                                     <div className="flex items-start justify-between gap-2 flex-wrap">
                                       <div className="min-w-0">
                                         <div className="font-semibold text-foreground truncate">
-                                          {d.origin} → {d.destination_name}
+                                          {translateCity(d.origin)} → {translateCity(d.destination_name)}
                                         </div>
                                         <div className="text-[11px] text-muted-foreground mt-0.5 truncate">
-                                          {d.date_range}
-                                          {d.airlines && <span className="ml-2">· {d.airlines}</span>}
-                                          {d.stops != null && <span className="ml-2">· {d.stops} stop{d.stops === 1 ? '' : 's'}</span>}
-                                          {d.duration && <span className="ml-2">· {d.duration}</span>}
+                                          {translateDateRange(d.date_range)}
+                                          {d.airlines && <span className="ml-2">· {translateAirlines(d.airlines)}</span>}
+                                          {d.stops != null && <span className="ml-2">· {translateStops(d.stops)}</span>}
+                                          {d.duration && <span className="ml-2">· {translateDuration(d.duration)}</span>}
                                         </div>
                                       </div>
                                       <div className="text-right shrink-0">

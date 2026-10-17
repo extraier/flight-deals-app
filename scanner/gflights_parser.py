@@ -5,24 +5,30 @@ Parses the "tracked route" digest emails sent by
 noreply-travel@google.com into structured deal data.
 
 The Gmail API returns the raw .eml (RFC 822) content. This parser
-works against the email body's plain-text part (or HTML→text fallback).
+works against the email body's plain-text part. View links (which
+contain the actual Google Flights search URL via c.gle redirect)
+are passed in from the HTML body and paired with deals by order.
+
 It extracts:
   - Subject: "Your tracked route: {ORIGIN} to {DEST} flights from HK${PRICE}"
   - Trip label: "{N}-week trips in {MONTH}"
   - Trip params: "{N}–{N} days · Round trip · 1 adult · Economy"
   - N deals, each with date range, price, save %, airline, stops, route, duration
+  - View link (c.gle redirect → resolves to Google Flights search)
   - Historical price range: HK${LOW} - HK${HIGH}
   - "Prices updated" timestamp
 
 Usage:
     from gflights_parser import parse_email
-    result = parse_email(headers={"subject": "...", "from": "..."}, body="...")
+    result = parse_email(headers={"subject": "...", "from": "..."},
+                          body="...",
+                          view_links=["https://c.gle/...", ...])
 """
 
 import re
 import json
 from datetime import datetime, timezone, timedelta
-from typing import Optional
+from typing import Optional, List
 
 # Email is from Google Flights
 SENDER_PATTERNS = [
@@ -97,17 +103,21 @@ MONTHS = {
 }
 
 
-def parse_email(headers: dict, body: str) -> Optional[dict]:
+def parse_email(headers: dict, body: str, view_links: Optional[List[str]] = None) -> Optional[dict]:
     """
     Parse a Google Flights digest email.
 
     Args:
         headers: dict with at least 'subject' and 'from'
         body: plain-text body of the email
+        view_links: optional list of c.gle/Google Flights URLs in order
+                    (extracted from the email HTML by the caller). The
+                    parser pairs them with deals in body-text order.
 
     Returns:
         dict with parsed structure, or None if not a Google Flights digest
     """
+    view_links = view_links or []
     from_addr = headers.get("from", "") or headers.get("From", "")
     subject = headers.get("subject", "") or headers.get("Subject", "")
 
@@ -165,11 +175,19 @@ def parse_email(headers: dict, body: str) -> Optional[dict]:
             if current is not None:
                 current["airlines"] = am.group("airlines").strip()
                 current["stops"] = int(am.group("stops"))
-                current["duration"] = f"{am.group('duration')}hr"
+                duration = am.group("duration")
+                current["duration"] = f"{duration}hr"
             continue
 
     if current:
         deals.append(current)
+
+    # Pair view_links with deals in order
+    for i, d in enumerate(deals):
+        if i < len(view_links):
+            d["view_link"] = view_links[i]
+        else:
+            d["view_link"] = None
 
     # Trip label + params
     trip_label = None
@@ -230,6 +248,7 @@ def parse_email(headers: dict, body: str) -> Optional[dict]:
         "params": params,
         "price_range": price_range,
         "deals": deals,
+        "view_links": view_links,
         "prices_updated": updated.isoformat() if updated else None,
         "parsed_at": datetime.now(timezone.utc).isoformat(),
     }

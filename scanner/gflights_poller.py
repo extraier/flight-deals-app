@@ -26,6 +26,7 @@ Environment:
 """
 
 import argparse
+from typing import List
 import base64
 import json
 import os
@@ -144,15 +145,53 @@ def list_gflights_message_ids(service, days: int) -> list:
 
 
 def get_message(service, msg_id: str) -> dict:
-    """Fetch a full message and return {headers, body}."""
+    """Fetch a full message and return {headers, body, view_links}."""
     msg = service.users().messages().get(userId="me", id=msg_id, format="full").execute()
     headers = {}
     for h in msg.get("payload", {}).get("headers", []):
         name = h["name"].lower()
         if name in ("from", "subject", "date", "message-id"):
             headers[name] = h["value"]
-    body = extract_body(msg.get("payload", {}))
-    return {"headers": headers, "body": body, "raw": msg}
+    payload = msg.get("payload", {})
+    body = extract_body(payload)
+    # Hermes 2026-10-17: extract View links from the HTML part so the parser
+    # can pair them with deals in body-text order. Each c.gle URL resolves
+    # (via Google redirect) to the actual Google Flights search URL with
+    # origin/destination/dates/airline/cabin — that's what the user clicks
+    # through to. We store the c.gle directly and let the browser follow.
+    view_links = extract_view_links(payload)
+    return {"headers": headers, "body": body, "view_links": view_links, "raw": msg}
+
+
+def extract_view_links(payload: dict) -> List[str]:
+    """Recursively walk a Gmail message payload and return the c.gle/Google
+    Flights URLs from <a> elements whose visible text is exactly "View".
+    URLs are returned in document order so the parser can pair them with
+    deals by index."""
+    return _extract_view_links_recursive(payload, [])
+
+
+def _extract_view_links_recursive(payload: dict, acc: List[str]) -> List[str]:
+    mime = payload.get("mimeType", "")
+    if mime == "text/html":
+        data = payload.get("body", {}).get("data", "")
+        if data:
+            try:
+                html = base64.urlsafe_b64decode(data).decode("utf-8", errors="replace")
+            except Exception:
+                html = ""
+            # Find each <a ... href="URL" ...>View</a>
+            for m in re.finditer(
+                r'<a[^>]+href="([^"]+)"[^>]*>\s*View\s*</a>',
+                html, flags=re.IGNORECASE,
+            ):
+                href = m.group(1)
+                # Only c.gle and direct google.com/travel/flights URLs count
+                if 'c.gle/' in href or 'google.com/travel/flights' in href:
+                    acc.append(href)
+    for part in payload.get("parts", []):
+        _extract_view_links_recursive(part, acc)
+    return acc
 
 
 def load_existing(path: str) -> dict:
@@ -220,6 +259,7 @@ def flatten_for_api(parsed: dict, message_id: str = None) -> dict:
             "airlines": d.get("airlines"),
             "stops": d.get("stops"),
             "duration": d.get("duration"),
+            "view_link": d.get("view_link"),  # c.gle redirect → Google Flights
             "trip_label": parsed.get("trip_label"),
             "params": parsed.get("params"),
             "price_range": parsed.get("price_range"),
@@ -240,7 +280,7 @@ def poll(days: int, dry_run: bool, output_path: str, credentials: str, token: st
     all_deals = []
     for mid in msg_ids:
         msg = get_message(service, mid)
-        parsed = parse_email(msg["headers"], msg["body"])
+        parsed = parse_email(msg["headers"], msg["body"], view_links=msg.get("view_links", []))
         if parsed is None:
             print(f"  [{mid[:8]}] SKIP: not a Google Flights digest")
             continue

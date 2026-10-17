@@ -5,6 +5,13 @@ import Link from 'next/link';
 import { ArrowLeft, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import {
+  translateDateRange,
+  translateAirlines,
+  translateCity,
+  translateStops,
+  translateDuration,
+} from '@/lib/gflights_i18n';
 
 type Departure = 'HKG' | 'SZX';
 type SortMode = 'discount' | 'recency';
@@ -61,6 +68,7 @@ interface GfDeal {
   airlines: string | null;    // e.g. "China Airlines, Delta"
   stops: number | null;
   duration: string | null;    // e.g. "21hr"
+  view_link: string | null;   // c.gle redirect → resolves to Google Flights search
   trip_label: string | null;  // e.g. "1-week trips in January"
   params: string | null;      // e.g. "6–9 days · Round trip · 1 adult · Economy"
   price_range: [number, number] | null;
@@ -68,6 +76,7 @@ interface GfDeal {
   first_seen: string;         // ISO
   prices_updated: string | null;
 }
+
 
 interface DropRow {
   route: string;
@@ -964,7 +973,7 @@ hkgMerged = (() => {
                     return (
                       <a
                         key={`gf-${d.id}-${idx}`}
-                        href={`https://www.google.com/travel/flights?q=Flights%20to%20${encodeURIComponent(d.destination_name)}%20from%20${encodeURIComponent(d.origin)}%20on%20${d.dep_date}`}
+                        href={d.view_link || `https://www.google.com/travel/flights?q=Flights%20to%20${encodeURIComponent(d.destination_name)}%20from%20${encodeURIComponent(d.origin)}%20on%20${d.dep_date}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="block group"
@@ -975,17 +984,16 @@ hkgMerged = (() => {
                             <div className="flex-1 min-w-0">
                               <div className="flex items-start justify-between gap-2 flex-wrap">
                                 <div className="min-w-0">
-                                  <div className="font-semibold text-foreground truncate">
-                                    {d.origin} → {d.destination_name}
+                                    <div className="font-semibold text-foreground truncate">
+                                      {translateCity(d.origin)} → {translateCity(d.destination_name)}
+                                    </div>
+                                    <div className="text-[11px] text-muted-foreground mt-0.5 truncate">
+                                      {translateDateRange(d.date_range)}
+                                      {d.airlines && <span className="ml-2">· {translateAirlines(d.airlines)}</span>}
+                                      {d.stops != null && <span className="ml-2">· {translateStops(d.stops)}</span>}
+                                      {d.duration && <span className="ml-2">· {translateDuration(d.duration)}</span>}
+                                    </div>
                                   </div>
-                                  <div className="text-[11px] text-muted-foreground mt-0.5 truncate">
-                                    {d.date_range}
-                                    {d.airlines && <span className="ml-2">· {d.airlines}</span>}
-                                    {d.stops != null && <span className="ml-2">· {d.stops} stop{d.stops === 1 ? '' : 's'}</span>}
-                                    {d.duration && <span className="ml-2">· {d.duration}</span>}
-                                  </div>
-                                </div>
-                                <div className="text-right shrink-0">
                                   <div className="text-lg font-bold text-violet-700">
                                     HK${(d.price_hkd ?? 0).toLocaleString()}
                                   </div>
@@ -994,7 +1002,6 @@ hkgMerged = (() => {
                                       SAVE {d.save_pct}%
                                     </span>
                                   )}
-                                </div>
                               </div>
                               {low && high && (
                                 <div className="mt-1.5 text-[10px] text-muted-foreground">

@@ -1,75 +1,9 @@
 {
-  "generated": "2026-10-17T12:00:00+00:00",
+  "generated": "2026-10-17T13:12:59.193243+00:00",
   "source": "gmail://noreply-travel@google.com",
   "deals": [
     {
-      "id": "gflights-las_vegas",
-      "source": "google_flights",
-      "origin": "Hong Kong",
-      "destination_name": "Las Vegas",
-      "dep_date": "2026-01-04",
-      "date_range": "Mon, Jan 4 – Sun, Jan 10",
-      "price_hkd": 30344,
-      "save_pct": null,
-      "airlines": "China Eastern",
-      "stops": 1,
-      "duration": "14hr",
-      "trip_label": "1-week trips in January",
-      "params": "6–9 days · Round trip · 1 adult · Economy",
-      "price_range": [
-        5800,
-        16500
-      ],
-      "min_price": 7138,
-      "first_seen": "2026-10-17T09:33:48.815717+00:00",
-      "prices_updated": "2026-10-17T11:44:00+00:00"
-    },
-    {
-      "id": "gflights-fort_lauderdale",
-      "source": "google_flights",
-      "origin": "Hong Kong",
-      "destination_name": "Fort Lauderdale",
-      "dep_date": "2026-12-14",
-      "date_range": "Mon, Dec 14 – Wed, Dec 23",
-      "price_hkd": 9818,
-      "save_pct": 12,
-      "airlines": "American, Cathay Pacific",
-      "stops": 1,
-      "duration": "21hr",
-      "trip_label": "1-week trips in December",
-      "params": "6–9 days · Round trip · 1 adult · Economy",
-      "price_range": [
-        9800,
-        15000
-      ],
-      "min_price": 9082,
-      "first_seen": "2026-10-17T09:33:48.815591+00:00",
-      "prices_updated": "2026-10-17T03:58:00+00:00"
-    },
-    {
-      "id": "gflights-fort_lauderdale",
-      "source": "google_flights",
-      "origin": "Hong Kong",
-      "destination_name": "Fort Lauderdale",
-      "dep_date": "2026-12-17",
-      "date_range": "Thu, Dec 17 – Wed, Dec 23",
-      "price_hkd": 9818,
-      "save_pct": 12,
-      "airlines": "American, Cathay Pacific",
-      "stops": 1,
-      "duration": "21hr",
-      "trip_label": "1-week trips in December",
-      "params": "6–9 days · Round trip · 1 adult · Economy",
-      "price_range": [
-        9800,
-        15000
-      ],
-      "min_price": 9082,
-      "first_seen": "2026-10-17T09:33:48.815591+00:00",
-      "prices_updated": "2026-10-17T03:58:00+00:00"
-    },
-    {
-      "id": "gflights-fort_lauderdale",
+      "id": "gflights-fort_lauderdale-Thu,Dec24–Thu,D",
       "source": "google_flights",
       "origin": "Hong Kong",
       "destination_name": "Fort Lauderdale",
@@ -80,6 +14,7 @@
       "airlines": "China Airlines, Delta",
       "stops": 2,
       "duration": "24hr",
+      "view_link": "https://c.gle/AAuDWvmY6VqUpOPNH42Dq3inCZroD8lurzm-K-ZY6WfGoXrmLFPDvI15mEprd3qiUk8OuWLQMgcodI28ztMragxLc7Eq3ScyW3GeOGgG_xzjNUWIJiSDCVEEwol6q0cqW0mD_JqJi44trd6YmzNFne2QgMF2E0ghBT0POSjMkGibt2rwUEurtPqfkXWa8qmankjCfEvqd0XzIQyuMtidnfR3SGVwFv9dPHAljqYH5TLX6nfvTO_pKNBAUAZq8eb6ZtScw0WW1L8FkFWrLHfMCu8sqlp4xzF4jb808Tq_uAPNG3ig7epfCZSuXnaDADgbNE_tphbb90AUsoI6RD0thWEbJ0p4-PXzdOpe4gx8J1kQLTX7F7mqyy75StNrX7NUS6IvNbgVmOtlYgDTgBawnrNckTAfICDS_nNMfSeEMnjS9jxaW8ypI7aakDeuYFOzbj-mMDBqMWu-Xtiu9jKrBsSncfMD5EFsrtsIpZ2VFHER0ehESmVREebSpMnsB_Wn-SSMy3Hl9v5zmqvjxyHWcP9tlHwhq0HVC_oayBihwkSZj4OnkwGCQP4QEAsbN-QcQ8aWLvytm8MvkKmE1JlCkSz34I5unsnelcE",
       "trip_label": "1-week trips in December",
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": [
@@ -87,21 +22,68 @@
         15000
       ],
       "min_price": 9082,
-      "first_seen": "2026-10-17T09:33:48.815591+00:00",
+      "first_seen": "2026-10-17T13:12:59.193111+00:00",
       "prices_updated": "2026-10-17T03:58:00+00:00"
     },
     {
-      "id": "gflights-las_vegas",
+      "id": "gflights-fort_lauderdale-Mon,Dec14–Wed,D",
+      "source": "google_flights",
+      "origin": "Hong Kong",
+      "destination_name": "Fort Lauderdale",
+      "dep_date": "2026-12-14",
+      "date_range": "Mon, Dec 14 – Wed, Dec 23",
+      "price_hkd": 9818,
+      "save_pct": 12,
+      "airlines": "American, Cathay Pacific",
+      "stops": 1,
+      "duration": "21hr",
+      "view_link": "https://c.gle/AAuDWvkbZxDGYmgWSwi2tMgwqXEHV4S0POjAhTLicJ3wkDv5l2ILTZ7Q5WGR6L4845uXMxyrA-hVEIOm4fpfKjmyiwBvNfjUWMr18RVSxFd4X8leA14BYGOety4X8-HHdIVUDsG7qY-WiA_9D9i_2wjR-ONqr2C5X1jArWvZVOCKvBWyYpLrB8gb4RFfBqYGZ5fl50Byw74r6jvs24kcsnTO5161VsLrLoTUMs5AeUh_xibdLTYzaLiNNHHAZ86ee2ET3WFSuBp7hqdbqLpWg3TBuwSpp58gHnmY2IJUbzLMhnOeTnhV1aSatg1aLNBTTKT2JujD4kjILqXwpIsAAoZL0jcUXDJyU_Bk3Lf5JlPaY0Y_Eg_WKrHDuE3m8I5EOTx7q89GfExWqnVqLTAYMxeMgn2-WNOOh0pNmfwHRVb2Yz0GqYG1l-4s-BOetYZoxaeFuNT3FnROesLIEhDuFUrx6_T8yWn906vkXwywf-y-2RMQqDsS5ZWtRLy6cyy2n_R5xOqxq6GcvpuapmfvliWwqYWxPDlLfP2TxCs8lAG4cXjiG3gmJFZkiq8DFp4vWtwKP3qFrH2nn_6XocgvmCuojI5O5cbMPiQ",
+      "trip_label": "1-week trips in December",
+      "params": "6–9 days · Round trip · 1 adult · Economy",
+      "price_range": [
+        9800,
+        15000
+      ],
+      "min_price": 9082,
+      "first_seen": "2026-10-17T13:12:59.193111+00:00",
+      "prices_updated": "2026-10-17T03:58:00+00:00"
+    },
+    {
+      "id": "gflights-fort_lauderdale-Thu,Dec17–Wed,D",
+      "source": "google_flights",
+      "origin": "Hong Kong",
+      "destination_name": "Fort Lauderdale",
+      "dep_date": "2026-12-17",
+      "date_range": "Thu, Dec 17 – Wed, Dec 23",
+      "price_hkd": 9818,
+      "save_pct": 12,
+      "airlines": "American, Cathay Pacific",
+      "stops": 1,
+      "duration": "21hr",
+      "view_link": "https://c.gle/AAuDWvkf1LbqhIS0gBIJpX44VJiG3s6uJtlNi8p2WQj-oU2SqSpsA0uZjzU6qoMR-Fp2Zhv7FMbbxtbEl5eKWARn7Dx1uF437Bb-yty9h1qZaHCfKPZTrmwczlqPrdW14j0OzgenqsCD0LD18hzWLrm8S-m4TFdrli0H__Mx0e4fD-gXN-94adF-msfYsNGgg84Dr9pRt3R3e-w7sQvMU1WP0JMT-HWp6HE62v5OC15N7dn65MRXvpWutZBM5KViwg7M0IKsTXf-jDKXZ1h_uyuLSAgr6e7FgYm8QrngRMsDTT9i-kWaQsiUZvKwplw55SPIihFSFRqE3h7HYKEjXaDhf5MRihUvZCxim6KBkVyFTFd3HxmuNDp2dLxDjSVbNT6nU4I-2SXbZfR5fTfQsl1QCOkQB7UB7nfonqh3CVLfbNhFf8LWscZyizI4zhpPGGL7wtpqgQLFVlUn6i005IL4NwlJH30zf3bXe5IsvnGbktYKHxNxDbhAyKYRJxhkNlitGI3B9ynJ_QrEfIjz7gEVYYyxFqn_KXf9zTyrZhVIfcGeffG0Bk7dX5PWPSDyzou9z9XhN6u3DkwMpD3Tprl5JiMeM0rCPf0",
+      "trip_label": "1-week trips in December",
+      "params": "6–9 days · Round trip · 1 adult · Economy",
+      "price_range": [
+        9800,
+        15000
+      ],
+      "min_price": 9082,
+      "first_seen": "2026-10-17T13:12:59.193111+00:00",
+      "prices_updated": "2026-10-17T03:58:00+00:00"
+    },
+    {
+      "id": "gflights-las_vegas-Mon,Jan4–Sun,Ja",
       "source": "google_flights",
       "origin": "Hong Kong",
       "destination_name": "Las Vegas",
-      "dep_date": "2026-01-21",
-      "date_range": "Thu, Jan 21 – Wed, Jan 27",
-      "price_hkd": 7348,
+      "dep_date": "2026-01-04",
+      "date_range": "Mon, Jan 4 – Sun, Jan 10",
+      "price_hkd": 30344,
       "save_pct": null,
-      "airlines": "Delta",
+      "airlines": "China Eastern",
       "stops": 1,
-      "duration": "18hr",
+      "duration": "14hr",
+      "view_link": null,
       "trip_label": "1-week trips in January",
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": [
@@ -109,33 +91,11 @@
         16500
       ],
       "min_price": 7138,
-      "first_seen": "2026-10-17T09:33:48.815717+00:00",
+      "first_seen": "2026-10-17T13:12:59.193221+00:00",
       "prices_updated": "2026-10-17T11:44:00+00:00"
     },
     {
-      "id": "gflights-las_vegas",
-      "source": "google_flights",
-      "origin": "Hong Kong",
-      "destination_name": "Las Vegas",
-      "dep_date": "2026-01-14",
-      "date_range": "Thu, Jan 14 – Wed, Jan 20",
-      "price_hkd": 7348,
-      "save_pct": null,
-      "airlines": "Delta",
-      "stops": 1,
-      "duration": "25hr",
-      "trip_label": "1-week trips in January",
-      "params": "6–9 days · Round trip · 1 adult · Economy",
-      "price_range": [
-        5800,
-        16500
-      ],
-      "min_price": 7138,
-      "first_seen": "2026-10-17T09:33:48.815717+00:00",
-      "prices_updated": "2026-10-17T11:44:00+00:00"
-    },
-    {
-      "id": "gflights-las_vegas",
+      "id": "gflights-las_vegas-Thu,Jan28–Thu,F",
       "source": "google_flights",
       "origin": "Hong Kong",
       "destination_name": "Las Vegas",
@@ -146,6 +106,7 @@
       "airlines": "Alaska, Cathay Pacific",
       "stops": 2,
       "duration": "21hr",
+      "view_link": null,
       "trip_label": "1-week trips in January",
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": [
@@ -153,7 +114,53 @@
         16500
       ],
       "min_price": 7138,
-      "first_seen": "2026-10-17T09:33:48.815717+00:00",
+      "first_seen": "2026-10-17T13:12:59.193221+00:00",
+      "prices_updated": "2026-10-17T11:44:00+00:00"
+    },
+    {
+      "id": "gflights-las_vegas-Thu,Jan21–Wed,J",
+      "source": "google_flights",
+      "origin": "Hong Kong",
+      "destination_name": "Las Vegas",
+      "dep_date": "2026-01-21",
+      "date_range": "Thu, Jan 21 – Wed, Jan 27",
+      "price_hkd": 7348,
+      "save_pct": null,
+      "airlines": "Delta",
+      "stops": 1,
+      "duration": "18hr",
+      "view_link": null,
+      "trip_label": "1-week trips in January",
+      "params": "6–9 days · Round trip · 1 adult · Economy",
+      "price_range": [
+        5800,
+        16500
+      ],
+      "min_price": 7138,
+      "first_seen": "2026-10-17T13:12:59.193221+00:00",
+      "prices_updated": "2026-10-17T11:44:00+00:00"
+    },
+    {
+      "id": "gflights-las_vegas-Thu,Jan14–Wed,J",
+      "source": "google_flights",
+      "origin": "Hong Kong",
+      "destination_name": "Las Vegas",
+      "dep_date": "2026-01-14",
+      "date_range": "Thu, Jan 14 – Wed, Jan 20",
+      "price_hkd": 7348,
+      "save_pct": null,
+      "airlines": "Delta",
+      "stops": 1,
+      "duration": "25hr",
+      "view_link": null,
+      "trip_label": "1-week trips in January",
+      "params": "6–9 days · Round trip · 1 adult · Economy",
+      "price_range": [
+        5800,
+        16500
+      ],
+      "min_price": 7138,
+      "first_seen": "2026-10-17T13:12:59.193221+00:00",
       "prices_updated": "2026-10-17T11:44:00+00:00"
     }
   ],
