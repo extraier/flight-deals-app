@@ -44,3 +44,7 @@ next-env.d.ts
 # .wikimedia-cache.json is the runtime cache for seed-spots-wikimedia.mjs
 # (avoid committing ~100 KB of HTTP responses)
 /scripts/.wikimedia-cache.json
+
+# Google Flights poller OAuth files (DO NOT COMMIT)
+scanner/gflights_credentials.json
+scanner/gflights_token.json
