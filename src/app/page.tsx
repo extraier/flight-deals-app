@@ -77,6 +77,28 @@ interface Deal {
   totalDates?: number;
 }
 
+// Hermes 2026-10-17: Google Flights digest deal shape (one per route+date).
+// Same shape as on /deals page — see src/app/deals/page.tsx GfDeal.
+interface GfDeal {
+  id: string;
+  source: 'google_flights';
+  origin: string;
+  destination_name: string;
+  dep_date: string;
+  date_range: string;
+  price_hkd: number;
+  save_pct: number | null;
+  airlines: string | null;
+  stops: number | null;
+  duration: string | null;
+  trip_label: string | null;
+  params: string | null;
+  price_range: [number, number] | null;
+  min_price: number;
+  first_seen: string;
+  prices_updated: string | null;
+}
+
 interface FlightData {
   results?: Deal[];
   generated?: string;
@@ -150,9 +172,37 @@ export default function Home() {
   const [liveData, setLiveData] = useState<FlightData>(staticHkg as unknown as FlightData);
   const [dataAge, setDataAge] = useState<number>(0);
   const [dataSource, setDataSource] = useState<'live' | 'static' | 'loading'>('loading');
+  // Hermes 2026-10-17: Google Flights digest deals. Fetched from /api/gflights.
+  // `showGf` toggles the section — collapsed by default so the main grid
+  // stays clean, expanded via the "📧 Google Flights" button in the
+  // segmented control. Persisted in localStorage so users who opened it
+  // once don't have to click again next visit.
+  const [gfDeals, setGfDeals] = useState<GfDeal[]>([]);
+  const [gfGenerated, setGfGenerated] = useState<string>('');
+  const [showGf, setShowGf] = useState<boolean>(false);
+
+  useEffect(() => {
+    try {
+      const v = window.localStorage.getItem('showGf');
+      if (v === '1') setShowGf(true);
+    } catch {}
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
+    // Hermes 2026-10-17: Google Flights poll. Independent of `departure` so
+    // it doesn't refetch on every tab switch. 30-min cadence matches the
+    // poller's own write cadence; 24h GC makes staleness non-critical.
+    const gfLoad = async () => {
+      try {
+        const r = await fetch('/api/gflights', { cache: 'no-store' });
+        if (!r.ok) return;
+        const j = await r.json();
+        if (cancelled) return;
+        setGfDeals(((j.deals || []) as GfDeal[]).filter((d) => d.origin === 'Hong Kong'));
+        setGfGenerated(j.generated || '');
+      } catch {}
+    };
     const load = async () => {
       try {
         const res = await fetch(`/api/deals?dep=${departure}`, { cache: 'no-store' });
@@ -172,22 +222,32 @@ export default function Home() {
       }
     };
     load();
+    gfLoad();
     // Hermes 2026-07-09: dropped 90s → 20s so drops appear on the home
     // page within ~30 s of the export cycle (was 5+ min). Combined with
     // the deals page's on-focus refresh, opening the app from a Telegram
     // notification now shows the matching alert immediately.
     const interval = setInterval(load, 20_000);
+    // Hermes 2026-10-17: gflights refresh on 30-min cadence. /api/gflights
+    // already caches for 5s; underlying JSON only changes when the Gmail
+    // poller writes (every 30 min on its own cron), so 30 min here is the
+    // right cadence — no point refreshing faster than the writer.
+    const gfInterval = setInterval(gfLoad, 30 * 60 * 1000);
     // Hermes 2026-07-09: refresh on tab focus so a backgrounded tab gets
     // fresh data the moment the user opens the app — closes the
     // "I just got a Telegram alert but the page still shows yesterday's
     // drops" gap.
     const onVisibility = () => {
-      if (document.visibilityState === 'visible') load();
+      if (document.visibilityState === 'visible') {
+        load();
+        gfLoad();
+      }
     };
     document.addEventListener('visibilitychange', onVisibility);
     return () => {
       cancelled = true;
       clearInterval(interval);
+      clearInterval(gfInterval);
       document.removeEventListener('visibilitychange', onVisibility);
     };
   }, [departure]);
@@ -348,6 +408,13 @@ export default function Home() {
                   Both segments are still <Link> tags so they navigate; the
                   matching pattern is also used below for the region/country
                   filter (按地區 / 按國家). */}
+              {/* Hermes 2026-10-17: third segment — Google Flights digest toggle.
+                  - Not a link: clicking it shows/hides the GF section inline
+                    (no navigation, no full reload)
+                  - Violet to distinguish from the orange/pink existing segments
+                  - Count badge so the user sees there's fresh mail at a glance
+                  - Persists `showGf` to localStorage so users who opened it
+                    once don't have to re-click next visit */}
               <div className="inline-flex items-center gap-0 rounded-xl border border-border bg-card p-1 shadow-sm">
                 <Link
                   href="/deals"
@@ -362,8 +429,143 @@ export default function Home() {
                 >
                   🗺 一起揀目的地
                 </Link>
+                <span className="h-6 w-px bg-border" aria-hidden="true" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowGf((v) => {
+                      const nv = !v;
+                      try { window.localStorage.setItem('showGf', nv ? '1' : '0'); } catch {}
+                      return nv;
+                    });
+                  }}
+                  className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-bold transition-all ${
+                    showGf
+                      ? 'bg-violet-600 text-white shadow-sm'
+                      : 'text-violet-600 dark:text-violet-400 hover:bg-violet-500/10'
+                  }`}
+                  aria-expanded={showGf}
+                  title="顯示 Google Flights 過去 24 小時推介"
+                >
+                  ✉️ Google Flights
+                  {gfDeals.length > 0 && (
+                    <span className={`ml-1 inline-flex items-center justify-center text-[10px] font-bold rounded-full min-w-[18px] h-[18px] px-1 ${
+                      showGf ? 'bg-white/20 text-white' : 'bg-violet-100 text-violet-700'
+                    }`}>
+                      {gfDeals.length}
+                    </span>
+                  )}
+                </button>
               </div>
             </div>
+
+            {/* Hermes 2026-10-17: Google Flights digest section.
+                Renders when `showGf` is true. Visually distinct from the main
+                destinations grid (violet border + lighter background) so users
+                can tell at a glance that this is from Gmail, not the scanner.
+                Same card shape as the /deals page section. Top 10 by price asc.
+                The empty state (`gfDeals.length === 0`) shows a one-line hint
+                instead of the empty grid so users aren't confused when the
+                Gmail poller isn't authenticated yet. */}
+            {showGf && (
+              <section className="mb-6" aria-label="Google Flights 推介">
+                <div className="rounded-xl border border-violet-200/60 bg-gradient-to-br from-violet-50/40 to-white p-4 sm:p-5">
+                  <div className="mb-3 flex items-baseline justify-between gap-2 flex-wrap">
+                    <div>
+                      <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground inline-flex items-center gap-2">
+                        <span aria-hidden>📧</span>
+                        <span>Google Flights 推介</span>
+                        {gfDeals.length > 0 && (
+                          <span className="text-sm font-normal text-muted-foreground">
+                            ({gfDeals.length})
+                          </span>
+                        )}
+                      </h2>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        過去 24 小時 · 由 Gmail 自動解析
+                      </p>
+                    </div>
+                    {gfGenerated && (
+                      <p className="text-[11px] text-muted-foreground">
+                        更新：{new Date(gfGenerated).toLocaleString('zh-HK', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                    )}
+                  </div>
+                  {gfDeals.length === 0 ? (
+                    <p className="text-sm text-muted-foreground py-6 text-center">
+                      暫時無新嘅 Google Flights 推介。完成 Gmail 授權後，新嘅 digest 會自動出現喺呢度。
+                    </p>
+                  ) : (
+                    <div className="space-y-2.5">
+                      {gfDeals
+                        .slice()
+                        .sort((a, b) => (a.price_hkd ?? Infinity) - (b.price_hkd ?? Infinity))
+                        .slice(0, 10)
+                        .map((d, idx) => {
+                          const low = d.price_range?.[0];
+                          const high = d.price_range?.[1];
+                          const savingPct = (low != null && high != null && d.price_hkd && low > 0)
+                            ? Math.max(0, Math.round((1 - d.price_hkd / ((low + high) / 2)) * 100))
+                            : null;
+                          return (
+                            <a
+                              key={`gf-${d.id}-${idx}`}
+                              href={`https://www.google.com/travel/flights?q=Flights%20to%20${encodeURIComponent(d.destination_name)}%20from%20${encodeURIComponent(d.origin)}%20on%20${d.dep_date}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block group"
+                            >
+                              <div className="rounded-lg border border-violet-200/60 bg-white p-3 transition-all hover:border-violet-400 hover:shadow-md hover:shadow-violet-500/10">
+                                <div className="flex items-start gap-3">
+                                  <div className="shrink-0 text-xl select-none pt-0.5" aria-hidden>✈️</div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-start justify-between gap-2 flex-wrap">
+                                      <div className="min-w-0">
+                                        <div className="font-semibold text-foreground truncate">
+                                          {d.origin} → {d.destination_name}
+                                        </div>
+                                        <div className="text-[11px] text-muted-foreground mt-0.5 truncate">
+                                          {d.date_range}
+                                          {d.airlines && <span className="ml-2">· {d.airlines}</span>}
+                                          {d.stops != null && <span className="ml-2">· {d.stops} stop{d.stops === 1 ? '' : 's'}</span>}
+                                          {d.duration && <span className="ml-2">· {d.duration}</span>}
+                                        </div>
+                                      </div>
+                                      <div className="text-right shrink-0">
+                                        <div className="text-lg font-bold text-violet-700">
+                                          HK${(d.price_hkd ?? 0).toLocaleString()}
+                                        </div>
+                                        {d.save_pct != null && d.save_pct > 0 && (
+                                          <span className="inline-block mt-0.5 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                                            SAVE {d.save_pct}%
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                    {low != null && high != null && (
+                                      <div className="mt-1.5 text-[10px] text-muted-foreground">
+                                        過去 12 個月範圍：HK${low.toLocaleString()} – HK${high.toLocaleString()}
+                                        {savingPct != null && savingPct > 0 && (
+                                          <span className="ml-2 text-emerald-700 font-medium">
+                                            · 低於平均 {savingPct}%
+                                          </span>
+                                        )}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </a>
+                          );
+                        })}
+                    </div>
+                  )}
+                  <p className="mt-3 text-center text-[10px] text-muted-foreground">
+                    點擊卡片到 Google Flights 搜尋 · 數據由 Gmail noreply-travel@google.com 自動解析
+                  </p>
+                </div>
+              </section>
+            )}
 
             {/* Filters & Sort */}
             <div className="mb-6 space-y-3">
