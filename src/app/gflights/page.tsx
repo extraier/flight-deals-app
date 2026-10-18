@@ -33,6 +33,7 @@ interface GfDeal {
 }
 
 type OriginFilter = 'all' | 'Hong Kong';
+type SortBy = 'alert' | 'price';
 
 export default function GFlightsPage() {
   const [deals, setDeals] = useState<GfDeal[]>([]);
@@ -40,6 +41,9 @@ export default function GFlightsPage() {
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [originFilter, setOriginFilter] = useState<OriginFilter>('all');
+  // Hermes 2026-10-18: 'alert' (default) means most recently emailed
+  // destinations surface first; 'price' sorts by cheapest first.
+  const [sortBy, setSortBy] = useState<SortBy>('alert');
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
 
   async function load(silent = false) {
@@ -93,10 +97,27 @@ export default function GFlightsPage() {
     list.sort((a, b) => (a.price_hkd ?? Infinity) - (b.price_hkd ?? Infinity));
   }
 
-  // Display the destinations sorted by their cheapest deal price.
-  const destList = Array.from(byDest.entries())
-    .map(([dest, list]) => ({ dest, deals: list, cheapest: list[0] }))
-    .sort((a, b) => (a.cheapest.price_hkd ?? Infinity) - (b.cheapest.price_hkd ?? Infinity));
+  // Hermes 2026-10-18: build the destination list and capture the most
+  // recent alert time per destination (across all the deals in that
+  // group). The toggle below lets the user pick between two orderings:
+  //   - "alert"  (default): most recently emailed routes first, so a
+  //     fresh London alert outranks a week-old Taipei deal
+  //   - "price": cheapest first, the old behaviour
+  const destEntries = Array.from(byDest.entries()).map(([dest, list]) => {
+    const latestAlert = list.reduce((m, d) => {
+      const v = typeof d.alert_unix_ms === 'number' ? d.alert_unix_ms : 0;
+      return v > m ? v : m;
+    }, 0);
+    return { dest, deals: list, cheapest: list[0], latestAlert };
+  });
+  const destList = destEntries.sort((a, b) => {
+    if (sortBy === 'alert') {
+      // Most recent alert first; break ties by cheapest price.
+      if (b.latestAlert !== a.latestAlert) return b.latestAlert - a.latestAlert;
+      return (a.cheapest.price_hkd ?? Infinity) - (b.cheapest.price_hkd ?? Infinity);
+    }
+    return (a.cheapest.price_hkd ?? Infinity) - (b.cheapest.price_hkd ?? Infinity);
+  });
 
   const formatPrice = (n: number) => `HK$${(n ?? 0).toLocaleString()}`;
   const formatTimestamp = (iso: string) => {
@@ -218,6 +239,37 @@ export default function GFlightsPage() {
             </div>
           </div>
         )}
+
+        {/* Hermes 2026-10-18: sort-by toggle. Default = 'alert' (most
+            recently emailed first), so a fresh London alert outranks
+            a week-old Taipei deal. 'price' is the old behaviour. */}
+        <div className="mb-4 flex justify-center">
+          <div className="inline-flex rounded-lg border border-border bg-card p-1 gap-1">
+            <button
+              onClick={() => setSortBy('alert')}
+              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all inline-flex items-center gap-1 ${
+                sortBy === 'alert'
+                  ? 'bg-violet-600 text-white shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+              }`}
+              title="最新推介優先"
+            >
+              <Clock className="h-3 w-3" />
+              最新推介優先
+            </button>
+            <button
+              onClick={() => setSortBy('price')}
+              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all inline-flex items-center gap-1 ${
+                sortBy === 'price'
+                  ? 'bg-violet-600 text-white shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+              }`}
+              title="最平優先"
+            >
+              💰 最平優先
+            </button>
+          </div>
+        </div>
 
         {/* Status banners */}
         {fetchError && (
