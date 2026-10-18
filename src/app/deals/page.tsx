@@ -820,17 +820,25 @@ hkgMerged = (() => {
     // "this route has a CX flight option" with "this route was alerted by
     // the CX scanner". With the new SQL alerts (key
     // "YYYYMMDD{airport}{airline}alert{dest}", e.g. "20261015HKCXalertNGO"),
-    // we know exactly which scanner alerted on each route. The page's
-    // CX tab now shows only rows whose destCode has a CX alert in the
-    // SQL store, matching the bot's CX 持續跌價 section exactly.
-    // The cheapestDate.airline is still used for the displayed ✈️ badge
-    // (because that's the carrier of the cheapest flight), but NOT for
-    // the filter.
+    // Hermes 2026-10-18: airline filter checks the row's own
+    // cheapestDate.airline (the carrier the bot alerted on, derived
+    // from the cooldown) instead of the SQL alerts map. The SQL
+    // alerts map is empty most of the time (the bot only writes to
+    // SQL on detection events, and the 24h TTL has often expired
+    // by the time the user looks). Using the SQL as the filter
+    // source would zero out the airline tabs. The cooldown is the
+    // authoritative record of "the bot alerted on this destination
+    // at this airline" and is always live.
     const activeAlerts = departure === 'HKG' ? hkgAlerts : szxAlerts;
     if (airlineFilter) {
       copy = copy.filter((r) => {
+        const rowAirline = (r.cheapestDate?.airline || '').toUpperCase().replace(/^_/, '');
+        if (rowAirline === airlineFilter) return true;
+        // Defensive: if the row has no cheapestDate.airline (cooldown
+        // synthesized without flight info), fall back to the SQL alert
+        // if we have one.
         const alert = activeAlerts.get(r.destCode);
-        return alert && alert.airline === airlineFilter;
+        return !!(alert && alert.airline === airlineFilter);
       });
     }
     // Hermes 2026-10-15: page only shows 持續跌價 entries (cooldown-marked),
@@ -948,36 +956,41 @@ hkgMerged = (() => {
               </button>
             </div>
           )}
-          {/* Hermes 2026-07-01: multi-airline filter as a dropdown. Replaces
-              the previous chip-row layout (which got unwieldy with 10+
-              airlines on the deals page). Same filter behavior as the home
-              page — null = show all airlines, otherwise narrow to that
-              airline's drops. */}
-          {renderedRows.length > 0 && airlineOptions.length > 0 && (
-            <div className="flex items-center gap-2">
-              <label
-                htmlFor="airline-filter-deals"
-                className="text-sm text-muted-foreground shrink-0"
+          {/* Hermes 2026-10-18: airline filter as visible pills (chips).
+              User feedback: dropdown was confusing — once a filter is
+              picked, the page shows the empty state and the user
+              couldn't tell how to unfilter. Chips make "全部" /
+              "CX" / "UO" mutually exclusive and the active state
+              obvious. Replacing the legacy <select>.
+              Hermes 2026-10-18: also always render the chips when
+              airlineOptions is non-empty, even if renderedRows is 0.
+              Otherwise the empty state hides the chips and the user
+              has no way to switch back to 全部. */}
+          {airlineOptions.length > 0 && (
+            <div className="inline-flex items-center gap-0 rounded-xl border border-border bg-card p-1 shadow-sm">
+              <button
+                onClick={() => setAirlineFilter(null)}
+                className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-3 sm:px-4 py-2 text-sm font-bold transition-all whitespace-nowrap ${
+                  airlineFilter == null
+                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                }`}
               >
-                ✈️ 航空公司:
-              </label>
-              <select
-                id="airline-filter-deals"
-                value={airlineFilter ?? '__all__'}
-                onChange={(e) =>
-                  setAirlineFilter(
-                    e.target.value === '__all__' ? null : e.target.value,
-                  )
-                }
-                className="h-9 rounded-md border border-input bg-background px-3 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500/40 max-w-xs"
-              >
-                <option value="__all__">全部 ({rows.length})</option>
-                {airlineOptions.map(([code, count]) => (
-                  <option key={code} value={code}>
-                    {airlineLabel(code)} ({code}) · {count}
-                  </option>
-                ))}
-              </select>
+                ✈️ 全部 ({rows.length})
+              </button>
+              {airlineOptions.map(([code, count]) => (
+                <button
+                  key={code}
+                  onClick={() => setAirlineFilter(code)}
+                  className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-3 sm:px-4 py-2 text-sm font-bold transition-all whitespace-nowrap ${
+                    airlineFilter === code
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                  }`}
+                >
+                  {airlineLabel(code)} ({code}) · {count}
+                </button>
+              ))}
             </div>
           )}
         </div>
@@ -1015,7 +1028,9 @@ hkgMerged = (() => {
                   ? `錯誤：${fetchError}`
                   : loading
                     ? '從 NAS 取得最新價格中…'
-                    : '所有航線價格都比昨日高或持平，無可顯示嘅劈價。'}
+                    : airlineFilter
+                      ? `已篩選 ${airlineLabel(airlineFilter)} (${airlineFilter}) · 點上面「全部」睇全部航線。`
+                      : '所有航線價格都比昨日高或持平，無可顯示嘅劈價。'}
               </p>
             </CardContent>
           </Card>
