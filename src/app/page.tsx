@@ -356,24 +356,28 @@ export default function Home() {
                   - Count badge so the user sees there's fresh mail at a glance
                   - Default collapsed so the main grid stays clean; user
                     toggles by clicking the button */}
-              <div className="inline-flex items-center gap-0 rounded-xl border border-border bg-card p-1 shadow-sm flex-wrap sm:flex-nowrap justify-center">
+              {/* Hermes 2026-10-18: 3 separate pill buttons (not a single
+                  segmented control). The user prefers distinct pills
+                  so each CTA reads as its own action. flex-wrap lets
+                  them sit on one row on wide viewports, and stack
+                  cleanly on mobile. justify-center keeps the row
+                  centered. */}
+              <div className="flex flex-wrap items-center justify-center gap-2">
                 <Link
                   href="/deals"
-                  className="inline-flex items-center justify-center gap-1.5 rounded-lg px-3 sm:px-4 py-2 text-sm font-bold text-orange-600 dark:text-orange-400 transition-all hover:bg-orange-500/10 whitespace-nowrap"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-3 sm:px-4 py-2 text-sm font-bold text-orange-600 dark:text-orange-400 transition-all hover:bg-orange-500/10 whitespace-nowrap shadow-sm"
                 >
                   🔥 今日劈價
                 </Link>
-                <span className="h-6 w-px bg-border" aria-hidden="true" />
                 <Link
                   href="/match"
-                  className="inline-flex items-center justify-center gap-1.5 rounded-lg px-3 sm:px-4 py-2 text-sm font-bold text-pink-600 dark:text-pink-400 transition-all hover:bg-pink-500/10 whitespace-nowrap"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-3 sm:px-4 py-2 text-sm font-bold text-pink-600 dark:text-pink-400 transition-all hover:bg-pink-500/10 whitespace-nowrap shadow-sm"
                 >
                   🗺 一起揀目的地
                 </Link>
-                <span className="h-6 w-px bg-border" aria-hidden="true" />
                 <Link
                   href="/gflights"
-                  className="inline-flex items-center justify-center gap-1.5 rounded-lg px-3 sm:px-4 py-2 text-sm font-bold transition-all text-violet-600 dark:text-violet-400 hover:bg-violet-500/10 whitespace-nowrap"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-3 sm:px-4 py-2 text-sm font-bold transition-all text-violet-600 dark:text-violet-400 hover:bg-violet-500/10 whitespace-nowrap shadow-sm"
                   title="Google Flights 推介（過去 24 小時）"
                 >
                   ✉️ Google Flights
