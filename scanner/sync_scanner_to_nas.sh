@@ -111,22 +111,37 @@ for f in "${changed[@]}"; do
   else
     local_path="$HOME/$f"
   fi
-  # Hermes 2026-07-26: pre-rm the destination so we can overwrite root-owned
-  # 0644 files. /volume1/flight-scanner/ is mode 0777 so unlink works for any
-  # user, but the file contents themselves may be root:root 0644 (set by the
-  # docker cp / scanner container that originally placed them there). Plain
-  # `cat > $NAS_DIR/$f` then fails with "Permission denied". rm -f first lets
-  # us recreate. No-op when the file is already openclaw-owned.
-  if cat "$local_path" | nas_ssh "rm -f '$NAS_DIR/$f' && cat > '$NAS_DIR/$f'"; then
-    # Restore executable bit for .sh files (cat > strips it on most volumes)
-    case "$f" in
-      *.sh) nas_ssh "chmod +x '$NAS_DIR/$f'" >/dev/null 2>&1 ;;
-    esac
-    log "PUSHED: $f"
-  else
-    log "PUSH FAILED: $f"
-    push_failed=1
-  fi
+  # Hermes 2026-10-18: UGREEN snapshot_serv sets the `i` (immutable) attribute
+  # on tracked files (fli_db.py, export_all_dates_*.py, etc.) so even root
+  # can't rm/rename/overwrite them. `cat >` over an immutable file ALSO
+  # fails with "Operation not permitted" (write to fd is blocked at the
+  # kernel layer). The fix: `chattr -i` first, then overwrite, then
+  # `chattr +i` to restore protection. Without this, PUSH FAILED forever.
+  #
+  # Hermes 2026-07-26 (legacy note): pre-rm the destination so we can
+  # overwrite root-owned 0644 files. /volume1/flight-scanner/ is mode 0777
+  # so unlink works for any user, but the file contents themselves may be
+  # root:root 0644 (set by the docker cp / scanner container that originally
+  # placed them there). Plain `cat > $NAS_DIR/$f` then fails with
+  # "Permission denied". rm -f first lets us recreate. No-op when the
+  # file is already openclaw-owned.
+  push_one() {
+    if cat "$local_path" | nas_ssh "sudo -n chattr -i '$NAS_DIR/$f' 2>/dev/null; rm -f '$NAS_DIR/$f' && cat > '$NAS_DIR/$f'"; then
+      # Restore immutable flag for files UGREEN tracks. Best-effort — if
+      # chattr isn't permitted, the snapshot daemon will re-immutable it
+      # anyway on its next cycle.
+      nas_ssh "sudo -n chattr +i '$NAS_DIR/$f' 2>/dev/null" >/dev/null
+      # Restore executable bit for .sh files (cat > strips it on most volumes)
+      case "$f" in
+        *.sh) nas_ssh "chmod +x '$NAS_DIR/$f'" >/dev/null 2>&1 ;;
+      esac
+      log "PUSHED: $f"
+    else
+      log "PUSH FAILED: $f"
+      push_failed=1
+    fi
+  }
+  push_one
 done
 
 # If any push failed, don't restart containers (could leave them with half-updated scripts)
