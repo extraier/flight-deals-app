@@ -209,12 +209,17 @@ def load_existing(path: str) -> dict:
 
 def merge_deals(existing: dict, new_deals: list) -> dict:
     """Dedupe by (origin, dest, dep_date). Keep the most recent first_seen."""
+    def _key(d):
+        # Hermes 2026-10-18: the parsed deal uses 'destination_name' (matching
+        # the API/UI shape); the dedup key needs to be tolerant of both so we
+        # don't crash when an existing deal has either field.
+        dest = d.get("destination_name") or d.get("destination") or ""
+        return (d.get("origin", ""), dest, d.get("dep_date", ""))
     by_key = {}
     for d in existing.get("deals", []):
-        key = (d["origin"], d["destination"], d.get("dep_date", ""))
-        by_key[key] = d
+        by_key[_key(d)] = d
     for d in new_deals:
-        key = (d["origin"], d["destination"], d.get("dep_date", ""))
+        key = _key(d)
         existing_d = by_key.get(key)
         if not existing_d or d.get("first_seen", "") > existing_d.get("first_seen", ""):
             by_key[key] = d
