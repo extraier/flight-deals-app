@@ -243,6 +243,19 @@ function buildDropList(
           const absAmt = Math.abs(cs.amount);
           const absPct = Math.abs(Math.round(cs.pct * 10) / 10);
           cd = pickDisplayDate(d.cheapestDates, cs.price) ?? d.cheapestDates?.[0];
+          // Hermes 2026-10-18: stale-cooldown guard. The cooldown records
+          // the price at alert time. If today's cheapest flight is far
+          // from the alert price, the deal has been filled and the
+          // displayed card would quote a price no actual flight carries.
+          // Compare cs.price to the *current* cheapest date price; if they
+          // differ by more than 30%, the alert is stale — skip the row
+          // (we'd rather show one less card than a misleading one).
+          if (cd && cd.price) {
+            const drift = Math.abs(cd.price - cs.price) / cs.price;
+            if (drift > 0.30) {
+              continue; // alert is stale; cheapestDate is far from alert price
+            }
+          }
           newPrice = cs.price;
           oldPrice = newPrice + absAmt;
           dropAmount = absAmt;
