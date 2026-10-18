@@ -426,7 +426,7 @@ export default function GFlightsPage() {
                                 fare + baggage on Google Flights. Show a
                                 small hint so the gap is visible without
                                 claiming a value we don't have. */}
-                            <div className="text-[10px] text-muted-foreground/70 inline-flex items-center gap-1 mt-0.5">
+                            <div className="text-[10px] text-muted-foreground/70 flex items-center gap-1 mt-0.5">
                               <span aria-hidden>🧳</span>
                               行李政策請向航空公司查詢
                             </div>
@@ -439,7 +439,7 @@ export default function GFlightsPage() {
                               const t = formatAlertTime(d.alert_date, d.alert_unix_ms);
                               if (!t) return null;
                               return (
-                                <div className="text-[10px] text-muted-foreground/70 inline-flex items-center gap-1 mt-0.5">
+                                <div className="text-[10px] text-muted-foreground/70 flex items-center gap-1 mt-0.5">
                                   <Mail className="h-2.5 w-2.5" />
                                   {t}
                                 </div>
