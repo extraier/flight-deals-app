@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Clock, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Clock, RefreshCw, Mail } from 'lucide-react';
 import { translateDateRange, translateAirlines, translateCity, translateStops, translateDuration } from '@/lib/gflights_i18n';
 
 interface GfDeal {
@@ -24,6 +24,12 @@ interface GfDeal {
   min_price: number;
   first_seen: string;
   prices_updated: string | null;
+  // Hermes 2026-10-18: when Gmail delivered the digest. Same value for
+  // every deal in the same email. alert_unix_ms is the canonical form
+  // for sort/filter; alert_date is the ISO string with timezone, used
+  // for the display.
+  alert_date?: string | null;
+  alert_unix_ms?: number | null;
 }
 
 type OriginFilter = 'all' | 'Hong Kong';
@@ -101,6 +107,27 @@ export default function GFlightsPage() {
       });
     } catch { return iso; }
   };
+  // Hermes 2026-10-18: format when Google sent the digest email. Shows
+  // the local HKT date + time so the user can tell which Gmail alert
+  // a deal came from (e.g. "10/17 20:00" vs "10/11 16:52"). For an
+  // ISO string with timezone, this is the HKT time. For Unix ms
+  // fallback, also HKT. The result drops the year since the user is
+  // reading this in real time.
+  const formatAlertTime = (iso?: string | null, unixMs?: number | null) => {
+    let d: Date | null = null;
+    if (iso) {
+      try { d = new Date(iso); } catch { d = null; }
+    }
+    if (!d && typeof unixMs === 'number' && unixMs > 0) {
+      d = new Date(unixMs);
+    }
+    if (!d || isNaN(d.getTime())) return '';
+    return d.toLocaleString('zh-HK', {
+      timeZone: 'Asia/Hong_Kong',
+      month: 'numeric', day: 'numeric',
+      hour: '2-digit', minute: '2-digit', hour12: false,
+    });
+  };
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-violet-50/30 via-white to-orange-50/30">
@@ -132,9 +159,27 @@ export default function GFlightsPage() {
             <span aria-hidden className="text-3xl sm:text-4xl">📧</span>
             <span>Google Flights 推介</span>
           </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            過去 24 小時由 Gmail 自動解析嘅航班推介
-          </p>
+          {(() => {
+            // Hermes 2026-10-18: show the latest alert time across all
+            // deals so the user knows the freshness at a glance. The
+            // JSON's "generated" is when the poller ran (can be 30 min
+            // after the latest email), but alert_unix_ms is when Google
+            // actually sent the digest. We use the latter.
+            const latestAlertMs = deals.reduce((max, d) => {
+              const m = d.alert_unix_ms;
+              return typeof m === 'number' && m > max ? m : max;
+            }, 0);
+            const latestAlert = latestAlertMs
+              ? formatAlertTime(new Date(latestAlertMs).toISOString(), latestAlertMs)
+              : '';
+            return (
+              <p className="mt-2 text-sm text-muted-foreground">
+                {latestAlert
+                  ? `最新一封 Google 推介電郵：${latestAlert}`
+                  : '過去 24 小時由 Gmail 自動解析嘅航班推介'}
+              </p>
+            );
+          })()}
           {generated && (
             <p className="mt-1 text-xs text-muted-foreground/80 inline-flex items-center gap-1">
               <Clock className="h-3 w-3" />
@@ -242,6 +287,20 @@ export default function GFlightsPage() {
                           {main.params && <span className="ml-1.5">· {main.params}</span>}
                         </p>
                       )}
+                      {/* Hermes 2026-10-18: when Google sent the Gmail digest
+                          that this deal was parsed from. Sits below the
+                          trip_label/params line so it doesn't compete with
+                          the date/route line for attention. */}
+                      {(() => {
+                        const t = formatAlertTime(main.alert_date, main.alert_unix_ms);
+                        if (!t) return null;
+                        return (
+                          <p className="mt-1 text-[11px] text-muted-foreground/80 inline-flex items-center gap-1">
+                            <Mail className="h-3 w-3" />
+                            Google 推介：{t}
+                          </p>
+                        );
+                      })()}
                     </div>
                     <div className="text-right shrink-0">
                       <div className="text-2xl sm:text-3xl font-bold text-violet-700">
@@ -289,6 +348,21 @@ export default function GFlightsPage() {
                               {d.stops != null && <span className="ml-2">{translateStops(d.stops)}</span>}
                               {d.duration && <span className="ml-2">{translateDuration(d.duration)}</span>}
                             </div>
+                            {/* Hermes 2026-10-18: each alternate can come from
+                                a different Gmail digest (Google sends separate
+                                emails for different time windows). Show its
+                                own alert time so the user knows the
+                                freshness. */}
+                            {(() => {
+                              const t = formatAlertTime(d.alert_date, d.alert_unix_ms);
+                              if (!t) return null;
+                              return (
+                                <div className="text-[10px] text-muted-foreground/70 inline-flex items-center gap-1 mt-0.5">
+                                  <Mail className="h-2.5 w-2.5" />
+                                  {t}
+                                </div>
+                              );
+                            })()}
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
                             {d.save_pct != null && d.save_pct > 0 && (

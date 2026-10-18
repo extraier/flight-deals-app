@@ -145,7 +145,7 @@ def list_gflights_message_ids(service, days: int) -> list:
 
 
 def get_message(service, msg_id: str) -> dict:
-    """Fetch a full message and return {headers, body, view_links}."""
+    """Fetch a full message and return {headers, body, view_links, internal_date}."""
     msg = service.users().messages().get(userId="me", id=msg_id, format="full").execute()
     headers = {}
     for h in msg.get("payload", {}).get("headers", []):
@@ -160,7 +160,19 @@ def get_message(service, msg_id: str) -> dict:
     # origin/destination/dates/airline/cabin — that's what the user clicks
     # through to. We store the c.gle directly and let the browser follow.
     view_links = extract_view_links(payload)
-    return {"headers": headers, "body": body, "view_links": view_links, "raw": msg}
+    # Hermes 2026-10-18: also extract the message's send timestamp so the UI
+    # can show "alert sent at 20:00" on each card. internalDate is the
+    # authoritative GMT ms; we keep both the raw Date header (preserves
+    # Google's timezone) and the parsed form.
+    internal_date = int(msg.get("internalDate", "0") or 0)
+    return {
+        "headers": headers,
+        "body": body,
+        "view_links": view_links,
+        "internal_date_ms": internal_date,
+        "date_header": headers.get("date", ""),
+        "raw": msg,
+    }
 
 
 def extract_view_links(payload: dict) -> List[str]:
@@ -236,8 +248,14 @@ def merge_deals(existing: dict, new_deals: list) -> dict:
     }
 
 
-def flatten_for_api(parsed: dict, message_id: str = None) -> dict:
-    """Flatten a parsed email into the API shape (one entry per deal)."""
+def flatten_for_api(parsed: dict, message_id: str = None, alert_date_iso = None, alert_unix_ms = None) -> dict:
+    """Flatten a parsed email into the API shape (one entry per deal).
+
+    alert_date_iso / alert_unix_ms are the Gmail message's send time so the
+    UI can render "alert sent at 2026-10-17 20:00" on each card. Same
+    value for every deal in the same digest (they all come from the
+    same email).
+    """
     flat = []
     for d in parsed.get("deals", []):
         # Build dep_date in YYYY-MM-DD format
@@ -272,6 +290,12 @@ def flatten_for_api(parsed: dict, message_id: str = None) -> dict:
             "first_seen": parsed.get("parsed_at"),
             "prices_updated": parsed.get("prices_updated"),
             "message_id": message_id,
+            # Hermes 2026-10-18: when Google sent the digest. Same for all
+            # deals in the email. The ISO string preserves Gmail's
+            # reported timezone; the unix ms is the canonical form for
+            # sort/filter and date math on the client.
+            "alert_date": alert_date_iso,
+            "alert_unix_ms": alert_unix_ms,
         })
     return flat
 
@@ -290,8 +314,20 @@ def poll(days: int, dry_run: bool, output_path: str, credentials: str, token: st
             print(f"  [{mid[:8]}] SKIP: not a Google Flights digest")
             continue
         n = len(parsed.get("deals", []))
-        print(f"  [{mid[:8]}] {parsed['origin']}→{parsed['destination']}: {n} deal(s)")
-        flat = flatten_for_api(parsed, message_id=mid)
+        # Hermes 2026-10-18: convert the message's internalDate (Unix ms)
+        # into an ISO-8601 string with timezone for the UI.
+        alert_unix_ms = msg.get("internal_date_ms")
+        if alert_unix_ms:
+            alert_date_iso = (
+                datetime.fromtimestamp(alert_unix_ms / 1000, tz=timezone.utc).isoformat()
+            )
+        else:
+            alert_date_iso = None
+        print(f"  [{mid[:8]}] {parsed['origin']}→{parsed['destination']}: {n} deal(s) (alert={alert_date_iso})")
+        flat = flatten_for_api(
+            parsed, message_id=mid,
+            alert_date_iso=alert_date_iso, alert_unix_ms=alert_unix_ms,
+        )
         all_deals.extend(flat)
 
     print(f"\nTotal deals parsed: {len(all_deals)}")

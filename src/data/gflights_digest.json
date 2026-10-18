@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-18T00:45:59.048013+00:00",
+  "generated": "2026-10-18T04:39:38.350583+00:00",
   "source": "gmail://noreply-travel@google.com",
   "deals": [
     {
@@ -19,9 +19,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4634,
-      "first_seen": "2026-10-18T00:45:59.046181+00:00",
+      "first_seen": "2026-10-18T04:39:38.349602+00:00",
       "prices_updated": "2026-10-11T08:52:00+00:00",
-      "message_id": "1a12a299f6d15da1"
+      "message_id": "1a12a299f6d15da1",
+      "alert_date": "2026-10-11T08:52:13+00:00",
+      "alert_unix_ms": 1791708733000
     },
     {
       "id": "gflights-HON-Edinburgh-2026-02-22",
@@ -40,9 +42,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4634,
-      "first_seen": "2026-10-18T00:45:59.046181+00:00",
+      "first_seen": "2026-10-18T04:39:38.349602+00:00",
       "prices_updated": "2026-10-11T08:52:00+00:00",
-      "message_id": "1a12a299f6d15da1"
+      "message_id": "1a12a299f6d15da1",
+      "alert_date": "2026-10-11T08:52:13+00:00",
+      "alert_unix_ms": 1791708733000
     },
     {
       "id": "gflights-HON-Edinburgh-2026-02-25",
@@ -61,9 +65,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4634,
-      "first_seen": "2026-10-18T00:45:59.046181+00:00",
+      "first_seen": "2026-10-18T04:39:38.349602+00:00",
       "prices_updated": "2026-10-11T08:52:00+00:00",
-      "message_id": "1a12a299f6d15da1"
+      "message_id": "1a12a299f6d15da1",
+      "alert_date": "2026-10-11T08:52:13+00:00",
+      "alert_unix_ms": 1791708733000
     },
     {
       "id": "gflights-HON-Singapore-2026-04-15",
@@ -82,9 +88,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1985,
-      "first_seen": "2026-10-18T00:45:58.524246+00:00",
+      "first_seen": "2026-10-18T04:39:37.826908+00:00",
       "prices_updated": "2026-10-11T10:42:00+00:00",
-      "message_id": "1a12a8f0df009529"
+      "message_id": "1a12a8f0df009529",
+      "alert_date": "2026-10-11T10:43:00+00:00",
+      "alert_unix_ms": 1791715380000
     },
     {
       "id": "gflights-HON-Singapore-2026-04-08",
@@ -103,9 +111,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1985,
-      "first_seen": "2026-10-18T00:45:58.524246+00:00",
+      "first_seen": "2026-10-18T04:39:37.826908+00:00",
       "prices_updated": "2026-10-11T10:42:00+00:00",
-      "message_id": "1a12a8f0df009529"
+      "message_id": "1a12a8f0df009529",
+      "alert_date": "2026-10-11T10:43:00+00:00",
+      "alert_unix_ms": 1791715380000
     },
     {
       "id": "gflights-HON-Singapore-2026-04-22",
@@ -124,9 +134,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1985,
-      "first_seen": "2026-10-18T00:45:58.524246+00:00",
+      "first_seen": "2026-10-18T04:39:37.826908+00:00",
       "prices_updated": "2026-10-11T10:42:00+00:00",
-      "message_id": "1a12a8f0df009529"
+      "message_id": "1a12a8f0df009529",
+      "alert_date": "2026-10-11T10:43:00+00:00",
+      "alert_unix_ms": 1791715380000
     },
     {
       "id": "gflights-HON-Bangkok-2026-12-04",
@@ -145,9 +157,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1137,
-      "first_seen": "2026-10-18T00:45:58.000678+00:00",
+      "first_seen": "2026-10-18T04:39:37.304825+00:00",
       "prices_updated": "2026-10-11T12:04:00+00:00",
-      "message_id": "1a12ada41cd07934"
+      "message_id": "1a12ada41cd07934",
+      "alert_date": "2026-10-11T12:05:08+00:00",
+      "alert_unix_ms": 1791720308000
     },
     {
       "id": "gflights-HON-Bangkok-2026-12-11",
@@ -166,9 +180,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1137,
-      "first_seen": "2026-10-18T00:45:58.000678+00:00",
+      "first_seen": "2026-10-18T04:39:37.304825+00:00",
       "prices_updated": "2026-10-11T12:04:00+00:00",
-      "message_id": "1a12ada41cd07934"
+      "message_id": "1a12ada41cd07934",
+      "alert_date": "2026-10-11T12:05:08+00:00",
+      "alert_unix_ms": 1791720308000
     },
     {
       "id": "gflights-HON-Bangkok-2026-12-18",
@@ -187,9 +203,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1137,
-      "first_seen": "2026-10-18T00:45:58.000678+00:00",
+      "first_seen": "2026-10-18T04:39:37.304825+00:00",
       "prices_updated": "2026-10-11T12:04:00+00:00",
-      "message_id": "1a12ada41cd07934"
+      "message_id": "1a12ada41cd07934",
+      "alert_date": "2026-10-11T12:05:08+00:00",
+      "alert_unix_ms": 1791720308000
     },
     {
       "id": "gflights-HON-Vancouver-2026-12-24",
@@ -208,9 +226,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6428,
-      "first_seen": "2026-10-18T00:45:57.472747+00:00",
+      "first_seen": "2026-10-18T04:39:36.780417+00:00",
       "prices_updated": "2026-10-11T20:29:00+00:00",
-      "message_id": "1a12ca8180f1bfa3"
+      "message_id": "1a12ca8180f1bfa3",
+      "alert_date": "2026-10-11T20:29:35+00:00",
+      "alert_unix_ms": 1791750575000
     },
     {
       "id": "gflights-HON-Vancouver-2026-12-03",
@@ -229,9 +249,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6428,
-      "first_seen": "2026-10-18T00:45:57.472747+00:00",
+      "first_seen": "2026-10-18T04:39:36.780417+00:00",
       "prices_updated": "2026-10-11T20:29:00+00:00",
-      "message_id": "1a12ca8180f1bfa3"
+      "message_id": "1a12ca8180f1bfa3",
+      "alert_date": "2026-10-11T20:29:35+00:00",
+      "alert_unix_ms": 1791750575000
     },
     {
       "id": "gflights-HON-Vancouver-2026-12-14",
@@ -250,9 +272,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6428,
-      "first_seen": "2026-10-18T00:45:57.472747+00:00",
+      "first_seen": "2026-10-18T04:39:36.780417+00:00",
       "prices_updated": "2026-10-11T20:29:00+00:00",
-      "message_id": "1a12ca8180f1bfa3"
+      "message_id": "1a12ca8180f1bfa3",
+      "alert_date": "2026-10-11T20:29:35+00:00",
+      "alert_unix_ms": 1791750575000
     },
     {
       "id": "gflights-HON-Vancouver-2026-12-26",
@@ -271,9 +295,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6428,
-      "first_seen": "2026-10-18T00:45:57.472747+00:00",
+      "first_seen": "2026-10-18T04:39:36.780417+00:00",
       "prices_updated": "2026-10-11T20:29:00+00:00",
-      "message_id": "1a12ca8180f1bfa3"
+      "message_id": "1a12ca8180f1bfa3",
+      "alert_date": "2026-10-11T20:29:35+00:00",
+      "alert_unix_ms": 1791750575000
     },
     {
       "id": "gflights-HON-Rome-2026-12-07",
@@ -292,9 +318,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 3608,
-      "first_seen": "2026-10-18T00:45:57.034792+00:00",
+      "first_seen": "2026-10-18T04:39:36.254783+00:00",
       "prices_updated": "2026-10-13T01:31:00+00:00",
-      "message_id": "1a132e2d82e9e996"
+      "message_id": "1a132e2d82e9e996",
+      "alert_date": "2026-10-13T01:31:29+00:00",
+      "alert_unix_ms": 1791855089000
     },
     {
       "id": "gflights-HON-Rome-2026-12-24",
@@ -313,9 +341,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 3608,
-      "first_seen": "2026-10-18T00:45:57.034792+00:00",
+      "first_seen": "2026-10-18T04:39:36.254783+00:00",
       "prices_updated": "2026-10-13T01:31:00+00:00",
-      "message_id": "1a132e2d82e9e996"
+      "message_id": "1a132e2d82e9e996",
+      "alert_date": "2026-10-13T01:31:29+00:00",
+      "alert_unix_ms": 1791855089000
     },
     {
       "id": "gflights-HON-Rome-2026-12-21",
@@ -334,9 +364,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 3608,
-      "first_seen": "2026-10-18T00:45:57.034792+00:00",
+      "first_seen": "2026-10-18T04:39:36.254783+00:00",
       "prices_updated": "2026-10-13T01:31:00+00:00",
-      "message_id": "1a132e2d82e9e996"
+      "message_id": "1a132e2d82e9e996",
+      "alert_date": "2026-10-13T01:31:29+00:00",
+      "alert_unix_ms": 1791855089000
     },
     {
       "id": "gflights-HON-Tokyo-2026-11-07",
@@ -355,9 +387,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1975,
-      "first_seen": "2026-10-18T00:45:56.533585+00:00",
+      "first_seen": "2026-10-18T04:39:35.771561+00:00",
       "prices_updated": "2026-10-13T01:36:00+00:00",
-      "message_id": "1a132e7e0790c3c1"
+      "message_id": "1a132e7e0790c3c1",
+      "alert_date": "2026-10-13T01:36:59+00:00",
+      "alert_unix_ms": 1791855419000
     },
     {
       "id": "gflights-HON-Tokyo-2026-11-15",
@@ -376,9 +410,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1975,
-      "first_seen": "2026-10-18T00:45:56.533585+00:00",
+      "first_seen": "2026-10-18T04:39:35.771561+00:00",
       "prices_updated": "2026-10-13T01:36:00+00:00",
-      "message_id": "1a132e7e0790c3c1"
+      "message_id": "1a132e7e0790c3c1",
+      "alert_date": "2026-10-13T01:36:59+00:00",
+      "alert_unix_ms": 1791855419000
     },
     {
       "id": "gflights-HON-Tokyo-2026-11-28",
@@ -397,9 +433,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1975,
-      "first_seen": "2026-10-18T00:45:56.533585+00:00",
+      "first_seen": "2026-10-18T04:39:35.771561+00:00",
       "prices_updated": "2026-10-13T01:36:00+00:00",
-      "message_id": "1a132e7e0790c3c1"
+      "message_id": "1a132e7e0790c3c1",
+      "alert_date": "2026-10-13T01:36:59+00:00",
+      "alert_unix_ms": 1791855419000
     },
     {
       "id": "gflights-HON-Amsterdam-2026-04-25",
@@ -418,9 +456,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5924,
-      "first_seen": "2026-10-18T00:45:56.099131+00:00",
+      "first_seen": "2026-10-18T04:39:35.345241+00:00",
       "prices_updated": "2026-10-13T17:33:00+00:00",
-      "message_id": "1a1365390f0940d8"
+      "message_id": "1a1365390f0940d8",
+      "alert_date": "2026-10-13T17:33:28+00:00",
+      "alert_unix_ms": 1791912808000
     },
     {
       "id": "gflights-HON-Amsterdam-2026-04-04",
@@ -439,9 +479,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5924,
-      "first_seen": "2026-10-18T00:45:56.099131+00:00",
+      "first_seen": "2026-10-18T04:39:35.345241+00:00",
       "prices_updated": "2026-10-13T17:33:00+00:00",
-      "message_id": "1a1365390f0940d8"
+      "message_id": "1a1365390f0940d8",
+      "alert_date": "2026-10-13T17:33:28+00:00",
+      "alert_unix_ms": 1791912808000
     },
     {
       "id": "gflights-HON-Amsterdam-2026-04-18",
@@ -460,9 +502,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5924,
-      "first_seen": "2026-10-18T00:45:56.099131+00:00",
+      "first_seen": "2026-10-18T04:39:35.345241+00:00",
       "prices_updated": "2026-10-13T17:33:00+00:00",
-      "message_id": "1a1365390f0940d8"
+      "message_id": "1a1365390f0940d8",
+      "alert_date": "2026-10-13T17:33:28+00:00",
+      "alert_unix_ms": 1791912808000
     },
     {
       "id": "gflights-HON-LosAngeles-2026-11-02",
@@ -481,9 +525,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5604,
-      "first_seen": "2026-10-18T00:45:55.484615+00:00",
+      "first_seen": "2026-10-18T04:39:34.899722+00:00",
       "prices_updated": "2026-10-13T19:52:00+00:00",
-      "message_id": "1a136d35d6834ceb"
+      "message_id": "1a136d35d6834ceb",
+      "alert_date": "2026-10-13T19:53:03+00:00",
+      "alert_unix_ms": 1791921183000
     },
     {
       "id": "gflights-HON-LosAngeles-2026-11-05",
@@ -502,9 +548,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5604,
-      "first_seen": "2026-10-18T00:45:55.484615+00:00",
+      "first_seen": "2026-10-18T04:39:34.899722+00:00",
       "prices_updated": "2026-10-13T19:52:00+00:00",
-      "message_id": "1a136d35d6834ceb"
+      "message_id": "1a136d35d6834ceb",
+      "alert_date": "2026-10-13T19:53:03+00:00",
+      "alert_unix_ms": 1791921183000
     },
     {
       "id": "gflights-HON-LosAngeles-2026-11-12",
@@ -523,9 +571,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5604,
-      "first_seen": "2026-10-18T00:45:55.484615+00:00",
+      "first_seen": "2026-10-18T04:39:34.899722+00:00",
       "prices_updated": "2026-10-13T19:52:00+00:00",
-      "message_id": "1a136d35d6834ceb"
+      "message_id": "1a136d35d6834ceb",
+      "alert_date": "2026-10-13T19:53:03+00:00",
+      "alert_unix_ms": 1791921183000
     },
     {
       "id": "gflights-HON-SanDiego-2026-11-05",
@@ -544,9 +594,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6588,
-      "first_seen": "2026-10-18T00:45:55.050450+00:00",
+      "first_seen": "2026-10-18T04:39:34.484785+00:00",
       "prices_updated": "2026-10-13T21:37:00+00:00",
-      "message_id": "1a1373324816ad71"
+      "message_id": "1a1373324816ad71",
+      "alert_date": "2026-10-13T21:37:40+00:00",
+      "alert_unix_ms": 1791927460000
     },
     {
       "id": "gflights-HON-SanDiego-2026-11-12",
@@ -565,9 +617,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6588,
-      "first_seen": "2026-10-18T00:45:55.050450+00:00",
+      "first_seen": "2026-10-18T04:39:34.484785+00:00",
       "prices_updated": "2026-10-13T21:37:00+00:00",
-      "message_id": "1a1373324816ad71"
+      "message_id": "1a1373324816ad71",
+      "alert_date": "2026-10-13T21:37:40+00:00",
+      "alert_unix_ms": 1791927460000
     },
     {
       "id": "gflights-HON-SanDiego-2026-11-19",
@@ -586,9 +640,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6588,
-      "first_seen": "2026-10-18T00:45:55.050450+00:00",
+      "first_seen": "2026-10-18T04:39:34.484785+00:00",
       "prices_updated": "2026-10-13T21:37:00+00:00",
-      "message_id": "1a1373324816ad71"
+      "message_id": "1a1373324816ad71",
+      "alert_date": "2026-10-13T21:37:40+00:00",
+      "alert_unix_ms": 1791927460000
     },
     {
       "id": "gflights-HON-CapeTown-2026-01-17",
@@ -607,9 +663,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6434,
-      "first_seen": "2026-10-18T00:45:54.525065+00:00",
+      "first_seen": "2026-10-18T04:39:33.960176+00:00",
       "prices_updated": "2026-10-13T21:41:00+00:00",
-      "message_id": "1a13736f0a8f8f17"
+      "message_id": "1a13736f0a8f8f17",
+      "alert_date": "2026-10-13T21:41:49+00:00",
+      "alert_unix_ms": 1791927709000
     },
     {
       "id": "gflights-HON-CapeTown-2026-01-24",
@@ -628,9 +686,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6434,
-      "first_seen": "2026-10-18T00:45:54.525065+00:00",
+      "first_seen": "2026-10-18T04:39:33.960176+00:00",
       "prices_updated": "2026-10-13T21:41:00+00:00",
-      "message_id": "1a13736f0a8f8f17"
+      "message_id": "1a13736f0a8f8f17",
+      "alert_date": "2026-10-13T21:41:49+00:00",
+      "alert_unix_ms": 1791927709000
     },
     {
       "id": "gflights-HON-CapeTown-2026-01-11",
@@ -649,9 +709,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6434,
-      "first_seen": "2026-10-18T00:45:54.525065+00:00",
+      "first_seen": "2026-10-18T04:39:33.960176+00:00",
       "prices_updated": "2026-10-13T21:41:00+00:00",
-      "message_id": "1a13736f0a8f8f17"
+      "message_id": "1a13736f0a8f8f17",
+      "alert_date": "2026-10-13T21:41:49+00:00",
+      "alert_unix_ms": 1791927709000
     },
     {
       "id": "gflights-HON-Boston-2026-02-01",
@@ -670,9 +732,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6607,
-      "first_seen": "2026-10-18T00:45:54.001909+00:00",
+      "first_seen": "2026-10-18T04:39:33.445133+00:00",
       "prices_updated": "2026-10-13T21:59:00+00:00",
-      "message_id": "1a13747123aaee35"
+      "message_id": "1a13747123aaee35",
+      "alert_date": "2026-10-13T21:59:26+00:00",
+      "alert_unix_ms": 1791928766000
     },
     {
       "id": "gflights-HON-Boston-2026-02-15",
@@ -691,9 +755,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6607,
-      "first_seen": "2026-10-18T00:45:54.001909+00:00",
+      "first_seen": "2026-10-18T04:39:33.445133+00:00",
       "prices_updated": "2026-10-13T21:59:00+00:00",
-      "message_id": "1a13747123aaee35"
+      "message_id": "1a13747123aaee35",
+      "alert_date": "2026-10-13T21:59:26+00:00",
+      "alert_unix_ms": 1791928766000
     },
     {
       "id": "gflights-HON-Boston-2026-02-08",
@@ -712,9 +778,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6607,
-      "first_seen": "2026-10-18T00:45:54.001909+00:00",
+      "first_seen": "2026-10-18T04:39:33.445133+00:00",
       "prices_updated": "2026-10-13T21:59:00+00:00",
-      "message_id": "1a13747123aaee35"
+      "message_id": "1a13747123aaee35",
+      "alert_date": "2026-10-13T21:59:26+00:00",
+      "alert_unix_ms": 1791928766000
     },
     {
       "id": "gflights-HON-Fukuoka-2026-02-12",
@@ -733,9 +801,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 2337,
-      "first_seen": "2026-10-18T00:45:53.384214+00:00",
+      "first_seen": "2026-10-18T04:39:32.993493+00:00",
       "prices_updated": "2026-10-14T03:26:00+00:00",
-      "message_id": "1a138732940ea4aa"
+      "message_id": "1a138732940ea4aa",
+      "alert_date": "2026-10-14T03:27:13+00:00",
+      "alert_unix_ms": 1791948433000
     },
     {
       "id": "gflights-HON-Fukuoka-2026-02-18",
@@ -754,9 +824,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 2337,
-      "first_seen": "2026-10-18T00:45:53.384214+00:00",
+      "first_seen": "2026-10-18T04:39:32.993493+00:00",
       "prices_updated": "2026-10-14T03:26:00+00:00",
-      "message_id": "1a138732940ea4aa"
+      "message_id": "1a138732940ea4aa",
+      "alert_date": "2026-10-14T03:27:13+00:00",
+      "alert_unix_ms": 1791948433000
     },
     {
       "id": "gflights-HON-Fukuoka-2026-02-25",
@@ -775,9 +847,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 2337,
-      "first_seen": "2026-10-18T00:45:53.384214+00:00",
+      "first_seen": "2026-10-18T04:39:32.993493+00:00",
       "prices_updated": "2026-10-14T03:26:00+00:00",
-      "message_id": "1a138732940ea4aa"
+      "message_id": "1a138732940ea4aa",
+      "alert_date": "2026-10-14T03:27:13+00:00",
+      "alert_unix_ms": 1791948433000
     },
     {
       "id": "gflights-HON-Newark,NewYork-2026-02-01",
@@ -796,9 +870,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6488,
-      "first_seen": "2026-10-18T00:45:52.955386+00:00",
+      "first_seen": "2026-10-18T04:39:32.486711+00:00",
       "prices_updated": "2026-10-14T07:45:00+00:00",
-      "message_id": "1a13960436527abc"
+      "message_id": "1a13960436527abc",
+      "alert_date": "2026-10-14T07:46:11+00:00",
+      "alert_unix_ms": 1791963971000
     },
     {
       "id": "gflights-HON-Newark,NewYork-2026-02-18",
@@ -817,9 +893,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6488,
-      "first_seen": "2026-10-18T00:45:52.955386+00:00",
+      "first_seen": "2026-10-18T04:39:32.486711+00:00",
       "prices_updated": "2026-10-14T07:45:00+00:00",
-      "message_id": "1a13960436527abc"
+      "message_id": "1a13960436527abc",
+      "alert_date": "2026-10-14T07:46:11+00:00",
+      "alert_unix_ms": 1791963971000
     },
     {
       "id": "gflights-HON-Newark,NewYork-2026-02-11",
@@ -838,9 +916,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6488,
-      "first_seen": "2026-10-18T00:45:52.955386+00:00",
+      "first_seen": "2026-10-18T04:39:32.486711+00:00",
       "prices_updated": "2026-10-14T07:45:00+00:00",
-      "message_id": "1a13960436527abc"
+      "message_id": "1a13960436527abc",
+      "alert_date": "2026-10-14T07:46:11+00:00",
+      "alert_unix_ms": 1791963971000
     },
     {
       "id": "gflights-HON-Newark,NewYork-2026-02-26",
@@ -859,9 +939,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6488,
-      "first_seen": "2026-10-18T00:45:52.955386+00:00",
+      "first_seen": "2026-10-18T04:39:32.486711+00:00",
       "prices_updated": "2026-10-14T07:45:00+00:00",
-      "message_id": "1a13960436527abc"
+      "message_id": "1a13960436527abc",
+      "alert_date": "2026-10-14T07:46:11+00:00",
+      "alert_unix_ms": 1791963971000
     },
     {
       "id": "gflights-HON-Chicago-2026-12-24",
@@ -880,9 +962,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5408,
-      "first_seen": "2026-10-18T00:45:52.427462+00:00",
+      "first_seen": "2026-10-18T04:39:32.059872+00:00",
       "prices_updated": "2026-10-14T08:08:00+00:00",
-      "message_id": "1a139753e1f8258b"
+      "message_id": "1a139753e1f8258b",
+      "alert_date": "2026-10-14T08:09:07+00:00",
+      "alert_unix_ms": 1791965347000
     },
     {
       "id": "gflights-HON-Chicago-2026-12-03",
@@ -901,9 +985,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5408,
-      "first_seen": "2026-10-18T00:45:52.427462+00:00",
+      "first_seen": "2026-10-18T04:39:32.059872+00:00",
       "prices_updated": "2026-10-14T08:08:00+00:00",
-      "message_id": "1a139753e1f8258b"
+      "message_id": "1a139753e1f8258b",
+      "alert_date": "2026-10-14T08:09:07+00:00",
+      "alert_unix_ms": 1791965347000
     },
     {
       "id": "gflights-HON-Chicago-2026-12-25",
@@ -922,9 +1008,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5408,
-      "first_seen": "2026-10-18T00:45:52.427462+00:00",
+      "first_seen": "2026-10-18T04:39:32.059872+00:00",
       "prices_updated": "2026-10-14T08:08:00+00:00",
-      "message_id": "1a139753e1f8258b"
+      "message_id": "1a139753e1f8258b",
+      "alert_date": "2026-10-14T08:09:07+00:00",
+      "alert_unix_ms": 1791965347000
     },
     {
       "id": "gflights-HON-Chicago-2026-12-21",
@@ -943,9 +1031,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5408,
-      "first_seen": "2026-10-18T00:45:52.427462+00:00",
+      "first_seen": "2026-10-18T04:39:32.059872+00:00",
       "prices_updated": "2026-10-14T08:08:00+00:00",
-      "message_id": "1a139753e1f8258b"
+      "message_id": "1a139753e1f8258b",
+      "alert_date": "2026-10-14T08:09:07+00:00",
+      "alert_unix_ms": 1791965347000
     },
     {
       "id": "gflights-HON-Barcelona-2026-12-03",
@@ -964,9 +1054,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4160,
-      "first_seen": "2026-10-18T00:45:51.906130+00:00",
+      "first_seen": "2026-10-18T04:39:31.536846+00:00",
       "prices_updated": "2026-10-14T08:56:00+00:00",
-      "message_id": "1a139a0efc1eea7d"
+      "message_id": "1a139a0efc1eea7d",
+      "alert_date": "2026-10-14T08:56:50+00:00",
+      "alert_unix_ms": 1791968210000
     },
     {
       "id": "gflights-HON-Barcelona-2026-12-24",
@@ -985,9 +1077,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4160,
-      "first_seen": "2026-10-18T00:45:51.906130+00:00",
+      "first_seen": "2026-10-18T04:39:31.536846+00:00",
       "prices_updated": "2026-10-14T08:56:00+00:00",
-      "message_id": "1a139a0efc1eea7d"
+      "message_id": "1a139a0efc1eea7d",
+      "alert_date": "2026-10-14T08:56:50+00:00",
+      "alert_unix_ms": 1791968210000
     },
     {
       "id": "gflights-HON-Barcelona-2026-12-10",
@@ -1006,9 +1100,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4160,
-      "first_seen": "2026-10-18T00:45:51.906130+00:00",
+      "first_seen": "2026-10-18T04:39:31.536846+00:00",
       "prices_updated": "2026-10-14T08:56:00+00:00",
-      "message_id": "1a139a0efc1eea7d"
+      "message_id": "1a139a0efc1eea7d",
+      "alert_date": "2026-10-14T08:56:50+00:00",
+      "alert_unix_ms": 1791968210000
     },
     {
       "id": "gflights-HON-Madrid-2026-12-03",
@@ -1027,9 +1123,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4159,
-      "first_seen": "2026-10-18T00:45:51.382348+00:00",
+      "first_seen": "2026-10-18T04:39:31.011779+00:00",
       "prices_updated": "2026-10-14T10:14:00+00:00",
-      "message_id": "1a139e8b702907a1"
+      "message_id": "1a139e8b702907a1",
+      "alert_date": "2026-10-14T10:15:13+00:00",
+      "alert_unix_ms": 1791972913000
     },
     {
       "id": "gflights-HON-Madrid-2026-12-24",
@@ -1048,9 +1146,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4159,
-      "first_seen": "2026-10-18T00:45:51.382348+00:00",
+      "first_seen": "2026-10-18T04:39:31.011779+00:00",
       "prices_updated": "2026-10-14T10:14:00+00:00",
-      "message_id": "1a139e8b702907a1"
+      "message_id": "1a139e8b702907a1",
+      "alert_date": "2026-10-14T10:15:13+00:00",
+      "alert_unix_ms": 1791972913000
     },
     {
       "id": "gflights-HON-Madrid-2026-12-10",
@@ -1069,9 +1169,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4159,
-      "first_seen": "2026-10-18T00:45:51.382348+00:00",
+      "first_seen": "2026-10-18T04:39:31.011779+00:00",
       "prices_updated": "2026-10-14T10:14:00+00:00",
-      "message_id": "1a139e8b702907a1"
+      "message_id": "1a139e8b702907a1",
+      "alert_date": "2026-10-14T10:15:13+00:00",
+      "alert_unix_ms": 1791972913000
     },
     {
       "id": "gflights-HON-Zürich-2026-12-04",
@@ -1090,9 +1192,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4751,
-      "first_seen": "2026-10-18T00:45:50.855041+00:00",
+      "first_seen": "2026-10-18T04:39:30.523574+00:00",
       "prices_updated": "2026-10-14T22:00:00+00:00",
-      "message_id": "1a13c6ec7d174d6b"
+      "message_id": "1a13c6ec7d174d6b",
+      "alert_date": "2026-10-14T22:00:55+00:00",
+      "alert_unix_ms": 1792015255000
     },
     {
       "id": "gflights-HON-Zürich-2026-12-03",
@@ -1111,9 +1215,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4751,
-      "first_seen": "2026-10-18T00:45:50.855041+00:00",
+      "first_seen": "2026-10-18T04:39:30.523574+00:00",
       "prices_updated": "2026-10-14T22:00:00+00:00",
-      "message_id": "1a13c6ec7d174d6b"
+      "message_id": "1a13c6ec7d174d6b",
+      "alert_date": "2026-10-14T22:00:55+00:00",
+      "alert_unix_ms": 1792015255000
     },
     {
       "id": "gflights-HON-Zürich-2026-12-28",
@@ -1132,9 +1238,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4751,
-      "first_seen": "2026-10-18T00:45:50.855041+00:00",
+      "first_seen": "2026-10-18T04:39:30.523574+00:00",
       "prices_updated": "2026-10-14T22:00:00+00:00",
-      "message_id": "1a13c6ec7d174d6b"
+      "message_id": "1a13c6ec7d174d6b",
+      "alert_date": "2026-10-14T22:00:55+00:00",
+      "alert_unix_ms": 1792015255000
     },
     {
       "id": "gflights-HON-Zürich-2026-12-31",
@@ -1153,9 +1261,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4751,
-      "first_seen": "2026-10-18T00:45:50.855041+00:00",
+      "first_seen": "2026-10-18T04:39:30.523574+00:00",
       "prices_updated": "2026-10-14T22:00:00+00:00",
-      "message_id": "1a13c6ec7d174d6b"
+      "message_id": "1a13c6ec7d174d6b",
+      "alert_date": "2026-10-14T22:00:55+00:00",
+      "alert_unix_ms": 1792015255000
     },
     {
       "id": "gflights-HON-Dubai-2026-12-03",
@@ -1174,9 +1284,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4608,
-      "first_seen": "2026-10-18T00:45:50.397457+00:00",
+      "first_seen": "2026-10-18T04:39:30.053483+00:00",
       "prices_updated": "2026-10-15T01:40:00+00:00",
-      "message_id": "1a13d381357d55d6"
+      "message_id": "1a13d381357d55d6",
+      "alert_date": "2026-10-15T01:40:47+00:00",
+      "alert_unix_ms": 1792028447000
     },
     {
       "id": "gflights-HON-Dubai-2026-12-07",
@@ -1195,9 +1307,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4608,
-      "first_seen": "2026-10-18T00:45:50.397457+00:00",
+      "first_seen": "2026-10-18T04:39:30.053483+00:00",
       "prices_updated": "2026-10-15T01:40:00+00:00",
-      "message_id": "1a13d381357d55d6"
+      "message_id": "1a13d381357d55d6",
+      "alert_date": "2026-10-15T01:40:47+00:00",
+      "alert_unix_ms": 1792028447000
     },
     {
       "id": "gflights-HON-Dubai-2026-12-17",
@@ -1216,9 +1330,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4608,
-      "first_seen": "2026-10-18T00:45:50.397457+00:00",
+      "first_seen": "2026-10-18T04:39:30.053483+00:00",
       "prices_updated": "2026-10-15T01:40:00+00:00",
-      "message_id": "1a13d381357d55d6"
+      "message_id": "1a13d381357d55d6",
+      "alert_date": "2026-10-15T01:40:47+00:00",
+      "alert_unix_ms": 1792028447000
     },
     {
       "id": "gflights-HON-Dubai-2026-12-10",
@@ -1237,9 +1353,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4608,
-      "first_seen": "2026-10-18T00:45:50.397457+00:00",
+      "first_seen": "2026-10-18T04:39:30.053483+00:00",
       "prices_updated": "2026-10-15T01:40:00+00:00",
-      "message_id": "1a13d381357d55d6"
+      "message_id": "1a13d381357d55d6",
+      "alert_date": "2026-10-15T01:40:47+00:00",
+      "alert_unix_ms": 1792028447000
     },
     {
       "id": "gflights-HON-Lisbon-2026-11-26",
@@ -1258,9 +1376,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4317,
-      "first_seen": "2026-10-18T00:45:49.936708+00:00",
+      "first_seen": "2026-10-18T04:39:29.658636+00:00",
       "prices_updated": "2026-10-15T05:57:00+00:00",
-      "message_id": "1a13e234b1dcc224"
+      "message_id": "1a13e234b1dcc224",
+      "alert_date": "2026-10-15T05:57:42+00:00",
+      "alert_unix_ms": 1792043862000
     },
     {
       "id": "gflights-HON-Lisbon-2026-11-05",
@@ -1279,9 +1399,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4317,
-      "first_seen": "2026-10-18T00:45:49.936708+00:00",
+      "first_seen": "2026-10-18T04:39:29.658636+00:00",
       "prices_updated": "2026-10-15T05:57:00+00:00",
-      "message_id": "1a13e234b1dcc224"
+      "message_id": "1a13e234b1dcc224",
+      "alert_date": "2026-10-15T05:57:42+00:00",
+      "alert_unix_ms": 1792043862000
     },
     {
       "id": "gflights-HON-Lisbon-2026-11-16",
@@ -1300,9 +1422,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4317,
-      "first_seen": "2026-10-18T00:45:49.936708+00:00",
+      "first_seen": "2026-10-18T04:39:29.658636+00:00",
       "prices_updated": "2026-10-15T05:57:00+00:00",
-      "message_id": "1a13e234b1dcc224"
+      "message_id": "1a13e234b1dcc224",
+      "alert_date": "2026-10-15T05:57:42+00:00",
+      "alert_unix_ms": 1792043862000
     },
     {
       "id": "gflights-HON-Fukuoka-2026-02-22",
@@ -1321,9 +1445,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1817,
-      "first_seen": "2026-10-18T00:45:49.482021+00:00",
+      "first_seen": "2026-10-18T04:39:29.242551+00:00",
       "prices_updated": "2026-10-15T12:20:00+00:00",
-      "message_id": "1a13f81e1299c534"
+      "message_id": "1a13f81e1299c534",
+      "alert_date": "2026-10-15T12:20:37+00:00",
+      "alert_unix_ms": 1792066837000
     },
     {
       "id": "gflights-HON-Fukuoka-2026-02-26",
@@ -1342,9 +1468,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1817,
-      "first_seen": "2026-10-18T00:45:49.482021+00:00",
+      "first_seen": "2026-10-18T04:39:29.242551+00:00",
       "prices_updated": "2026-10-15T12:20:00+00:00",
-      "message_id": "1a13f81e1299c534"
+      "message_id": "1a13f81e1299c534",
+      "alert_date": "2026-10-15T12:20:37+00:00",
+      "alert_unix_ms": 1792066837000
     },
     {
       "id": "gflights-HON-Fukuoka-2026-02-13",
@@ -1363,9 +1491,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1817,
-      "first_seen": "2026-10-18T00:45:49.482021+00:00",
+      "first_seen": "2026-10-18T04:39:29.242551+00:00",
       "prices_updated": "2026-10-15T12:20:00+00:00",
-      "message_id": "1a13f81e1299c534"
+      "message_id": "1a13f81e1299c534",
+      "alert_date": "2026-10-15T12:20:37+00:00",
+      "alert_unix_ms": 1792066837000
     },
     {
       "id": "gflights-HON-Dublin-2026-02-14",
@@ -1384,9 +1514,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4082,
-      "first_seen": "2026-10-18T00:45:48.991814+00:00",
+      "first_seen": "2026-10-18T04:39:28.626285+00:00",
       "prices_updated": "2026-10-15T22:21:00+00:00",
-      "message_id": "1a141a7e3b51d938"
+      "message_id": "1a141a7e3b51d938",
+      "alert_date": "2026-10-15T22:21:23+00:00",
+      "alert_unix_ms": 1792102883000
     },
     {
       "id": "gflights-HON-Dublin-2026-02-18",
@@ -1405,9 +1537,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4082,
-      "first_seen": "2026-10-18T00:45:48.991814+00:00",
+      "first_seen": "2026-10-18T04:39:28.626285+00:00",
       "prices_updated": "2026-10-15T22:21:00+00:00",
-      "message_id": "1a141a7e3b51d938"
+      "message_id": "1a141a7e3b51d938",
+      "alert_date": "2026-10-15T22:21:23+00:00",
+      "alert_unix_ms": 1792102883000
     },
     {
       "id": "gflights-HON-Dublin-2026-02-25",
@@ -1426,9 +1560,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4082,
-      "first_seen": "2026-10-18T00:45:48.991814+00:00",
+      "first_seen": "2026-10-18T04:39:28.626285+00:00",
       "prices_updated": "2026-10-15T22:21:00+00:00",
-      "message_id": "1a141a7e3b51d938"
+      "message_id": "1a141a7e3b51d938",
+      "alert_date": "2026-10-15T22:21:23+00:00",
+      "alert_unix_ms": 1792102883000
     },
     {
       "id": "gflights-HON-Melbourne-2026-02-15",
@@ -1447,9 +1583,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4185,
-      "first_seen": "2026-10-18T00:45:48.572766+00:00",
+      "first_seen": "2026-10-18T04:39:28.192348+00:00",
       "prices_updated": "2026-10-15T23:36:00+00:00",
-      "message_id": "1a141ed11596c682"
+      "message_id": "1a141ed11596c682",
+      "alert_date": "2026-10-15T23:36:57+00:00",
+      "alert_unix_ms": 1792107417000
     },
     {
       "id": "gflights-HON-Melbourne-2026-02-28",
@@ -1468,9 +1606,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4185,
-      "first_seen": "2026-10-18T00:45:48.572766+00:00",
+      "first_seen": "2026-10-18T04:39:28.192348+00:00",
       "prices_updated": "2026-10-15T23:36:00+00:00",
-      "message_id": "1a141ed11596c682"
+      "message_id": "1a141ed11596c682",
+      "alert_date": "2026-10-15T23:36:57+00:00",
+      "alert_unix_ms": 1792107417000
     },
     {
       "id": "gflights-HON-Melbourne-2026-02-21",
@@ -1489,9 +1629,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4185,
-      "first_seen": "2026-10-18T00:45:48.572766+00:00",
+      "first_seen": "2026-10-18T04:39:28.192348+00:00",
       "prices_updated": "2026-10-15T23:36:00+00:00",
-      "message_id": "1a141ed11596c682"
+      "message_id": "1a141ed11596c682",
+      "alert_date": "2026-10-15T23:36:57+00:00",
+      "alert_unix_ms": 1792107417000
     },
     {
       "id": "gflights-HON-Melbourne-2026-02-14",
@@ -1510,9 +1652,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4185,
-      "first_seen": "2026-10-18T00:45:48.572766+00:00",
+      "first_seen": "2026-10-18T04:39:28.192348+00:00",
       "prices_updated": "2026-10-15T23:36:00+00:00",
-      "message_id": "1a141ed11596c682"
+      "message_id": "1a141ed11596c682",
+      "alert_date": "2026-10-15T23:36:57+00:00",
+      "alert_unix_ms": 1792107417000
     },
     {
       "id": "gflights-HON-TaipeiCity-2026-02-27",
@@ -1531,9 +1675,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1084,
-      "first_seen": "2026-10-18T00:45:48.111793+00:00",
+      "first_seen": "2026-10-18T04:39:27.668700+00:00",
       "prices_updated": "2026-10-16T05:17:00+00:00",
-      "message_id": "1a1432573342ce7e"
+      "message_id": "1a1432573342ce7e",
+      "alert_date": "2026-10-16T05:18:09+00:00",
+      "alert_unix_ms": 1792127889000
     },
     {
       "id": "gflights-HON-TaipeiCity-2026-02-15",
@@ -1552,9 +1698,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1084,
-      "first_seen": "2026-10-18T00:45:48.111793+00:00",
+      "first_seen": "2026-10-18T04:39:27.668700+00:00",
       "prices_updated": "2026-10-16T05:17:00+00:00",
-      "message_id": "1a1432573342ce7e"
+      "message_id": "1a1432573342ce7e",
+      "alert_date": "2026-10-16T05:18:09+00:00",
+      "alert_unix_ms": 1792127889000
     },
     {
       "id": "gflights-HON-TaipeiCity-2026-02-18",
@@ -1573,9 +1721,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1084,
-      "first_seen": "2026-10-18T00:45:48.111793+00:00",
+      "first_seen": "2026-10-18T04:39:27.668700+00:00",
       "prices_updated": "2026-10-16T05:17:00+00:00",
-      "message_id": "1a1432573342ce7e"
+      "message_id": "1a1432573342ce7e",
+      "alert_date": "2026-10-16T05:18:09+00:00",
+      "alert_unix_ms": 1792127889000
     },
     {
       "id": "gflights-HON-CapeTown-2026-11-01",
@@ -1594,9 +1744,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5403,
-      "first_seen": "2026-10-18T00:45:47.185894+00:00",
+      "first_seen": "2026-10-18T04:39:26.295904+00:00",
       "prices_updated": "2026-10-16T08:42:00+00:00",
-      "message_id": "1a143e1111de2a05"
+      "message_id": "1a143e1111de2a05",
+      "alert_date": "2026-10-16T08:43:05+00:00",
+      "alert_unix_ms": 1792140185000
     },
     {
       "id": "gflights-HON-CapeTown-2026-11-12",
@@ -1615,9 +1767,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5403,
-      "first_seen": "2026-10-18T00:45:47.185894+00:00",
+      "first_seen": "2026-10-18T04:39:26.295904+00:00",
       "prices_updated": "2026-10-16T08:42:00+00:00",
-      "message_id": "1a143e1111de2a05"
+      "message_id": "1a143e1111de2a05",
+      "alert_date": "2026-10-16T08:43:05+00:00",
+      "alert_unix_ms": 1792140185000
     },
     {
       "id": "gflights-HON-CapeTown-2026-11-19",
@@ -1636,9 +1790,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5403,
-      "first_seen": "2026-10-18T00:45:47.185894+00:00",
+      "first_seen": "2026-10-18T04:39:26.295904+00:00",
       "prices_updated": "2026-10-16T08:42:00+00:00",
-      "message_id": "1a143e1111de2a05"
+      "message_id": "1a143e1111de2a05",
+      "alert_date": "2026-10-16T08:43:05+00:00",
+      "alert_unix_ms": 1792140185000
     },
     {
       "id": "gflights-HON-SanFrancisco-2026-01-14",
@@ -1657,9 +1813,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5908,
-      "first_seen": "2026-10-18T00:45:46.663407+00:00",
+      "first_seen": "2026-10-18T04:39:25.786231+00:00",
       "prices_updated": "2026-10-16T09:50:00+00:00",
-      "message_id": "1a1441f86240629b"
+      "message_id": "1a1441f86240629b",
+      "alert_date": "2026-10-16T09:51:18+00:00",
+      "alert_unix_ms": 1792144278000
     },
     {
       "id": "gflights-HON-SanFrancisco-2026-01-21",
@@ -1678,9 +1836,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5908,
-      "first_seen": "2026-10-18T00:45:46.663407+00:00",
+      "first_seen": "2026-10-18T04:39:25.786231+00:00",
       "prices_updated": "2026-10-16T09:50:00+00:00",
-      "message_id": "1a1441f86240629b"
+      "message_id": "1a1441f86240629b",
+      "alert_date": "2026-10-16T09:51:18+00:00",
+      "alert_unix_ms": 1792144278000
     },
     {
       "id": "gflights-HON-SanFrancisco-2026-01-28",
@@ -1699,9 +1859,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5908,
-      "first_seen": "2026-10-18T00:45:46.663407+00:00",
+      "first_seen": "2026-10-18T04:39:25.786231+00:00",
       "prices_updated": "2026-10-16T09:50:00+00:00",
-      "message_id": "1a1441f86240629b"
+      "message_id": "1a1441f86240629b",
+      "alert_date": "2026-10-16T09:51:18+00:00",
+      "alert_unix_ms": 1792144278000
     },
     {
       "id": "gflights-HON-SanFrancisco-2026-01-18",
@@ -1720,9 +1882,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 5908,
-      "first_seen": "2026-10-18T00:45:46.663407+00:00",
+      "first_seen": "2026-10-18T04:39:25.786231+00:00",
       "prices_updated": "2026-10-16T09:50:00+00:00",
-      "message_id": "1a1441f86240629b"
+      "message_id": "1a1441f86240629b",
+      "alert_date": "2026-10-16T09:51:18+00:00",
+      "alert_unix_ms": 1792144278000
     },
     {
       "id": "gflights-HON-Athens-2026-11-09",
@@ -1741,9 +1905,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4891,
-      "first_seen": "2026-10-18T00:45:46.137633+00:00",
+      "first_seen": "2026-10-18T04:39:24.787426+00:00",
       "prices_updated": "2026-10-16T09:51:00+00:00",
-      "message_id": "1a1441fa975fe10a"
+      "message_id": "1a1441fa975fe10a",
+      "alert_date": "2026-10-16T09:51:27+00:00",
+      "alert_unix_ms": 1792144287000
     },
     {
       "id": "gflights-HON-Athens-2026-11-26",
@@ -1762,9 +1928,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4891,
-      "first_seen": "2026-10-18T00:45:46.137633+00:00",
+      "first_seen": "2026-10-18T04:39:24.787426+00:00",
       "prices_updated": "2026-10-16T09:51:00+00:00",
-      "message_id": "1a1441fa975fe10a"
+      "message_id": "1a1441fa975fe10a",
+      "alert_date": "2026-10-16T09:51:27+00:00",
+      "alert_unix_ms": 1792144287000
     },
     {
       "id": "gflights-HON-Athens-2026-11-12",
@@ -1783,9 +1951,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4891,
-      "first_seen": "2026-10-18T00:45:46.137633+00:00",
+      "first_seen": "2026-10-18T04:39:24.787426+00:00",
       "prices_updated": "2026-10-16T09:51:00+00:00",
-      "message_id": "1a1441fa975fe10a"
+      "message_id": "1a1441fa975fe10a",
+      "alert_date": "2026-10-16T09:51:27+00:00",
+      "alert_unix_ms": 1792144287000
     },
     {
       "id": "gflights-HON-Seattle-2026-01-14",
@@ -1804,9 +1974,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6333,
-      "first_seen": "2026-10-18T00:45:45.621415+00:00",
+      "first_seen": "2026-10-18T04:39:24.353133+00:00",
       "prices_updated": "2026-10-16T10:45:00+00:00",
-      "message_id": "1a1445112303ff06"
+      "message_id": "1a1445112303ff06",
+      "alert_date": "2026-10-16T10:45:26+00:00",
+      "alert_unix_ms": 1792147526000
     },
     {
       "id": "gflights-HON-Seattle-2026-01-18",
@@ -1825,9 +1997,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6333,
-      "first_seen": "2026-10-18T00:45:45.621415+00:00",
+      "first_seen": "2026-10-18T04:39:24.353133+00:00",
       "prices_updated": "2026-10-16T10:45:00+00:00",
-      "message_id": "1a1445112303ff06"
+      "message_id": "1a1445112303ff06",
+      "alert_date": "2026-10-16T10:45:26+00:00",
+      "alert_unix_ms": 1792147526000
     },
     {
       "id": "gflights-HON-Seattle-2026-01-25",
@@ -1846,9 +2020,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6333,
-      "first_seen": "2026-10-18T00:45:45.621415+00:00",
+      "first_seen": "2026-10-18T04:39:24.353133+00:00",
       "prices_updated": "2026-10-16T10:45:00+00:00",
-      "message_id": "1a1445112303ff06"
+      "message_id": "1a1445112303ff06",
+      "alert_date": "2026-10-16T10:45:26+00:00",
+      "alert_unix_ms": 1792147526000
     },
     {
       "id": "gflights-HON-Seattle-2026-01-28",
@@ -1867,9 +2043,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 6333,
-      "first_seen": "2026-10-18T00:45:45.621415+00:00",
+      "first_seen": "2026-10-18T04:39:24.353133+00:00",
       "prices_updated": "2026-10-16T10:45:00+00:00",
-      "message_id": "1a1445112303ff06"
+      "message_id": "1a1445112303ff06",
+      "alert_date": "2026-10-16T10:45:26+00:00",
+      "alert_unix_ms": 1792147526000
     },
     {
       "id": "gflights-HON-Paris-2026-03-01",
@@ -1888,9 +2066,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4772,
-      "first_seen": "2026-10-18T00:45:45.157831+00:00",
+      "first_seen": "2026-10-18T04:39:23.892357+00:00",
       "prices_updated": "2026-10-16T14:08:00+00:00",
-      "message_id": "1a14518376e8d379"
+      "message_id": "1a14518376e8d379",
+      "alert_date": "2026-10-16T14:08:44+00:00",
+      "alert_unix_ms": 1792159724000
     },
     {
       "id": "gflights-HON-Paris-2026-03-08",
@@ -1909,9 +2089,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4772,
-      "first_seen": "2026-10-18T00:45:45.157831+00:00",
+      "first_seen": "2026-10-18T04:39:23.892357+00:00",
       "prices_updated": "2026-10-16T14:08:00+00:00",
-      "message_id": "1a14518376e8d379"
+      "message_id": "1a14518376e8d379",
+      "alert_date": "2026-10-16T14:08:44+00:00",
+      "alert_unix_ms": 1792159724000
     },
     {
       "id": "gflights-HON-Paris-2026-03-11",
@@ -1930,9 +2112,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4772,
-      "first_seen": "2026-10-18T00:45:45.157831+00:00",
+      "first_seen": "2026-10-18T04:39:23.892357+00:00",
       "prices_updated": "2026-10-16T14:08:00+00:00",
-      "message_id": "1a14518376e8d379"
+      "message_id": "1a14518376e8d379",
+      "alert_date": "2026-10-16T14:08:44+00:00",
+      "alert_unix_ms": 1792159724000
     },
     {
       "id": "gflights-HON-Istanbul-2026-11-02",
@@ -1951,9 +2135,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4654,
-      "first_seen": "2026-10-18T00:45:44.716771+00:00",
+      "first_seen": "2026-10-18T04:39:23.475469+00:00",
       "prices_updated": "2026-10-16T17:32:00+00:00",
-      "message_id": "1a145c62168a83c4"
+      "message_id": "1a145c62168a83c4",
+      "alert_date": "2026-10-16T17:32:54+00:00",
+      "alert_unix_ms": 1792171974000
     },
     {
       "id": "gflights-HON-Istanbul-2026-11-16",
@@ -1972,9 +2158,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4654,
-      "first_seen": "2026-10-18T00:45:44.716771+00:00",
+      "first_seen": "2026-10-18T04:39:23.475469+00:00",
       "prices_updated": "2026-10-16T17:32:00+00:00",
-      "message_id": "1a145c62168a83c4"
+      "message_id": "1a145c62168a83c4",
+      "alert_date": "2026-10-16T17:32:54+00:00",
+      "alert_unix_ms": 1792171974000
     },
     {
       "id": "gflights-HON-Istanbul-2026-11-19",
@@ -1993,9 +2181,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4654,
-      "first_seen": "2026-10-18T00:45:44.716771+00:00",
+      "first_seen": "2026-10-18T04:39:23.475469+00:00",
       "prices_updated": "2026-10-16T17:32:00+00:00",
-      "message_id": "1a145c62168a83c4"
+      "message_id": "1a145c62168a83c4",
+      "alert_date": "2026-10-16T17:32:54+00:00",
+      "alert_unix_ms": 1792171974000
     },
     {
       "id": "gflights-HON-Istanbul-2026-11-26",
@@ -2014,9 +2204,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 4654,
-      "first_seen": "2026-10-18T00:45:44.716771+00:00",
+      "first_seen": "2026-10-18T04:39:23.475469+00:00",
       "prices_updated": "2026-10-16T17:32:00+00:00",
-      "message_id": "1a145c62168a83c4"
+      "message_id": "1a145c62168a83c4",
+      "alert_date": "2026-10-16T17:32:54+00:00",
+      "alert_unix_ms": 1792171974000
     },
     {
       "id": "gflights-HON-LasVegas-2026-01-04",
@@ -2035,9 +2227,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 7138,
-      "first_seen": "2026-10-18T00:45:44.253155+00:00",
+      "first_seen": "2026-10-18T04:39:22.951111+00:00",
       "prices_updated": "2026-10-16T22:44:00+00:00",
-      "message_id": "1a146e3d8f538452"
+      "message_id": "1a146e3d8f538452",
+      "alert_date": "2026-10-16T22:44:59+00:00",
+      "alert_unix_ms": 1792190699000
     },
     {
       "id": "gflights-HON-LasVegas-2026-01-28",
@@ -2056,9 +2250,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 7138,
-      "first_seen": "2026-10-18T00:45:44.253155+00:00",
+      "first_seen": "2026-10-18T04:39:22.951111+00:00",
       "prices_updated": "2026-10-16T22:44:00+00:00",
-      "message_id": "1a146e3d8f538452"
+      "message_id": "1a146e3d8f538452",
+      "alert_date": "2026-10-16T22:44:59+00:00",
+      "alert_unix_ms": 1792190699000
     },
     {
       "id": "gflights-HON-LasVegas-2026-01-21",
@@ -2077,9 +2273,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 7138,
-      "first_seen": "2026-10-18T00:45:44.253155+00:00",
+      "first_seen": "2026-10-18T04:39:22.951111+00:00",
       "prices_updated": "2026-10-16T22:44:00+00:00",
-      "message_id": "1a146e3d8f538452"
+      "message_id": "1a146e3d8f538452",
+      "alert_date": "2026-10-16T22:44:59+00:00",
+      "alert_unix_ms": 1792190699000
     },
     {
       "id": "gflights-HON-LasVegas-2026-01-14",
@@ -2098,9 +2296,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 7138,
-      "first_seen": "2026-10-18T00:45:44.253155+00:00",
+      "first_seen": "2026-10-18T04:39:22.951111+00:00",
       "prices_updated": "2026-10-16T22:44:00+00:00",
-      "message_id": "1a146e3d8f538452"
+      "message_id": "1a146e3d8f538452",
+      "alert_date": "2026-10-16T22:44:59+00:00",
+      "alert_unix_ms": 1792190699000
     },
     {
       "id": "gflights-HON-FortLauderdale-2026-12-24",
@@ -2119,9 +2319,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 9082,
-      "first_seen": "2026-10-18T00:45:43.844228+00:00",
+      "first_seen": "2026-10-18T04:39:22.333319+00:00",
       "prices_updated": "2026-10-17T03:58:00+00:00",
-      "message_id": "1a1480291e0017ed"
+      "message_id": "1a1480291e0017ed",
+      "alert_date": "2026-10-17T03:58:09+00:00",
+      "alert_unix_ms": 1792209489000
     },
     {
       "id": "gflights-HON-FortLauderdale-2026-12-14",
@@ -2140,9 +2342,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 9082,
-      "first_seen": "2026-10-18T00:45:43.844228+00:00",
+      "first_seen": "2026-10-18T04:39:22.333319+00:00",
       "prices_updated": "2026-10-17T03:58:00+00:00",
-      "message_id": "1a1480291e0017ed"
+      "message_id": "1a1480291e0017ed",
+      "alert_date": "2026-10-17T03:58:09+00:00",
+      "alert_unix_ms": 1792209489000
     },
     {
       "id": "gflights-HON-FortLauderdale-2026-12-17",
@@ -2161,9 +2365,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 9082,
-      "first_seen": "2026-10-18T00:45:43.844228+00:00",
+      "first_seen": "2026-10-18T04:39:22.333319+00:00",
       "prices_updated": "2026-10-17T03:58:00+00:00",
-      "message_id": "1a1480291e0017ed"
+      "message_id": "1a1480291e0017ed",
+      "alert_date": "2026-10-17T03:58:09+00:00",
+      "alert_unix_ms": 1792209489000
     },
     {
       "id": "gflights-HON-Bangkok-2026-01-22",
@@ -2182,9 +2388,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1240,
-      "first_seen": "2026-10-18T00:45:43.319569+00:00",
+      "first_seen": "2026-10-18T04:39:21.900814+00:00",
       "prices_updated": "2026-10-17T15:05:00+00:00",
-      "message_id": "1a14a65ac5dc4aee"
+      "message_id": "1a14a65ac5dc4aee",
+      "alert_date": "2026-10-17T15:05:39+00:00",
+      "alert_unix_ms": 1792249539000
     },
     {
       "id": "gflights-HON-Bangkok-2026-01-28",
@@ -2203,9 +2411,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1240,
-      "first_seen": "2026-10-18T00:45:43.319569+00:00",
+      "first_seen": "2026-10-18T04:39:21.900814+00:00",
       "prices_updated": "2026-10-17T15:05:00+00:00",
-      "message_id": "1a14a65ac5dc4aee"
+      "message_id": "1a14a65ac5dc4aee",
+      "alert_date": "2026-10-17T15:05:39+00:00",
+      "alert_unix_ms": 1792249539000
     },
     {
       "id": "gflights-HON-Bangkok-2026-01-02",
@@ -2224,9 +2434,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1240,
-      "first_seen": "2026-10-18T00:45:43.319569+00:00",
+      "first_seen": "2026-10-18T04:39:21.900814+00:00",
       "prices_updated": "2026-10-17T15:05:00+00:00",
-      "message_id": "1a14a65ac5dc4aee"
+      "message_id": "1a14a65ac5dc4aee",
+      "alert_date": "2026-10-17T15:05:39+00:00",
+      "alert_unix_ms": 1792249539000
     },
     {
       "id": "gflights-HON-TaipeiCity-2026-12-03",
@@ -2245,9 +2457,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1020,
-      "first_seen": "2026-10-18T00:45:42.274298+00:00",
+      "first_seen": "2026-10-18T04:39:21.379614+00:00",
       "prices_updated": "2026-10-17T22:40:00+00:00",
-      "message_id": "1a14c05ed2bf4c2e"
+      "message_id": "1a14c05ed2bf4c2e",
+      "alert_date": "2026-10-17T22:40:18+00:00",
+      "alert_unix_ms": 1792276818000
     },
     {
       "id": "gflights-HON-TaipeiCity-2026-12-10",
@@ -2266,9 +2480,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1020,
-      "first_seen": "2026-10-18T00:45:42.274298+00:00",
+      "first_seen": "2026-10-18T04:39:21.379614+00:00",
       "prices_updated": "2026-10-17T22:40:00+00:00",
-      "message_id": "1a14c05ed2bf4c2e"
+      "message_id": "1a14c05ed2bf4c2e",
+      "alert_date": "2026-10-17T22:40:18+00:00",
+      "alert_unix_ms": 1792276818000
     },
     {
       "id": "gflights-HON-TaipeiCity-2026-12-17",
@@ -2287,9 +2503,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 1020,
-      "first_seen": "2026-10-18T00:45:42.274298+00:00",
+      "first_seen": "2026-10-18T04:39:21.379614+00:00",
       "prices_updated": "2026-10-17T22:40:00+00:00",
-      "message_id": "1a14c05ed2bf4c2e"
+      "message_id": "1a14c05ed2bf4c2e",
+      "alert_date": "2026-10-17T22:40:18+00:00",
+      "alert_unix_ms": 1792276818000
     },
     {
       "id": "gflights-HON-Toronto-2026-04-01",
@@ -2308,9 +2526,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 8352,
-      "first_seen": "2026-10-18T00:45:41.747235+00:00",
+      "first_seen": "2026-10-18T04:39:20.852401+00:00",
       "prices_updated": "2026-10-17T22:50:00+00:00",
-      "message_id": "1a14c0f507bba18f"
+      "message_id": "1a14c0f507bba18f",
+      "alert_date": "2026-10-17T22:50:34+00:00",
+      "alert_unix_ms": 1792277434000
     },
     {
       "id": "gflights-HON-Toronto-2026-04-08",
@@ -2329,9 +2549,11 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 8352,
-      "first_seen": "2026-10-18T00:45:41.747235+00:00",
+      "first_seen": "2026-10-18T04:39:20.852401+00:00",
       "prices_updated": "2026-10-17T22:50:00+00:00",
-      "message_id": "1a14c0f507bba18f"
+      "message_id": "1a14c0f507bba18f",
+      "alert_date": "2026-10-17T22:50:34+00:00",
+      "alert_unix_ms": 1792277434000
     },
     {
       "id": "gflights-HON-Toronto-2026-04-15",
@@ -2350,10 +2572,104 @@
       "params": "6–9 days · Round trip · 1 adult · Economy",
       "price_range": null,
       "min_price": 8352,
-      "first_seen": "2026-10-18T00:45:41.747235+00:00",
+      "first_seen": "2026-10-18T04:39:20.852401+00:00",
       "prices_updated": "2026-10-17T22:50:00+00:00",
-      "message_id": "1a14c0f507bba18f"
+      "message_id": "1a14c0f507bba18f",
+      "alert_date": "2026-10-17T22:50:34+00:00",
+      "alert_unix_ms": 1792277434000
+    },
+    {
+      "id": "gflights-HON-London-2026-12-28",
+      "source": "google_flights",
+      "origin": "Hong Kong",
+      "destination_name": "London",
+      "dep_date": "2026-12-28",
+      "date_range": "Mon, Dec 28 - Wed, Jan 6",
+      "price_hkd": 7904,
+      "save_pct": null,
+      "airlines": null,
+      "stops": null,
+      "duration": null,
+      "view_link": null,
+      "trip_label": "1-week trips in December",
+      "params": "6–9 days · Round trip · 1 adult · Economy",
+      "price_range": null,
+      "min_price": 5026,
+      "first_seen": "2026-10-18T04:39:20.331871+00:00",
+      "prices_updated": "2026-10-18T02:59:00+00:00",
+      "message_id": "1a14cf3f1fc08f4b",
+      "alert_date": "2026-10-18T03:00:16+00:00",
+      "alert_unix_ms": 1792292416000
+    },
+    {
+      "id": "gflights-HON-London-2026-12-27",
+      "source": "google_flights",
+      "origin": "Hong Kong",
+      "destination_name": "London",
+      "dep_date": "2026-12-27",
+      "date_range": "Sun, Dec 27 - Mon, Jan 4",
+      "price_hkd": 5026,
+      "save_pct": 20,
+      "airlines": "Hainan",
+      "stops": 2,
+      "duration": "35hr",
+      "view_link": null,
+      "trip_label": "1-week trips in December",
+      "params": "6–9 days · Round trip · 1 adult · Economy",
+      "price_range": null,
+      "min_price": 5026,
+      "first_seen": "2026-10-18T04:39:20.331871+00:00",
+      "prices_updated": "2026-10-18T02:59:00+00:00",
+      "message_id": "1a14cf3f1fc08f4b",
+      "alert_date": "2026-10-18T03:00:16+00:00",
+      "alert_unix_ms": 1792292416000
+    },
+    {
+      "id": "gflights-HON-London-2026-12-03",
+      "source": "google_flights",
+      "origin": "Hong Kong",
+      "destination_name": "London",
+      "dep_date": "2026-12-03",
+      "date_range": "Thu, Dec 3 - Wed, Dec 9",
+      "price_hkd": 5156,
+      "save_pct": 18,
+      "airlines": "SWISS",
+      "stops": 1,
+      "duration": "17hr",
+      "view_link": null,
+      "trip_label": "1-week trips in December",
+      "params": "6–9 days · Round trip · 1 adult · Economy",
+      "price_range": null,
+      "min_price": 5026,
+      "first_seen": "2026-10-18T04:39:20.331871+00:00",
+      "prices_updated": "2026-10-18T02:59:00+00:00",
+      "message_id": "1a14cf3f1fc08f4b",
+      "alert_date": "2026-10-18T03:00:16+00:00",
+      "alert_unix_ms": 1792292416000
+    },
+    {
+      "id": "gflights-HON-London-2026-12-31",
+      "source": "google_flights",
+      "origin": "Hong Kong",
+      "destination_name": "London",
+      "dep_date": "2026-12-31",
+      "date_range": "Thu, Dec 31 - Thu, Jan 7",
+      "price_hkd": 5636,
+      "save_pct": 10,
+      "airlines": "Finnair",
+      "stops": 1,
+      "duration": "28hr",
+      "view_link": null,
+      "trip_label": "1-week trips in December",
+      "params": "6–9 days · Round trip · 1 adult · Economy",
+      "price_range": null,
+      "min_price": 5026,
+      "first_seen": "2026-10-18T04:39:20.331871+00:00",
+      "prices_updated": "2026-10-18T02:59:00+00:00",
+      "message_id": "1a14cf3f1fc08f4b",
+      "alert_date": "2026-10-18T03:00:16+00:00",
+      "alert_unix_ms": 1792292416000
     }
   ],
-  "count": 112
+  "count": 116
 }
