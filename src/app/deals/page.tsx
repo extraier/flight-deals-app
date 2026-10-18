@@ -168,7 +168,18 @@ function buildDropList(
     // surfacing indefinitely. comparisonSource: 'cooldown' is the marker
     // the render code uses to pick the "持續跌價" badge.
     let cooldownSource: { amount: number; pct: number; price: number | null; ts: string } | null = null;
-    if (cooldown && (!hasExportDrop || expDropAmount === 0)) {
+    // Hermes 2026-10-18: always check the cooldown for a recent alert,
+    // not only when the export has no drop. The cooldown is the
+    // authoritative record of the bot's last alert (price/drop at
+    // detection time). The export's `dropAmount` is the destination-
+    // level aggregation, which can be a tiny non-zero (e.g. -3 HKD,
+    // -0.1%) for a route the bot alerted on 16h ago at -574 HKD
+    // -10.8%. The previous gate `(!hasExportDrop || expDropAmount === 0)`
+    // caused routes like HKG→DEL to skip the cooldown lookup and
+    // get stamped with `comparisonSource: 'yesterday'`, which the
+    // strict page filter (line 910) then dropped — even though
+    // Telegram's CX 持續跌價 has DEL.
+    if (cooldown) {
       const code = d.destination?.code || '';
       const airline = (d.airline || '').replace(/^_/, '').toUpperCase();
       const bareName = d.destination?.name || '';
@@ -176,6 +187,7 @@ function buildDropList(
         airline ? `HKG→${airline}→${bareName}` : null,
         `HKG→${bareName}`,
         airline ? `${airline}:HKG→${bareName}` : null,
+        airline ? `${airline}:HKG→${bareName} (${code})` : null,
         `HKG→${code}`,
       ].filter((k): k is string => !!k);
       for (const key of candidates) {
@@ -197,7 +209,29 @@ function buildDropList(
       }
     }
 
-    if (hasExportDrop) {
+    if (cooldownSource
+        && typeof cooldownSource.amount === 'number' && cooldownSource.amount !== 0
+        && typeof cooldownSource.pct === 'number' && cooldownSource.pct !== 0
+        && cooldownSource.price) {
+      // Hermes 2026-10-18: prefer cooldown fingerprint over export
+      // drop. The cooldown's stamped price/drop is the authoritative
+      // record of the bot's last alert (could be a specific dep date
+      // with a real -X% drop that the destination-level export
+      // aggregation has absorbed to a tiny residual). Without this,
+      // a route like HKG→DEL gets stamped as 昨日 -$3 -0.1% (the
+      // export's residual) instead of 持續跌價 -$574 -10.8% (the
+      // bot's actual alert) — the page then drops it from the
+      // strict cooldown-only filter, even though Telegram's CX
+      // 持續跌價 has DEL.
+      const absAmt = Math.abs(cooldownSource.amount);
+      const absPct = Math.abs(Math.round(cooldownSource.pct * 10) / 10);
+      cd = pickDisplayDate(d.cheapestDates, cooldownSource.price) ?? d.cheapestDates?.[0];
+      newPrice = cooldownSource.price;
+      oldPrice = newPrice + absAmt;
+      dropAmount = absAmt;
+      dropPct = absPct;
+      computedFallback = true;
+    } else if (hasExportDrop) {
       // Destination-level: today's lowest = expDropPrice, yesterday's
       // lowest = expDropPrice - expDropAmount (where dropAmount is
       // negative-signed, so oldPrice = expDropPrice + |expDropAmount|).
@@ -676,13 +710,141 @@ export default function DealsPage() {
         if (cancelled) return;
         // Build alerts maps: destCode -> alert. The page filter uses this
         // to show only routes that the SELECTED SCANNER alerted on.
+        // Hermes 2026-10-18: SQL alerts may have multiple entries per
+        // dest_code (one for the HKG aggregate scanner with airline='',
+        // and one each for the UO/CX scanners with airline='UO'/'CX').
+        // The iteration order of the SQL response determines which one
+        // wins the .set() override. Without ranking, the HKG aggregate
+        // (airline='') may win over the per-scanner entry (airline='UO')
+        // if it comes later in the array, masking the per-scanner
+        // alert from the airline filter. Rank by specificity
+        // (per-scanner > aggregate) so the per-scanner entry always
+        // wins.
         const hkgAlertsMap = new Map<string, any>();
+        const sqlRank = (a: { airline: string; dest_code: string }): number => {
+          if (a.airline === 'CX' || a.airline === 'UO') return 2;
+          return 1; // HKG aggregate (airline='')
+        };
+        // Hermes 2026-10-18: rank SQL alerts so per-scanner entries
+        // (airline='CX'/'UO') win over HKG aggregate entries
+        // (airline=''). Otherwise the HKG aggregate may override the
+        // per-scanner entry via the simple .set() override, masking
+        // the airline from the page filter.
+        const hkgAlertsRanked = new Map<string, { alert: any; rank: number }>();
         for (const a of (hkgAlertsJson.alerts || [])) {
-          hkgAlertsMap.set(a.dest_code, a);
+          const rank = sqlRank(a);
+          const prev = hkgAlertsRanked.get(a.dest_code);
+          if (!prev || rank > prev.rank) {
+            hkgAlertsRanked.set(a.dest_code, { alert: a, rank });
+          }
+        }
+        for (const { alert } of hkgAlertsRanked.values()) {
+          hkgAlertsMap.set(alert.dest_code, alert);
+        }
+        // Hermes 2026-10-18: backfill from cooldown key prefix.
+        // Key shapes: "HKG→DEST" (HKG aggregate, airline=''),
+        // "UO:HKG→DEST" or "HKG→UO→DEST" (UO scanner, airline='UO'),
+        // "CX:HKG→DEST" or "HKG→CX→DEST" (CX scanner, airline='CX').
+        // Hermes 2026-10-18: prefer the MOST SPECIFIC match (per-scanner
+        // keys) over the bare "HKG→DEST" key. Otherwise iteration order
+        // in the cooldown JSON can pick the bare key first, which has
+        // airline='', and the destination's UO/CX alert is masked.
+        // Concretely: HKG→東京 (NRT) appears in the cooldown alongside
+        // UO:HKG→東京 (NRT); the bare key's airline='' would map NRT
+        // to "no airline" and exclude it from any airline filter.
+        // Resolution: rank by specificity (per-scanner > aggregate)
+        // and pick the highest-ranked key per dest_code.
+        const cdKeys = Object.keys(hkgJson.cooldown || {});
+        const cdRank = (k: string): number => {
+          // Per-scanner keys rank higher
+          if (k.startsWith('CX:') || k.startsWith('UO:')) return 2;
+          const parts = k.split('→');
+          if (parts.length >= 3 && (parts[1] === 'CX' || parts[1] === 'UO')) return 2;
+          return 1; // bare HKG→DEST
+        };
+        const cdCandidates = new Map<string, { k: string; cd: any; rank: number; airline: string }>();
+        for (const k of cdKeys) {
+          const cd = (hkgJson.cooldown || {})[k];
+          if (!cd || !cd.ts) continue;
+          const m = k.match(/\(([A-Z]{3})\)\s*$/);
+          if (!m) continue;
+          const destCode = m[1];
+          // Parse airline for this key
+          let keyAirline = '';
+          if (k.startsWith('CX:')) keyAirline = 'CX';
+          else if (k.startsWith('UO:')) keyAirline = 'UO';
+          if (!keyAirline) {
+            const parts = k.split('→');
+            if (parts.length >= 3 && (parts[1] === 'CX' || parts[1] === 'UO')) keyAirline = parts[1];
+          }
+          const rank = cdRank(k);
+          const prev = cdCandidates.get(destCode);
+          if (!prev || rank > prev.rank) {
+            cdCandidates.set(destCode, { k, cd, rank, airline: keyAirline });
+          }
+        }
+        for (const [destCode, { k, cd, airline: candidateAirline }] of cdCandidates) {
+          // Hermes 2026-10-18: use the airline that was already computed
+          // in the first loop's `cdRank` pass (it's the winner's airline).
+          // The previous code re-parsed the key here, which produced
+          // empty strings for routes whose cdCandidates key was the
+          // infix form (e.g. "HKG→UO→克拉克 (CRK)"). The re-parse logic
+          // was identical, but for some reason the result differed —
+          // possibly due to a stale closure or a different code path
+          // being taken in the bundle. Using the already-computed value
+          // sidesteps the issue entirely.
+          const airline = candidateAirline;
+          if (hkgAlertsMap.has(destCode)) continue;
+          hkgAlertsMap.set(destCode, {
+            dest_code: destCode,
+            airline,
+            price: cd.price,
+            drop_amount: cd.amount,
+            drop_pct: cd.pct,
+            detected_at: cd.ts,
+            key: k,
+            dest_name: k.replace(/^[A-Z]+:|→[A-Z]+→/g, '').replace(/\s*\([A-Z]{3}\)\s*$/, ''),
+            _source: 'cooldown',
+          });
         }
         const szxAlertsMap = new Map<string, any>();
+        const szxAlertsRanked = new Map<string, { alert: any; rank: number }>();
         for (const a of (szxAlertsJson.alerts || [])) {
-          szxAlertsMap.set(a.dest_code, a);
+          const rank = sqlRank(a);
+          const prev = szxAlertsRanked.get(a.dest_code);
+          if (!prev || rank > prev.rank) {
+            szxAlertsRanked.set(a.dest_code, { alert: a, rank });
+          }
+        }
+        for (const { alert } of szxAlertsRanked.values()) {
+          szxAlertsMap.set(alert.dest_code, alert);
+        }
+        for (const k of Object.keys(szxJson.cooldown || {})) {
+          const cd = (szxJson.cooldown || {})[k];
+          if (!cd || !cd.ts) continue;
+          const m = k.match(/\(([A-Z]{3})\)\s*$/);
+          if (!m) continue;
+          const destCode = m[1];
+          let airline = '';
+          if (k.startsWith('CX:')) airline = 'CX';
+          else if (k.startsWith('UO:')) airline = 'UO';
+          if (!airline) {
+            const parts = k.split('→');
+            if (parts.length >= 3 && parts[1] === 'CX') airline = 'CX';
+            else if (parts.length >= 3 && parts[1] === 'UO') airline = 'UO';
+          }
+          if (szxAlertsMap.has(destCode)) continue;
+          szxAlertsMap.set(destCode, {
+            dest_code: destCode,
+            airline,
+            price: cd.price,
+            drop_amount: cd.amount,
+            drop_pct: cd.pct,
+            detected_at: cd.ts,
+            key: k,
+            dest_name: k.replace(/^[A-Z]+:|→[A-Z]+→/g, '').replace(/\s*\([A-Z]{3}\)\s*$/, ''),
+            _source: 'cooldown',
+          });
         }
         // Hermes 2026-10-14: merge UO + CX drops into hkgDeals so they participate
         // in buildDropList (cooldown override, typical fallback, drop detection)
@@ -706,10 +868,20 @@ export default function DealsPage() {
 // airline, prefer cxDrops > uoDrops > hkgBase (CX is the dominant scanner).
 hkgMerged = (() => {
   // Cooldown's per-destination airline map (derived from the bot's most
-  // recent alert for that dest).
-  const cdAirlineByDest: Record<string, string> = {};
-  const cdKeys = Object.keys(hkgJson.cooldown || {});
-  for (const k of cdKeys) {
+  // recent alert for that dest). Hermes 2026-10-18: rank by specificity
+  // (per-scanner > aggregate) and keep the highest-ranked entry per
+  // dest_code. Otherwise iteration order can pick the bare HKG→DEST
+  // key first (airline=''), and the destination's per-scanner alert
+  // gets masked.
+  const cdAirlineByDest: Record<string, string> & Record<string, any> = {} as any;
+  const cdKeys2 = Object.keys(hkgJson.cooldown || {});
+  const cdRank2 = (k: string): number => {
+    if (k.startsWith('CX:') || k.startsWith('UO:')) return 2;
+    const parts = k.split('→');
+    if (parts.length >= 3 && (parts[1] === 'CX' || parts[1] === 'UO')) return 2;
+    return 1;
+  };
+  for (const k of cdKeys2) {
     // Cooldown key shapes: "HKG→UO→CODE", "HKG→CODE", "UO:HKG→CODE",
     // "CX:HKG→CODE". Pull the dest code and the airline.
     let airline = '';
@@ -725,7 +897,15 @@ hkgMerged = (() => {
     }
     const last = parts[parts.length - 1];
     const m = last.match(/\(([A-Z]{3})\)/);
-    if (m) cdAirlineByDest[m[1]] = airline;
+    if (m) {
+      const dest = m[1];
+      const rank = cdRank2(k);
+      const prevRank = (cdAirlineByDest as any)[`_rank_${dest}`] ?? 0;
+      if (rank > prevRank) {
+        cdAirlineByDest[dest] = airline;
+        (cdAirlineByDest as any)[`_rank_${dest}`] = rank;
+      }
+    }
   }
   // Score each candidate: prefer cooldown airline match, then cxDrops > uoDrops > hkgBase.
   const tier = (d: { airline?: string }): number => {
@@ -820,25 +1000,20 @@ hkgMerged = (() => {
     // "this route has a CX flight option" with "this route was alerted by
     // the CX scanner". With the new SQL alerts (key
     // "YYYYMMDD{airport}{airline}alert{dest}", e.g. "20261015HKCXalertNGO"),
-    // Hermes 2026-10-18: airline filter checks the row's own
-    // cheapestDate.airline (the carrier the bot alerted on, derived
-    // from the cooldown) instead of the SQL alerts map. The SQL
-    // alerts map is empty most of the time (the bot only writes to
-    // SQL on detection events, and the 24h TTL has often expired
-    // by the time the user looks). Using the SQL as the filter
-    // source would zero out the airline tabs. The cooldown is the
-    // authoritative record of "the bot alerted on this destination
-    // at this airline" and is always live.
+    // Hermes 2026-10-18: airline filter checks the alerts map (built
+    // from SQL + cooldown backfill, see data-load useEffect). This
+    // matches the bot's per-airport block exactly: the CX tab shows
+    // only routes whose alert's `airline === 'CX'` (i.e. the CX
+    // scanner specifically detected them), not every row that
+    // happens to have a CX cheapest flight option. Backfilled from
+    // the cooldown's per-scanner keys (CX:HKG→CODE, UO:HKG→CODE),
+    // so the filter keeps working even when the SQL alerts table
+    // is empty (Bug T).
     const activeAlerts = departure === 'HKG' ? hkgAlerts : szxAlerts;
     if (airlineFilter) {
       copy = copy.filter((r) => {
-        const rowAirline = (r.cheapestDate?.airline || '').toUpperCase().replace(/^_/, '');
-        if (rowAirline === airlineFilter) return true;
-        // Defensive: if the row has no cheapestDate.airline (cooldown
-        // synthesized without flight info), fall back to the SQL alert
-        // if we have one.
         const alert = activeAlerts.get(r.destCode);
-        return !!(alert && alert.airline === airlineFilter);
+        return alert && alert.airline === airlineFilter;
       });
     }
     // Hermes 2026-10-15: page only shows 持續跌價 entries (cooldown-marked),
@@ -956,41 +1131,38 @@ hkgMerged = (() => {
               </button>
             </div>
           )}
-          {/* Hermes 2026-10-18: airline filter as visible pills (chips).
-              User feedback: dropdown was confusing — once a filter is
-              picked, the page shows the empty state and the user
-              couldn't tell how to unfilter. Chips make "全部" /
-              "CX" / "UO" mutually exclusive and the active state
-              obvious. Replacing the legacy <select>.
-              Hermes 2026-10-18: also always render the chips when
-              airlineOptions is non-empty, even if renderedRows is 0.
-              Otherwise the empty state hides the chips and the user
-              has no way to switch back to 全部. */}
+          {/* Hermes 2026-10-18: airline filter as a dropdown.
+              Hermes 2026-10-18 revert: user preferred the previous
+              dropdown. Chip pills looked like nav buttons. Restoring
+              the <select>. Also: always render the dropdown when
+              airlineOptions is non-empty (drop the renderedRows guard),
+              so the user can always switch back to 全部 even if the
+              current filter is empty. */}
           {airlineOptions.length > 0 && (
-            <div className="inline-flex items-center gap-0 rounded-xl border border-border bg-card p-1 shadow-sm">
-              <button
-                onClick={() => setAirlineFilter(null)}
-                className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-3 sm:px-4 py-2 text-sm font-bold transition-all whitespace-nowrap ${
-                  airlineFilter == null
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                }`}
+            <div className="flex items-center gap-2">
+              <label
+                htmlFor="airline-filter-deals"
+                className="text-sm text-muted-foreground shrink-0"
               >
-                ✈️ 全部 ({rows.length})
-              </button>
-              {airlineOptions.map(([code, count]) => (
-                <button
-                  key={code}
-                  onClick={() => setAirlineFilter(code)}
-                  className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-3 sm:px-4 py-2 text-sm font-bold transition-all whitespace-nowrap ${
-                    airlineFilter === code
-                      ? 'bg-primary text-primary-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                  }`}
-                >
-                  {airlineLabel(code)} ({code}) · {count}
-                </button>
-              ))}
+                ✈️ 航空公司:
+              </label>
+              <select
+                id="airline-filter-deals"
+                value={airlineFilter ?? '__all__'}
+                onChange={(e) =>
+                  setAirlineFilter(
+                    e.target.value === '__all__' ? null : e.target.value,
+                  )
+                }
+                className="h-9 rounded-md border border-input bg-background px-3 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500/40 max-w-xs"
+              >
+                <option value="__all__">全部 ({rows.length})</option>
+                {airlineOptions.map(([code, count]) => (
+                  <option key={code} value={code}>
+                    {airlineLabel(code)} ({code}) · {count}
+                  </option>
+                ))}
+              </select>
             </div>
           )}
         </div>
@@ -1029,7 +1201,7 @@ hkgMerged = (() => {
                   : loading
                     ? '從 NAS 取得最新價格中…'
                     : airlineFilter
-                      ? `已篩選 ${airlineLabel(airlineFilter)} (${airlineFilter}) · 點上面「全部」睇全部航線。`
+                      ? `已篩選 ${airlineLabel(airlineFilter)} (${airlineFilter}) · 喺上面 dropdown 揀「全部」返去。`
                       : '所有航線價格都比昨日高或持平，無可顯示嘅劈價。'}
               </p>
             </CardContent>
