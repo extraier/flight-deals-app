@@ -33,7 +33,7 @@ interface GfDeal {
 }
 
 type OriginFilter = 'all' | 'Hong Kong';
-type SortBy = 'alert' | 'price';
+type SortBy = 'alert' | 'discount';
 
 export default function GFlightsPage() {
   const [deals, setDeals] = useState<GfDeal[]>([]);
@@ -42,7 +42,8 @@ export default function GFlightsPage() {
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [originFilter, setOriginFilter] = useState<OriginFilter>('all');
   // Hermes 2026-10-18: 'alert' (default) means most recently emailed
-  // destinations surface first; 'price' sorts by cheapest first.
+  // destinations surface first; 'discount' sorts by highest save_pct
+  // first (Chicago at 45% off outranks London at 20% off).
   const [sortBy, setSortBy] = useState<SortBy>('alert');
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
 
@@ -98,24 +99,35 @@ export default function GFlightsPage() {
   }
 
   // Hermes 2026-10-18: build the destination list and capture the most
-  // recent alert time per destination (across all the deals in that
-  // group). The toggle below lets the user pick between two orderings:
-  //   - "alert"  (default): most recently emailed routes first, so a
+  // recent alert time + the highest save_pct per destination (across
+  // all the deals in that group). The toggle below lets the user pick
+  // between two orderings:
+  //   - "alert"    (default): most recently emailed routes first, so a
   //     fresh London alert outranks a week-old Taipei deal
-  //   - "price": cheapest first, the old behaviour
+  //   - "discount"           : highest save_pct first, so Chicago at
+  //     45% off outranks London at 20% off regardless of price
   const destEntries = Array.from(byDest.entries()).map(([dest, list]) => {
     const latestAlert = list.reduce((m, d) => {
       const v = typeof d.alert_unix_ms === 'number' ? d.alert_unix_ms : 0;
       return v > m ? v : m;
     }, 0);
-    return { dest, deals: list, cheapest: list[0], latestAlert };
+    const maxSave = list.reduce((m, d) => {
+      const v = typeof d.save_pct === 'number' ? d.save_pct : 0;
+      return v > m ? v : m;
+    }, 0);
+    return { dest, deals: list, cheapest: list[0], latestAlert, maxSave };
   });
   const destList = destEntries.sort((a, b) => {
     if (sortBy === 'alert') {
-      // Most recent alert first; break ties by cheapest price.
+      // Most recent alert first; break ties by highest save_pct,
+      // then by cheapest price.
       if (b.latestAlert !== a.latestAlert) return b.latestAlert - a.latestAlert;
+      if (b.maxSave !== a.maxSave) return b.maxSave - a.maxSave;
       return (a.cheapest.price_hkd ?? Infinity) - (b.cheapest.price_hkd ?? Infinity);
     }
+    // sortBy === 'discount'
+    if (b.maxSave !== a.maxSave) return b.maxSave - a.maxSave;
+    if (b.latestAlert !== a.latestAlert) return b.latestAlert - a.latestAlert;
     return (a.cheapest.price_hkd ?? Infinity) - (b.cheapest.price_hkd ?? Infinity);
   });
 
@@ -258,15 +270,15 @@ export default function GFlightsPage() {
               最新推介優先
             </button>
             <button
-              onClick={() => setSortBy('price')}
+              onClick={() => setSortBy('discount')}
               className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all inline-flex items-center gap-1 ${
-                sortBy === 'price'
+                sortBy === 'discount'
                   ? 'bg-violet-600 text-white shadow-sm'
                   : 'text-muted-foreground hover:text-foreground hover:bg-muted'
               }`}
-              title="最平優先"
+              title="折扣最多優先"
             >
-              💰 最平優先
+              🏷️ 折扣最多優先
             </button>
           </div>
         </div>
