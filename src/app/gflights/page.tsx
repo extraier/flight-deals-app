@@ -333,27 +333,46 @@ export default function GFlightsPage() {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-2xl" aria-hidden>✈️</span>
-                        <h2 className="text-lg sm:text-xl font-bold text-foreground">
+                        <h2 className="text-lg sm:text-xl font-bold text-foreground break-words">
                           {translateCity(main.origin)} → {translateCity(main.destination_name)}
                         </h2>
                       </div>
-                      <div className="mt-1.5 text-sm text-muted-foreground">
-                        <span className="font-medium text-foreground">
+                      <div className="mt-1.5 text-sm text-muted-foreground leading-snug">
+                        <div className="font-medium text-foreground">
                           {translateDateRange(main.date_range)}
-                        </span>
-                        {main.airlines && <span className="ml-2">· {translateAirlines(main.airlines)}</span>}
-                        {main.stops != null && <span className="ml-2">· {translateStops(main.stops)}</span>}
-                        {main.duration && <span className="ml-2">· {translateDuration(main.duration)}</span>}
+                        </div>
+                        {/* Hermes 2026-10-18: airline / stops / duration
+                            segments. Each segment is whitespace-nowrap so
+                            "聯合航空" never breaks mid-word, but the
+                            whole line can wrap at any space. The leading
+                            "· " sits inside each segment so the dot
+                            stays attached to the segment when it
+                            wraps. */}
+                        <div className="mt-0.5 text-[12px] text-muted-foreground/90">
+                          {[
+                            main.airlines && translateAirlines(main.airlines),
+                            main.stops != null && translateStops(main.stops),
+                            main.duration && translateDuration(main.duration),
+                          ].filter(Boolean).map((seg, i) => (
+                            <span key={i} className="whitespace-nowrap">
+                              {i > 0 && ' · '}
+                              {seg}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                       {/* Hermes 2026-10-18: baggage policy isn't in the
                           Gmail digest. Show a small hint so the gap is
-                          visible without claiming a value we don't have. */}
-                      <p className="mt-0.5 text-[10px] text-muted-foreground/70 inline-flex items-center gap-1">
+                          visible without claiming a value we don't have.
+                          Block-level (not inline-flex) so it stacks on
+                          its own line and doesn't run into the alert
+                          time below. */}
+                      <p className="mt-1.5 text-[10px] text-muted-foreground/70 flex items-center gap-1">
                         <span aria-hidden>🧳</span>
                         行李政策請向航空公司查詢
                       </p>
                       {main.trip_label && (
-                        <p className="mt-1 text-[11px] text-muted-foreground/80">
+                        <p className="mt-1 text-[11px] text-muted-foreground/80 break-words">
                           {main.trip_label}
                           {main.params && <span className="ml-1.5">· {main.params}</span>}
                         </p>
@@ -366,7 +385,7 @@ export default function GFlightsPage() {
                         const t = formatAlertTime(main.alert_date, main.alert_unix_ms);
                         if (!t) return null;
                         return (
-                          <p className="mt-1 text-[11px] text-muted-foreground/80 inline-flex items-center gap-1">
+                          <p className="mt-1 text-[11px] text-muted-foreground/80 flex items-center gap-1">
                             <Mail className="h-3 w-3" />
                             Google 推介：{t}
                           </p>
@@ -374,11 +393,11 @@ export default function GFlightsPage() {
                       })()}
                     </div>
                     <div className="text-right shrink-0">
-                      <div className="text-2xl sm:text-3xl font-bold text-violet-700">
+                      <div className="text-2xl sm:text-3xl font-bold text-violet-700 whitespace-nowrap">
                         {formatPrice(main.price_hkd)}
                       </div>
                       {main.save_pct != null && main.save_pct > 0 && (
-                        <span className="mt-1 inline-block text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                        <span className="mt-1 inline-block text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded whitespace-nowrap">
                           SAVE {main.save_pct}%
                         </span>
                       )}
@@ -390,7 +409,7 @@ export default function GFlightsPage() {
                       {savingPct != null && savingPct > 0 && (
                         <span className="text-emerald-700 font-medium">· 低於平均 {savingPct}%</span>
                       )}
-                      <span className="ml-auto text-violet-600 group-hover:translate-x-0.5 transition-transform">查看詳情 →</span>
+                      <span className="ml-auto text-violet-600 group-hover:translate-x-0.5 transition-transform whitespace-nowrap">查看詳情 →</span>
                     </div>
                   )}
                 </a>
@@ -408,16 +427,32 @@ export default function GFlightsPage() {
                           href={d.view_link || `https://www.google.com/travel/flights?q=Flights%20to%20${encodeURIComponent(d.destination_name)}%20from%20${encodeURIComponent(d.origin)}%20on%20${d.dep_date}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center justify-between gap-2 px-4 sm:px-5 py-2.5 text-sm hover:bg-violet-50/40 transition-colors"
+                          className="flex items-center justify-between gap-3 px-4 sm:px-5 py-2.5 text-sm hover:bg-violet-50/40 transition-colors"
                         >
+                          {/* Hermes 2026-10-18: flex-1 + min-w-0 so the
+                              left content can wrap onto multiple lines
+                              without overflowing; price/save on the right
+                              has shrink-0 so it never gets squished. The
+                              airline/stops/duration line uses
+                              white-space: nowrap on its individual
+                              segments so the dot separators don't break
+                              mid-phrase, but the whole block can wrap
+                              at any space between segments. */}
                           <div className="min-w-0 flex-1">
-                            <div className="text-foreground font-medium truncate">
+                            <div className="text-foreground font-medium leading-snug break-words">
                               {translateDateRange(d.date_range)}
                             </div>
-                            <div className="text-[11px] text-muted-foreground truncate">
-                              {d.airlines && <span>{translateAirlines(d.airlines)}</span>}
-                              {d.stops != null && <span className="ml-2">{translateStops(d.stops)}</span>}
-                              {d.duration && <span className="ml-2">{translateDuration(d.duration)}</span>}
+                            <div className="mt-0.5 text-[11px] text-muted-foreground/90 leading-snug">
+                              {[
+                                d.airlines && translateAirlines(d.airlines),
+                                d.stops != null && translateStops(d.stops),
+                                d.duration && translateDuration(d.duration),
+                              ].filter(Boolean).map((seg, i) => (
+                                <span key={i} className="whitespace-nowrap">
+                                  {i > 0 && ' · '}
+                                  {seg}
+                                </span>
+                              ))}
                             </div>
                             {/* Hermes 2026-10-18: baggage policy isn't in
                                 the Gmail digest — Google only sends
@@ -426,7 +461,7 @@ export default function GFlightsPage() {
                                 fare + baggage on Google Flights. Show a
                                 small hint so the gap is visible without
                                 claiming a value we don't have. */}
-                            <div className="text-[10px] text-muted-foreground/70 flex items-center gap-1 mt-0.5">
+                            <div className="text-[10px] text-muted-foreground/70 flex items-center gap-1 mt-1">
                               <span aria-hidden>🧳</span>
                               行李政策請向航空公司查詢
                             </div>
@@ -446,13 +481,13 @@ export default function GFlightsPage() {
                               );
                             })()}
                           </div>
-                          <div className="flex items-center gap-2 shrink-0">
+                          <div className="flex items-center gap-2 shrink-0 text-right">
                             {d.save_pct != null && d.save_pct > 0 && (
-                              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded whitespace-nowrap">
                                 SAVE {d.save_pct}%
                               </span>
                             )}
-                            <span className="font-bold text-violet-700">{formatPrice(d.price_hkd)}</span>
+                            <span className="font-bold text-violet-700 whitespace-nowrap">{formatPrice(d.price_hkd)}</span>
                           </div>
                         </a>
                       ))}
