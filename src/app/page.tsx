@@ -327,7 +327,7 @@ export default function Home() {
         ) : (
           <>
             {/* Stats */}
-            <div className="mb-6 flex justify-center flex-wrap items-end gap-x-8 gap-y-4">
+            <div className="mb-4 flex justify-center flex-wrap items-end gap-x-8 gap-y-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-emerald-600">{deals.length}</div>
                 <div className="text-xs text-muted-foreground">個目的地</div>
@@ -356,31 +356,30 @@ export default function Home() {
                   - Count badge so the user sees there's fresh mail at a glance
                   - Default collapsed so the main grid stays clean; user
                     toggles by clicking the button */}
-              <div className="inline-flex items-center gap-0 rounded-xl border border-border bg-card p-1 shadow-sm">
+              <div className="inline-flex items-center gap-0 rounded-xl border border-border bg-card p-1 shadow-sm flex-wrap sm:flex-nowrap justify-center">
                 <Link
                   href="/deals"
-                  className="inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-bold text-orange-600 dark:text-orange-400 transition-all hover:bg-orange-500/10"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-lg px-3 sm:px-4 py-2 text-sm font-bold text-orange-600 dark:text-orange-400 transition-all hover:bg-orange-500/10 whitespace-nowrap"
                 >
                   🔥 今日劈價
                 </Link>
                 <span className="h-6 w-px bg-border" aria-hidden="true" />
                 <Link
                   href="/match"
-                  className="inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-bold text-pink-600 dark:text-pink-400 transition-all hover:bg-pink-500/10"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-lg px-3 sm:px-4 py-2 text-sm font-bold text-pink-600 dark:text-pink-400 transition-all hover:bg-pink-500/10 whitespace-nowrap"
                 >
                   🗺 一起揀目的地
                 </Link>
                 <span className="h-6 w-px bg-border" aria-hidden="true" />
                 <Link
                   href="/gflights"
-                  className="inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-bold transition-all text-violet-600 dark:text-violet-400 hover:bg-violet-500/10"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-lg px-3 sm:px-4 py-2 text-sm font-bold transition-all text-violet-600 dark:text-violet-400 hover:bg-violet-500/10 whitespace-nowrap"
                   title="Google Flights 推介（過去 24 小時）"
                 >
                   ✉️ Google Flights
                 </Link>
               </div>
             </div>
-
 
             {/* Filters & Sort */}
             <div className="mb-6 space-y-3">
