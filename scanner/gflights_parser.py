@@ -62,10 +62,20 @@ PRICE_RE = re.compile(
 )
 
 # Airline: "China Airlines, Delta · 2 stops · HKG–MIA · 24 hr"
+# Or:     "Hong Kong Express · Nonstop · HKG–TPE · 2 hr"
+# Hermes 2026-10-18: Google uses "Nonstop" for direct flights and "N stops"
+# for connections. Two named groups for the stops count + a separate
+# "stops_text" group for the raw word ("Nonstop" / "1 stop" / "2 stops")
+# so the UI can show "直航" / "轉機 1 次" etc.
 AIRLINE_RE = re.compile(
     r"^(?P<airlines>.+?)\s*·\s*"
-    r"(?P<stops>\d+)\s*stops?\s*·\s*"
-    r"(?P<route>[A-Z]{3})\s*[–—-]\s*([A-Z]{3})\s*·\s*"
+    r"(?:"
+    r"(?P<nonstop>Nonstop)"
+    r"|"
+    r"(?P<stops>\d+)\s*stops?"
+    r")"
+    r"\s*·\s*"
+    r"(?P<route_from>[A-Z]{3})\s*[–\-—]\s*(?P<route_to>[A-Z]{3})\s*·\s*"
     r"(?P<duration>\d+)\s*hr$"
 )
 
@@ -174,9 +184,17 @@ def parse_email(headers: dict, body: str, view_links: Optional[List[str]] = None
         if am:
             if current is not None:
                 current["airlines"] = am.group("airlines").strip()
-                current["stops"] = int(am.group("stops"))
+                # Hermes 2026-10-18: "Nonstop" → stops=0, "N stops" → N
+                if am.group("nonstop"):
+                    current["stops"] = 0
+                else:
+                    current["stops"] = int(am.group("stops"))
                 duration = am.group("duration")
                 current["duration"] = f"{duration}hr"
+                # Hermes 2026-10-18: also save the route, in case the
+                # UI wants to show it (HKG → TPE, etc.)
+                current["route_from"] = am.group("route_from")
+                current["route_to"] = am.group("route_to")
             continue
 
     if current:

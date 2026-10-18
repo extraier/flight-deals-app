@@ -345,6 +345,13 @@ export default function GFlightsPage() {
                         {main.stops != null && <span className="ml-2">· {translateStops(main.stops)}</span>}
                         {main.duration && <span className="ml-2">· {translateDuration(main.duration)}</span>}
                       </div>
+                      {/* Hermes 2026-10-18: baggage policy isn't in the
+                          Gmail digest. Show a small hint so the gap is
+                          visible without claiming a value we don't have. */}
+                      <p className="mt-0.5 text-[10px] text-muted-foreground/70 inline-flex items-center gap-1">
+                        <span aria-hidden>🧳</span>
+                        行李政策請向航空公司查詢
+                      </p>
                       {main.trip_label && (
                         <p className="mt-1 text-[11px] text-muted-foreground/80">
                           {main.trip_label}
@@ -411,6 +418,17 @@ export default function GFlightsPage() {
                               {d.airlines && <span>{translateAirlines(d.airlines)}</span>}
                               {d.stops != null && <span className="ml-2">{translateStops(d.stops)}</span>}
                               {d.duration && <span className="ml-2">{translateDuration(d.duration)}</span>}
+                            </div>
+                            {/* Hermes 2026-10-18: baggage policy isn't in
+                                the Gmail digest — Google only sends
+                                airline, stops, route, duration. The user
+                                has to click "View" to see the actual
+                                fare + baggage on Google Flights. Show a
+                                small hint so the gap is visible without
+                                claiming a value we don't have. */}
+                            <div className="text-[10px] text-muted-foreground/70 inline-flex items-center gap-1 mt-0.5">
+                              <span aria-hidden>🧳</span>
+                              行李政策請向航空公司查詢
                             </div>
                             {/* Hermes 2026-10-18: each alternate can come from
                                 a different Gmail digest (Google sends separate
