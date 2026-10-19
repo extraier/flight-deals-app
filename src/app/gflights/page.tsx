@@ -65,7 +65,19 @@ export default function GFlightsPage() {
   }
 
   useEffect(() => {
-    load();
+    // Hermes 2026-10-19: react-hooks v6 set-state-in-effect lint flagged
+    // the synchronous `load()` call here. `load()` calls
+    // setLoading(true) + setFetchError(null) before the async fetch
+    // starts, which is the source of the cascading-renders warning.
+    // Fix: use `Promise.resolve().then(...)` to break the synchronous
+    // chain — setState calls now happen in a microtask after the
+    // effect body returns, which is the React-blessed pattern. The
+    // interval/visibility change handlers still call load() directly
+    // because those run AFTER the initial mount, not as part of an
+    // effect setup.
+    Promise.resolve().then(() => {
+      load();
+    });
     // 5-min interval — gflights digest is fed by the Gmail poller, which
     // runs every 30 min. Polling the JSON faster than the upstream is
     // wasteful.

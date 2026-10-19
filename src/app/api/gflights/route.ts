@@ -11,16 +11,41 @@ export const revalidate = 0;
 
 const CACHE_TTL_MS = 5_000;
 
-let cached: { body: unknown; fetchedAt: number } | null = null;
+// Hermes 2026-10-19: define proper types instead of `any`. The shape
+// mirrors what scanner/gflights_parser.py writes into
+// src/data/gflights_digest.json.
+export interface GFlightDeal {
+  origin: string;
+  destination: string;
+  destination_name: string;
+  date_range: string;
+  price: number;
+  save_pct: number | null;
+  airline: string | null;
+  stops: number | null;
+  duration_min: number | null;
+  url: string;
+  email_id: string;
+  first_seen: string;
+}
 
-async function loadDigest() {
+export interface GFlightsFile {
+  generated: string;
+  source: string;
+  deals: GFlightDeal[];
+  count: number;
+}
+
+let cached: { body: GFlightsFile; fetchedAt: number } | null = null;
+
+async function loadDigest(): Promise<GFlightsFile> {
   if (cached && Date.now() - cached.fetchedAt < CACHE_TTL_MS) {
     return cached.body;
   }
   const fp = path.join(process.cwd(), 'src', 'data', 'gflights_digest.json');
   try {
     const raw = await fs.readFile(fp, 'utf-8');
-    const body = JSON.parse(raw);
+    const body: GFlightsFile = JSON.parse(raw);
     cached = { body, fetchedAt: Date.now() };
     return body;
   } catch {
@@ -28,7 +53,7 @@ async function loadDigest() {
   }
 }
 
-function filterExpired(deals: any[]): any[] {
+function filterExpired(deals: GFlightDeal[]): GFlightDeal[] {
   const nowMs = Date.now();
   return deals.filter((d) => {
     if (!d.first_seen) return true;
@@ -38,14 +63,14 @@ function filterExpired(deals: any[]): any[] {
 }
 
 export async function GET(req: NextRequest) {
-  const body: any = await loadDigest();
+  const body = await loadDigest();
   const url = new URL(req.url);
   const origin = url.searchParams.get('origin') || '';
   const dest = url.searchParams.get('destination') || '';
 
   let deals = filterExpired(body.deals || []);
-  if (origin) deals = deals.filter((d: any) => d.origin === origin);
-  if (dest) deals = deals.filter((d: any) =>
+  if (origin) deals = deals.filter((d) => d.origin === origin);
+  if (dest) deals = deals.filter((d) =>
     d.destination_name.toLowerCase().includes(dest.toLowerCase()));
 
   return NextResponse.json({

@@ -9,6 +9,41 @@ import { Badge } from '@/components/ui/badge';
 type Departure = 'HKG' | 'SZX';
 type SortMode = 'discount' | 'recency';
 
+// Hermes 2026-10-19: structured shape for SQL alerts (matches
+// /api/alerts AlertEntry). Used for the hkgAlertsMap / szxAlertsMap
+// types that previously defaulted to `any`. Lint errors on `any` were
+// failing CI for the past 3 weeks.
+interface SqlAlert {
+  key: string;
+  airport: string;
+  airline: string;
+  dest_code: string;
+  dest_name: string;
+  region: string | null;
+  price: number;
+  old_price: number | null;
+  drop_amount: number | null;
+  drop_pct: number | null;
+  detected_at: string;
+  expires_at?: string;
+  comparison_source?: string;
+}
+
+// Hermes 2026-10-19: cooldown JSON shape from src/data/all_dates*.json
+// (hkgJson.cooldown[key] = {ts, price, airline, ...}). The `amount` and
+// `pct` fields are used by buildDropList when deriving a 持續跌價
+// comparison (oldPrice = cd.price + amount, dropPct = pct).
+interface CooldownEntry {
+  ts: string;
+  price?: number;
+  airline?: string;
+  dest_code?: string;
+  dest_name?: string;
+  fingerprint?: string;
+  amount?: number;
+  pct?: number;
+}
+
 interface Deal {
   route: string;
   destination: { name: string; code: string; region: string };
@@ -678,8 +713,8 @@ export default function DealsPage() {
   // CX flight option) when the bot's CX 持續跌價 only has 1 (NGO). The fix
   // is to filter by the alert's `airline` field, which is the actual scanner
   // source.
-  const [hkgAlerts, setHkgAlerts] = useState<Map<string, { airline: string; key: string; dest_code: string; dest_name: string; price: number; drop_amount: number; drop_pct: number; detected_at: string }>>(new Map());
-  const [szxAlerts, setSzxAlerts] = useState<Map<string, { airline: string; key: string; dest_code: string; dest_name: string; price: number; drop_amount: number; drop_pct: number; detected_at: string }>>(new Map());
+  const [hkgAlerts, setHkgAlerts] = useState<Map<string, SqlAlert>>(new Map());
+  const [szxAlerts, setSzxAlerts] = useState<Map<string, SqlAlert>>(new Map());
   const [hkgGenerated, setHkgGenerated] = useState<string>('');
   const [szxGenerated, setSzxGenerated] = useState<string>('');
   const [loading, setLoading] = useState(true);
@@ -720,7 +755,7 @@ export default function DealsPage() {
         // alert from the airline filter. Rank by specificity
         // (per-scanner > aggregate) so the per-scanner entry always
         // wins.
-        const hkgAlertsMap = new Map<string, any>();
+        const hkgAlertsMap = new Map<string, SqlAlert>();
         const sqlRank = (a: { airline: string; dest_code: string }): number => {
           if (a.airline === 'CX' || a.airline === 'UO') return 2;
           return 1; // HKG aggregate (airline='')
@@ -730,7 +765,7 @@ export default function DealsPage() {
         // (airline=''). Otherwise the HKG aggregate may override the
         // per-scanner entry via the simple .set() override, masking
         // the airline from the page filter.
-        const hkgAlertsRanked = new Map<string, { alert: any; rank: number }>();
+        const hkgAlertsRanked = new Map<string, { alert: SqlAlert; rank: number }>();
         for (const a of (hkgAlertsJson.alerts || [])) {
           const rank = sqlRank(a);
           const prev = hkgAlertsRanked.get(a.dest_code);
@@ -762,7 +797,7 @@ export default function DealsPage() {
           if (parts.length >= 3 && (parts[1] === 'CX' || parts[1] === 'UO')) return 2;
           return 1; // bare HKG→DEST
         };
-        const cdCandidates = new Map<string, { k: string; cd: any; rank: number; airline: string }>();
+        const cdCandidates = new Map<string, { k: string; cd: CooldownEntry; rank: number; airline: string }>();
         for (const k of cdKeys) {
           const cd = (hkgJson.cooldown || {})[k];
           if (!cd || !cd.ts) continue;
@@ -796,19 +831,21 @@ export default function DealsPage() {
           const airline = candidateAirline;
           if (hkgAlertsMap.has(destCode)) continue;
           hkgAlertsMap.set(destCode, {
-            dest_code: destCode,
-            airline,
-            price: cd.price,
-            drop_amount: cd.amount,
-            drop_pct: cd.pct,
-            detected_at: cd.ts,
             key: k,
+            airport: 'HKG',
+            dest_code: destCode,
             dest_name: k.replace(/^[A-Z]+:|→[A-Z]+→/g, '').replace(/\s*\([A-Z]{3}\)\s*$/, ''),
-            _source: 'cooldown',
+            region: null,
+            airline,
+            price: cd.price ?? 0,
+            old_price: null,
+            drop_amount: cd.amount ?? null,
+            drop_pct: cd.pct ?? null,
+            detected_at: cd.ts,
           });
         }
-        const szxAlertsMap = new Map<string, any>();
-        const szxAlertsRanked = new Map<string, { alert: any; rank: number }>();
+        const szxAlertsMap = new Map<string, SqlAlert>();
+        const szxAlertsRanked = new Map<string, { alert: SqlAlert; rank: number }>();
         for (const a of (szxAlertsJson.alerts || [])) {
           const rank = sqlRank(a);
           const prev = szxAlertsRanked.get(a.dest_code);
@@ -835,15 +872,17 @@ export default function DealsPage() {
           }
           if (szxAlertsMap.has(destCode)) continue;
           szxAlertsMap.set(destCode, {
-            dest_code: destCode,
-            airline,
-            price: cd.price,
-            drop_amount: cd.amount,
-            drop_pct: cd.pct,
-            detected_at: cd.ts,
             key: k,
+            airport: 'SZX',
+            dest_code: destCode,
             dest_name: k.replace(/^[A-Z]+:|→[A-Z]+→/g, '').replace(/\s*\([A-Z]{3}\)\s*$/, ''),
-            _source: 'cooldown',
+            region: null,
+            airline,
+            price: cd.price ?? 0,
+            old_price: null,
+            drop_amount: cd.amount ?? null,
+            drop_pct: cd.pct ?? null,
+            detected_at: cd.ts,
           });
         }
         // Hermes 2026-10-14: merge UO + CX drops into hkgDeals so they participate
@@ -873,7 +912,8 @@ hkgMerged = (() => {
   // dest_code. Otherwise iteration order can pick the bare HKG→DEST
   // key first (airline=''), and the destination's per-scanner alert
   // gets masked.
-  const cdAirlineByDest: Record<string, string> & Record<string, any> = {} as any;
+  const cdAirlineByDest: Record<string, string> = {};
+  const cdRankByDest: Record<string, number> = {};
   const cdKeys2 = Object.keys(hkgJson.cooldown || {});
   const cdRank2 = (k: string): number => {
     if (k.startsWith('CX:') || k.startsWith('UO:')) return 2;
@@ -900,10 +940,10 @@ hkgMerged = (() => {
     if (m) {
       const dest = m[1];
       const rank = cdRank2(k);
-      const prevRank = (cdAirlineByDest as any)[`_rank_${dest}`] ?? 0;
+      const prevRank = cdRankByDest[dest] ?? 0;
       if (rank > prevRank) {
         cdAirlineByDest[dest] = airline;
-        (cdAirlineByDest as any)[`_rank_${dest}`] = rank;
+        cdRankByDest[dest] = rank;
       }
     }
   }

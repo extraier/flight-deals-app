@@ -40,6 +40,23 @@ const CACHE_TTL_MS = 20_000; // 20 seconds — matches deals page poll interval
 
 type Departure = 'HKG' | 'SZX';
 
+// Hermes 2026-10-19: typed return instead of `any[]`. The shape is the
+// generic Deal record from all_dates_uo.json / all_dates_cx.json
+// (see src/app/deals/page.tsx `interface Deal`). We don't know the
+// exact subset, so use `Record<string, unknown>` and the caller
+// (projectAirlineDrops) just spreads it — no field-by-field typing
+// needed at the network boundary.
+type DealRecord = Record<string, unknown>;
+
+// Hermes 2026-10-19: uoDrops / cxDrops in SidecarData use a permissive
+// record type because the upstream JSON can have arbitrary fields.
+// The `airline` field is the only typed discriminator; we set it
+// when projecting. The original `Record<string, unknown> & {airline: 'UO'}`
+// intersection caused `projectAirlineDrops` to fail the type check
+// when it returned `{airline: 'UO' | 'CX'}` (widened). Use a single
+// union type that's compatible with both narrow and wide airline.
+type AirlineDrop = Record<string, unknown> & { airline: 'UO' | 'CX' };
+
 interface CacheEntry {
   body: unknown;
   fetchedAt: number;
@@ -118,17 +135,18 @@ async function fetchFromAnyUpstream(
 // safety net for local-dev / static-fallback mode where augmentation may
 // not be available.
 interface SidecarData {
-  uoDrops: Array<{
-    route: string;
-    destination: { code: string; name: string };
-    price: number;
-    typicalPrice?: number;
-    dropAmount: number;
-    dropPct: number;
-    firstDetected?: string | null;
-    pendingFirstSeen?: string | null;
-    depDate?: string; // YYYY-MM-DD
-  }>;
+  // Hermes 2026-10-14: shape changed. Previously these were summary DropRow-ish
+  // objects (route, destination, price, dropAmount, dropPct, depDate). The page
+  // never consumed them (grep confirmed 0 references in deals/page.tsx) and the
+  // summary shape was too thin for buildDropList to do anything useful with.
+  //
+  // Now we return full Deal records (the same shape as the HKG results array).
+  // The page appends them to hkgDeals before buildDropList runs, so UO/CX
+  // routes participate in the same drop + cooldown + airline-filter pipeline
+  // as the HKG routes. This is what makes the airline filter dropdown show
+  // "UO" and "CX" as selectable options.
+  uoDrops: AirlineDrop[];
+  cxDrops: AirlineDrop[];
   cooldown: Record<string, {
     amount: number | null;
     pct: number | null;
@@ -138,62 +156,64 @@ interface SidecarData {
 }
 
 async function fetchSidecar(parentSignal: AbortSignal): Promise<SidecarData> {
-  const empty: SidecarData = { uoDrops: [], cooldown: {} };
-  // UO data: only needed for HKG (SZX has no UO routes)
-  const ac = new AbortController();
-  const timeout = setTimeout(() => ac.abort(), UPSTREAM_TIMEOUT_MS);
-  const abortParent = () => ac.abort();
-  parentSignal.addEventListener('abort', abortParent);
-  try {
-    const res = await fetch(`${FUNNEL_BASE}/all_dates_uo.json`, {
-      signal: ac.signal,
-      headers: { 'User-Agent': 'flight-deals-app/1.1 (vercel-edge)' },
-      cache: 'no-store',
-    });
-    if (res.ok) {
-      const uo = (await res.json()) as { results?: any[] };
-      if (Array.isArray(uo?.results)) {
-        // Project UO rows to DropRow-ish shape for the deals page
-        empty.uoDrops = uo.results.map((r: any) => {
-          const dest = r.destination || {};
-          const cheapest = (r.cheapestDates || [])
-            .filter((cd: any) => typeof cd?.price === 'number')
-            .sort((a: any, b: any) => (a.price || 0) - (b.price || 0))[0];
-          const depDate = cheapest
-            ? `${cheapest.year}-${String(cheapest.month).padStart(2, '0')}-${String(cheapest.day).padStart(2, '0')}`
-            : undefined;
-          return {
-            route: r.route,
-            destination: { code: dest.code, name: dest.name || dest.code },
-            price: r.price,
-            typicalPrice: r.typicalPrice,
-            dropAmount: r.dropAmount ?? 0,
-            dropPct: r.dropPct ?? 0,
-            firstDetected: r.firstDetected ?? null,
-            pendingFirstSeen: r.pendingFirstSeen ?? null,
-            depDate,
-          };
-        });
-      }
+  const empty: SidecarData = { uoDrops: [], cxDrops: [], cooldown: {} };
+  // Hermes 2026-10-14: refactored to a generic helper. Previously only UO was
+  // fetched; CX was missing. The funnel allowlist now exposes both files
+  // (see fli-data-server.py ALLOW_FILES), so we fetch them in parallel to
+  // halve wall-time vs two sequential awaits. SZX has no airline-specific
+  // exports, so we only do this for HKG; fetchSidecar is HKG-only and SZX
+  // falls through with empty arrays.
+const fetchAirlineDrops = async (parentSignal: AbortSignal, filename: string): Promise<DealRecord[]> => {
+    const ac = new AbortController();
+    const timeout = setTimeout(() => ac.abort(), UPSTREAM_TIMEOUT_MS);
+    const abortParent = () => ac.abort();
+    parentSignal.addEventListener('abort', abortParent);
+    try {
+      const res = await fetch(`${FUNNEL_BASE}/${filename}`, {
+        signal: ac.signal,
+        headers: { 'User-Agent': 'flight-deals-app/1.1 (vercel-edge)' },
+        cache: 'no-store',
+      });
+      if (!res.ok) return [];
+      const body = (await res.json()) as { results?: DealRecord[] };
+      if (!Array.isArray(body?.results)) return [];
+      return body.results;
+    } catch (err) {
+      console.warn(`[api/deals] ${filename} sidecar fetch failed (non-fatal):`, String(err));
+      return [];
+    } finally {
+      clearTimeout(timeout);
+      parentSignal.removeEventListener('abort', abortParent);
     }
-  } catch (err) {
-    console.warn('[api/deals] UO sidecar fetch failed (non-fatal):', String(err));
-  } finally {
-    clearTimeout(timeout);
-    parentSignal.removeEventListener('abort', abortParent);
-  }
+  };
+  // Hermes 2026-10-14: pass through the FULL deal record (not a summary projection).
+  // The page merges these into hkgDeals, so they need the same shape: route,
+  // destination {name, code, region}, price, typicalPrice, dropAmount, dropPct,
+  // cheapestDates[], firstDetected, etc. The only field we add is `airline`,
+  // which buildDropList reads to populate the airline-filter chip and the
+  // cheapestDate.airline badge.
+  const projectAirlineDrops = (rows: DealRecord[], airline: 'UO' | 'CX') =>
+    rows.map((r) => ({ ...r, airline }));
+  // UO + CX in parallel (HKG only).
+  const [uoRows, cxRows] = await Promise.all([
+    fetchAirlineDrops(parentSignal, 'all_dates_uo.json'),
+    fetchAirlineDrops(parentSignal, 'all_dates_cx.json'),
+  ]);
+  empty.uoDrops = projectAirlineDrops(uoRows, 'UO');
+  empty.cxDrops = projectAirlineDrops(cxRows, 'CX');
   // Cooldown: best-effort, never blocks deals
   try {
     const res = await fetch(`${FUNNEL_BASE}/all_dates_cooldown.json`, {
-      signal: ac.signal,
+      signal: parentSignal,
       headers: { 'User-Agent': 'flight-deals-app/1.1 (vercel-edge)' },
       cache: 'no-store',
     });
     if (res.ok) {
-      const cd = (await res.json()) as Record<string, any>;
+      const cd = (await res.json()) as Record<string, unknown>;
       // Normalize entries: {amount, pct, price, ts}
-      for (const [k, v] of Object.entries(cd)) {
-        if (v && typeof v === 'object') {
+      for (const [k, raw] of Object.entries(cd)) {
+        if (raw && typeof raw === 'object') {
+          const v = raw as { amount?: unknown; pct?: unknown; price?: unknown; ts?: unknown };
           empty.cooldown[k] = {
             amount: typeof v.amount === 'number' ? v.amount : null,
             pct: typeof v.pct === 'number' ? v.pct : null,

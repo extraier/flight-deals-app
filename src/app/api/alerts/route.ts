@@ -18,16 +18,40 @@ export const revalidate = 0;
 
 const CACHE_TTL_MS = 5_000;  // 5s — matches bot's export cadence
 
-let cached: { body: unknown; fetchedAt: number } | null = null;
+// Hermes 2026-10-19: define proper types instead of `any`. The shape
+// mirrors what scripts/export_alerts_to_json.py writes into
+// src/data/drop_alerts.json.
+export interface AlertEntry {
+  key: string;
+  airport: string;
+  airline: string;
+  dest_code: string;
+  dest_name: string;
+  region: string | null;
+  price: number;
+  old_price: number | null;
+  drop_amount: number | null;
+  drop_pct: number | null;
+  detected_at: string;
+  expires_at?: string;
+  comparison_source?: string;
+}
 
-async function loadAlerts() {
+export interface AlertsFile {
+  generated: string;
+  alerts: AlertEntry[];
+}
+
+let cached: { body: AlertsFile; fetchedAt: number } | null = null;
+
+async function loadAlerts(): Promise<AlertsFile> {
   if (cached && Date.now() - cached.fetchedAt < CACHE_TTL_MS) {
     return cached.body;
   }
   const fp = path.join(process.cwd(), 'src', 'data', 'drop_alerts.json');
   try {
     const raw = await fs.readFile(fp, 'utf-8');
-    const body = JSON.parse(raw);
+    const body: AlertsFile = JSON.parse(raw);
     cached = { body, fetchedAt: Date.now() };
     return body;
   } catch {
@@ -35,7 +59,7 @@ async function loadAlerts() {
   }
 }
 
-function filterExpired(alerts: any[]): any[] {
+function filterExpired(alerts: AlertEntry[]): AlertEntry[] {
   const nowMs = Date.now();
   return alerts.filter((a) => {
     if (!a.expires_at) return true;
@@ -45,15 +69,15 @@ function filterExpired(alerts: any[]): any[] {
 }
 
 export async function GET(req: NextRequest) {
-  const body: any = await loadAlerts();
+  const body = await loadAlerts();
   const url = new URL(req.url);
   const airport = url.searchParams.get('airport') || '';
   const airline = url.searchParams.get('airline') || '';
 
   // 24h GC at the API layer
   let alerts = filterExpired(body.alerts || []);
-  if (airport) alerts = alerts.filter((a: any) => a.airport === airport);
-  if (airline) alerts = alerts.filter((a: any) => a.airline === airline);
+  if (airport) alerts = alerts.filter((a) => a.airport === airport);
+  if (airline) alerts = alerts.filter((a) => a.airline === airline);
 
   return NextResponse.json({
     generated: body.generated,
