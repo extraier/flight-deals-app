@@ -1153,7 +1153,10 @@ hkgMerged = (() => {
                 <option value="__all__">全部 ({rows.length})</option>
                 {airlineOptions.map(([code, count]) => (
                   <option key={code} value={code}>
-                    {airlineLabel(code)} ({code}) · {count}
+                    {/* Hermes 2026-10-19: user wants Chinese only — no English
+                        code in the label. The IATA code stays as the option's
+                        value so the filter logic still works. */}
+                    {AIRLINE_NAMES[code] || code} · {count}
                   </option>
                 ))}
               </select>
