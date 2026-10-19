@@ -480,7 +480,7 @@ function buildDropList(
     // undefined for many routes (e.g. HIJ has no flight metadata at all),
     // so the bot's "HKG→UO→廣島 (HIJ)" key can never be reconstructed from
     // the row alone — the lookup has to be fuzzy on destName.
-    const cdByName = new Map<string, { entry: { amount: number | null; pct: number | null; price: number | null; ts: string | null }; ageMs: number }>();
+    const cdByName = new Map<string, { entry: { amount: number | null; pct: number | null; price: number | null; ts: string | null }; ageMs: number; tsMs: number }>();
     const nowMs = Date.now();
     // Hermes 2026-09-29 (later): the previous 24h gate filtered out cooldown
     // entries before they could even seed cdByName, which meant routes whose
@@ -514,10 +514,28 @@ function buildDropList(
       const m = key.match(/([^→\s]+(?:\s[^→\s]+)*)\s*\(([A-Z]{3})\)\s*$/);
       if (!m) continue;
       const destName = `${m[1]} (${m[2]})`;
-      // First match wins (so explicit-airline keys are preferred when
-      // the same destName appears under multiple keys).
-      if (!cdByName.has(destName)) {
-        cdByName.set(destName, { entry: c, ageMs });
+      // Hermes 2026-10-19: TG-vs-page drift fix (user: "ensure HKG 🔥
+      // 今日劈價 match with what I receive in telegram"). Previously
+      // this used "First match wins" (line 519 below) — but the
+      // iteration order of `Object.entries(cooldown)` depends on JSON
+      // object key order. The bot writes both the per-airline stamp
+      // (e.g. `HKG→UO→馬尼拉 (MNL)`, stamped by the 22:00 UO scan)
+      // and the base stamp (e.g. `HKG→馬尼拉 (MNL)`, stamped by the
+      // 19:00 HKT scan) to the same JSON. The per-airline one usually
+      // comes first because the UO scanner wrote it later but with
+      // a different prefix — and `Object.entries` preserves insertion
+      // order, so the older (per-airline) entry wins the "first match
+      // wins" race. Result: the page's `cdByName` ends up with the
+      // stale -170 from yesterday, not the fresh -200 from today.
+      //
+      // Fix: keep the most recent (max tsMs) entry per destName.
+      // Iteration order no longer matters; freshness wins. This
+      // matches the fix in buildDropList's per-deal candidate loop
+      // (line ~236).
+      const tsMs = new Date(c.ts).getTime();
+      const prev = cdByName.get(destName);
+      if (!prev || tsMs > prev.tsMs) {
+        cdByName.set(destName, { entry: c, ageMs, tsMs });
       }
     }
     // Hermes 2026-09-29 (later): two-pass override.
