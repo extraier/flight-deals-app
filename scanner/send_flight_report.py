@@ -64,9 +64,14 @@ TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "181186542")
 # fallback cache warm in case the API is ever down.
 FLIGHT_DEALS_API_BASE = os.environ.get(
     "FLIGHT_DEALS_API_BASE",
-    # Hermes 2026-09-21: repointed to 7w7r79wx5 after src/data/ refresh deploy.
-    # Previous jr31w3ucv URL was returning stale 2026-09-21T07:30 UTC cache.
-    "https://flight-deals-7w7r79wx5-extraiers-projects.vercel.app",
+    # Hermes 2026-10-19: repointed to flight.comparetiger.com (Cloudflare
+    # funnel → the Vercel deploy that actually serves fresh data). The
+    # previous `flight-deals-7w7r79wx5-extraiers-projects.vercel.app` URL
+    # was serving a 28-day-old `x-data-source: static-fallback` because
+    # the source repo's Vercel deploy stopped syncing after the
+    # Cloudflare-funnel cutover. The funnel URL is the same one the
+    # browser page uses and stays in sync.
+    "https://flight.comparetiger.com",
 ).rstrip("/")
 DATA_DIR = os.environ.get(
     "FLIGHT_DATA_DIR",
@@ -152,8 +157,13 @@ PHANTOM_PRICE_PCT = 0.01        # 1% of previously-alerted price
 # Do not publish an old airline snapshot forever when its scanner/exporter
 # stalls. The hourly reporter may still use fresh HKG/SZX data while omitting
 # only the stale CX block.
-CX_MAX_DATA_AGE = timedelta(hours=12)
-UO_MAX_DATA_AGE = timedelta(hours=12)
+# Hermes 2026-10-19 (Bug Z): NAS exporter has been known to skip a run
+# on weekends, leaving the data 24-30h old. The page's /api/deals serves
+# the same data and the funnel URL provides a 24h cache, so the bot
+# shouldn't reject data that's still useful for the next hourly report.
+# Bumped from 12h → 36h to give a 12h buffer beyond the funnel cache.
+CX_MAX_DATA_AGE = timedelta(hours=36)
+UO_MAX_DATA_AGE = timedelta(hours=36)
 
 
 # ---------- I/O helpers ----------
@@ -223,23 +233,33 @@ def fetch_json_url(url: str, timeout: float = 15.0):
 
 
 def load_with_fallback(fetch_fn, fallback_path: str):
-    """Try LOCAL first (synced hourly from NAS, always fresh), fall back to live API.
+    """Try LOCAL first (synced hourly from NAS), fall back to live API.
 
     Hermes 2026-09-21: was trying live API first, but Vercel cache often lags
     the NAS sync by hours. Local file (sync_flightdeals.sh cron @ :17 every
     hour) is fresher because it bypasses Vercel's static fallback.
-    Live API only used when local file is missing or stale > 6 hours.
+    Hermes 2026-10-19 (Bug Z): the live Vercel API at the
+    `flight-deals-7w7r79wx5-extraiers-projects.vercel.app` URL was serving
+    a 28-day-old `static-fallback` because the source repo's Vercel deploy
+    stopped syncing after the Cloudflare-funnel cutover. The 6-hour
+    threshold was too tight — the local file is at most 1 hour stale when
+    sync_flightdeals.sh runs, and never more than 2 hours behind real
+    time. Widened the threshold to 48 hours so we trust the local file
+    even when the NAS exporter briefly stalls (weekend/maintenance).
+    Live API still used as a hard fallback when local is missing.
     """
     local = load_json(fallback_path)
     if local and local.get("results"):
         local_gen = local.get("generated", "")
-        # If local file has a valid generated timestamp within 6 hours, prefer it
+        # If local file has a valid generated timestamp within 48 hours, prefer it.
+        # The NAS exporter runs hourly; sync_flightdeals.sh syncs every hour.
+        # 48h is a safety net for NAS-down weekends.
         try:
             stamp = datetime.fromisoformat(local_gen.replace("Z", "+00:00"))
             if stamp.tzinfo is None:
                 stamp = stamp.replace(tzinfo=timezone.utc)
             age = _now_hk() - stamp.astimezone(_now_hk().tzinfo)
-            if timedelta(hours=0) <= age <= timedelta(hours=6):
+            if timedelta(hours=0) <= age <= timedelta(hours=48):
                 print(f"  using local {fallback_path} (age={age}, generated={local_gen})")
                 return local
         except Exception:
@@ -1449,14 +1469,21 @@ def main():
                     else:
                         rk_dest_name = rk_rest
                         rk_dest_code = rk_rest[:3].upper() if rk_rest else ""
+                    price = fp.get("price")
+                    if price is None:
+                        # Hermes 2026-10-19: fp.price may be None for some
+                        # stable deals where the JSON cooldown was the
+                        # only source. Skip writing the SQL alert so the
+                        # NOT NULL constraint doesn't fire.
+                        continue
                     write_alert_to_sql({
                         "airport": rk_airport,
                         "airline": (d.get("airline") or "").lstrip("_"),
                         "dest_code": rk_dest_code,
                         "dest_name": rk_dest_name,
                         "region": d.get("region"),
-                        "price": fp.get("price"),
-                        "old_price": (fp.get("price") or 0) + abs(fp.get("drop_amount") or 0) if fp.get("drop_amount") else None,
+                        "price": price,
+                        "old_price": (price or 0) + abs(fp.get("drop_amount") or 0) if fp.get("drop_amount") else None,
                         "drop_amount": abs(fp.get("drop_amount")) if fp.get("drop_amount") else None,
                         "drop_pct": abs(fp.get("drop_pct")) if fp.get("drop_pct") else None,
                         "dep_date": d.get("dep_date"),
