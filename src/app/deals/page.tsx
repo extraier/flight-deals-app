@@ -1065,15 +1065,9 @@ hkgMerged = (() => {
             <ArrowLeft className="h-4 w-4" />
             返回主頁
           </Link>
-          <Link
-            href="/gflights"
-            className="inline-flex items-center gap-1 text-sm text-violet-700 hover:text-violet-900 transition-colors"
-          >
-            ✉️ Google Flights 推介
-          </Link>
         </div>
 
-                {/* Header */}
+        {/* Header */}
         <div className="mb-4 text-center">
           <h1 className="text-3xl font-bold tracking-tight text-foreground">🔥 今日劈價</h1>
           <p className="mt-1 text-sm text-muted-foreground">
