@@ -1150,13 +1150,16 @@ hkgMerged = (() => {
                 }
                 className="h-9 rounded-md border border-input bg-background px-3 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500/40 max-w-xs"
               >
-                <option value="__all__">全部 ({rows.length})</option>
-                {airlineOptions.map(([code, count]) => (
+                <option value="__all__">全部</option>
+                {airlineOptions.map(([code]) => (
                   <option key={code} value={code}>
                     {/* Hermes 2026-10-19: user wants Chinese only — no English
-                        code in the label. The IATA code stays as the option's
-                        value so the filter logic still works. */}
-                    {AIRLINE_NAMES[code] || code} · {count}
+                        code, no count. The IATA code stays as the option's
+                        value so the filter logic still works. Counts were
+                        the per-airline *drop* count (UO=20), which
+                        confused the user because the filtered page only
+                        shows UO持續跌價=7. Removing for clarity. */}
+                    {AIRLINE_NAMES[code] || code}
                   </option>
                 ))}
               </select>
