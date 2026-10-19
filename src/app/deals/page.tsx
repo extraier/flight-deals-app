@@ -218,6 +218,21 @@ function buildDropList(
       const code = d.destination?.code || '';
       const airline = (d.airline || '').replace(/^_/, '').toUpperCase();
       const bareName = d.destination?.name || '';
+      // Hermes 2026-10-19: TG-vs-page drift fix (user: "ensure HKG 🔥
+      // 今日劈價 match with what I receive in telegram"). Previously
+      // the candidate list was iterated in order and the first match
+      // won. That meant the per-airline key (e.g. HKG→UO→MNL, stamped
+      // by the UO 22:00 scanner run) would mask the base key
+      // (HKG→MNL, stamped by the most recent 19:00 HKT run). Result:
+      // the page showed yesterday's -17.6% on MNL while Telegram
+      // showed today's -22.9% on MNL.
+      //
+      // Fix: collect ALL candidates that match within 24h, then pick
+      // the most recent one (largest ts). That way the page mirrors
+      // the bot's most-recent alert, which is what Telegram shows.
+      // The per-airline keys are still iterated in the same
+      // specificity order, but the comparator now considers ts, not
+      // iteration order.
       const candidates = [
         airline ? `HKG→${airline}→${bareName}` : null,
         `HKG→${bareName}`,
@@ -225,22 +240,41 @@ function buildDropList(
         airline ? `${airline}:HKG→${bareName} (${code})` : null,
         `HKG→${code}`,
       ].filter((k): k is string => !!k);
+      // Hermes 2026-10-19: FCO/cooldown-only fix. If the deal has no
+      // airline stamped (hkgBase rows), the airline-specific candidates
+      // are filtered out — leaving only the base `HKG→bareName` and
+      // `HKG→code` keys. For routes like FCO where the bot's most
+      // recent alert is keyed by `HKG→羅馬 (FCO)` (i.e. the base
+      // shape), this is enough. But if a per-airline stamp also
+      // exists (e.g. `HKG→UO→FCO`), it should still be considered —
+      // not the other way around. This branch is the same iteration
+      // we already had; the change is below where we pick the winner.
+      let bestCd: { amount: number; pct: number; price: number | null; ts: string; tsMs: number } | null = null;
       for (const key of candidates) {
         const c = cooldown[key];
         if (c && c.ts) {
           const ageMs = Date.now() - new Date(c.ts).getTime();
           if (ageMs >= 0 && ageMs <= 24 * 60 * 60 * 1000) {
-            // Prefer stamped fingerprint; fall back to ts-only so we can
-            // still mark the row as 持續跌價.
-            cooldownSource = {
-              amount: typeof c.amount === 'number' ? c.amount : 0,
-              pct: typeof c.pct === 'number' ? c.pct : 0,
-              price: c.price,
-              ts: c.ts,
-            };
-            break;
+            const tsMs = new Date(c.ts).getTime();
+            if (!bestCd || tsMs > bestCd.tsMs) {
+              bestCd = {
+                amount: typeof c.amount === 'number' ? c.amount : 0,
+                pct: typeof c.pct === 'number' ? c.pct : 0,
+                price: c.price,
+                ts: c.ts,
+                tsMs,
+              };
+            }
           }
         }
+      }
+      if (bestCd) {
+        cooldownSource = {
+          amount: bestCd.amount,
+          pct: bestCd.pct,
+          price: bestCd.price,
+          ts: bestCd.ts,
+        };
       }
     }
 
