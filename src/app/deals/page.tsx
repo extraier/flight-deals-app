@@ -999,8 +999,24 @@ hkgMerged = (() => {
       }
     }
   }
-  // Score each candidate: prefer cooldown airline match, then cxDrops > uoDrops > hkgBase.
-  const tier = (d: { airline?: string }): number => {
+  // Hermes 2026-10-21: Bug FCO-merge. The previous loop replaced a real
+  // hkgBase row with an empty cxDrops stub just because tier(3) > tier(1),
+  // even when the cxDrops row had price=0 and cheapestDates=[] (no real
+  // data to display). Symptom: FCO has a real -$212/-5.5% in hkgBase but
+  // the page ignored it because tier-3 cxDrops FCO has "price 0". Result
+  // the row never made it into buildDropList → never rendered. Same trap
+  // for any other route where cxDrops has a sentinel row.
+  //
+  // Guard: only count a row's tier (cxDrops > uoDrops > hkgBase) when it
+  // has real data. Empty stubs keep tier 0 and never replace anyone.
+  const hasRealData = (d: { price?: number; cheapestDates?: Deal["cheapestDates"] }): boolean => {
+    const p = d.price;
+    const cd = d.cheapestDates;
+    return (typeof p === "number" && p > 0)
+      && Array.isArray(cd) && cd.length > 0;
+  };
+  const tier = (d: { airline?: string; price?: number; cheapestDates?: Deal["cheapestDates"] }): number => {
+    if (!hasRealData(d)) return 0; // tier 0 = stub, never wins
     const a = (d.airline || '').toUpperCase();
     if (a === 'CX') return 3;
     if (a === 'UO') return 2;
@@ -1016,8 +1032,8 @@ hkgMerged = (() => {
     const codeMatchCd = cdAirlineByDest[code];
     const prevMatch = codeMatchCd && (prev.airline || '').toUpperCase() === codeMatchCd;
     const curMatch  = codeMatchCd && (d.airline     || '').toUpperCase() === codeMatchCd;
-    if (curMatch && !prevMatch) { destBest.set(code, d); continue; }
-    if (curMatch === prevMatch && tier(d) > tier(prev)) destBest.set(code, d);
+    if (curMatch && !prevMatch && hasRealData(d)) { destBest.set(code, d); continue; }
+    if (curMatch === prevMatch && hasRealData(d) && tier(d) > tier(prev)) destBest.set(code, d);
   }
   return Array.from(destBest.values());
 })();
