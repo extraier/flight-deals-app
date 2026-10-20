@@ -54,11 +54,19 @@ async function loadDigest(): Promise<GFlightsFile> {
 }
 
 function filterExpired(deals: GFlightDeal[]): GFlightDeal[] {
+  // Hermes 2026-10-19: widened from 24h to 7d to match the cron window
+  // (`scanner/gflights_poller.py --days 7`). The poller fetches 7 days of
+  // emails, so the JSON stores up to 7-day-old alerts. Previously the
+  // 24h gate silently dropped everything older than a day, which made
+  // ~80% of the corpus invisible on /gflights and made the user think
+  // the cron was broken. The previous "Hermes 2026-10-17" comment was
+  // a wrong-first-attempt that masked the bug for 2 days.
   const nowMs = Date.now();
+  const windowMs = 7 * 24 * 60 * 60 * 1000;
   return deals.filter((d) => {
     if (!d.first_seen) return true;
     const firstMs = Date.parse(d.first_seen);
-    return !isNaN(firstMs) && (nowMs - firstMs) < 24 * 60 * 60 * 1000;
+    return !isNaN(firstMs) && (nowMs - firstMs) < windowMs;
   });
 }
 
