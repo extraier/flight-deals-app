@@ -16,8 +16,13 @@ set -euo pipefail
 
 REPO=/Users/roger/flight-deals-app
 LOG=/tmp/gflights_poll_deploy.log
-PLIST_LABEL=com.comparetiger.gflights-poll
 TEAM=team_UHKez9kHl9L94fPGdgP2Uj8i
+
+# Hermes 2026-10-20: launchd runs scripts with a stripped PATH (just
+# /usr/bin:/bin:/usr/sbin:/sbin). npx + vercel live in /opt/homebrew/bin
+# via npm-prefix, so without this we get exit 127 "command not found"
+# on `npx vercel`. Explicit PATH avoids drift across Node versions.
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 exec >> "$LOG" 2>&1
 echo "==== $(date -u +%FT%TZ) gflights poll+deploy ===="
@@ -44,7 +49,7 @@ echo "[changed] gflights_digest.json has new deals — deploying"
 # (defense in depth vs the git diff above).
 git add src/data/gflights_digest.json
 git commit -m "Cron pull: new GFlight deals $(date -u +%FT%TZ)
-$(git diff --cached --numstat src/data/glights_digest.json | awk '{print $1" insertions, "$2" deletions"}')"
+$(git diff --cached --numstat -- src/data/gflights_digest.json | awk '{print $1" insertions, "$2" deletions"}')"
 
 # 5) Push to main. If push fails (e.g. concurrent push), bail out
 # without deploying so we don't drift further.
