@@ -766,6 +766,90 @@ def mark_alerted(route_keys: list, cooldown: dict, *, alert_payload: dict | None
             }
         else:
             new[k] = now_iso
+
+    # Hermes 2026-10-21: Bug V part 3 — keep page and Telegram MAIN
+    # in sync on stale (持續跌價) drops. The current loop stamps
+    # per-airline keys ("HKG→UO→DEST", "UO:HKG→DEST") with the
+    # UO-scanner's per-airline history.1d drop (-170 for MNL). But
+    # the destination's HKG-base key ("HKG→DEST") is idempotently
+    # SKIPPED (it's already in cooldown from yesterday's HKG scan,
+    # which stamped the destination-level value -200 for MNL).
+    #
+    # The page's buildDropList picks the freshest stamp per dest;
+    # today's UO stamps win over yesterday's HKG-base stamp, so the
+    # page shows -170 for MNL while Telegram MAIN (which uses
+    # hkg_fresh_raw's freshly-computed drop, never cooldown) sends
+    # -200.
+    #
+    # Fix: for each per-airline key we just stamped, ALSO bump the
+    # matching HKG-base key's timestamp to today and re-stamp its
+    # fingerprint with the destination-level value from `cooldown`/
+    # the freshly-generated HKG export. The HKG-base key already
+    # exists in `cooldown` from yesterday's HKG scan with the
+    # destination-level value (-200 for MNL). Bumping its ts to now
+    # makes it the freshest entry → page picks the destination-level
+    # value, matching Telegram MAIN.
+    #
+    # Why preserve old fingerprint instead of pulling fresh from
+    # alert_payload? alert_payload is built from hkg_fresh
+    # (POST-filter_already_alerted). For routes already in cooldown
+    # (like MNL), the HKG-base key isn't in hkg_fresh, so it's not
+    # in alert_payload. But the cooldown still has its
+    # destination-level value from yesterday's stamp. Re-stamping
+    # that same value with today's ts is the simplest correct
+    # action: it carries forward the destination-level drop without
+    # computing it again.
+    def _split_hkg_base_key(per_airline_key: str) -> str | None:
+        # "HKG→UO→DEST (CODE)"   → "HKG→DEST (CODE)"
+        # "UO:HKG→DEST (CODE)"   → "HKG→DEST (CODE)"
+        # "HKG→DEST (CODE)"      → None (already bare)
+        # "SZX→UO→DEST"          → "SZX→DEST"
+        if "→UO→" in per_airline_key or "→CX→" in per_airline_key or "→HKE→" in per_airline_key:
+            prefix, _mid, rest = per_airline_key.partition("→")
+            if _mid in ("UO", "CX", "HKE"):
+                return f"{prefix}→{rest}"
+        if ":" in per_airline_key:
+            _prefix_part, _sep, rest = per_airline_key.partition(":")
+            if rest.startswith("HKG→") or rest.startswith("SZX→"):
+                return rest
+        return None
+
+    bumped_hkg_base_keys: set[str] = set()
+    # Iterate over per-airline variants in route_keys. mark_alerted's
+    # idempotent guard (Bug E fix 2026-09-27) preserves old stamps for
+    # keys already in cooldown, which means per-airline keys that are
+    # still in cooldown from earlier in the day WON'T have ts=now_iso
+    # after mark_alerted returns. We test for "per-airline variant in
+    # route_keys" instead of "freshly stamped" — the relevant condition
+    # is that THIS run observed the per-airline scan output and wanted
+    # the destination alerted, regardless of whether the stamp is new.
+    for k in route_keys:
+        base = _split_hkg_base_key(k)
+        if not base or base in bumped_hkg_base_keys:
+            continue
+        # Must already be in cooldown as a fingerprint (otherwise
+        # mark_alerted would have stamped it earlier with the fresh
+        # destination-level value, and we don't need to bump).
+        existing_entry = new.get(base)
+        if not isinstance(existing_entry, dict):
+            continue
+        # Bug V part 3: only bump if the HKG-base stamp is older than
+        # the per-airline stamp observed this run. If HKG-base is
+        # already at-or-after the per-airline stamp, the page will
+        # pick it correctly without intervention. If it's older, the
+        # page currently prefers the per-airline value (wrong) — bump
+        # the HKG-base entry to now so it wins.
+        per_airline_entry = new.get(k)
+        per_airline_ts = _existing_ts(per_airline_entry) if isinstance(per_airline_entry, dict) else ""
+        hkg_base_ts = existing_entry.get("ts", "")
+        if per_airline_ts and hkg_base_ts and per_airline_ts > hkg_base_ts:
+            new[base] = {
+                "ts": now_iso,
+                "price": existing_entry.get("price"),
+                "pct": existing_entry.get("pct"),
+                "amount": existing_entry.get("amount"),
+            }
+            bumped_hkg_base_keys.add(base)
     # Garbage-collect entries older than COOLDOWN_WINDOW so the file
     # stays small. Daily-cadence cooldown means we only need yesterday's
     # entries around to suppress "same calendar day" re-fires, but we
