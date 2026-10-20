@@ -233,6 +233,24 @@ function buildDropList(
       // The per-airline keys are still iterated in the same
       // specificity order, but the comparator now considers ts, not
       // iteration order.
+      // Hermes 2026-10-21: Bug V part 2 — Telegram MAIN uses the
+      // destination-level (HKG-export) drop value (-200 for MNL).
+      // The page's per-deal candidate loop was picking the
+      // freshest stamp across all variants, which made the
+      // merged UO-airline deal pick today's UO per-airline
+      // stamp (-170 for MNL) over yesterday's HKG-base stamp
+      // (-200). Two sources, two answers, page disagreed with
+      // Telegram.
+      //
+      // Fix: bias the comparator so the HKG-base key
+      // (`HKG→${bareName}`) wins on ties with the UO per-airline
+      // key (`HKG→UO→${bareName}`) when they're within 1 minute
+      // of each other. They almost always are (per-airline
+      // scanner writes its own key within seconds of the HKG
+      // base scan), so this treats them as "same alert" and
+      // prefers the destination-level value. Real new per-airline
+      // signals (e.g. UO drops again 2h after HKG, no new HKG
+      // stamp) still win because they're temporally newer by hours.
       const candidates = [
         airline ? `HKG→${airline}→${bareName}` : null,
         `HKG→${bareName}`,
@@ -249,20 +267,51 @@ function buildDropList(
       // exists (e.g. `HKG→UO→FCO`), it should still be considered —
       // not the other way around. This branch is the same iteration
       // we already had; the change is below where we pick the winner.
-      let bestCd: { amount: number; pct: number; price: number | null; ts: string; tsMs: number } | null = null;
+      let bestCd: {
+        amount: number; pct: number; price: number | null; ts: string; tsMs: number;
+        _candidateIdx?: number;
+      } | null = null;
+      // Hermes 2026-10-21: Bug V part 2 tie-breaker. Prefer the HKG base
+      // key (`HKG→${bareName}`) over per-airline variants when their
+      // timestamps are within the SAME_SCAN_WINDOW_MS. Per-airline
+      // scanners run alongside the HKG scan and stamp cooldown within
+      // seconds; treating them as one alert keeps the destination-level
+      // Telegram MAIN value visible on the page. Real per-airline
+      // signals (UO dropped again 2h after HKG, no fresh HKG stamp)
+      // still win because their timestamps differ by hours.
+      const SAME_SCAN_WINDOW_MS = 5 * 60 * 1000;
       for (const key of candidates) {
         const c = cooldown[key];
         if (c && c.ts) {
           const ageMs = Date.now() - new Date(c.ts).getTime();
           if (ageMs >= 0 && ageMs <= 24 * 60 * 60 * 1000) {
             const tsMs = new Date(c.ts).getTime();
-            if (!bestCd || tsMs > bestCd.tsMs) {
+            const isHkgBase = key === `HKG→${bareName}`;
+            const prevIsHkgBase = bestCd
+              ? candidates.indexOf(`HKG→${bareName}`) < bestCd._candidateIdx
+              : false;
+            const prevTsMs = bestCd?.tsMs ?? -Infinity;
+            const prevIdx = bestCd?._candidateIdx ?? Infinity;
+            // Standard: pick max tsMs. Override: if new is HKG-base AND
+            // prev exists AND they're within 5 min AND prev is the
+            // per-airline variant (idx > 0 = came AFTER the HKG-base
+            // candidate in the list), prefer the HKG-base value
+            // (matches Telegram MAIN).
+            const shouldPreferHkgBase =
+              isHkgBase
+              && bestCd !== null
+              && Math.abs(tsMs - prevTsMs) <= SAME_SCAN_WINDOW_MS
+              && prevIdx > 0;
+            if (!bestCd || shouldPreferHkgBase || tsMs > bestCd.tsMs) {
+              // Track the candidate index so we can detect prior-position
+              // HKG-base picks for future iterations.
               bestCd = {
                 amount: typeof c.amount === 'number' ? c.amount : 0,
                 pct: typeof c.pct === 'number' ? c.pct : 0,
                 price: c.price,
                 ts: c.ts,
                 tsMs,
+                _candidateIdx: candidates.indexOf(key),
               };
             }
           }
