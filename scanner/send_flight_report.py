@@ -1429,6 +1429,31 @@ def main():
                 # so the same destination alerted by different scanners
                 # gets distinct rows. The cooldown JSON write below stays
                 # for backwards compat with the bot's dedup logic.
+
+                # Hermes 2026-10-21: Bug V (TG-vs-page data drift on UO/CX
+                # filters). The previous loop iterated uo_fresh_raw and
+                # uo_combined alongside hkg_fresh_raw, which produced
+                # TWO SQL rows per destination:
+                #   - `20261021HKalertMNL` (no airline) ← from hkg_fresh_raw's
+                #     drop_amount=-200 stamped with airline=''
+                #   - `20261021HKUOalertMNL` (UO) ← from uo_combined's
+                #     drop_amount=-170 stamped with airline='UO'
+                #
+                # Result: the page's "📌 持續跌價" matches the Telegram
+                # value when the airline filter is "all" (HKG row wins
+                # somehow), but when the user picks "國泰" / "香港快運"
+                # the SQL shows the stale per-airline cooldown stamp
+                # (e.g. MNL -170/-15.4% from 2026-10-18 UO history) instead
+                # of the Telegram's whole-route drop (MNL -200/-17.6% from
+                # the latest HKG export).
+                #
+                # Fix: iterate ONLY the same set the Telegram MAIN section
+                # uses (hkg_fresh_raw + szx_fresh_raw + cx_fresh_raw).
+                # Skip uo_fresh_raw / uo_combined — those are UO-only
+                # vs昨日 signals that correctly show in the dedicated
+                # "✈️ 港快 UO" Telegram block but should NOT stamp the
+                # shared drop_alerts.db (which feeds the unified page
+                # 持續跌價 section).
                 sql_written = 0
                 now_hk_iso = _now_hk().isoformat()
                 # Hermes 2026-10-15: iterate the UNFILTERED fresh lists so we
@@ -1436,8 +1461,7 @@ def main():
                 # (those are exactly the routes the user wants persisted to
                 # SQL so the page can re-display them). alerted_keys is the
                 # POST-filter set, but we want PRE-filter.
-                for d in (hkg_fresh_raw + szx_fresh_raw + cx_fresh_raw
-                          + uo_fresh_raw + uo_combined):
+                for d in (hkg_fresh_raw + szx_fresh_raw + cx_fresh_raw):
                     if not d.get("route_key"):
                         continue
                     rk = d["route_key"]
