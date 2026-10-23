@@ -176,20 +176,33 @@ export default function Home() {
     // page within ~30 s of the export cycle (was 5+ min). Combined with
     // the deals page's on-focus refresh, opening the app from a Telegram
     // notification now shows the matching alert immediately.
-    const interval = setInterval(load, 20_000);
-    // Hermes 2026-07-09: refresh on tab focus so a backgrounded tab gets
-    // fresh data the moment the user opens the app — closes the
-    // "I just got a Telegram alert but the page still shows yesterday's
-    // drops" gap.
+    //
+    // Hermes 2026-10-23: poll only while the tab is actually visible.
+    // A hidden tab cannot show the result, so polling it is pure waste
+    // against the 1,000,000/month Hobby function-invocation allowance.
+    let timer: ReturnType<typeof setInterval> | null = null;
+    const startPolling = () => {
+      if (timer === null) timer = setInterval(load, 20_000);
+    };
+    const stopPolling = () => {
+      if (timer !== null) {
+        clearInterval(timer);
+        timer = null;
+      }
+    };
     const onVisibility = () => {
       if (document.visibilityState === 'visible') {
         load();
+        startPolling();
+      } else {
+        stopPolling();
       }
     };
+    if (document.visibilityState === 'visible') startPolling();
     document.addEventListener('visibilitychange', onVisibility);
     return () => {
       cancelled = true;
-      clearInterval(interval);
+      stopPolling();
       document.removeEventListener('visibilitychange', onVisibility);
     };
   }, [departure]);

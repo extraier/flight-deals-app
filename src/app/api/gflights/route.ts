@@ -81,10 +81,28 @@ export async function GET(req: NextRequest) {
   if (dest) deals = deals.filter((d) =>
     d.destination_name.toLowerCase().includes(dest.toLowerCase()));
 
-  return NextResponse.json({
-    generated: body.generated,
-    source: body.source,
-    deals,
-    count: deals.length,
-  });
+  return NextResponse.json(
+    {
+      generated: body.generated,
+      source: body.source,
+      deals,
+      count: deals.length,
+    },
+    {
+      headers: {
+        // Hermes 2026-10-23: CDN-cacheable.
+        //
+        // Same problem as /api/alerts — without s-maxage this route returned
+        // "max-age=0, must-revalidate" on every request → x-vercel-cache: MISS
+        // → one Lambda invocation per hit. The /gflights page polls this
+        // route every 5 minutes, and the hourly poll+deploy cycle guarantees
+        // a cold cache right after every deploy.
+        //
+        // The digest is refreshed hourly by the gflights poller, so a 30s
+        // edge cache is far fresher than the data itself.
+        'Cache-Control':
+          'public, max-age=0, s-maxage=30, stale-while-revalidate=120',
+      },
+    },
+  );
 }

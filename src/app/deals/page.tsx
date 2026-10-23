@@ -1055,17 +1055,40 @@ hkgMerged = (() => {
     // Hermes 2026-07-09: dropped 90s → 20s so drops appear on the page within
     // ~30 s of the export cycle (was 5+ min). The /api/deals cache layer
     // already short-circuits redundant upstream fetches, so 20 s is cheap.
-    const t = setInterval(load, 20_000);
-    // Hermes 2026-07-09: also refresh on tab focus so a backgrounded tab gets
-    // fresh data the moment the user opens the app — closes the "I just got
-    // a Telegram alert but the page still shows yesterday's drops" gap.
-    const onVisibility = () => {
-      if (document.visibilityState === 'visible') load();
+    //
+    // Hermes 2026-10-23: poll only while the tab is actually visible.
+    //
+    // A hidden tab polling every 20s is pure waste — the user cannot see the
+    // result. Each poll fires 4 API calls; with the /api/alerts + /api/gflights
+    // routes now CDN-cacheable most of those are edge hits, but the FIRST
+    // poll after every 60s edge-cache expiry still costs a Lambda invocation.
+    // Background tabs were the single biggest avoidable source of invocations
+    // against the 1,000,000/month Hobby allowance.
+    //
+    // Visible-tab behaviour is unchanged: still a fresh fetch every 20s.
+    let timer: ReturnType<typeof setInterval> | null = null;
+    const startPolling = () => {
+      if (timer === null) timer = setInterval(load, 20_000);
     };
+    const stopPolling = () => {
+      if (timer !== null) {
+        clearInterval(timer);
+        timer = null;
+      }
+    };
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        load();
+        startPolling();
+      } else {
+        stopPolling();
+      }
+    };
+    if (document.visibilityState === 'visible') startPolling();
     document.addEventListener('visibilitychange', onVisibility);
     return () => {
       cancelled = true;
-      clearInterval(t);
+      stopPolling();
       document.removeEventListener('visibilitychange', onVisibility);
     };
   }, []);

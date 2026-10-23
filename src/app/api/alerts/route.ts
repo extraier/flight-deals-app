@@ -79,9 +79,29 @@ export async function GET(req: NextRequest) {
   if (airport) alerts = alerts.filter((a) => a.airport === airport);
   if (airline) alerts = alerts.filter((a) => a.airline === airline);
 
-  return NextResponse.json({
-    generated: body.generated,
-    alerts,
-    count: alerts.length,
-  });
+  return NextResponse.json(
+    {
+      generated: body.generated,
+      alerts,
+      count: alerts.length,
+    },
+    {
+      headers: {
+        // Hermes 2026-10-23: CDN-cacheable.
+        //
+        // Without s-maxage this route returned "max-age=0, must-revalidate"
+        // on EVERY request → x-vercel-cache: MISS → one Lambda invocation per
+        // hit. The /deals page polls every 20s and fires this route twice per
+        // poll, so this single route was burning roughly half of the team's
+        // 1,000,000/month Hobby function-invocation allowance.
+        //
+        // 30s matches the scanner export cadence, so cache staleness is
+        // invisible. stale-while-revalidate serves the cached body while a
+        // background request refreshes it, so a burst never queues up
+        // serial Lambda invocations.
+        'Cache-Control':
+          'public, max-age=0, s-maxage=30, stale-while-revalidate=120',
+      },
+    },
+  );
 }
