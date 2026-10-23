@@ -26,7 +26,20 @@ import type { NextRequest } from 'next/server';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-const FUNNEL_BASE = 'https://ugreen-nas.tail20bf1.ts.net';
+// Hermes 2026-10-24: fixed stale hostname. This was hardcoded to
+// 'https://ugreen-nas.tail20bf1.ts.net' — the OLD NAS, which no longer
+// exists in the tailnet (NXDOMAIN). The live Funnel hostname is
+// 'dh4300plus-70ca-1.tail20bf1.ts.net', matching FUNNEL_BASE in
+// src/app/api/deals/route.ts and src/app/api/diag-funnel/route.ts.
+//
+// Symptom of the bug: /api/health reported status=critical with
+// "all upstreams failed" for BOTH HKG and SZX, because the funnel probe
+// hit a host that doesn't resolve. The watchdog cron then alerted on a
+// phantom outage while the funnel was actually fine.
+//
+// Verify the live hostname before changing this:
+//   ssh nas 'tailscale serve status'   # shows the "(Funnel on)" hostname
+const FUNNEL_BASE = 'https://dh4300plus-70ca-1.tail20bf1.ts.net';
 const CDN_BASE = 'https://cdn.savetheday.io/deals';
 const PROBE_TIMEOUT_MS = 6_000;
 
