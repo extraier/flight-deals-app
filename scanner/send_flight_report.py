@@ -169,19 +169,93 @@ UO_MAX_DATA_AGE = timedelta(hours=36)
 # ---------- I/O helpers ----------
 
 def send_telegram(text: str) -> bool:
-    """Post a single message to the configured chat. Returns True on success.
+    """Post a message to the configured chat. Returns True on success.
 
-    Telegram has a 4096 char limit per message; if our text is longer we
-    refuse to send (better than truncating silently). The current format
-    fits in ~1700 chars, so this is just a safety net.
+    Telegram has a 4096 char limit per message. The report grew past
+    that on 2026-10-27 (4660 chars) because the number of live drop
+    routes went up — the old code REFUSED to send anything over 4000
+    chars, so the user silently stopped getting hourly alerts for the
+    rest of the day (8 consecutive failed runs).
+
+    We now SPLIT the message instead of refusing. Splits happen at
+    airport-block boundaries so each part is a coherent chunk, and a
+    continuation marker is added to every part after the first.
     """
     if not TELEGRAM_TOKEN:
         print("ERROR: TELEGRAM_BOT_TOKEN env var is not set. Refusing to send.")
         print("       Add it to the launchd plist (see comment at top) and reload.")
         return False
-    if len(text) > 4000:
-        print(f"WARN: message is {len(text)} chars, refusing to send (limit 4096)")
-        return False
+
+    for part in split_for_telegram(text):
+        if not _send_one_telegram(part):
+            return False
+    return True
+
+
+# Telegram's hard limit is 4096. Leave headroom for the continuation
+# marker and for Telegram counting the message differently than Python
+# (it counts UTF-16 code units, so emoji outside the BMP count as 2).
+TELEGRAM_MAX = 3900
+
+
+def split_for_telegram(text: str, limit: int = TELEGRAM_MAX) -> list:
+    """Split a long report into Telegram-sized parts at block boundaries.
+
+    The report is built from airport blocks separated by blank lines, so
+    the natural split point is a blank line. We prefer to split at a
+    blank line; if a single block is still too long, we split it at the
+    next newline instead. We never split mid-line if we can avoid it.
+    """
+    if len(text) <= limit:
+        return [text]
+
+    # Prefer splitting on blank lines (block boundaries).
+    blocks = text.split("\n\n")
+    parts = []
+    cur = ""
+    for block in blocks:
+        candidate = block if not cur else cur + "\n\n" + block
+        if len(candidate) <= limit:
+            cur = candidate
+            continue
+        if cur:
+            parts.append(cur)
+            cur = ""
+        # A single block that is still too long → split on newlines.
+        if len(block) <= limit:
+            cur = block
+            continue
+        for line in block.split("\n"):
+            if len(line) > limit:
+                # Pathological single line — hard-wrap it.
+                while len(line) > limit:
+                    parts.append(line[:limit])
+                    line = line[limit:]
+                cur = line
+                continue
+            candidate = line if not cur else cur + "\n" + line
+            if len(candidate) <= limit:
+                cur = candidate
+            else:
+                parts.append(cur)
+                cur = line
+    if cur:
+        parts.append(cur)
+
+    # Add continuation markers.
+    total = len(parts)
+    out = []
+    for i, part in enumerate(parts):
+        if total > 1:
+            marker = f"（{i + 1}/{total}）"
+            # Prepend to the first line so the user sees it immediately.
+            part = part + marker
+        out.append(part)
+    return out
+
+
+def _send_one_telegram(text: str) -> bool:
+    """Send exactly one message. Returns True on success."""
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     data = urllib.parse.urlencode({
         "chat_id": TELEGRAM_CHAT_ID,
@@ -217,9 +291,20 @@ def fetch_json_url(url: str, timeout: float = 15.0):
     Returns parsed dict/list on success, None on any failure (DNS, timeout,
     non-2xx, malformed JSON). Errors are logged so they show up in the
     launchd-captured /tmp/flight_report.log — never silent.
+
+    Hermes 2026-10-27: the User-Agent matters now that the app sits behind
+    a Cloudflare Tunnel. Cloudflare's bot-fight rules return **error 1010**
+    for the stock `Python-urllib/3.9` UA (urllib sends it by default),
+    which made every live /api/deals fetch 403 and silently degraded the
+    bot to the stale local JSON fallback. `python-requests/2.31.0` and
+    browser UAs both pass, so the filter is UA-string specific.
     """
     try:
-        req = urllib.request.Request(url, headers={"Accept": "application/json"})
+        req = urllib.request.Request(url, headers={
+            "Accept": "application/json",
+            # Deliberately NOT the default Python-urllib UA — CF 1010.
+            "User-Agent": "flight-deals-report/1.0 (CompareTiger scanner)",
+        })
         with urllib.request.urlopen(req, timeout=timeout) as r:
             body = r.read()
         return json.loads(body)
