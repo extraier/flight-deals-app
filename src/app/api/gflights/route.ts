@@ -38,19 +38,42 @@ export interface GFlightsFile {
 
 let cached: { body: GFlightsFile; fetchedAt: number } | null = null;
 
+// Hermes 2026-10-27: self-hosted on the NAS. The digest is produced by the
+// Mac-side Gmail poller and pushed to the NAS, so the app reads it from
+// disk instead of from the bundle baked into the build.
+//
+// Previously the flow was: poller → git commit → Vercel deploy → new
+// bundle containing the new JSON. That cost one Vercel deploy per poll
+// (~27/day) purely to move a data file, which is what the user wanted to
+// stop. Now the poller scps the JSON to the NAS and the running app picks
+// it up on the next cache expiry — no deploy, no git, no quota burn.
+//
+// FLI_DATA_DIR can override for local dev; it defaults to the NAS path.
+const FLI_DATA_DIR =
+  process.env.FLI_DATA_DIR || '/volume1/flight-scanner';
+
+const DIGEST_PATHS = [
+  path.join(FLI_DATA_DIR, 'gflights_digest.json'),
+  // Fallback: the copy bundled with the build, used in local dev and as
+  // a last resort if the NAS copy is missing.
+  path.join(process.cwd(), 'src', 'data', 'gflights_digest.json'),
+];
+
 async function loadDigest(): Promise<GFlightsFile> {
   if (cached && Date.now() - cached.fetchedAt < CACHE_TTL_MS) {
     return cached.body;
   }
-  const fp = path.join(process.cwd(), 'src', 'data', 'gflights_digest.json');
-  try {
-    const raw = await fs.readFile(fp, 'utf-8');
-    const body: GFlightsFile = JSON.parse(raw);
-    cached = { body, fetchedAt: Date.now() };
-    return body;
-  } catch {
-    return { generated: new Date().toISOString(), source: 'gmail://noreply-travel@google.com', deals: [], count: 0 };
+  for (const fp of DIGEST_PATHS) {
+    try {
+      const raw = await fs.readFile(fp, 'utf-8');
+      const body: GFlightsFile = JSON.parse(raw);
+      cached = { body, fetchedAt: Date.now() };
+      return body;
+    } catch {
+      // try next path
+    }
   }
+  return { generated: new Date().toISOString(), source: 'gmail://noreply-travel@google.com', deals: [], count: 0 };
 }
 
 function filterExpired(deals: GFlightDeal[]): GFlightDeal[] {

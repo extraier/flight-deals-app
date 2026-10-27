@@ -2,6 +2,7 @@ import { FlightDealCard } from '@/components/FlightDealCard';
 import allDatesHkg from '@/data/all_dates.json';
 import allDatesSzx from '@/data/all_dates_szx.json';
 import Link from 'next/link';
+import { headers } from 'next/headers';
 import { ArrowLeft, Plane } from 'lucide-react';
 import type { FlightDeal } from '@/types/flight';
 
@@ -15,10 +16,20 @@ interface PageProps {
 // (same upstream chain as the deals page — Tailscale Funnel → CDN → static
 // fallback). The static JSON is kept as the last-resort fallback so the
 // page still renders something if every upstream fails.
-async function fetchDealsLive(dep: 'HKG' | 'SZX'): Promise<FlightDeal[] | null> {
-  const base = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : process.env.NEXT_PUBLIC_BASE_URL || '';
+//
+// Hermes 2026-10-27: self-hosted on the NAS. The app now serves itself, so
+// a server-side fetch to its own /api/deals must use an absolute URL that
+// resolves on this host. VERCEL_URL is gone (no more Vercel). We build the
+// base from the request headers when available, falling back to localhost.
+async function fetchDealsLive(
+  dep: 'HKG' | 'SZX',
+  reqHeaders?: Headers,
+): Promise<FlightDeal[] | null> {
+  const host = reqHeaders?.get('x-forwarded-host') || reqHeaders?.get('host');
+  const proto = reqHeaders?.get('x-forwarded-proto') || 'http';
+  const base = host
+    ? `${proto}://${host}`
+    : process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:3000';
   // Server-side fetch from the in-project API route. Cache 60s per dep
   // so multiple route clicks within the same minute don't hammer upstream.
   const url = `${base}/api/deals?dep=${dep}`;
@@ -63,7 +74,10 @@ export default async function RoutePage({ params, searchParams }: PageProps) {
 
   // Hermes 2026-07-01: try live data first, fall back to bundled JSON.
   let deals: FlightDeal[] = [];
-  const live = await fetchDealsLive(departure);
+  // Hermes 2026-10-27: pass request headers so the self-hosted server can
+  // build an absolute URL for its own /api/deals (no VERCEL_URL anymore).
+  const reqHeaders = await headers();
+  const live = await fetchDealsLive(departure, reqHeaders);
   if (live && live.length > 0) {
     deals = live;
   } else {

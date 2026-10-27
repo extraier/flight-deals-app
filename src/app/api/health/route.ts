@@ -22,9 +22,17 @@
  */
 
 import type { NextRequest } from 'next/server';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
+
+// Hermes 2026-10-27: self-hosted on the NAS. The scanner JSON sits on the
+// same disk as this app, so the health probe reads the file's mtime directly
+// instead of fetching it over the public Funnel / CDN.
+const FLI_DATA_DIR =
+  process.env.FLI_DATA_DIR || '/volume1/flight-scanner';
 
 // Hermes 2026-10-24: fixed stale hostname. This was hardcoded to
 // 'https://ugreen-nas.tail20bf1.ts.net' — the OLD NAS, which no longer
@@ -62,7 +70,7 @@ const CRITICAL_AFTER_SEC =
 type Departure = 'HKG' | 'SZX';
 
 interface UpstreamResult {
-  source: 'funnel' | 'cdn';
+  source: 'funnel' | 'cdn' | 'nas-disk';
   ok: boolean;
   status?: number;
   error?: string;
@@ -93,68 +101,91 @@ const CJK_RE = /[\u3400-\u9fff\uf900-\ufaff]/;
 
 async function probeUpstream(dep: Departure): Promise<UpstreamResult> {
   const suffix = dep === 'SZX' ? '_szx' : '';
-  const candidates: { name: 'funnel' | 'cdn'; url: string }[] = [
-    {
-      name: 'funnel',
-      url: `${FUNNEL_BASE}/all_dates${suffix}.json`,
-    },
-    {
-      name: 'cdn',
-      url: `${CDN_BASE}/all_dates${suffix}.json`,
-    },
-  ];
 
-  const ac = new AbortController();
-  const timer = setTimeout(() => ac.abort(), PROBE_TIMEOUT_MS);
+  // Hermes 2026-10-27: self-hosted on the NAS. The scanner output now sits
+  // on the same disk as this app, so probe the local file directly instead
+  // of fetching over the public Funnel / CDN. Same signal (file mtime = data
+  // freshness), no network hop, no dependency on Tailscale's relay being up.
+  //
+  // The old implementation fetched ${FUNNEL_BASE}/all_dates*.json and read
+  // the x-file-mtime response header. Reading the file's own mtime is
+  // equivalent and more accurate — it is the same inode the scanner wrote.
+  const localPath = path.join(FLI_DATA_DIR, `all_dates${suffix}.json`);
   const fetchedAtMs = Date.now();
-  const lastError: { source: string; err: unknown }[] = [];
+  try {
+    const st = await fs.stat(localPath);
+    // Check the file actually parses — a truncated write would otherwise
+    // look "fresh" but break the page.
+    await fs.readFile(localPath, 'utf-8');
+    return {
+      source: 'nas-disk',
+      ok: true,
+      status: 200,
+      upstreamMtimeSec: Math.round(st.mtimeMs / 1000),
+      fetchedAtMs,
+    };
+  } catch (err) {
+    // Fall back to the remote probe so a missing local file still gets
+    // diagnosed (and so the 'cdn'/'funnel' source label stays meaningful).
+    const candidates: { name: 'funnel' | 'cdn'; url: string }[] = [
+      {
+        name: 'funnel',
+        url: `${FUNNEL_BASE}/all_dates${suffix}.json`,
+      },
+      {
+        name: 'cdn',
+        url: `${CDN_BASE}/all_dates${suffix}.json`,
+      },
+    ];
 
-  for (const c of candidates) {
-    try {
-      const res = await fetch(c.url, {
-        signal: ac.signal,
-        method: 'GET',
-        headers: {
-          'User-Agent': 'flight-deals-app/health-probe/1.0 (vercel-edge)',
-        },
-        cache: 'no-store',
-      });
-      if (!res.ok) {
-        lastError.push({ source: c.name, err: `${res.status} ${res.statusText}` });
+    const ac = new AbortController();
+    const timer = setTimeout(() => ac.abort(), PROBE_TIMEOUT_MS);
+    const lastError: { source: string; err: unknown }[] = [];
+
+    for (const c of candidates) {
+      try {
+        const res = await fetch(c.url, {
+          signal: ac.signal,
+          method: 'GET',
+          headers: {
+            'User-Agent': 'flight-deals-app/health-probe/1.0 (nas-self-hosted)',
+          },
+          cache: 'no-store',
+        });
+        if (!res.ok) {
+          lastError.push({ source: c.name, err: `${res.status} ${res.statusText}` });
+          continue;
+        }
+        clearTimeout(timer);
+        const mtimeHeader = res.headers.get('x-file-mtime');
+        let mtimeSec: number | null = null;
+        if (mtimeHeader) {
+          const raw = Number(mtimeHeader);
+          if (Number.isFinite(raw) && raw > 0) {
+            mtimeSec = raw > 1e12 ? Math.round(raw / 1000) : Math.round(raw);
+          }
+        }
+        return {
+          source: c.name,
+          ok: true,
+          status: res.status,
+          upstreamMtimeSec: mtimeSec,
+          fetchedAtMs,
+        };
+      } catch (err) {
+        lastError.push({ source: c.name, err });
         continue;
       }
-      clearTimeout(timer);
-      // x-file-mtime is conventionally UNIX seconds (nginx $mtime, Apache, etc.).
-      // Some servers (S3, Cloudflare R2) emit ms; sniff by magnitude.
-      const mtimeHeader = res.headers.get('x-file-mtime');
-      let mtimeSec: number | null = null;
-      if (mtimeHeader) {
-        const raw = Number(mtimeHeader);
-        if (Number.isFinite(raw) && raw > 0) {
-          // > 10^12 means ms, else seconds.
-          mtimeSec = raw > 1e12 ? Math.round(raw / 1000) : Math.round(raw);
-        }
-      }
-      return {
-        source: c.name,
-        ok: true,
-        status: res.status,
-        upstreamMtimeSec: mtimeSec,
-        fetchedAtMs,
-      };
-    } catch (err) {
-      lastError.push({ source: c.name, err });
-      continue;
     }
+    clearTimeout(timer);
+    return {
+      source: 'cdn',
+      ok: false,
+      upstreamMtimeSec: null,
+      fetchedAtMs,
+      error: `local file unreadable (${String(err)}) and all remote upstreams failed: ${JSON.stringify(lastError)}`,
+    };
   }
-  clearTimeout(timer);
-  return {
-    source: 'cdn',
-    ok: false,
-    upstreamMtimeSec: null,
-    fetchedAtMs,
-    error: `all upstreams failed: ${JSON.stringify(lastError)}`,
-  };
 }
 
 /**

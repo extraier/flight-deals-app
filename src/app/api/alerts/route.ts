@@ -44,19 +44,33 @@ export interface AlertsFile {
 
 let cached: { body: AlertsFile; fetchedAt: number } | null = null;
 
+// Hermes 2026-10-27: self-hosted on the NAS. drop_alerts.json is written
+// by the Mac-side flight report bot and pushed to the NAS, so read it from
+// disk rather than from the bundle baked into the build. Same rationale as
+// /api/gflights — no Vercel deploy needed just to move a data file.
+const FLI_DATA_DIR =
+  process.env.FLI_DATA_DIR || '/volume1/flight-scanner';
+
+const ALERT_PATHS = [
+  path.join(FLI_DATA_DIR, 'drop_alerts.json'),
+  path.join(process.cwd(), 'src', 'data', 'drop_alerts.json'),
+];
+
 async function loadAlerts(): Promise<AlertsFile> {
   if (cached && Date.now() - cached.fetchedAt < CACHE_TTL_MS) {
     return cached.body;
   }
-  const fp = path.join(process.cwd(), 'src', 'data', 'drop_alerts.json');
-  try {
-    const raw = await fs.readFile(fp, 'utf-8');
-    const body: AlertsFile = JSON.parse(raw);
-    cached = { body, fetchedAt: Date.now() };
-    return body;
-  } catch {
-    return { generated: new Date().toISOString(), alerts: [] };
+  for (const fp of ALERT_PATHS) {
+    try {
+      const raw = await fs.readFile(fp, 'utf-8');
+      const body: AlertsFile = JSON.parse(raw);
+      cached = { body, fetchedAt: Date.now() };
+      return body;
+    } catch {
+      // try next path
+    }
   }
+  return { generated: new Date().toISOString(), alerts: [] };
 }
 
 function filterExpired(alerts: AlertEntry[]): AlertEntry[] {

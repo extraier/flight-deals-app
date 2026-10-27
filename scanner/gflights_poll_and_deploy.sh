@@ -1,153 +1,105 @@
 #!/bin/bash
-# Hermes 2026-10-24: wrap gflights_poller.py with auto-publish.
+# Hermes 2026-10-27: REWRITTEN. The app is now self-hosted on the NAS.
 #
-# Problem this fixes: the poller writes gflights_digest.json every hour
-# but never publishes. The user reported the 10:29 HKT Rome email landed
-# in the JSON at 15:01 HKT but stayed invisible until I manually
-# deployed — a 5-hour lag that makes the cron useless.
+# WHAT CHANGED
+#   Before: poller → git commit + push → Vercel GitHub integration builds a
+#           new production deployment → alias repair. That was ONE Vercel
+#           deploy per hour, every hour, purely to move a data file. That
+#           burned the Hobby quota (~27 deploys/day observed on 2026-10-22
+#           through 10-25) and forced the alias-repair dance on every run.
 #
-# Hermes 2026-10-24 — three corrections to the previous version:
+#   After:  poller → push the JSON to the NAS → the running Next.js server
+#           picks it up from disk on its next cache expiry (5s). No git, no
+#           commit, no deploy, no alias repair, no quota.
 #
-#   1. DROPPED the `npx vercel deploy --prod` step. The Vercel project's
-#      GitHub integration already has productionBranch=main, so every
-#      `git push origin main` triggers a production deploy by itself.
-#      The explicit deploy was a DUPLICATE build of the same commit —
-#      pure waste. It also failed silently from 2026-10-22 08:22 onward
-#      (84 consecutive runs), because `npx --no-install` can no longer
-#      resolve vercel@65.2.0 from the npm cache. Every one of those
-#      failures meant the custom-domain aliases were never re-attached.
+# The site (https://flight.comparetiger.com) is served by the Next.js
+# standalone server on the NAS at 127.0.0.1:3000, fronted by a Cloudflare
+# Tunnel. Its /api/gflights route reads /volume1/flight-scanner/
+# gflights_digest.json directly.
 #
-#   2. Replaced the CLI with the REST API. No npx, no npm cache, no
-#      Node-version drift. Uses the token already on disk.
+# FALLBACK
+#   The Vercel deployment is still live and still has the last-known-good
+#   bundle. If the NAS push fails, the site keeps serving the previous
+#   data from the NAS copy — so a failed push is a no-op, not an outage.
 #
-#   3. This script now REPAIRS the aliases rather than deploying. After
-#      the git push, Vercel's GitHub integration produces a new
-#      production deployment — but the manually-created aliases
-#      (flight.comparetiger.com, flight-deals-app-seven.vercel.app) do
-#      NOT auto-track production and stay pinned to whatever deployment
-#      they were last attached to. That is the "stale alias" bug
-#      (see skill: vercel-custom-domain-stale-alias). This step finds
-#      the newest production deployment and re-attaches both aliases
-#      to it, so the site never serves a stale bundle again.
-#
-# The wrapper lives in the repo so each commit captures changes.
+# SECRETS
+#   The Vercel token is no longer needed here. Kept out of this file
+#   entirely so there is nothing to leak.
 
-set -euo pipefail
+set -uo pipefail
 
 REPO=/Users/roger/flight-deals-app
 LOG=/tmp/gflights_poll_deploy.log
-TEAM=team_UHKez9kHl9L94fPGdgP2Uj8i
-PROJECT=prj_6eJE6rjCAwZD1o70ZFpxPkSsYjem
-TOKEN_FILE="$HOME/.hermes/secrets/vercel-token"
-API=https://api.vercel.com
 
-# Hermes 2026-10-20: launchd runs scripts with a stripped PATH (just
-# /usr/bin:/bin:/usr/sbin:/sbin). Explicit PATH avoids drift across
-# Node versions and keeps /usr/bin/python3 resolvable for the poller.
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 exec >> "$LOG" 2>&1
-echo "==== $(date -u +%FT%TZ) gflights poll+publish ===="
+echo "==== $(date -u +%FT%TZ) gflights poll+publish (NAS mode) ===="
 
 cd "$REPO"
 
-# 1) Pull latest. Skip if no network — cron is offline-tolerant.
+# 1) Pull latest code (the poller itself may have been updated).
 git fetch origin main --quiet 2>&1 | head -3 || true
 git merge --ff-only origin/main --quiet 2>&1 | head -3 || true
 
 # 2) Poll Gmail → JSON. /usr/bin/python3 (launchd's default) has the
-# user-site google-api-python-client installed.
-/usr/bin/python3 scanner/gflights_poller.py
-
-# 3) Check if the JSON changed. If not, skip publish (saves Vercel churn).
-if git diff --quiet src/data/gflights_digest.json; then
-  echo "[skip] gflights_digest.json unchanged — nothing to publish"
-  exit 0
+#    user-site google-api-python-client installed.
+#
+#    NOTE (2026-10-27): the OAuth token was revoked on 2026-10-25
+#    ("invalid_grant: Token has been expired or revoked"). Until the user
+#    re-runs `python3 gflights_poller.py --auth`, this exits non-zero and
+#    the digest goes stale. We log it loudly and continue (the push below
+#    then pushes the last-known-good file, which is a no-op).
+if ! /usr/bin/python3 scanner/gflights_poller.py; then
+  echo "[error] poller failed — most likely the Gmail OAuth token needs"
+  echo "        re-consent:  cd $REPO/scanner && python3 gflights_poller.py --auth"
+  echo "        (the site will keep serving the previous digest until then)"
 fi
 
-echo "[changed] gflights_digest.json has new deals — publishing"
-
-# 4) Commit. Allow-empty disabled so we error if nothing to commit
-# (defense in depth vs the git diff above).
-git add src/data/gflights_digest.json
-git commit -m "Cron pull: new GFlight deals $(date -u +%FT%TZ)
-$(git diff --cached --numstat -- src/data/gflights_digest.json | awk '{print $1" insertions, "$2" deletions"}')"
-
-# 5) Push to main. Vercel's GitHub integration deploys main → production
-# automatically from this push. If push fails (e.g. concurrent push),
-# bail out so we don't drift further.
-git push origin main 2>&1 | head -5 || {
-  echo "[error] git push failed — bailing out, JSON written but not published"
-  exit 1
-}
-
-# 6) Wait for Vercel's GitHub integration to finish the production build.
-#    The build takes ~40-90s. Poll the deployments list for a READY
-#    deployment whose commit sha matches the commit we just pushed.
-if [ ! -f "$TOKEN_FILE" ]; then
-  echo "[error] vercel token missing at $TOKEN_FILE — cannot repair aliases"
-  exit 1
-fi
-TOKEN=$(tr -d '\n\r' < "$TOKEN_FILE")
-
-SHA=$(git rev-parse HEAD)
-echo "[wait] waiting for production deployment of ${SHA:0:8}"
-
-NEW_DEPLOY=""
-for attempt in $(seq 1 20); do
-  sleep 15
-  DEPLOY_JSON=$(curl -sS --max-time 20 \
-    -H "Authorization: Bearer $TOKEN" \
-    "$API/v6/deployments?projectId=$PROJECT&limit=5&teamId=$TEAM" || true)
-
-  NEW_DEPLOY=$(printf '%s' "$DEPLOY_JSON" | /usr/bin/python3 -c '
-import json, sys
-try:
-    d = json.load(sys.stdin)
-except Exception:
-    sys.exit(0)
-sha = sys.argv[1]
-for x in d.get("deployments", []):
-    if (x.get("meta") or {}).get("githubCommitSha", "").startswith(sha):
-        if (x.get("state") or x.get("readyState")) == "READY":
-            print(x.get("uid") or "")
-        break
-' "$SHA" 2>/dev/null || true)
-
-  if [ -n "$NEW_DEPLOY" ]; then
-    echo "[ready] deployment $NEW_DEPLOY is READY after $((attempt * 15))s"
-    break
+# 3) Push the freshly-written data files to the NAS. The push script
+#    validates JSON locally and writes atomically on the NAS side
+#    (tmp file + mv), so a reader never sees a half-written file.
+if [ -x "$REPO/scanner/push_data_to_nas.sh" ]; then
+  bash "$REPO/scanner/push_data_to_nas.sh"
+  PUSH_RC=$?
+  if [ "$PUSH_RC" -ne 0 ]; then
+    echo "[warn] push_data_to_nas.sh returned $PUSH_RC — check /tmp/fli_data_push.log"
   fi
-  echo "[wait] ... not ready yet ($((attempt * 15))s)"
-done
-
-if [ -z "$NEW_DEPLOY" ]; then
-  echo "[error] no READY production deployment for ${SHA:0:8} after 300s"
-  echo "[error] aliases left pointing at previous deployment"
+else
+  echo "[error] $REPO/scanner/push_data_to_nas.sh missing or not executable"
   exit 1
 fi
 
-# 7) Re-attach the custom-domain aliases to the new deployment.
-#    These aliases were created manually and do NOT auto-track
-#    production, so they must be re-pointed after every deploy.
-for ALIAS in flight.comparetiger.com flight-deals-app-seven.vercel.app; do
-  RESULT=$(curl -sS --max-time 20 -X POST \
-    -H "Authorization: Bearer $TOKEN" \
-    -H "Content-Type: application/json" \
-    -d "{\"alias\": \"$ALIAS\", \"teamId\": \"$TEAM\"}" \
-    "$API/v2/deployments/$NEW_DEPLOY/aliases" 2>&1 || true)
-  if printf '%s' "$RESULT" | grep -q '"alias"'; then
-    OLD=$(printf '%s' "$RESULT" | /usr/bin/python3 -c '
+# 4) Verify the NAS is actually serving the new data. If the file was
+#    pushed, the Next.js /api/gflights route should report a `generated`
+#    timestamp matching the local file.
+LOCAL_GEN=$(/usr/bin/python3 - <<'PY'
+import json
+try:
+    with open("/Users/roger/flight-deals-app/src/data/gflights_digest.json") as f:
+        print(json.load(f).get("generated", ""))
+except Exception:
+    print("")
+PY
+)
+REMOTE_GEN=$(curl -sS --max-time 20 "https://flight.comparetiger.com/api/gflights" 2>/dev/null \
+  | /usr/bin/python3 -c '
 import json, sys
 try:
-    print(json.load(sys.stdin).get("oldDeploymentId", "?")[:24])
+    print(json.load(sys.stdin).get("generated", ""))
 except Exception:
-    print("?")
-' 2>/dev/null || echo "?")
-    echo "[alias] $ALIAS → $NEW_DEPLOY (was $OLD)"
+    print("")
+' 2>/dev/null)
+
+if [ -n "$LOCAL_GEN" ] && [ -n "$REMOTE_GEN" ]; then
+  if [ "$LOCAL_GEN" = "$REMOTE_GEN" ]; then
+    echo "[ok] NAS is serving the current digest (generated=$LOCAL_GEN)"
   else
-    echo "[error] alias re-attach failed for $ALIAS: $RESULT"
+    echo "[warn] NAS digest differs — local=$LOCAL_GEN remote=$REMOTE_GEN"
+    echo "        (expected for up to ~5s while the 5s in-memory cache expires)"
   fi
-done
+else
+  echo "[warn] could not compare generated timestamps (local='$LOCAL_GEN' remote='$REMOTE_GEN')"
+fi
 
-echo "[done] published ${SHA:0:8} as $NEW_DEPLOY"
+echo "[done] no git commit, no Vercel deploy — data lives on the NAS"

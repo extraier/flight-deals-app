@@ -48,3 +48,42 @@ next-env.d.ts
 # Google Flights poller OAuth files (DO NOT COMMIT)
 scanner/gflights_credentials.json
 scanner/gflights_token.json
+
+# Hermes 2026-10-27: runtime data files.
+#
+# The app is self-hosted on the NAS (Next.js standalone on 127.0.0.1:3000,
+# fronted by a Cloudflare Tunnel). The Mac-side poller pushes these JSON
+# files to the NAS via scanner/push_data_to_nas.sh, and the running server
+# reads them from /volume1/flight-scanner/ directly.
+#
+# Previously they were committed to git, and every commit triggered a
+# Vercel GitHub auto-deploy — ~27 deploys/day purely to move a data file,
+# which is what burned the Hobby quota. Now the data path is:
+#
+#   poller → scp to NAS → running app reads it from disk (5s cache)
+#
+# No git, no commit, no deploy. The Vercel project's Git link has also
+# been disconnected (link: null, createDeployments: disabled) so a stray
+# push can never auto-deploy again.
+#
+# IMPORTANT: these files are still TRACKED in git, and must stay tracked.
+# Six components statically import them at build time:
+#   src/app/page.tsx           → all_dates.json, all_dates_szx.json
+#   src/app/route/[code]/page.tsx → all_dates.json, all_dates_szx.json
+#   src/app/trump/page.tsx      → trump_alerts.json
+#   src/app/trump/serenity-tabs.tsx → serenity_data.json
+#   src/app/worldcup/page.tsx   → worldcup_latest.json
+# Untracking them breaks `npm run build` on a clean checkout. They are
+# committed to git as build inputs, NOT as the live data path — the live
+# path is the NAS copy, which the app reads at runtime.
+#
+# To stop the hourly cron from committing them (it no longer does — see
+# scanner/gflights_poll_and_deploy.sh), untrack them with:
+#   git rm --cached src/data/*.json
+# but then the build breaks. Leave them tracked.
+
+# Hermes 2026-10-27: stray file from a bad shell redirect (empty).
+/{row[2]}
+scanner/__pycache__/
+scanner/*.bak
+scanner/*.unpatched.bak

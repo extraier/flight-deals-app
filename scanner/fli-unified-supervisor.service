@@ -1,0 +1,27 @@
+[Unit]
+Description=Flight Scanner Unified Detail-Loop Supervisor (v2 with watchdog)
+Documentation=https://github.com/extraier/flight-deals-app
+After=docker.service synology-tunnel.service network-online.target
+Wants=synology-tunnel.service
+StartLimitIntervalSec=300
+StartLimitBurst=10
+
+[Service]
+Type=simple
+User=root
+ExecStart=/bin/bash /home/openclaw/bin/fli_unified_supervisor_v2.sh
+Restart=always
+RestartSec=15
+TimeoutStartSec=0
+StandardOutput=append:/volume1/flight-scanner/fli_unified_supervisor.log
+StandardError=append:/volume1/flight-scanner/fli_unified_supervisor.log
+
+# No ReadOnlyProtection — supervisor needs to write pid + log files in
+# /home/openclaw/bin/. The other ProtectX flags still apply.
+NoNewPrivileges=false
+ProtectSystem=full
+ProtectHome=false
+ReadWritePaths=/home/openclaw/bin /volume1/flight-scanner
+
+[Install]
+WantedBy=multi-user.target
