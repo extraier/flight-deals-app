@@ -17,7 +17,7 @@
  *   the alias is stale.
  *
  * Usage:
- *   node scripts/verify-trump-deploy.js [--url=https://flight-deals-app-seven.vercel.app/trump]
+ *   node scripts/verify-trump-deploy.js [--url=https://flight.comparetiger.com/trump]
  *
  * Exit code 0 = verified live, 1 = stale alias (printed fix recipe).
  */
@@ -32,7 +32,7 @@ const JSON_PATH = path.join(ROOT, 'src', 'data', 'trump_alerts.json');
 
 const args = process.argv.slice(2);
 const urlArg = args.find((a) => a.startsWith('--url='));
-const TARGET_URL = urlArg ? urlArg.slice('--url='.length) : 'https://flight-deals-app-seven.vercel.app/trump';
+const TARGET_URL = urlArg ? urlArg.slice('--url='.length) : 'https://flight.comparetiger.com/trump';
 
 const UA =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';

@@ -48,9 +48,9 @@ fi
 
 # Quick smoke test on production alias
 if [[ "$PROD" == "1" ]]; then
-  echo "==> Smoke-testing https://flight-deals-app-seven.vercel.app/trump"
+  echo "==> Smoke-testing https://flight.comparetiger.com/trump"
   code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 \
-    'https://flight-deals-app-seven.vercel.app/trump?cache_bust=1')
+    'https://flight.comparetiger.com/trump?cache_bust=1')
   if [[ "$code" == "200" ]]; then
     echo "==> PASS: /trump returns 200"
   else
