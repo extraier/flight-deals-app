@@ -38,7 +38,11 @@ const FLI_DATA_DIR =
 // 'https://ugreen-nas.tail20bf1.ts.net' — the OLD NAS, which no longer
 // exists in the tailnet (NXDOMAIN). The live Funnel hostname is
 // 'dh4300plus-70ca-1.tail20bf1.ts.net', matching FUNNEL_BASE in
-// src/app/api/deals/route.ts and src/app/api/diag-funnel/route.ts.
+// src/app/api/deals/route.ts.
+//
+// Hermes 2026-10-30: the /api/diag-funnel route was removed -- it
+// was a 2026-09-28 ad-hoc diagnostic that publicly leaked the
+// tailnet hostname and the home network's public IPs.
 //
 // Symptom of the bug: /api/health reported status=critical with
 // "all upstreams failed" for BOTH HKG and SZX, because the funnel probe

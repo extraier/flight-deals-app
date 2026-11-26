@@ -395,6 +395,13 @@ export default function Home() {
                 >
                   ✉️ Google Flights
                 </Link>
+                <Link
+                  href="/open-jaw"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-3 sm:px-4 py-2 text-sm font-bold transition-all text-teal-600 dark:text-teal-400 hover:bg-teal-500/10 whitespace-nowrap shadow-sm"
+                  title="比香港直飛平常價平超過七成先顯示"
+                >
+                  🎫 開口機票
+                </Link>
               </div>
             </div>
 

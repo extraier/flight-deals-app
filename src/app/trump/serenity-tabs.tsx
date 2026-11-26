@@ -3,10 +3,24 @@
 // Serenity推文 (tweet feed) and Serenity持股 (performance ranking) tabs.
 // Extracted from the former /serenity page so all Serenity content now
 // lives inline alongside the Trump-era tabs on /trump.
+//
+// Hermes 2026-11-04: the data now arrives at RUNTIME from /api/serenity
+// instead of a static `import serenityData from '@/data/serenity_data.json'`.
+//
+// WHY
+// ---
+// A static import is baked into the Next.js bundle at BUILD time. The
+// Serenity sync job refreshes serenity_data.json every 6 hours and
+// pushes it to the NAS, but the running app kept serving whatever JSON
+// was in the bundle when it was last built -- the live page was showing
+// a 2026-08-23 snapshot while the fresh file sat unused on disk.
+//
+// The bundled import is retained ONLY as the initial value so the tabs
+// render real content instantly (no flash of empty state) before the
+// fetch resolves, and so they still work if the API is unreachable.
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import serenityData from '@/data/serenity_data.json';
-import { STOCK_PROFILES } from '@/data/serenity_stock_profiles';
 
 // ──────────────────────────────────────────────────────────────────────────
 // Types (mirrored from the former /serenity/page.tsx)
@@ -55,7 +69,7 @@ interface TickerEntry {
   stale: boolean;
 }
 
-interface Data {
+export interface SerenityData {
   updated: string;
   source_updated_at: string;
   source_url: string;
@@ -78,7 +92,53 @@ interface Data {
   };
 }
 
-const data = serenityData as unknown as Data;
+// Bundled copy — the initial value only. Live data arrives from
+// /api/serenity within a second.
+const BUNDLED = serenityData as unknown as SerenityData;
+
+/**
+ * Load Serenity data at runtime.
+ *
+ * Hermes 2026-11-04: fetch from /api/serenity, which reads the file from
+ * disk on the NAS at request time. Falls back to the bundled copy if the
+ * API is unreachable, so the tabs always render something.
+ */
+export function useSerenityData(): SerenityData {
+  const [data, setData] = useState<SerenityData>(BUNDLED);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      try {
+        const res = await fetch('/api/serenity', { cache: 'no-store' });
+        if (!res.ok) return;
+        const json = (await res.json()) as SerenityData;
+        if (cancelled) return;
+        if (json && Array.isArray(json.posts)) setData(json);
+      } catch {
+        // Keep the bundled copy — the tabs still work, just less fresh.
+      }
+    }
+
+    Promise.resolve().then(() => {
+      load();
+    });
+    // The Serenity sync job runs every 6 hours; a 5-minute poll is plenty.
+    const t = setInterval(() => load(), 5 * 60_000);
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') load();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      cancelled = true;
+      clearInterval(t);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, []);
+
+  return data;
+}
 
 // ──────────────────────────────────────────────────────────────────────────
 // Shared style helpers — kept in sync with /trump/page.tsx helpers
@@ -91,15 +151,19 @@ function card(isDark: boolean) {
     ? 'bg-zinc-900/50 border-zinc-700 hover:border-zinc-600'
     : 'bg-white border-zinc-200 hover:border-zinc-400 shadow-sm';
 }
+
 function textMuted(isDark: boolean) {
   return isDark ? 'text-zinc-400' : 'text-zinc-500';
 }
+
 function textFaint(isDark: boolean) {
   return isDark ? 'text-zinc-600' : 'text-zinc-400';
 }
+
 function bgSurface(isDark: boolean) {
   return isDark ? 'bg-zinc-800' : 'bg-zinc-100';
 }
+
 function borderSubtle(isDark: boolean) {
   return isDark ? 'border-zinc-700' : 'border-zinc-200';
 }
@@ -118,7 +182,7 @@ function ChangePill({ pct }: { pct: number | null }) {
   if (pct == null) return <span className="text-zinc-400">—</span>;
   const pos = pct > 0;
   return (
-    <span className={`text-xs font-medium ${pos ? 'text-emerald-500' : pct < 0 ? 'text-red-500' : 'text-zinc-400'}`}>
+    <span className={`text-xs font-medium ${pos ? 'text-emerald-500' : 'text-red-500'}`}>
       {pos ? '↑' : '↓'}{Math.abs(pct).toFixed(2)}%
     </span>
   );
@@ -191,10 +255,54 @@ function formatDate(iso: string | null | undefined): string {
 // 📰 Serenity推文 — Tweet feed
 // ──────────────────────────────────────────────────────────────────────────
 
-function TweetCard({ tweet, isDark }: { tweet: Tweet; isDark: boolean }) {
-  const tickers = (tweet.cashtags || []).map((t) => String(t).toUpperCase()).filter(Boolean);
+/**
+ * Hermes 2026-11-04: parse a tweet timestamp to epoch millis.
+ *
+ * The upstream feed mixes two timestamp formats for the SAME field:
+ *   - Twitter's old style: 'Tue Nov 03 05:49:56 +0000 2026'
+ *   - ISO 8601:             '2026-11-02T14:15:50.000Z'
+ *
+ * The old code sorted with `(b.createdAt || '').localeCompare(a.createdAt
+ * || '')` — a plain STRING comparison. That silently ordered the feed by
+ * WEEKDAY NAME ('Mon' < 'Sat' < 'Tue' < 'Wed'), not by date, so the
+ * newest tweets were buried: the genuinely newest post ranked 62nd out
+ * of 80 and the top of the feed showed a week-old tweet.
+ *
+ * `Date.parse` handles both formats, so normalise through it.
+ */
+function tweetTime(iso: string | null | undefined): number {
+  if (!iso) return 0;
+  const t = Date.parse(iso);
+  return Number.isNaN(t) ? 0 : t;
+}
+
+/**
+ * Hermes 2026-11-04: format a tweet timestamp as HKT 'YYYY-MM-DD HH:MM'.
+ *
+ * `displayTime` from the upstream is inconsistent too — some tweets carry
+ * an already-formatted HKT string ('2026-11-02 22:15'), others carry the
+ * raw Twitter string ('Tue Nov 03 05:49:56 +0000 2026'). Formatting both
+ * through the same path makes every card in the feed consistent.
+ */
+function formatTweetTime(iso: string | null | undefined): string {
+  const ms = tweetTime(iso);
+  if (!ms) return '';
+  // HKT is UTC+8 — shift, then read UTC fields.
+  const d = new Date(ms + 8 * 60 * 60 * 1000);
+  const p = (n: number) => String(n).padStart(2, '0');
+  return (
+    `${d.getUTCFullYear()}-${p(d.getUTCMonth() + 1)}-${p(d.getUTCDate())} ` +
+    `${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`
+  );
+}
+
+function TweetCard({ tweet, isDark, tickers }: { tweet: Tweet; isDark: boolean; tickers: Record<string, TickerEntry> }) {
+  const cashtags = (tweet.cashtags || []).map((t) => String(t).toUpperCase()).filter(Boolean);
   const text = tweet.text || '';
   const textCn = tweet.text_cn || null;
+  // Hermes 2026-11-04: derive the timestamp from createdAt so every card
+  // shows the same 'YYYY-MM-DD HH:MM' (HKT) format.
+  const displayTime = formatTweetTime(tweet.createdAt) || tweet.displayTime || '';
 
   return (
     <div className={`border rounded-lg ${card(isDark)} overflow-hidden`}>
@@ -203,28 +311,26 @@ function TweetCard({ tweet, isDark }: { tweet: Tweet; isDark: boolean }) {
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-sm font-bold">{tweet.nickname || 'Serenity'}</span>
             <span className={`text-xs ${textFaint(isDark)}`}>@{tweet.username}</span>
-            <span className={`text-xs ${textFaint(isDark)}`}>· {tweet.displayTime}</span>
+            <span className={`text-xs ${textFaint(isDark)}`}>· {displayTime}</span>
           </div>
           <span className={`text-xs ${textFaint(isDark)}`}>#{tweet.id.slice(-6)}</span>
         </div>
 
-        <p className={`text-sm leading-relaxed mb-2 whitespace-pre-wrap ${isDark ? 'text-zinc-100' : 'text-zinc-800'}`}>
+        <p className={`text-sm leading-relaxed whitespace-pre-wrap ${isDark ? 'text-zinc-100' : 'text-zinc-800'}`}>
           {text}
         </p>
 
         {textCn && (
           <div className={`mt-3 pt-3 border-t ${borderSubtle(isDark)}`}>
             <div className="text-xs text-emerald-500 mb-1 font-medium">🇭🇰 粵語/繁體中文翻譯</div>
-            <p className={`text-sm leading-relaxed whitespace-pre-wrap ${isDark ? 'text-zinc-300' : 'text-zinc-600'}`}>
-              {textCn}
-            </p>
+            <p className={`text-sm leading-relaxed whitespace-pre-wrap ${isDark ? 'text-zinc-300' : 'text-zinc-600'}`}>{textCn}</p>
           </div>
         )}
 
-        {tickers.length > 0 && (
+        {cashtags.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-3">
-            {tickers.map((t) => {
-              const tkr = data.tickers[t];
+            {cashtags.map((t) => {
+              const tkr = tickers[t];
               const cur = tkr?.current_price;
               const chg = tkr?.change_pct;
               return (
@@ -264,9 +370,14 @@ function TweetCard({ tweet, isDark }: { tweet: Tweet; isDark: boolean }) {
 
 export function SerenityFeedTab({ isDark }: { isDark: boolean }) {
   const [showAll, setShowAll] = useState(false);
+  const data = useSerenityData();
   const sorted = useMemo(
-    () => [...data.posts].sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '')),
-    [],
+    // Hermes 2026-11-04: sort by PARSED timestamp, not by string. The
+    // upstream mixes 'Tue Nov 03 05:49:56 +0000 2026' and ISO 8601 in
+    // the same field, so a localeCompare sorted by weekday name and
+    // buried the newest tweets (the newest post ranked 62/80).
+    () => [...data.posts].sort((a, b) => tweetTime(b.createdAt) - tweetTime(a.createdAt)),
+    [data.posts],
   );
   const visible = showAll ? sorted : sorted.slice(0, 12);
   const decorated = useMemo(
@@ -275,7 +386,7 @@ export function SerenityFeedTab({ isDark }: { isDark: boolean }) {
         ...t,
         text_cn: t.text_cn || data.translations?.[t.id] || undefined,
       })),
-    [visible],
+    [visible, data.translations],
   );
 
   if (sorted.length === 0) {
@@ -293,7 +404,7 @@ export function SerenityFeedTab({ isDark }: { isDark: boolean }) {
   return (
     <div className="space-y-3">
       {decorated.map((t) => (
-        <TweetCard key={t.id} tweet={t} isDark={isDark} />
+        <TweetCard key={t.id} tweet={t} isDark={isDark} tickers={data.tickers} />
       ))}
       {!showAll && sorted.length > 12 && (
         <button
@@ -313,11 +424,16 @@ export function SerenityFeedTab({ isDark }: { isDark: boolean }) {
 
 export function SerenityPerformanceTab({ isDark }: { isDark: boolean }) {
   const [showAll, setShowAll] = useState(false);
+  const data = useSerenityData();
   // Hermes 2026-07-27: show ALL tickers, even those without mention-day price.
   // Sort: latest mention first (mention_date desc).
-  const ranked = [...data.rankings].sort((a, b) => {
-    return (b.mention_date ?? '').localeCompare(a.mention_date ?? '');
-  });
+  const ranked = useMemo(
+    () =>
+      [...data.rankings].sort((a, b) => {
+        return (b.mention_date ?? '').localeCompare(a.mention_date ?? '');
+      }),
+    [data.rankings],
+  );
   const visible = showAll ? ranked : ranked.slice(0, 25);
 
   if (ranked.length === 0) {
@@ -344,7 +460,7 @@ export function SerenityPerformanceTab({ isDark }: { isDark: boolean }) {
       <div className="overflow-x-auto" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
         <table className="w-full text-sm">
           <thead>
-            <tr className={`${bgSurface(isDark)} ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+            <tr className={`${bgSurface(isDark)} text-${isDark ? 'zinc-300' : 'zinc-700'}`}>
               <th className="text-left p-3 rounded-tl-lg sticky top-0 z-10 bg-inherit">#</th>
               <th className="text-left p-3 sticky top-0 z-10 bg-inherit">Ticker</th>
               <th className="text-left p-3 sticky top-0 z-10 bg-inherit hidden sm:table-cell">Company</th>
@@ -365,7 +481,7 @@ export function SerenityPerformanceTab({ isDark }: { isDark: boolean }) {
                   <div>${r.ticker}</div>
                   <div className={`text-xs font-normal ${textFaint(isDark)}`}>{shortExchange(r.exchange)}</div>
                 </td>
-                <td className={`p-3 hidden sm:table-cell`}>
+                <td className="p-3 hidden sm:table-cell">
                   <div>{r.longName}</div>
                   {r.relation && (
                     <div className={`text-xs ${textFaint(isDark)} italic mt-0.5 line-clamp-1`} title={r.relation}>
