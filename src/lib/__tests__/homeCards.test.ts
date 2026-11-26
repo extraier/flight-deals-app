@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { fixCityName } from '../cityNames.ts';
+import { displaySpotCity, fixCityName, spotFlightHref } from '../cityNames.ts';
 import { homeSavingsText, leadAirlineLabel, leadFareDateLabel } from '../homeCards.ts';
 
 const AIRLINES: Record<string, string> = { CX: '國泰', UO: '香港快運' };
@@ -12,6 +12,13 @@ test('city titles keep the airport code and correct the two spellings', () => {
   assert.equal(fixCityName('巴塞羅拿 (BCN)'), '巴塞羅那 (BCN)');
   assert.equal(fixCityName('洛杉矶 (LAX)'), '洛杉磯 (LAX)');
   assert.equal(fixCityName('洛杉矶'), '洛杉磯');
+  assert.equal(fixCityName('巴塞隆拿'), '巴塞羅那');
+  assert.equal(displaySpotCity('巴塞隆拿', 'BCN'), '巴塞羅那 (BCN)');
+  assert.equal(displaySpotCity('香港', 'HKG'), '香港 (HKG)');
+  assert.equal(displaySpotCity('香港', ''), '香港');
+  assert.equal(spotFlightHref('HKG', '?from=wishlist'), '/route/HKG?from=wishlist');
+  assert.equal(spotFlightHref(undefined, ''), null);
+  assert.equal(spotFlightHref(''), null);
 });
 
 test('lead fare dates come from the stored departure and stay', () => {

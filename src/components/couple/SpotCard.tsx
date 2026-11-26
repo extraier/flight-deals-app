@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { MapPin, Heart, X, Rocket, Ban, Sparkles } from 'lucide-react';
 import type { DeckCard } from '@/lib/couple/cards';
+import { displaySpotCity } from '@/lib/cityNames';
 
 const REGION_COLORS: Record<string, string> = {
   '東亞': 'bg-sky-500/30 text-sky-100 border-sky-300/40',
@@ -226,7 +227,7 @@ export function SpotCard({
             🌍
           </span>
           <span className="text-white/80 text-xs font-medium px-3 text-center">
-            {spot.city || spot.name || '目的地'}
+            {displaySpotCity(spot.city, spot.dealCode) || spot.name || '目的地'}
           </span>
         </div>
       )}
@@ -238,7 +239,7 @@ export function SpotCard({
         </span>
         <span className="px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-full text-white text-xs font-bold shadow-lg flex items-center gap-1">
           <MapPin size={12} className="text-pink-400" />
-          {spot.city}
+          {displaySpotCity(spot.city, spot.dealCode)}
         </span>
         <span className={`px-3 py-1.5 backdrop-blur-md rounded-full text-xs font-bold shadow-lg border ${priceColor}`}>
           {PRICE_LABEL[spot.priceLevel] || PRICE_LABEL[2]}

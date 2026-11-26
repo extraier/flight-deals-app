@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Clock, RefreshCw, Mail } from 'lucide-react';
-import { translateDateRange, translateAirlines, translateCity, translateStops, translateDuration } from '@/lib/gflights_i18n';
+import { translateDateRange, translateAirlines, translateCity, translateStops, translateDuration, correctedDepartureIso, departureIsPast, formatDepartureZh } from '@/lib/gflights_i18n';
 
 interface GfDeal {
   id: string;
@@ -118,10 +118,15 @@ export default function GFlightsPage() {
     };
   }, []);
 
-  const origins = Array.from(new Set(deals.map((d) => d.origin))).sort();
+  const visibleDeals = deals.flatMap((d) => {
+    const dep = correctedDepartureIso(d);
+    if (dep && departureIsPast(dep)) return [];
+    return [{ ...d, dep_date: dep || d.dep_date }];
+  });
+  const origins = Array.from(new Set(visibleDeals.map((d) => d.origin))).sort();
   const filtered = originFilter === 'all'
-    ? deals
-    : deals.filter((d) => d.origin === originFilter);
+    ? visibleDeals
+    : visibleDeals.filter((d) => d.origin === originFilter);
 
   // Group by alert calendar day (HKT), not destination.
   const byDay = new Map<string, GfDeal[]>();
@@ -220,7 +225,7 @@ export default function GFlightsPage() {
             <span>Google Flights 推介</span>
           </h1>
           {(() => {
-            const latestAlertMs = deals.reduce((max, d) => {
+            const latestAlertMs = visibleDeals.reduce((max, d) => {
               const m = d.alert_unix_ms;
               return typeof m === 'number' && m > max ? m : max;
             }, 0);
@@ -307,13 +312,13 @@ export default function GFlightsPage() {
           </div>
         )}
 
-        {loading && deals.length === 0 && (
+        {loading && visibleDeals.length === 0 && (
           <div className="text-center py-12 text-sm text-muted-foreground">
             載入中...
           </div>
         )}
 
-        {!loading && deals.length === 0 && !fetchError && (
+        {!loading && visibleDeals.length === 0 && !fetchError && (
           <div className="rounded-xl border border-dashed border-violet-200 bg-violet-50/30 p-8 text-center">
             <div className="text-4xl mb-2" aria-hidden>📭</div>
             <p className="text-sm font-medium text-foreground">暫時無新嘅 Google Flights 推介</p>
@@ -369,7 +374,8 @@ export default function GFlightsPage() {
                             </div>
                             <div className="mt-1.5 text-sm text-muted-foreground leading-snug">
                               <div className="font-medium text-foreground">
-                                {translateDateRange(d.date_range)}
+                                {formatDepartureZh(d.dep_date)}
+                                {d.date_range ? ` · ${translateDateRange(d.date_range)}` : ''}
                               </div>
                               <div className="mt-0.5 text-[12px] text-muted-foreground/90">
                                 {[
@@ -430,7 +436,7 @@ export default function GFlightsPage() {
           ))}
         </div>
 
-        {deals.length > 0 && (
+        {visibleDeals.length > 0 && (
           <p className="mt-6 text-center text-[10px] text-muted-foreground">
             按推介電郵日期分組 · 同日內最新電郵優先 · 點擊卡片到 Google Flights · 數據由 Gmail noreply-travel@google.com 自動解析
           </p>

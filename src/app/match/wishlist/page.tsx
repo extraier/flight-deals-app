@@ -11,6 +11,7 @@ import {
   type WishlistEntry,
 } from '@/lib/couple/wishlist';
 import type { SpotCard } from '@/lib/couple/cards';
+import { displaySpotCity, spotFlightHref } from '@/lib/cityNames';
 import {
   Heart,
   ArrowLeft,
@@ -197,6 +198,7 @@ function WishlistCard({
   const monthName = entry.targetMonth
     ? ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'][entry.targetMonth - 1]
     : null;
+  const flightHref = spot ? spotFlightHref(spot.dealCode, '?from=wishlist') : null;
   const travelLabel = entry.travelWith === 'solo' ? '獨遊'
     : entry.travelWith === 'couple' ? '情侶'
     : entry.travelWith === 'family' ? '家庭'
@@ -220,9 +222,9 @@ function WishlistCard({
         className="h-36 bg-cover bg-center relative"
         style={{ backgroundImage: `url(${spot.image})` }}
       >
-        {spot.dealCode && (
+        {flightHref && (
           <Link
-            href={`/route/${spot.dealCode}?from=wishlist`}
+            href={flightHref}
             className="absolute bottom-2 right-2 bg-white/90 text-pink-600 px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-white shadow"
           >
             <Plane size={12} /> 查機票
@@ -237,7 +239,7 @@ function WishlistCard({
           <p className="text-xs text-gray-500 truncate">{spot.nameEn}</p>
         )}
         <div className="flex items-center gap-1 mt-1 text-xs text-gray-600 dark:text-gray-400">
-          <MapPin size={12} /> {spot.city} · {spot.country}
+          <MapPin size={12} /> {displaySpotCity(spot.city, spot.dealCode)} · {spot.country}
         </div>
 
         {(monthName || travelLabel || entry.note) && (

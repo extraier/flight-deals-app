@@ -43,7 +43,7 @@ const MONTHS: Record<string, number> = {
 /** Airport / city code → bare Traditional Chinese name. Codes never reach the UI. */
 const CITY_BY_CODE: Record<string, string> = {
   HKG: '香港', SZX: '深圳',
-  AKL: '奧克蘭', AMS: '阿姆斯特丹', ATH: '雅典', BCN: '巴塞隆拿', BER: '柏林',
+  AKL: '奧克蘭', AMS: '阿姆斯特丹', ATH: '雅典', BCN: '巴塞羅那', BER: '柏林',
   BKI: '亞庇', BKK: '曼谷', BGY: '貝加莫', BOM: '孟買', BRU: '布魯塞爾',
   BUD: '布達佩斯', CAI: '開羅', CAN: '廣州', CDG: '巴黎', CGK: '雅加達',
   CIA: '羅馬', CJU: '濟州', CMB: '科倫坡', CNX: '清邁', CPH: '哥本哈根',
@@ -81,7 +81,7 @@ const CITY_BY_ENGLISH: Record<string, string> = {
   lisbon: '里斯本',
   rome: '羅馬',
   milan: '米蘭',
-  barcelona: '巴塞隆拿',
+  barcelona: '巴塞羅那',
   madrid: '馬德里',
   amsterdam: '阿姆斯特丹',
   berlin: '柏林',

@@ -3,6 +3,7 @@
 // 24h GC: filters out deals whose first_seen is older than 24h.
 
 import { NextRequest, NextResponse } from 'next/server';
+import { correctedDepartureIso, departureIsPast } from '@/lib/gflights_i18n';
 import { promises as fs } from 'fs';
 import path from 'path';
 
@@ -97,7 +98,17 @@ export async function GET(req: NextRequest) {
   const origin = url.searchParams.get('origin') || '';
   const dest = url.searchParams.get('destination') || '';
 
-  let deals = filterExpired(body.deals || []);
+  let deals = filterExpired(body.deals || []).flatMap((deal) => {
+    const source = deal as GFlightDeal & {
+      dep_date?: string | null;
+      alert_unix_ms?: number | null;
+      alert_date?: string | null;
+      prices_updated?: string | null;
+    };
+    const dep = correctedDepartureIso(source);
+    if (dep && departureIsPast(dep)) return [];
+    return [dep ? { ...deal, dep_date: dep } : deal];
+  });
   if (origin) deals = deals.filter((d) => d.origin === origin);
   if (dest) deals = deals.filter((d) =>
     d.destination_name.toLowerCase().includes(dest.toLowerCase()));
