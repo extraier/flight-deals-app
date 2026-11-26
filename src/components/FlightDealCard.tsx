@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { X, AlertTriangle } from 'lucide-react';
 import { ComparisonMetric } from '@/components/ComparisonMetric';
 import type { CheapDate, FlightDeal, Itinerary } from '@/types/flight';
+import { fixCityName } from '@/lib/cityNames';
 
 export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal: FlightDeal; onMoreMonths?: () => void; departure?: 'HKG' | 'SZX' }) {
   const { destination, price, badge, cheapestDates, moreMonths, typicalPrice,
@@ -67,7 +68,7 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
         <div className="bg-gradient-to-r from-primary/20 to-primary/10 p-6">
           <div className="flex items-start justify-between">
             <div className="space-y-1">
-              <h2 className="text-2xl font-bold text-card-foreground">{destination.name}</h2>
+              <h2 className="text-2xl font-bold text-card-foreground">{fixCityName(destination.name)}</h2>
               <p className="text-sm text-muted-foreground">
                 {destination.region} · {destination.code}
               </p>
@@ -269,7 +270,7 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
                 )}
                 {/* Outbound Flight */}
                 <div className="rounded-xl bg-secondary p-4">
-                  <p className="text-xs font-medium text-muted-foreground mb-3">去程 · {destination.name}</p>
+                  <p className="text-xs font-medium text-muted-foreground mb-3">去程 · {fixCityName(destination.name)}</p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 text-primary font-bold">

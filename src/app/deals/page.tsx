@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { fixCityName } from '@/lib/cityNames';
 
 type Departure = 'HKG' | 'SZX';
 type SortMode = 'discount' | 'recency';
@@ -1441,7 +1442,7 @@ hkgMerged = (() => {
                             <div className="flex items-start justify-between gap-2 flex-wrap">
                               <div className="min-w-0">
                                 <div className="flex items-center gap-2 flex-wrap">
-                                  <span className="text-lg font-bold text-foreground">{r.destName}</span>
+                                  <span className="text-lg font-bold text-foreground">{fixCityName(r.destName)}</span>
                                   <Badge variant="outline" className={`text-xs ${regionColors[r.region] || regionColors['其他']}`}>
                                     {r.region}
                                   </Badge>

@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { fixCityName } from '@/lib/cityNames';
+import { homeSavingsText, leadFareDateLabel } from '@/lib/homeCards';
 // Static JSONs are kept as the build-time fallback only — the live data comes
 // from /api/deals which fetches directly from the NAS via Tailscale Funnel.
 // See src/app/api/deals/route.ts.
@@ -261,11 +263,6 @@ export default function Home() {
     }
     return result;
   }, [deals, sortBy, filterMode, selectedRegion, selectedCountry, airlineFilter]);
-
-  const discount = (deal: Deal) => {
-    if (!deal.typicalPrice || deal.typicalPrice <= 0) return null;
-    return Math.round(((deal.typicalPrice - deal.price) / deal.typicalPrice) * 100);
-  };
 
   // Get comparison price for a deal (based on selected period)
   const getComparePrice = (deal: Deal): number | null => {
@@ -545,16 +542,25 @@ export default function Home() {
             {/* Destinations Grid */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {filteredAndSortedDeals.map((dest) => {
-                const discountPct = discount(dest);
                 const diff = getCompareDiff(dest);
+                const leadDate = dest.cheapestDates?.[0];
+                const dateLabel = leadFareDateLabel(leadDate);
+                const savings = homeSavingsText(
+                  dest.price,
+                  dest.typicalPrice,
+                  comparePeriod,
+                  comparePeriod === 'now' ? null : leadDate?.history?.[comparePeriod]?.price,
+                );
                 return (
                   <Link key={dest.route} href={`/route/${dest.destination.code}?dep=${departure}`} className="group">
                     <Card className="transition-all duration-200 hover:border-sky-500/50 hover:shadow-lg hover:shadow-sky-500/10">
                       <CardHeader className="pb-2">
                         <div className="flex items-start justify-between">
                           <div>
-                            <CardTitle className="text-xl">{dest.destination.name}</CardTitle>
-                            <p className="text-sm text-muted-foreground">{dest.destination.code}</p>
+                            <CardTitle className="text-xl">{fixCityName(dest.destination.name)}</CardTitle>
+                            {dateLabel && (
+                              <p className="text-sm text-muted-foreground">{dateLabel}</p>
+                            )}
                           </div>
                           <div className="text-right">
                             <div className="text-xl font-bold text-emerald-600">${dest.price.toLocaleString()}</div>
@@ -570,22 +576,17 @@ export default function Home() {
                         </div>
                       </CardHeader>
                       <CardContent>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <Badge
                               variant="outline"
                               className={`${regionColors[dest.destination.region] || 'bg-slate-500/10 text-slate-600 border-slate-500/30'}`}
                             >
                               {dest.destination.region}
                             </Badge>
-                            {discountPct !== null && discountPct > 0 && (
+                            {savings && (
                               <Badge variant="destructive" className="text-xs">
-                                -{discountPct}%
-                              </Badge>
-                            )}
-                            {diff !== null && (
-                              <Badge variant="outline" className="text-xs text-muted-foreground border-muted-foreground/30">
-                                vs {COMPARE_LABELS[comparePeriod]}
+                                {savings}
                               </Badge>
                             )}
                           </div>
