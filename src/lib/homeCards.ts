@@ -23,6 +23,47 @@ const WINDOW_LABEL: Record<Exclude<HomeCompareWindow, 'now'>, string> = {
   '7d': '7日',
 };
 
+/**
+ * Chinese airline name for the lead fare. Uses the same name map as the
+ * home-page filter. A code with no Chinese name is shown as that code,
+ * which is what the deals page already does. Nothing is shown when the
+ * fare has no airline.
+ */
+export function leadAirlineLabel(
+  date: { flight?: unknown; itinerary?: unknown; airline?: unknown } | undefined,
+  names: Record<string, string>,
+): string | null {
+  const code = airlineCode(date);
+  if (!code) return null;
+  return names[code] || names[code.toUpperCase()] || code;
+}
+
+function airlineCode(
+  date: { flight?: unknown; itinerary?: unknown; airline?: unknown } | undefined,
+): string {
+  if (!date) return '';
+  const direct = cleanCode(date.airline);
+  if (direct) return direct;
+  const flight = asRecord(date.flight);
+  const fromFlight = cleanCode(flight?.airline);
+  if (fromFlight) return fromFlight;
+  const itinerary = asRecord(date.itinerary);
+  const outbound = asRecord(itinerary?.outbound);
+  return cleanCode(outbound?.airline);
+}
+
+function cleanCode(value: unknown): string {
+  if (typeof value !== 'string') return '';
+  return value.replace(/^_/, '').trim();
+}
+
+function asRecord(value: unknown): Record<string, unknown> | null {
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    return value as Record<string, unknown>;
+  }
+  return null;
+}
+
 export function leadFareDateLabel(date: LeadFareDate | undefined): string {
   if (!date || !date.year || !date.month || !date.day) return '';
   const start = new Date(Date.UTC(date.year, date.month - 1, date.day));
