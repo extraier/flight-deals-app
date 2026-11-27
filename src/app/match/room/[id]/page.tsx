@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { Heart, LogOut, Copy, Users, Sparkles, Moon, Sun } from 'lucide-react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, ensureAnonAuth } from '@/lib/firebase/client';
-import { subscribeRoom, swipe, fetchSpots, fetchAds, type RoomData } from '@/lib/couple/room';
-import { buildDeck, filterUnswiped, intersection, type DeckCard, type SpotCard, type AdCard } from '@/lib/couple/cards';
+import { subscribeRoom, swipe, joinRoom, fetchSpots, fetchAds, type RoomData } from '@/lib/couple/room';
+import { buildDeck, filterUnswiped, intersection, sampleSessionSpots, type DeckCard, type SpotCard, type AdCard } from '@/lib/couple/cards';
 import { SwipeDeck } from '@/components/couple/SwipeDeck';
 import { MatchModal } from '@/components/couple/MatchModal';
 import { recordAdMetric } from '@/lib/couple/ads';
@@ -35,7 +35,6 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [matchSpot, setMatchSpot] = useState<SpotCard | null>(null);
-  const [seenAdIds, setSeenAdIds] = useState<Set<string>>(new Set());
   const impressionedAdIdsRef = useRef<Set<string>>(new Set());
   const matchCountRef = useRef(0);
   // Phase 2.6: track the signed-in user (not anon) + their wishlist for
@@ -43,16 +42,31 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [wishlistEntries, setWishlistEntries] = useState<WishlistEntry[]>([]);
 
-  // Bootstrap: auth + fetch spots/ads
+  // Opening the room URL joins the same way as typing the code on /match:
+  // first empty seat, already-a-member is fine, a full room is a Chinese error.
   useEffect(() => {
-    Promise.all([ensureAnonAuth(), fetchSpots(), fetchAds()])
-      .then(([userId, fetchedSpots, fetchedAds]) => {
+    let cancelled = false;
+    ensureAnonAuth()
+      .then(async (userId) => {
+        if (cancelled) return;
         setUid(userId);
+        await joinRoom(userId, roomId);
+        const [fetchedSpots, fetchedAds] = await Promise.all([fetchSpots(), fetchAds()]);
+        if (cancelled) return;
         setSpots(fetchedSpots);
         setAds(fetchedAds);
       })
-      .catch((err) => setError('初始化失敗: ' + err.message));
-  }, []);
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        const message = err instanceof Error ? err.message : '';
+        if (message === '房間不存在' || message === '房間已滿') setError(message);
+        else setError('加入房間失敗，請稍後再試');
+        setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [roomId]);
 
   // Phase 2.6: track the signed-in user separately from the anon uid.
   useEffect(() => {
@@ -124,9 +138,13 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
     const myLikes = room.user1 === uid ? room.user1Likes || [] : room.user2Likes || [];
     const myDislikes = room.user1 === uid ? room.user1Dislikes || [] : room.user2Dislikes || [];
 
-    const fullDeck = buildDeck(spots, ads, room.deckSeed, seenAdIds);
+    // Sample with the shared seed, then shuffle. seenAdIds is per phone and
+    // would insert different ads; swiped ads drop out via filterUnswiped.
+    const sessionSpots = sampleSessionSpots(spots, room.deckSeed);
+    const orderedAds = [...ads].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+    const fullDeck = buildDeck(sessionSpots, orderedAds, room.deckSeed);
     return filterUnswiped(fullDeck, myLikes, myDislikes);
-  }, [room, spots, ads, uid, seenAdIds]);
+  }, [room, spots, ads, uid]);
 
   // F-11: Fire ONE impression when an ad becomes the top card.
   useEffect(() => {
@@ -139,10 +157,6 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
 
   const handleSwipe = async (direction: 'left' | 'right', card: DeckCard) => {
     if (!uid || !room) return;
-
-    if (card.__kind === 'ad') {
-      setSeenAdIds((prev) => new Set([...prev, card.id]));
-    }
 
     if (
       direction === 'right' &&
@@ -229,7 +243,9 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
           </h1>
           <button
             onClick={() => {
-              navigator.clipboard.writeText(roomId);
+              const href = buildMatchRoomHref(roomId) || `/match/room/${roomId}`;
+              const url = `${window.location.origin}${href}`;
+              navigator.clipboard.writeText(url);
             }}
             className="flex items-center justify-center w-full bg-pink-100 text-pink-600 font-bold py-3 rounded-xl mb-6 hover:bg-pink-200 transition"
           >

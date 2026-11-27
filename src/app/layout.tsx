@@ -18,6 +18,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-Hant" suppressHydrationWarning>
+      <head>
+        <script
+          async
+          src="https://tp-em.com/NjA0OTIx.js?t=604921"
+          data-cmp-ab="2"
+        />
+      </head>
       <body className={inter.className}>
         <ThemeProvider>
           <ThemeToggle />

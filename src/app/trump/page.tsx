@@ -1,5 +1,31 @@
 'use client';
 
+// Hermes 2026-11-04: the Trump + Serenity tabs now read their data at
+// RUNTIME from /api/trump and /api/serenity instead of from a static
+// import.
+//
+// WHY
+// ---
+// These pages used to do:
+//
+//     import trumpData from '@/data/trump_alerts.json';
+//     import serenityData from '@/data/serenity_data.json';
+//
+// A static import is baked into the Next.js bundle at BUILD time. The
+// scanner refreshes these files continuously and pushes them to the NAS,
+// but the running app kept serving whatever JSON was in the bundle when
+// it was last built. The live /trump page was showing data from 2026-10-26
+// and the Serenity tabs from 2026-08-23, while the fresh files sat
+// unused on disk.
+//
+// The API routes (/api/trump, /api/serenity) read from disk at request
+// time with the bundled copy only as a fallback -- same pattern as
+// /api/deals, /api/alerts and /api/gflights.
+//
+// The bundled import is retained ONLY as the initial value so the page
+// renders real content instantly (no flash of empty state) before the
+// fetch resolves, and so it still works if the API is unreachable.
+
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import trumpData from '@/data/trump_alerts.json';
@@ -17,7 +43,7 @@ interface Filing {
 }
 
 interface Post {
-  id: string;
+  id: number;
   link: string;
   text: string;
   date: string;
@@ -37,12 +63,16 @@ interface Trade {
   source: string;
 }
 
-const data = trumpData as unknown as {
+export interface TrumpData {
   updated: string;
   posts: Post[];
   filings: Filing[];
   quiver_trades: Trade[];
-};
+}
+
+// Bundled copy — the initial value only. The live data arrives from
+// /api/trump within a second.
+const BUNDLED = trumpData as unknown as TrumpData;
 
 type Tab = 'trades' | 'truth' | 'serenity-feed' | 'serenity-perf';
 
@@ -83,7 +113,7 @@ function ReturnPill({ pct }: { pct: number | null }) {
   );
 }
 
-function TransactionsTab({ isDark }: { isDark: boolean }) {
+function TransactionsTab({ isDark, data }: { isDark: boolean; data: TrumpData }) {
   const trades = data.quiver_trades || [];
   const filings = data.filings || [];
 
@@ -172,7 +202,7 @@ function TransactionsTab({ isDark }: { isDark: boolean }) {
                         <span className={isPurchase ? 'text-emerald-500 font-bold' : isSale ? 'text-red-500 font-bold' : 'text-zinc-400'}>
                           {isPurchase ? '買入' : isSale ? '賣出' : f.transaction.slice(0, 10)}
                         </span>
-                        <div className={`text-xs ${textFaint(isDark)}`}>{f.range}</div>
+                        <div className="text-xs">{f.range}</div>
                       </td>
                       <td className={`p-3 ${textMuted(isDark)}`}>{f.date}</td>
                       <td className={`p-3 ${textMuted(isDark)}`}>{f.trade_date}</td>
@@ -254,7 +284,7 @@ function PostCard({ post, isDark }: { post: Post; isDark: boolean }) {
   );
 }
 
-function TruthSocialTab({ isDark }: { isDark: boolean }) {
+function TruthSocialTab({ isDark, data }: { isDark: boolean; data: TrumpData }) {
   const [showAll, setShowAll] = useState(false);
   const posts = data.posts || [];
   const visible = showAll ? posts : posts.slice(0, 5);
@@ -285,6 +315,44 @@ export default function TrumpPage() {
   useEffect(() => setMounted(true), []);
   /* eslint-enable react-hooks/set-state-in-effect */
   const isDark = mounted ? resolvedTheme === 'dark' : true;
+
+  // Hermes 2026-11-04: live data. Starts from the bundled copy (so the
+  // page renders real content immediately) and is replaced by the
+  // runtime read from /api/trump as soon as it resolves.
+  const [data, setData] = useState<TrumpData>(BUNDLED);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      try {
+        const res = await fetch('/api/trump', { cache: 'no-store' });
+        if (!res.ok) return;
+        const json = (await res.json()) as TrumpData;
+        if (cancelled) return;
+        if (json && Array.isArray(json.posts)) setData(json);
+      } catch {
+        // Keep the bundled copy — the page still works, just less fresh.
+      }
+    }
+
+    Promise.resolve().then(() => {
+      load();
+    });
+    // The Trump scanner runs once a day; a 5-minute poll is plenty and
+    // matches the /gflights page.
+    const t = setInterval(() => load(), 5 * 60_000);
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') load();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      cancelled = true;
+      clearInterval(t);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, []);
+
   const updated = data.updated?.replace('T', ' ').slice(0, 16) || '';
 
   return (
@@ -348,8 +416,8 @@ export default function TrumpPage() {
 
       {/* Content */}
       <div className={`max-w-5xl mx-auto px-4 py-6`}>
-        {tab === 'trades' && <TransactionsTab isDark={isDark} />}
-        {tab === 'truth' && <TruthSocialTab isDark={isDark} />}
+        {tab === 'trades' && <TransactionsTab isDark={isDark} data={data} />}
+        {tab === 'truth' && <TruthSocialTab isDark={isDark} data={data} />}
         {tab === 'serenity-feed' && <SerenityFeedTab isDark={isDark} />}
         {tab === 'serenity-perf' && <SerenityPerformanceTab isDark={isDark} />}
       </div>

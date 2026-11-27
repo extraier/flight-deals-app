@@ -248,6 +248,42 @@ def merge_deals(existing: dict, new_deals: list) -> dict:
     }
 
 
+_HKT = timezone(timedelta(hours=8))
+_MONTH_NUM = {
+    "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6,
+    "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12,
+}
+
+
+def alert_reference(alert_unix_ms=None, alert_date_iso=None, prices_updated=None, now=None):
+    """Email send time in Hong Kong, used to decide the departure year."""
+    if alert_unix_ms:
+        return datetime.fromtimestamp(int(alert_unix_ms) / 1000, tz=timezone.utc).astimezone(_HKT)
+    if alert_date_iso:
+        text = str(alert_date_iso).replace("Z", "+00:00")
+        parsed = datetime.fromisoformat(text)
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return parsed.astimezone(_HKT)
+    if prices_updated:
+        match = re.match(r"(\d{4})-(\d{2})-(\d{2})", str(prices_updated))
+        if match:
+            return datetime(int(match.group(1)), int(match.group(2)), int(match.group(3)), tzinfo=_HKT)
+    return (now or datetime.now(timezone.utc)).astimezone(_HKT)
+
+
+def rolled_departure_date(dep_month, dep_day, ref) -> str:
+    """Jan–May on an Oct/Nov email is next year, not the email's year."""
+    month_num = _MONTH_NUM[dep_month]
+    year = ref.year + (1 if month_num < ref.month else 0)
+    return f"{year:04d}-{month_num:02d}-{int(dep_day):02d}"
+
+
+def departure_has_passed(dep_date: str, now=None) -> bool:
+    today = (now or datetime.now(timezone.utc)).astimezone(_HKT).date()
+    return datetime.strptime(dep_date, "%Y-%m-%d").date() < today
+
+
 def flatten_for_api(parsed: dict, message_id: str = None, alert_date_iso = None, alert_unix_ms = None) -> dict:
     """Flatten a parsed email into the API shape (one entry per deal).
 
@@ -258,18 +294,19 @@ def flatten_for_api(parsed: dict, message_id: str = None, alert_date_iso = None,
     """
     flat = []
     for d in parsed.get("deals", []):
-        # Build dep_date in YYYY-MM-DD format
-        dep_year = parsed.get("prices_updated", "")[:4] if parsed.get("prices_updated") else ""
-        if not dep_year:
-            dep_year = str(datetime.now().year)
+        # Year comes from the email month, not prices_updated. A January
+        # departure emailed in November is next year.
+        ref = alert_reference(
+            alert_unix_ms=alert_unix_ms,
+            alert_date_iso=alert_date_iso,
+            prices_updated=parsed.get("prices_updated"),
+        )
         try:
-            month_num = {
-                "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6,
-                "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12,
-            }[d["dep_month"]]
-            dep_date = f"{dep_year}-{month_num:02d}-{d['dep_day']:02d}"
-        except (KeyError, TypeError):
+            dep_date = rolled_departure_date(d["dep_month"], d["dep_day"], ref)
+        except (KeyError, TypeError, ValueError):
             dep_date = ""
+        if dep_date and departure_has_passed(dep_date):
+            continue
         flat.append({
             "id": f"gflights-{parsed['origin'][:3].upper()}-{parsed['destination'][:20]}-{dep_date}".replace(" ", ""),
             "source": "google_flights",

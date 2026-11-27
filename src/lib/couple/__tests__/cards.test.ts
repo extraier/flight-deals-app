@@ -9,7 +9,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildDeck, type SpotCard, type AdCard } from '../cards.ts';
+import { buildDeck, sampleSessionSpots, type SpotCard, type AdCard } from '../cards.ts';
 
 const spots20: SpotCard[] = Array.from({ length: 20 }, (_, i) => ({
   id: `s${i}`,
@@ -172,4 +172,15 @@ test('buildDeck: realistic 200-spot session has 18 ads (200/11=18) with no back-
       `Slot gap between ads ${i - 1} and ${i} is ${slotGap} (${spotsBetween} spots between), want >= 10`
     );
   }
+});
+
+test('sampleSessionSpots: two clients with the same seed draw the same 200', () => {
+  const library = Array.from({ length: 674 }, (_, i) => ({ id: `spot-${String(i).padStart(3, '0')}` }));
+  const reversed = [...library].reverse();
+  const a = sampleSessionSpots(library, 424242);
+  const b = sampleSessionSpots(reversed, 424242);
+  assert.equal(a.length, 200);
+  assert.deepEqual(a.map((s) => s.id), b.map((s) => s.id));
+  const otherRoom = sampleSessionSpots(library, 7);
+  assert.notDeepEqual(a.map((s) => s.id), otherRoom.map((s) => s.id));
 });

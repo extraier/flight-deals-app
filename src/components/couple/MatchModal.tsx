@@ -3,6 +3,7 @@
 import { Heart, X, Plane } from 'lucide-react';
 import Link from 'next/link';
 import type { SpotCard as SpotCardType } from '@/lib/couple/cards';
+import { displaySpotCity, spotFlightHref } from '@/lib/cityNames';
 
 interface MatchModalProps {
   match: SpotCardType;
@@ -40,23 +41,25 @@ export function MatchModal({ match, onClose, onNext, roomId }: MatchModalProps) 
             <div className="p-4 text-gray-800">
               <h3 className="text-xl font-black mb-1">{match.name}</h3>
               <p className="text-xs text-gray-500 mb-2">
-                {match.country} · {match.city}
+                {match.country} · {displaySpotCity(match.city, match.dealCode)}
               </p>
               <p className="text-sm text-gray-700 leading-relaxed">{match.blurb}</p>
             </div>
           </div>
 
-          {match.dealCode && (
-            // Hermes 2026-08-14: pass ?from=room:<roomId> so the route page's
-            // back button returns to this couple room.
-            <Link
-              href={`/route/${match.dealCode}${roomId ? `?from=room:${roomId}` : ''}`}
-              className="flex items-center justify-center gap-2 w-full bg-white text-pink-600 font-bold py-3 rounded-2xl mb-2 hover:bg-pink-50 transition shadow-lg"
-            >
-              <Plane size={18} />
-              查看機票
-            </Link>
-          )}
+          {(() => {
+            const href = spotFlightHref(match.dealCode, roomId ? `?from=room:${roomId}` : '');
+            if (!href) return null;
+            return (
+              <Link
+                href={href}
+                className="flex items-center justify-center gap-2 w-full bg-white text-pink-600 font-bold py-3 rounded-2xl mb-2 hover:bg-pink-50 transition shadow-lg"
+              >
+                <Plane size={18} />
+                查看機票
+              </Link>
+            );
+          })()}
 
           <div className="flex gap-2">
             <button

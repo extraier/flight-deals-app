@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { fixCityName } from '@/lib/cityNames';
 
 type Departure = 'HKG' | 'SZX';
 type SortMode = 'discount' | 'recency';
@@ -171,6 +172,13 @@ function buildDropList(
   deals: Deal[],
   departure: Departure,
   cooldown?: Record<string, { amount: number | null; pct: number | null; price: number | null; ts: string | null }>,
+  // Hermes 2026-10-28: the SQL alerts map (destCode -> alert). The SZX
+  // /api/deals response carries no cooldown sidecar (the API only
+  // attaches it for HKG), so SZX rows had nothing to match and the
+  // strict `comparisonSource === 'cooldown'` filter removed them all
+  // -> "今日無劈價" while Telegram listed 9 SZX drops. The SQL alerts
+  // are the authoritative record of the bot's last alert per route.
+  alerts?: Map<string, SqlAlert>,
 ): DropRow[] {
   const rows: DropRow[] = []
   for (const d of deals) {
@@ -233,12 +241,20 @@ function buildDropList(
       // The per-airline keys are still iterated in the same
       // specificity order, but the comparator now considers ts, not
       // iteration order.
+      // Hermes 2026-10-28: the candidate list was hardcoded to HKG, so
+      // SZX never matched its own cooldown keys. Build it for the
+      // departure actually being rendered.
+      const dep = departure === 'SZX' ? 'SZX' : 'HKG';
       const candidates = [
-        airline ? `HKG→${airline}→${bareName}` : null,
-        `HKG→${bareName}`,
-        airline ? `${airline}:HKG→${bareName}` : null,
-        airline ? `${airline}:HKG→${bareName} (${code})` : null,
-        `HKG→${code}`,
+        airline ? `${dep}→${airline}→${bareName}` : null,
+        `${dep}→${bareName}`,
+        airline ? `${airline}:${dep}→${bareName}` : null,
+        airline ? `${airline}:${dep}→${bareName} (${code})` : null,
+        `${dep}→${code}`,
+        // The SQL alerts are keyed by IATA code, and the SZX exporter
+        // writes a BARE Chinese name (no " (IATA)" suffix), so also try
+        // the name with the code appended.
+        `${dep}→${bareName} (${code})`,
       ].filter((k): k is string => !!k);
       // Hermes 2026-10-19: FCO/cooldown-only fix. If the deal has no
       // airline stamped (hkgBase rows), the airline-specific candidates
@@ -275,6 +291,30 @@ function buildDropList(
           price: bestCd.price,
           ts: bestCd.ts,
         };
+      }
+    }
+
+    // Hermes 2026-10-28: fall back to the SQL alert for this route.
+    // The legacy cooldown map is HKG-only (the API attaches the
+    // sidecar for HKG only), so SZX rows had no cooldownSource and were
+    // stamped 'yesterday' -- then dropped by the page's strict
+    // `comparisonSource === 'cooldown'` filter. The SQL alert carries
+    // the bot's actual alert fingerprint, so use it directly.
+    const routeCode = d.destination?.code || '';
+    if (!cooldownSource && alerts && routeCode) {
+      const alert = alerts.get(routeCode);
+      if (alert) {
+        const amt = typeof alert.drop_amount === 'number' ? -Math.abs(alert.drop_amount) : null;
+        const pct = typeof alert.drop_pct === 'number' ? -Math.abs(alert.drop_pct) : null;
+        const ts = alert.detected_at || null;
+        // Only treat it as a live cooldown entry if it is recent
+        // (24h TTL, matching the API's own GC).
+        if (amt && pct && amt !== 0 && pct !== 0 && alert.price && ts) {
+          const ageMs = Date.now() - new Date(ts).getTime();
+          if (ageMs >= 0 && ageMs <= 24 * 60 * 60 * 1000) {
+            cooldownSource = { amount: amt, pct, price: alert.price, ts };
+          }
+        }
       }
     }
 
@@ -1097,12 +1137,12 @@ hkgMerged = (() => {
   // baseline caught up (dropAmount=0) but that have a recent alert can still
   // show the last-alerted drop data — matching the Telegram 📌 持續跌價 view.
   const hkgRows = useMemo(
-    () => buildDropList(hkgDeals, 'HKG', hkgCooldown),
-    [hkgDeals, hkgCooldown],
+    () => buildDropList(hkgDeals, 'HKG', hkgCooldown, hkgAlerts),
+    [hkgDeals, hkgCooldown, hkgAlerts],
   );
   const szxRows = useMemo(
-    () => buildDropList(szxDeals, 'SZX', szxCooldown),
-    [szxDeals, szxCooldown],
+    () => buildDropList(szxDeals, 'SZX', szxCooldown, szxAlerts),
+    [szxDeals, szxCooldown, szxAlerts],
   );
 
   const rows = departure === 'HKG' ? hkgRows : szxRows;
@@ -1402,7 +1442,7 @@ hkgMerged = (() => {
                             <div className="flex items-start justify-between gap-2 flex-wrap">
                               <div className="min-w-0">
                                 <div className="flex items-center gap-2 flex-wrap">
-                                  <span className="text-lg font-bold text-foreground">{r.destName}</span>
+                                  <span className="text-lg font-bold text-foreground">{fixCityName(r.destName)}</span>
                                   <Badge variant="outline" className={`text-xs ${regionColors[r.region] || regionColors['其他']}`}>
                                     {r.region}
                                   </Badge>

@@ -3,6 +3,7 @@
 // 24h GC: filters out deals whose first_seen is older than 24h.
 
 import { NextRequest, NextResponse } from 'next/server';
+import { correctedDepartureIso, departureIsPast } from '@/lib/gflights_i18n';
 import { promises as fs } from 'fs';
 import path from 'path';
 
@@ -77,15 +78,13 @@ async function loadDigest(): Promise<GFlightsFile> {
 }
 
 function filterExpired(deals: GFlightDeal[]): GFlightDeal[] {
-  // Hermes 2026-10-19: widened from 24h to 7d to match the cron window
-  // (`scanner/gflights_poller.py --days 7`). The poller fetches 7 days of
-  // emails, so the JSON stores up to 7-day-old alerts. Previously the
-  // 24h gate silently dropped everything older than a day, which made
-  // ~80% of the corpus invisible on /gflights and made the user think
-  // the cron was broken. The previous "Hermes 2026-10-17" comment was
-  // a wrong-first-attempt that masked the bug for 2 days.
+  // Hermes 2026-11-08: widened from 7d to 30d to match the cron window
+  // (`scanner/gflights_poller.py --days 30`). The poller fetches 30 days of
+  // emails, so the JSON stores up to 30-day-old alerts. Previously the
+  // 7d gate hid older digests even when Gmail still had them.
+  // (History: 24h → 7d on 2026-10-19; 7d → 30d on 2026-11-08.)
   const nowMs = Date.now();
-  const windowMs = 7 * 24 * 60 * 60 * 1000;
+  const windowMs = 30 * 24 * 60 * 60 * 1000;
   return deals.filter((d) => {
     if (!d.first_seen) return true;
     const firstMs = Date.parse(d.first_seen);
@@ -99,7 +98,17 @@ export async function GET(req: NextRequest) {
   const origin = url.searchParams.get('origin') || '';
   const dest = url.searchParams.get('destination') || '';
 
-  let deals = filterExpired(body.deals || []);
+  let deals = filterExpired(body.deals || []).flatMap((deal) => {
+    const source = deal as GFlightDeal & {
+      dep_date?: string | null;
+      alert_unix_ms?: number | null;
+      alert_date?: string | null;
+      prices_updated?: string | null;
+    };
+    const dep = correctedDepartureIso(source);
+    if (dep && departureIsPast(dep)) return [];
+    return [dep ? { ...deal, dep_date: dep } : deal];
+  });
   if (origin) deals = deals.filter((d) => d.origin === origin);
   if (dest) deals = deals.filter((d) =>
     d.destination_name.toLowerCase().includes(dest.toLowerCase()));

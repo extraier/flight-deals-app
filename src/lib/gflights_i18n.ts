@@ -66,10 +66,14 @@ const CITY_ZH: Record<string, string> = {
   'Dubai': '杜拜',
   'Lisbon': '里斯本',
   'Madrid': '馬德里',
-  'Barcelona': '巴塞隆拿',
+  'Barcelona': '巴塞羅那',
   'Chicago': '芝加哥',
   'Newark': '紐瓦克',
   'Zurich': '蘇黎世',
+  'Zürich': '蘇黎世',
+  'Los Angeles': '洛杉磯',
+  'Baltimore': '巴爾的摩',
+  'New York': '紐約',
   'Rome': '羅馬',
   'Boston': '波士頓',
   'San Diego': '聖地牙哥',
@@ -121,8 +125,99 @@ export function translateAirlines(airlines: string | null): string | null {
   return airlines.split(',').map((p) => AIRLINE_ZH[p.trim()] || p.trim()).join(', ');
 }
 
+/** Airports with one code this site already treats as that city. */
+const CITY_IATA: Record<string, string> = {
+  'Hong Kong': 'HKG',
+  'Los Angeles': 'LAX',
+  'Barcelona': 'BCN',
+  'Zurich': 'ZRH',
+  'Zürich': 'ZRH',
+  'Newark': 'EWR',
+  'Baltimore': 'BWI',
+};
+
 export function translateCity(city: string): string {
-  return CITY_ZH[city] || city;
+  const key = city.trim();
+  const name = CITY_ZH[key] || key;
+  const code = CITY_IATA[key];
+  if (code && !name.includes(`(${code})`)) return `${name} (${code})`;
+  return name;
+}
+
+const HKT_OFFSET_MS = 8 * 60 * 60 * 1000;
+
+export type GflightDateSource = {
+  dep_date?: string | null;
+  alert_unix_ms?: number | null;
+  alert_date?: string | null;
+  prices_updated?: string | null;
+};
+
+/**
+ * Rebuild the departure year from the email month. A Jan–May date on an
+ * Oct/Nov email was stored as the email's calendar year; the trip is next year.
+ * Idempotent: the stored year is ignored and recomputed from month + alert.
+ */
+export function correctedDepartureIso(
+  deal: GflightDateSource,
+  now: Date = new Date(),
+): string | null {
+  const dep = parseYmd(deal.dep_date);
+  if (!dep) return null;
+  const ref = alertRefHkt(deal, now);
+  const year = dep.month < ref.month ? ref.year + 1 : ref.year;
+  return ymd(year, dep.month, dep.day);
+}
+
+export function departureIsPast(isoDate: string, now: Date = new Date()): boolean {
+  return isoDate < hktToday(now);
+}
+
+function alertRefHkt(deal: GflightDateSource, now: Date): { year: number; month: number } {
+  if (typeof deal.alert_unix_ms === 'number' && deal.alert_unix_ms > 0) {
+    return hktParts(new Date(deal.alert_unix_ms));
+  }
+  if (deal.alert_date) {
+    const parsed = new Date(deal.alert_date);
+    if (!Number.isNaN(parsed.getTime())) return hktParts(parsed);
+  }
+  const priced = parseYmd(deal.prices_updated);
+  if (priced) return priced;
+  return hktParts(now);
+}
+
+function hktParts(date: Date): { year: number; month: number; day: number } {
+  const shifted = new Date(date.getTime() + HKT_OFFSET_MS);
+  return {
+    year: shifted.getUTCFullYear(),
+    month: shifted.getUTCMonth() + 1,
+    day: shifted.getUTCDate(),
+  };
+}
+
+function hktToday(now: Date): string {
+  const parts = hktParts(now);
+  return ymd(parts.year, parts.month, parts.day);
+}
+
+function parseYmd(value: string | null | undefined): { year: number; month: number; day: number } | null {
+  if (!value) return null;
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!match) return null;
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+  return { year: Number(match[1]), month, day };
+}
+
+function ymd(year: number, month: number, day: number): string {
+  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+}
+
+export function formatDepartureZh(isoDate: string): string {
+  const parts = parseYmd(isoDate);
+  if (!parts) return '';
+  return `${parts.year}年${parts.month}月${parts.day}日`;
 }
 
 export function translateStops(n: number | null): string {

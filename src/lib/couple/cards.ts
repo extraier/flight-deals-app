@@ -54,11 +54,40 @@ function seededShuffle<T>(arr: T[], seed: number): T[] {
   const out = [...arr];
   let s = seed || 1;
   for (let i = out.length - 1; i > 0; i--) {
-    s = (s * 9301 + 49297) % 233280;
+    s = nextSeed(s);
     const j = Math.floor((s / 233280) * (i + 1));
     [out[i], out[j]] = [out[j], out[i]];
   }
   return out;
+}
+
+function nextSeed(seed: number): number {
+  return (seed * 9301 + 49297) % 233280;
+}
+
+/** How many spots one couple session shows. Both phones must pick the same 200. */
+export const SESSION_SPOT_CAP = 200;
+
+/**
+ * Same 200 spots, in the same order, for every client that shares `seed`.
+ * Spots are sorted by id first so Firestore's unspecified query order cannot
+ * change the sample. The room's deckSeed is that shared seed.
+ */
+export function sampleSessionSpots<T extends { id: string }>(
+  spots: T[],
+  seed: number,
+  cap: number = SESSION_SPOT_CAP,
+): T[] {
+  const sorted = [...spots].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  if (sorted.length <= cap) return sorted;
+  const out = [...sorted];
+  let s = seed || 1;
+  for (let i = 0; i < cap; i++) {
+    s = nextSeed(s);
+    const j = i + Math.floor((s / 233280) * (out.length - i));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out.slice(0, cap);
 }
 
 /**

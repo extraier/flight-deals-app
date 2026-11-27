@@ -29,7 +29,7 @@ const CITY_NAMES = {
   KHH: { name: '高雄', region: '東亞' },
   KIX: { name: '大阪', region: '東亞' },
   KUL: { name: '吉隆坡', region: '東南亞' },
-  LAX: { name: '洛杉矶', region: '北美洲' },
+  LAX: { name: '洛杉磯', region: '北美洲' },
   LHR: { name: '倫敦', region: '歐洲' },
   MAD: { name: '馬德里', region: '歐洲' },
   MEL: { name: '墨爾本', region: '大洋洲' },

@@ -3,7 +3,6 @@
 
 import {
   doc,
-  getDoc,
   setDoc,
   updateDoc,
   onSnapshot,
@@ -15,6 +14,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/client';
 import type { SpotCard, AdCard } from '@/lib/couple/cards';
+import { nextJoinSlot } from '@/lib/couple/joinSlot';
 
 export type RoomData = {
   id: string;
@@ -62,23 +62,26 @@ export async function createRoom(uid: string): Promise<string> {
   return roomId;
 }
 
-/** Join an existing room. Throws if room is full or doesn't exist. */
+/** Join an existing room. Throws a Chinese error if the room is full or missing. */
 export async function joinRoom(uid: string, roomId: string): Promise<RoomData> {
   const ref = doc(db, 'coupleRooms', roomId);
-  const snap = await getDoc(ref);
-  if (!snap.exists()) {
-    throw new Error('房間不存在');
+  try {
+    return await runTransaction(db, async (tx) => {
+      const snap = await tx.get(ref);
+      if (!snap.exists()) throw new Error('房間不存在');
+      const data = snap.data() as RoomData;
+      const slot = nextJoinSlot(data.user1, data.user2, uid);
+      if (slot === 'member') return data;
+      if (slot === 'full') throw new Error('房間已滿');
+      tx.update(ref, { [slot]: uid });
+      return { ...data, [slot]: uid };
+    });
+  } catch (err) {
+    if (err instanceof Error && (err.message === '房間不存在' || err.message === '房間已滿')) {
+      throw err;
+    }
+    throw new Error('加入房間失敗，請稍後再試');
   }
-  const data = snap.data() as RoomData;
-  if (data.user1 === uid || data.user2 === uid) {
-    // Already in this room — rejoin
-    return data;
-  }
-  if (data.user2) {
-    throw new Error('房間已滿');
-  }
-  await updateDoc(ref, { user2: uid });
-  return { ...data, user2: uid };
 }
 
 /** Subscribe to room changes. Returns unsubscribe fn. */
@@ -123,32 +126,14 @@ export async function leaveRoom(roomId: string): Promise<void> {
   await updateDoc(ref, { endedAt: Date.now() });
 }
 
-/** Fetch spots for a couple room (client-side; cached by Firestore).
- *
- * Hermes 2026-08-14 (Phase 3.5): with 674 spots live, fetching all of
- * them on every room open is ~1 MB of payload per session. We cap at
- * SESSION_SPOT_CAP random spots per session — variety across rooms
- * comes from the random sample + shuffled deck, not from showing the
- * whole library. Firestore's IndexedDB cache makes subsequent room
- * opens instant.
- */
-const SESSION_SPOT_CAP = 200;
-
+/** Fetch every spot. The room page samples 200 with the shared deckSeed. */
 export async function fetchSpots(): Promise<SpotCard[]> {
   const q = query(collection(db, 'coupleSpots'));
   const snap = await getDocs(q);
-  const all = snap.docs.map((d) => {
+  return snap.docs.map((d) => {
     const data = d.data() as Omit<SpotCard, 'id'>;
     return { ...data, id: d.id };
   });
-  if (all.length <= SESSION_SPOT_CAP) return all;
-  // Random sample without replacement (Fisher–Yates partial shuffle).
-  const sampled = [...all];
-  for (let i = 0; i < SESSION_SPOT_CAP; i++) {
-    const j = i + Math.floor(Math.random() * (sampled.length - i));
-    [sampled[i], sampled[j]] = [sampled[j], sampled[i]];
-  }
-  return sampled.slice(0, SESSION_SPOT_CAP);
 }
 
 /** Fetch all ads. */

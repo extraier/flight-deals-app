@@ -4,7 +4,8 @@ import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { fixCityName } from '@/lib/cityNames';
+import { homeSavingsText, leadAirlineLabel, leadFareDateLabel } from '@/lib/homeCards';
 // Static JSONs are kept as the build-time fallback only — the live data comes
 // from /api/deals which fetches directly from the NAS via Tailscale Funnel.
 // See src/app/api/deals/route.ts.
@@ -262,11 +263,6 @@ export default function Home() {
     return result;
   }, [deals, sortBy, filterMode, selectedRegion, selectedCountry, airlineFilter]);
 
-  const discount = (deal: Deal) => {
-    if (!deal.typicalPrice || deal.typicalPrice <= 0) return null;
-    return Math.round(((deal.typicalPrice - deal.price) / deal.typicalPrice) * 100);
-  };
-
   // Get comparison price for a deal (based on selected period)
   const getComparePrice = (deal: Deal): number | null => {
     if (comparePeriod === 'now') return null;
@@ -305,27 +301,27 @@ export default function Home() {
         </div>
 
         {/* Departure Selector */}
-        <div className="mb-6 flex justify-center">
-          <div className="inline-flex rounded-lg border border-border bg-card p-1 gap-1">
+        <div className="mb-3 flex justify-center">
+          <div className="inline-flex w-full max-w-xs rounded-lg border border-border bg-card p-0.5 gap-0.5 sm:w-auto sm:max-w-none">
             <button
               onClick={() => setDeparture('HKG')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+              className={`flex-1 sm:flex-none px-3 py-1.5 rounded-md text-sm font-medium transition-all whitespace-nowrap ${
                 departure === 'HKG'
                   ? 'bg-primary text-primary-foreground shadow-sm'
                   : 'text-muted-foreground hover:text-foreground hover:bg-muted'
               }`}
             >
-              🛫 香港國際機場 (HKG)
+              香港 (HKG)
             </button>
             <button
               onClick={() => setDeparture('SZX')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+              className={`flex-1 sm:flex-none px-3 py-1.5 rounded-md text-sm font-medium transition-all whitespace-nowrap ${
                 departure === 'SZX'
                   ? 'bg-primary text-primary-foreground shadow-sm'
                   : 'text-muted-foreground hover:text-foreground hover:bg-muted'
               }`}
             >
-              🛫 深圳寶安機場 (SZX)
+              深圳 (SZX)
             </button>
           </div>
         </div>
@@ -395,72 +391,52 @@ export default function Home() {
                 >
                   ✉️ Google Flights
                 </Link>
+                <Link
+                  href="/open-jaw"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-3 sm:px-4 py-2 text-sm font-bold transition-all text-teal-600 dark:text-teal-400 hover:bg-teal-500/10 whitespace-nowrap shadow-sm"
+                  title="比香港直飛平常價平超過七成先顯示"
+                >
+                  🎫 開口機票
+                </Link>
               </div>
             </div>
 
-            {/* Filters & Sort */}
-            <div className="mb-6 space-y-3">
-              {/* Filter Mode Toggle */}
-              <div className="flex gap-2">
-                <Button
-                  variant={filterMode === 'region' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => { setFilterMode('region'); setSelectedRegion('全部'); }}
-                >
-                  🌍 按地區
-                </Button>
-                <Button
-                  variant={filterMode === 'country' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => { setFilterMode('country'); setSelectedCountry('全部'); }}
-                >
-                  ✈️ 按國家
-                </Button>
-              </div>
-
-              {/* Region Filter */}
-              {filterMode === 'region' && (
-                <div className="flex flex-wrap gap-2">
-                  {regions.map((region) => (
-                    <Button
-                      key={region}
-                      variant={selectedRegion === region ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setSelectedRegion(region)}
-                      className="text-xs"
-                    >
-                      {region}
-                    </Button>
-                  ))}
+            {/* Filters & Sort. One compact bar, then a single scrolling chip row. */}
+            <div className="mb-3 space-y-1.5">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+                <div className="inline-flex rounded-md border border-border bg-card p-0.5 gap-0.5" role="group" aria-label="篩選方式">
+                  <button
+                    type="button"
+                    onClick={() => { setFilterMode('region'); setSelectedRegion('全部'); }}
+                    className={`px-2 py-1 rounded text-xs font-medium transition-all ${
+                      filterMode === 'region' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    }`}
+                  >
+                    按地區
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setFilterMode('country'); setSelectedCountry('全部'); }}
+                    className={`px-2 py-1 rounded text-xs font-medium transition-all ${
+                      filterMode === 'country' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    }`}
+                  >
+                    按國家
+                  </button>
                 </div>
-              )}
 
-              {/* Country Filter */}
-              {filterMode === 'country' && (
-                <select
-                  value={selectedCountry}
-                  onChange={(e) => setSelectedCountry(e.target.value)}
-                  className="w-full max-w-xs rounded-lg border border-input bg-background px-3 py-2 text-sm"
-                >
-                  {countries.map((country) => (
-                    <option key={country} value={country}>{country}</option>
-                  ))}
-                </select>
-              )}
-
-              {/* Sort + Compare Options */}
-              <div className="flex flex-wrap gap-3">
                 <div className="flex items-center gap-1">
-                  <span className="text-xs text-muted-foreground">比較：</span>
-                  <div className="inline-flex rounded-md border border-border bg-card p-0.5 gap-0.5">
+                  <span className="text-xs text-muted-foreground">比較</span>
+                  <div className="inline-flex rounded-md border border-border bg-card p-0.5 gap-0.5" role="group" aria-label="比較">
                     {(Object.keys(COMPARE_LABELS) as ComparePeriod[]).map((p) => {
                       const hasData = deals.some(d => p === 'now' || d.cheapestDates[0]?.history?.[p]);
                       return (
                         <button
                           key={p}
+                          type="button"
                           onClick={() => setComparePeriod(p)}
                           disabled={!hasData && p !== 'now'}
-                          className={`px-2 py-1 rounded text-xs font-medium transition-all ${
+                          className={`px-1.5 py-1 rounded text-xs font-medium transition-all ${
                             comparePeriod === p
                               ? 'bg-sky-600 text-white'
                               : hasData
@@ -476,27 +452,63 @@ export default function Home() {
                 </div>
 
                 <div className="flex items-center gap-1">
-                  <span className="text-xs text-muted-foreground">排序：</span>
-                  <div className="inline-flex rounded-md border border-border bg-card p-0.5 gap-0.5">
+                  <span className="text-xs text-muted-foreground">排序</span>
+                  <div className="inline-flex rounded-md border border-border bg-card p-0.5 gap-0.5" role="group" aria-label="排序">
                     <button
+                      type="button"
                       onClick={() => setSortBy('price')}
-                      className={`px-2 py-1 rounded text-xs font-medium transition-all ${
+                      className={`px-1.5 py-1 rounded text-xs font-medium transition-all ${
                         sortBy === 'price' ? 'bg-sky-600 text-white' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                       }`}
                     >
-                      💰 最低價
+                      最低價
                     </button>
                     <button
+                      type="button"
                       onClick={() => setSortBy('discount')}
-                      className={`px-2 py-1 rounded text-xs font-medium transition-all ${
+                      className={`px-1.5 py-1 rounded text-xs font-medium transition-all ${
                         sortBy === 'discount' ? 'bg-sky-600 text-white' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                       }`}
                     >
-                      🔥 最抵
+                      最抵
                     </button>
                   </div>
                 </div>
               </div>
+
+              {filterMode === 'region' && (
+                <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0 [scrollbar-width:thin]">
+                  <div className="flex w-max gap-1 sm:w-auto sm:flex-wrap">
+                    {regions.map((region) => (
+                      <button
+                        key={region}
+                        type="button"
+                        onClick={() => setSelectedRegion(region)}
+                        className={`shrink-0 rounded-md border px-2 py-1 text-xs font-medium transition-all ${
+                          selectedRegion === region
+                            ? 'border-transparent bg-primary text-primary-foreground'
+                            : 'border-border bg-card text-muted-foreground hover:text-foreground'
+                        }`}
+                      >
+                        {region}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {filterMode === 'country' && (
+                <select
+                  value={selectedCountry}
+                  onChange={(e) => setSelectedCountry(e.target.value)}
+                  className="h-8 w-full max-w-xs rounded-md border border-input bg-background px-2 text-xs"
+                  aria-label="國家"
+                >
+                  {countries.map((country) => (
+                    <option key={country} value={country}>{country}</option>
+                  ))}
+                </select>
+              )}
 
               {/* Hermes 2026-07-01: multi-airline filter as a dropdown. Replaces
                   the previous chip-row layout which got unwieldy with 20+
@@ -517,7 +529,7 @@ export default function Home() {
                         e.target.value === '__all__' ? null : e.target.value,
                       )
                     }
-                    className="flex-1 max-w-xs h-9 rounded-md border border-input bg-background px-3 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                    className="h-8 max-w-xs flex-1 rounded-md border border-input bg-background px-2 text-xs shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500/40"
                   >
                     <option value="__all__">全部 ({deals.length})</option>
                     {airlineOptions.map(([code, count]) => (
@@ -531,23 +543,43 @@ export default function Home() {
             </div>
 
             {/* Results count */}
-            <p className="mb-4 text-sm text-muted-foreground">
+            <p className="mb-2 text-sm text-muted-foreground">
               顯示 {filteredAndSortedDeals.length} 個目的地
             </p>
 
             {/* Destinations Grid */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {filteredAndSortedDeals.map((dest) => {
-                const discountPct = discount(dest);
                 const diff = getCompareDiff(dest);
+                const leadDate = dest.cheapestDates?.[0];
+                const dateLabel = leadFareDateLabel(leadDate);
+                const airlineName = leadAirlineLabel(leadDate, AIRLINE_NAMES);
+                const cityName = fixCityName(dest.destination.name);
+                const savings = homeSavingsText(
+                  dest.price,
+                  dest.typicalPrice,
+                  comparePeriod,
+                  comparePeriod === 'now' ? null : leadDate?.history?.[comparePeriod]?.price,
+                );
                 return (
-                  <Link key={dest.route} href={`/route/${dest.destination.code}?dep=${departure}`} className="group">
-                    <Card className="transition-all duration-200 hover:border-sky-500/50 hover:shadow-lg hover:shadow-sky-500/10">
+                  <Link
+                    key={dest.route}
+                    href={`/route/${dest.destination.code}?dep=${departure}`}
+                    className="group block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
+                  >
+                    <span className="sr-only">查看詳情</span>
+                    <Card className="h-full transition-all duration-200 group-hover:border-sky-500/50 group-hover:shadow-lg group-hover:shadow-sky-500/10">
                       <CardHeader className="pb-2">
                         <div className="flex items-start justify-between">
-                          <div>
-                            <CardTitle className="text-xl">{dest.destination.name}</CardTitle>
-                            <p className="text-sm text-muted-foreground">{dest.destination.code}</p>
+                          <div className="min-w-0">
+                            <CardTitle className="text-xl">{cityName}</CardTitle>
+                            {(dateLabel || airlineName) && (
+                              <p className="text-sm text-muted-foreground">
+                                {dateLabel}
+                                {dateLabel && airlineName ? ' · ' : ''}
+                                {airlineName}
+                              </p>
+                            )}
                           </div>
                           <div className="text-right">
                             <div className="text-xl font-bold text-emerald-600">${dest.price.toLocaleString()}</div>
@@ -563,28 +595,20 @@ export default function Home() {
                         </div>
                       </CardHeader>
                       <CardContent>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <Badge
                               variant="outline"
                               className={`${regionColors[dest.destination.region] || 'bg-slate-500/10 text-slate-600 border-slate-500/30'}`}
                             >
                               {dest.destination.region}
                             </Badge>
-                            {discountPct !== null && discountPct > 0 && (
+                            {savings && (
                               <Badge variant="destructive" className="text-xs">
-                                -{discountPct}%
-                              </Badge>
-                            )}
-                            {diff !== null && (
-                              <Badge variant="outline" className="text-xs text-muted-foreground border-muted-foreground/30">
-                                vs {COMPARE_LABELS[comparePeriod]}
+                                {savings}
                               </Badge>
                             )}
                           </div>
-                          <span className="text-sm text-sky-600 transition-colors group-hover:text-sky-500">
-                            查看詳情 →
-                          </span>
                         </div>
                       </CardContent>
                     </Card>
