@@ -115,6 +115,27 @@ export default async function RoutePage({ params, searchParams }: PageProps) {
           </span>
         </div>
 
+        {/* Destination price card sits above the calendar on a phone. */}
+        <div className="mb-6">
+          {deal ? (
+            <FlightDealCard deal={deal} departure={departure} showDateGrid={!showHeatmap} />
+          ) : (
+            <div className="rounded-2xl border border-border bg-card p-8 text-center">
+              <p className="text-muted-foreground">
+                {departure === 'SZX'
+                  ? '深圳航班資料載入中...'
+                  : `找不到 ${normalizedCode} 的數據`}
+              </p>
+              <Link
+                href={backHref}
+                className="mt-4 inline-block text-sm text-sky-600 hover:text-sky-500"
+              >
+                ← {backLabel}
+              </Link>
+            </div>
+          )}
+        </div>
+
         {departure === 'SZX' && (
           <p className="mb-4 rounded-xl border border-dashed border-border bg-card px-4 py-3 text-sm text-muted-foreground">
             深圳出發的日期未夠密，暫不顯示價格日曆。
@@ -130,25 +151,6 @@ export default async function RoutePage({ params, searchParams }: PageProps) {
             data={calendar}
             title={deal ? fixCityName(deal.destination.name) : calendar.name}
           />
-        )}
-
-        {/* Flight Deal Card */}
-        {deal ? (
-          <FlightDealCard deal={deal} departure={departure} showDateGrid={!showHeatmap} />
-        ) : (
-          <div className="rounded-2xl border border-border bg-card p-8 text-center">
-            <p className="text-muted-foreground">
-              {departure === 'SZX'
-                ? '深圳航班資料載入中...'
-                : `找不到 ${normalizedCode} 的數據`}
-            </p>
-            <Link
-              href={backHref}
-              className="mt-4 inline-block text-sm text-sky-600 hover:text-sky-500"
-            >
-              ← {backLabel}
-            </Link>
-          </div>
         )}
       </div>
     </div>
