@@ -99,7 +99,7 @@ test('json pool is read and the 30-date deals file is ignored', async () => {
     if (body.heatmap) {
       assert.ok(body.pricedDays > 30);
       assert.equal(body.name.includes('馬尼拉'), true);
-      assert.equal(body.stayLabel, '日7日來回');
+      assert.equal(body.stayLabel, '7日來回');
     }
   } finally {
     if (previous === undefined) delete process.env.FLI_DATA_DIR;

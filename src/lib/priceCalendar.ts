@@ -7,7 +7,7 @@
  */
 
 export const STAY_NIGHTS = 7;
-export const STAY_LABEL = '日7日來回';
+export const STAY_LABEL = '7日來回';
 export const CALENDAR_MONTHS = 4;
 
 export interface HistoryPoint {
