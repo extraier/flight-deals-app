@@ -90,12 +90,26 @@ function queryStay7(db: DatabaseSync, dest: string, today: string): CalendarFare
   const cols = new Set(columnNames(db, 'flight_dates'));
   const depFilter = cols.has('departure') ? "AND departure = 'HKG'" : '';
   const scanCol = cols.has('scan_time') ? 'scan_time' : 'NULL';
+  const airlineCol = cols.has('outbound_airline') ? 'outbound_airline' : cols.has('airline') ? 'airline' : 'NULL';
+  const flightCol = cols.has('outbound_flight')
+    ? 'outbound_flight'
+    : cols.has('flight_no')
+      ? 'flight_no'
+      : 'NULL';
   const rows = db.prepare(`
-    SELECT dep_date, ret_date, price, ${scanCol} AS scan_time
+    SELECT dep_date, ret_date, price, ${scanCol} AS scan_time,
+           ${airlineCol} AS airline, ${flightCol} AS flight
     FROM flight_dates
     WHERE route = ? ${depFilter}
       AND dep_date >= ?
-  `).all(route, today) as Array<{ dep_date: string; ret_date: string | null; price: number; scan_time: string | null }>;
+  `).all(route, today) as Array<{
+    dep_date: string;
+    ret_date: string | null;
+    price: number;
+    scan_time: string | null;
+    airline: string | null;
+    flight: string | null;
+  }>;
 
   const history = tables.has('historical_prices')
     ? historyFor(db, route, today)
@@ -107,6 +121,8 @@ function queryStay7(db: DatabaseSync, dest: string, today: string): CalendarFare
     price: row.price,
     lastVerified: row.scan_time,
     history: history.get(row.dep_date),
+    airline: row.airline,
+    flight: row.flight,
   }));
 }
 
@@ -148,6 +164,10 @@ async function readJson(dir: string, dest: string, today: string): Promise<Price
         retDate: row.retDate || row.ret_date || null,
         lastVerified: row.lastVerified || row.last_verified || null,
         history: row.history,
+        airline: textField(row, ['airline', 'outbound_airline']) || nestedText(row.flight, ['airline']),
+        flight: textField(row, ['flight_no', 'outbound_flight']) || (
+          typeof row.flight === 'string' ? row.flight : nestedText(row.flight, ['flight_no', 'flight'])
+        ),
       }));
       const name = fixCityName(route.name || cityName(dest));
       return buildPriceCalendar({
@@ -235,4 +255,17 @@ function shiftIso(iso: string, days: number): string {
 
 function cityName(code: string): string {
   return fixCityName(code);
+}
+
+function textField(row: Record<string, unknown>, keys: string[]): string | null {
+  for (const key of keys) {
+    const value = row[key];
+    if (typeof value === 'string' && value.trim()) return value;
+  }
+  return null;
+}
+
+function nestedText(value: unknown, keys: string[]): string | null {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  return textField(value as Record<string, unknown>, keys);
 }

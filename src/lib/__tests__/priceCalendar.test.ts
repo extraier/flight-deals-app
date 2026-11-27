@@ -7,6 +7,7 @@ import { DatabaseSync } from 'node:sqlite';
 import {
   buildPriceCalendar,
   googleFlightsHref,
+  latestFareMove,
   priceHeat,
   savingsVsTypical,
   selectStay7,
@@ -63,6 +64,39 @@ test('selectStay7 does not cap at the public 30 cheapest dates', () => {
   ));
   const kept = selectStay7(fares, TODAY);
   assert.ok(kept.length > 30);
+});
+
+test('fare move uses the latest history and ignores shifts under 3%', () => {
+  const down = latestFareMove(2460, { '1d': { price: 2640 } });
+  assert.equal(down?.direction, 'down');
+  assert.equal(down?.delta, 180);
+  assert.equal(down?.key, '1d');
+  assert.equal(latestFareMove(1000, { '1d': { price: 1020 }, '4d': { price: 1500 } }), null);
+  const up = latestFareMove(2540, { '4d': { price: 2450 } });
+  assert.equal(up?.direction, 'up');
+  assert.equal(up?.delta, 90);
+  assert.equal(latestFareMove(2000, {}), null);
+});
+
+test('airline and flight strings pass through only when they are real', () => {
+  const calendar = buildPriceCalendar({
+    dest: 'MNL',
+    name: '馬尼拉 (MNL)',
+    today: TODAY,
+    fares: [
+      { ...fare('2026-12-15', 2460, 7, { '1d': 2640 }), airline: 'CX', flight: '912' },
+      { ...fare('2026-12-16', 2500), airline: 'any-airline', flight: '' },
+    ],
+  });
+  assert.ok(calendar);
+  const cells = calendar.months.flatMap((month) => month.weeks.flat());
+  const withCarrier = cells.find((cell) => cell.date === '2026-12-15');
+  const placeholder = cells.find((cell) => cell.date === '2026-12-16');
+  assert.equal(withCarrier?.airline, 'CX');
+  assert.equal(withCarrier?.flight, '912');
+  assert.equal(withCarrier?.airline === 'any-airline', false);
+  assert.equal(placeholder?.airline ?? null, null);
+  assert.equal(placeholder?.flight ?? null, null);
 });
 
 test('google flights link stays on the existing search url', () => {

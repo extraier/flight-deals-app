@@ -20,6 +20,10 @@ export interface CalendarFare {
   retDate?: string | null;
   lastVerified?: string | null;
   history?: Partial<Record<'1d' | '4d' | '7d', HistoryPoint | number>>;
+  /** Present only when the source row has a real carrier. Placeholders are dropped. */
+  airline?: string | null;
+  /** Flight number, when the source row has one. Times and terminals are not stored here. */
+  flight?: string | null;
 }
 
 export interface CalendarCell {
@@ -30,6 +34,8 @@ export interface CalendarCell {
   retDate: string | null;
   lastVerified: string | null;
   history: Partial<Record<'1d' | '4d' | '7d', HistoryPoint>>;
+  airline?: string | null;
+  flight?: string | null;
 }
 
 export interface CalendarMonth {
@@ -136,6 +142,63 @@ export function historyRows(
   return rows;
 }
 
+/** A move smaller than this, versus the latest history point, is not marked. */
+export const FARE_MOVE_MIN = 0.03;
+
+export interface FareMove {
+  direction: 'up' | 'down';
+  delta: number;
+  pct: number;
+  oldPrice: number;
+  key: '1d' | '4d' | '7d';
+}
+
+/**
+ * Compare the fare with the latest history we actually have (1 day, else 4, else 7).
+ * A shift under 3% is not a move. An older point is not used once a later one exists.
+ */
+export function latestFareMove(price: number, history: CalendarCell['history']): FareMove | null {
+  if (!Number.isFinite(price) || price <= 0) return null;
+  for (const key of ['1d', '4d', '7d'] as const) {
+    const oldPrice = history[key]?.price;
+    if (oldPrice == null || oldPrice <= 0) continue;
+    const raw = (price - oldPrice) / oldPrice;
+    if (Math.abs(raw) < FARE_MOVE_MIN) return null;
+    const roundedNow = Math.round(price);
+    const roundedOld = Math.round(oldPrice);
+    const delta = Math.abs(roundedNow - roundedOld);
+    if (delta <= 0) return null;
+    return {
+      direction: raw < 0 ? 'down' : 'up',
+      delta,
+      pct: Math.round(raw * 100),
+      oldPrice,
+      key,
+    };
+  }
+  return null;
+}
+
+/** Drop empty strings and the scanner's "any airline" placeholder. */
+export function usableLabel(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const text = value.replace(/^_/, '').trim();
+  if (!text) return null;
+  const key = text.toLowerCase().replace(/[\s_]+/g, '-');
+  if (
+    key === 'any' ||
+    key === 'any-airline' ||
+    key === 'null' ||
+    key === 'none' ||
+    key === 'n/a' ||
+    text === '不限' ||
+    text === '不限航空'
+  ) {
+    return null;
+  }
+  return text;
+}
+
 /** 0 = cheapest, 1 = most expensive. A single price is the cheap end. */
 export function priceHeat(price: number, minPrice: number, maxPrice: number): number {
   if (maxPrice <= minPrice) return 0;
@@ -217,6 +280,8 @@ function weeksForMonth(
   for (let day = 1; day <= daysInMonth; day++) {
     const date = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     const fare = byDate.get(date);
+    const airline = usableLabel(fare?.airline);
+    const flight = usableLabel(fare?.flight);
     cells.push({
       date,
       day,
@@ -225,6 +290,8 @@ function weeksForMonth(
       retDate: fare?.retDate || (fare ? addDays(date, STAY_NIGHTS) : null),
       lastVerified: fare?.lastVerified || null,
       history: normalizeHistory(fare?.history),
+      ...(airline ? { airline } : {}),
+      ...(flight ? { flight } : {}),
     });
   }
   while (cells.length % 7 !== 0) cells.push(blankCell());
