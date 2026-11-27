@@ -7,7 +7,7 @@ import { DatabaseSync } from 'node:sqlite';
 import {
   buildPriceCalendar,
   googleFlightsHref,
-  latestFareMove,
+  yesterdayFareMove,
   priceHeat,
   savingsVsTypical,
   selectStay7,
@@ -66,16 +66,17 @@ test('selectStay7 does not cap at the public 30 cheapest dates', () => {
   assert.ok(kept.length > 30);
 });
 
-test('fare move uses the latest history and ignores shifts under 3%', () => {
-  const down = latestFareMove(2460, { '1d': { price: 2640 } });
+test('yesterday move uses only the 1-day price and ignores shifts under 3%', () => {
+  const down = yesterdayFareMove(2460, { '1d': { price: 2640 } });
   assert.equal(down?.direction, 'down');
   assert.equal(down?.delta, 180);
   assert.equal(down?.key, '1d');
-  assert.equal(latestFareMove(1000, { '1d': { price: 1020 }, '4d': { price: 1500 } }), null);
-  const up = latestFareMove(2540, { '4d': { price: 2450 } });
+  assert.equal(yesterdayFareMove(1000, { '1d': { price: 1020 }, '4d': { price: 1500 } }), null);
+  assert.equal(yesterdayFareMove(2540, { '4d': { price: 2450 }, '7d': { price: 2000 } }), null);
+  const up = yesterdayFareMove(2540, { '1d': { price: 2450 } });
   assert.equal(up?.direction, 'up');
   assert.equal(up?.delta, 90);
-  assert.equal(latestFareMove(2000, {}), null);
+  assert.equal(yesterdayFareMove(2000, {}), null);
 });
 
 test('airline and flight strings pass through only when they are real', () => {

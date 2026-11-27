@@ -142,7 +142,7 @@ export function historyRows(
   return rows;
 }
 
-/** A move smaller than this, versus the latest history point, is not marked. */
+/** A move smaller than this, versus yesterday, is not marked. */
 export const FARE_MOVE_MIN = 0.03;
 
 export interface FareMove {
@@ -150,33 +150,29 @@ export interface FareMove {
   delta: number;
   pct: number;
   oldPrice: number;
-  key: '1d' | '4d' | '7d';
+  key: '1d';
 }
 
 /**
- * Compare the fare with the latest history we actually have (1 day, else 4, else 7).
- * A shift under 3% is not a move. An older point is not used once a later one exists.
+ * Compare the fare with yesterday only (history.1d).
+ * A shift under 3% is not a move. 4-day and 7-day prices are not yesterday,
+ * so they never draw an arrow.
  */
-export function latestFareMove(price: number, history: CalendarCell['history']): FareMove | null {
+export function yesterdayFareMove(price: number, history: CalendarCell['history']): FareMove | null {
   if (!Number.isFinite(price) || price <= 0) return null;
-  for (const key of ['1d', '4d', '7d'] as const) {
-    const oldPrice = history[key]?.price;
-    if (oldPrice == null || oldPrice <= 0) continue;
-    const raw = (price - oldPrice) / oldPrice;
-    if (Math.abs(raw) < FARE_MOVE_MIN) return null;
-    const roundedNow = Math.round(price);
-    const roundedOld = Math.round(oldPrice);
-    const delta = Math.abs(roundedNow - roundedOld);
-    if (delta <= 0) return null;
-    return {
-      direction: raw < 0 ? 'down' : 'up',
-      delta,
-      pct: Math.round(raw * 100),
-      oldPrice,
-      key,
-    };
-  }
-  return null;
+  const oldPrice = history['1d']?.price;
+  if (oldPrice == null || oldPrice <= 0) return null;
+  const raw = (price - oldPrice) / oldPrice;
+  if (Math.abs(raw) < FARE_MOVE_MIN) return null;
+  const delta = Math.abs(Math.round(price) - Math.round(oldPrice));
+  if (delta <= 0) return null;
+  return {
+    direction: raw < 0 ? 'down' : 'up',
+    delta,
+    pct: Math.round(raw * 100),
+    oldPrice,
+    key: '1d',
+  };
 }
 
 /** Drop empty strings and the scanner's "any airline" placeholder. */

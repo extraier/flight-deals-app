@@ -5,7 +5,7 @@ import {
   WEEKDAYS,
   googleFlightsHref,
   historyRows,
-  latestFareMove,
+  yesterdayFareMove,
   priceHeat,
   savingsVsTypical,
   type CalendarCell,
@@ -64,6 +64,8 @@ export function PriceCalendar({ data, title }: { data: PriceCalendarData; title?
 
         <DayPanel cell={selected} dest={data.dest} typicalPrice={data.typicalPrice} />
       </div>
+
+      <MoveNote />
     </section>
   );
 }
@@ -99,7 +101,7 @@ function DayCell({
     );
   }
   const heat = priceHeat(cell.price, minPrice, maxPrice);
-  const move = latestFareMove(cell.price, cell.history);
+  const move = yesterdayFareMove(cell.price, cell.history);
   const save = savingsVsTypical(cell.price, typicalPrice);
   return (
     <button
@@ -133,18 +135,60 @@ function MoveMark({ direction }: { direction: 'up' | 'down' }) {
   const up = direction === 'up';
   return (
     <span
-      className="pointer-events-none absolute right-0.5 top-0.5"
+      className="pointer-events-none absolute"
       aria-hidden
+      style={{
+        top: 3,
+        right: 3,
+        width: 0,
+        height: 0,
+        borderLeft: '5px solid transparent',
+        borderRight: '5px solid transparent',
+        ...(up
+          ? { borderBottom: '7px solid currentColor' }
+          : { borderTop: '7px solid currentColor' }),
+      }}
+    />
+  );
+}
+
+const DOWN_INK = '#6cc4a1';
+const UP_INK = '#ec9270';
+
+function LegendTriangle({ direction }: { direction: 'up' | 'down' }) {
+  const up = direction === 'up';
+  const color = up ? UP_INK : DOWN_INK;
+  return (
+    <span
+      aria-hidden
+      className="inline-block"
       style={{
         width: 0,
         height: 0,
-        borderLeft: '3px solid transparent',
-        borderRight: '3px solid transparent',
+        borderLeft: '3.5px solid transparent',
+        borderRight: '3.5px solid transparent',
         ...(up
-          ? { borderBottom: '5px solid rgba(255,255,255,0.95)' }
-          : { borderTop: '5px solid rgba(255,255,255,0.95)' }),
+          ? { borderBottom: `5px solid ${color}` }
+          : { borderTop: `5px solid ${color}` }),
       }}
     />
+  );
+}
+
+function MoveNote() {
+  return (
+    <p className="mt-4 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[11px] text-muted-foreground">
+      <span className="inline-flex items-center gap-1">
+        <LegendTriangle direction="down" />
+        跌價
+      </span>
+      <span aria-hidden>/</span>
+      <span className="inline-flex items-center gap-1">
+        <LegendTriangle direction="up" />
+        加價
+      </span>
+      <span>（同昨日比，變動 3% 以上）</span>
+    </p>
   );
 }
 
@@ -173,7 +217,7 @@ function HoverTip({
       </p>
       {move && (
         <p className={move.direction === 'down' ? 'mt-1 text-emerald-700' : 'mt-1 text-orange-800'}>
-          {move.direction === 'down' ? '比上次平' : '比上次貴'} HK${move.delta.toLocaleString('en-HK')}
+          {move.direction === 'down' ? '比昨日平' : '比昨日貴'} HK${move.delta.toLocaleString('en-HK')}
         </p>
       )}
       {save != null && save > 0 && (
@@ -202,7 +246,7 @@ function DayPanel({
   }
   const save = savingsVsTypical(cell.price, typicalPrice);
   const history = historyRows(cell.price, cell.history);
-  const move = latestFareMove(cell.price, cell.history);
+  const move = yesterdayFareMove(cell.price, cell.history);
   const href = googleFlightsHref(dest, cell.date, cell.retDate);
   const carrier = [cell.airline, cell.flight].filter(Boolean).join(' ');
   return (
@@ -216,7 +260,7 @@ function DayPanel({
       {carrier && <p className="mt-2 text-xs text-muted-foreground">{carrier}</p>}
       {move && (
         <p className={`mt-3 text-sm font-medium ${move.direction === 'down' ? 'text-emerald-600' : 'text-orange-700'}`}>
-          {move.direction === 'down' ? '比上次平' : '比上次貴'} HK${move.delta.toLocaleString('en-HK')}
+          {move.direction === 'down' ? '比昨日平' : '比昨日貴'} HK${move.delta.toLocaleString('en-HK')}
         </p>
       )}
       {save != null && save > 0 && (
@@ -251,7 +295,7 @@ function DayPanel({
 function cellLabel(cell: CalendarCell, move: FareMove | null): string {
   const price = `HK$${Math.round(cell.price || 0)}`;
   if (!move) return `${cell.date} ${price}`;
-  const change = move.direction === 'down' ? `比上次平 HK$${move.delta}` : `比上次貴 HK$${move.delta}`;
+  const change = move.direction === 'down' ? `比昨日平 HK$${move.delta}` : `比昨日貴 HK$${move.delta}`;
   return `${cell.date} ${price} ${change}`;
 }
 
