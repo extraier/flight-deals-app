@@ -1,10 +1,13 @@
 import { FlightDealCard } from '@/components/FlightDealCard';
+import { PriceCalendar } from '@/components/PriceCalendar';
 import allDatesHkg from '@/data/all_dates.json';
 import allDatesSzx from '@/data/all_dates_szx.json';
 import Link from 'next/link';
 import { headers } from 'next/headers';
-import { ArrowLeft, Plane } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import type { FlightDeal } from '@/types/flight';
+import { loadHkgStayCalendar } from '@/lib/calendarSource';
+import { fixCityName } from '@/lib/cityNames';
 
 interface PageProps {
   params: Promise<{ code: string }>;
@@ -86,10 +89,12 @@ export default async function RoutePage({ params, searchParams }: PageProps) {
     deals = results.filter(d => typeof d.price === 'number' && !!d.destination?.code);
   }
   const deal = deals.find(d => d.destination.code === normalizedCode);
+  const calendar = departure === 'HKG' ? await loadHkgStayCalendar(normalizedCode) : null;
+  const showHeatmap = calendar?.heatmap === true;
 
   return (
     <div className="min-h-screen bg-background py-12">
-      <div className="mx-auto max-w-lg px-4">
+      <div className={`mx-auto px-4 ${showHeatmap ? 'max-w-5xl' : 'max-w-lg'}`}>
         {/* Back Link — Hermes 2026-08-14: smart target based on ?from= param */}
         <Link
           href={backHref}
@@ -110,9 +115,26 @@ export default async function RoutePage({ params, searchParams }: PageProps) {
           </span>
         </div>
 
+        {departure === 'SZX' && (
+          <p className="mb-4 rounded-xl border border-dashed border-border bg-card px-4 py-3 text-sm text-muted-foreground">
+            深圳出發的日期未夠密，暫不顯示價格日曆。
+          </p>
+        )}
+        {departure === 'HKG' && !showHeatmap && (
+          <p className="mb-4 rounded-xl border border-dashed border-border bg-card px-4 py-3 text-sm text-muted-foreground">
+            完整 7 日來回日曆需要日期庫（fli_calendar.db 或 hkg_stay7_calendar.json）。未接到全日資料，所以不顯示稀疏日曆。
+          </p>
+        )}
+        {calendar?.heatmap && (
+          <PriceCalendar
+            data={calendar}
+            title={deal ? fixCityName(deal.destination.name) : calendar.name}
+          />
+        )}
+
         {/* Flight Deal Card */}
         {deal ? (
-          <FlightDealCard deal={deal} departure={departure} />
+          <FlightDealCard deal={deal} departure={departure} showDateGrid={!showHeatmap} />
         ) : (
           <div className="rounded-2xl border border-border bg-card p-8 text-center">
             <p className="text-muted-foreground">

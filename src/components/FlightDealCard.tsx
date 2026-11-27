@@ -10,7 +10,7 @@ import { ComparisonMetric } from '@/components/ComparisonMetric';
 import type { CheapDate, FlightDeal, Itinerary } from '@/types/flight';
 import { fixCityName } from '@/lib/cityNames';
 
-export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal: FlightDeal; onMoreMonths?: () => void; departure?: 'HKG' | 'SZX' }) {
+export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG', showDateGrid = true }: { deal: FlightDeal; onMoreMonths?: () => void; departure?: 'HKG' | 'SZX'; showDateGrid?: boolean }) {
   const { destination, price, badge, cheapestDates, moreMonths, typicalPrice,
     dateComparison, historyComparison, marketComparison } = deal;
   const [selectedDate, setSelectedDate] = useState<CheapDate | null>(null);
@@ -108,6 +108,7 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
           marketComparison={marketComparison}
         />
 
+        {showDateGrid && (<>
         {/* Legend */}
         <div className="px-6 pb-4">
           <p className="text-xs text-muted-foreground">
@@ -200,6 +201,7 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
               ))}
           </div>
         </div>
+        </>)}
 
         {/* Footer */}
         <div className="flex items-center justify-between border-t border-border bg-muted/30 px-6 py-4">
@@ -220,7 +222,7 @@ export function FlightDealCard({ deal, onMoreMonths, departure = 'HKG' }: { deal
       </Card>
 
       {/* Flight Detail Modal */}
-      {selectedDate && (() => {
+      {showDateGrid && selectedDate && (() => {
         const flightInfo = pickFlightInfo(selectedDate);
         return (
         <div
